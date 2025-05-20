@@ -12,11 +12,13 @@ function Home () {
     <p>DADA</p>
     
            <nav>
-            <p><Link to="/">Home</Link></p>
-            <Link to="/login">
-                Login<FontAwesomeIcon icon={faCoffee}/>
+            <p className="box"><Link to="/">Home</Link></p>
+            <p className='box'>
+                <Link to="/login">
+                    Login<FontAwesomeIcon icon={faCoffee}/>
 
-            </Link>
+                </Link>
+            </p>
           </nav>
  
     
