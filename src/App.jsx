@@ -12,6 +12,7 @@ function App() {
     <main>
       <div>
         <BrowserRouter>
+          <Header />
           <Routes>
             <Route index path='/' element={<Home />}></Route>
             <Route path='/login' element={<Login />}></Route>
