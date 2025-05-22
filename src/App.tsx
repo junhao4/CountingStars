@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Header from './components/Header.jsx'
+import Header from './components/Header.tsx'
 import './App.css'
-import Home from './components/pages/Home.jsx'
-import Login from './components/pages/Login.jsx'
+import Home from './components/pages/Home.tsx'
+import Login from './components/pages/Login.tsx'
 
 function App() {
   const [count, setCount] = useState(0);

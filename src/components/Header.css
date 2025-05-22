@@ -5,6 +5,7 @@
     justify-content: flex-start;
     align-items: center;
     text-align: center;
+    text-wrap: nowrap;
 }
 
 .header-logo {
@@ -24,4 +25,5 @@
     font-size: 40px;
     flex-grow: 1;
     margin-right: 120px;
+    min-width: 300px;
 }

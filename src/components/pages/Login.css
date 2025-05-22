@@ -8,7 +8,7 @@
     border-radius: 4px;
     background-color: grey;
 
-
+    min-width: 400px;
 }
 
 .form-container {
