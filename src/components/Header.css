@@ -1,9 +1,29 @@
-#root {
+.header-container {
     background-color: black;
     color: white;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    text-wrap: nowrap;
 }
 
-.header {
-    background-color: black;
-    color: white;
+.header-logo {
+    background-color: aqua;
+}
+
+.header-icon {
+    background-color: aqua;
+}
+
+.header-title {
+    color: red;
+    text-decoration: dashed;
+    text-decoration-line: underline;
+    text-decoration-color: red;
+    background-color: purple;
+    font-size: 40px;
+    flex-grow: 1;
+    margin-right: 120px;
+    min-width: 300px;
 }
