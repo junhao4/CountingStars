@@ -3,7 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Header from './components/Header.tsx'
 import './App.css'
 import Home from './components/pages/Home.tsx'
-import Login from './components/pages/Login.tsx'
+import NotFound from './components/pages/NotFound.tsx'
+ import Login from './components/pages/Login.tsx'
 
 function App() {
   const [count, setCount] = useState(0);
@@ -16,6 +17,7 @@ function App() {
           <Routes>
             <Route index path='/' element={<Home />}></Route>
             <Route path='/login' element={<Login />}></Route>
+            <Route path='*' element={<NotFound />} />
           </Routes> 
         </BrowserRouter>
       </div>
