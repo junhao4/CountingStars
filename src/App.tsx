@@ -7,6 +7,7 @@ import Login from './components/pages/Login.tsx'
 import Register from './components/pages/Register.tsx'
 import { initializeApp } from 'firebase/app'
 import { getAuth, onAuthStateChanged, type UserCredential, type User, signOut } from 'firebase/auth'
+import NotFound from './components/pages/NotFound.tsx'
 
 function App() {
   const config = {
@@ -32,7 +33,7 @@ function App() {
     <main>
       <div>
         <BrowserRouter>
-          <Header pageTitle='Login' auth={auth} user={user || null} handleUserLogout={() => {setUser(null);signOut(auth);}}/>
+          <Header pageTitle={pageTitle} auth={auth} user={user || null} handleUserLogout={() => {setUser(null);signOut(auth);}}/>
           <Routes>
             <Route index path='/' element={<Home />}></Route>
             <Route path='/login' element={<Login auth={auth} user={user || null} handleUserLogin={(user) => setUser(user)}/>}></Route>
