@@ -1,24 +1,24 @@
 import { type FormEvent, useState } from 'react';
-import './Login.css';
+import './Register.css';
 import { Link } from 'react-router-dom';
 // import Register from './Register.tsx';
-import { signInWithEmailAndPassword, type Auth, type User, signOut } from 'firebase/auth';
+import { type Auth, type User, signOut, createUserWithEmailAndPassword } from 'firebase/auth';
 
-interface LoginProps {
+interface RegisterProps {
     auth: Auth;
     user: User | null;
-    handleUserLogin: (user: User | null) => void;
+    handleUserRegister: (user: User | null) => void;
 }
 
-function Login({auth, user, handleUserLogin}: LoginProps) {
-    const handleLogin = (e: FormEvent<HTMLFormElement>) => {
+function Register({auth, user, handleUserRegister}: RegisterProps) {
+    const handleRegister = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        signInWithEmailAndPassword(auth, email, password).then(user => handleUserLogin(user.user));  
+        createUserWithEmailAndPassword(auth, email, password).then(userCreds => handleUserRegister(userCreds.user));  
     }
 
     const handleLogout = () => {
         signOut(auth);
-        handleUserLogin(null);
+        handleUserRegister(null);
     }
 
     // onAuthStateChanged(auth, user => {
@@ -31,8 +31,8 @@ function Login({auth, user, handleUserLogin}: LoginProps) {
     return (
         user
         ? <div><p>WELCOME, {user.email}</p><button onClick={handleLogout}>Log out</button></div>
-        : <div className='login-container'>
-            <form onSubmit={handleLogin} className='form-container'>
+        : <div className='register-container'>
+            <form onSubmit={handleRegister} className='form-container'>
                 <div className='form-field'>
                     <label htmlFor="email">Email:</label>
                     <input type="text" value={email} onChange={e => setEmail(e.target.value)} /><br />
@@ -42,11 +42,11 @@ function Login({auth, user, handleUserLogin}: LoginProps) {
                 <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
                 </div>
                 <div className='form-footer'>
-                    <button type="submit">Login</button>
+                    <button type="submit">Register</button>
                 </div>
             </form> 
         </div>
     );
 }
 
-export default Login;
+export default Register;

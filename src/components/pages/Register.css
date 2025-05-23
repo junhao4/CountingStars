@@ -1,4 +1,4 @@
-.login-container {
+.register-container {
     display: flex;
     flex-grow: 1;
     height: 300px;
@@ -6,11 +6,10 @@
 
     outline: 4px solid black;
     border-radius: 4px;
-    background-color: #00fff0;
+    background-color: grey;
 
     min-width: 400px;
 }
-
 
 .form-container {
     background-color: purple;
