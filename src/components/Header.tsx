@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Header.css';
 import stars from '../assets/stars.jpg';
 import noUser from '../assets/no_user.jpg';
@@ -13,6 +13,7 @@ interface HeaderProps {
 }
 
 function Header({ auth, user, pageTitle, handleUserLogout }: HeaderProps) {
+
     return (
         <div className='header-container'>
             <Link to='/' className='header-logo'>Counting Stars

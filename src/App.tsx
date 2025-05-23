@@ -38,6 +38,7 @@ function App() {
             <Route index path='/' element={<Home />}></Route>
             <Route path='/login' element={<Login auth={auth} user={user || null} handleUserLogin={(user) => setUser(user)}/>}></Route>
             <Route path='/register' element={<Register auth={auth} user={user || null} handleUserRegister={(user) => setUser(user)}/>}></Route>
+            <Route path='*' element={<NotFound />}></Route>
           </Routes> 
         </BrowserRouter>
       </div>
