@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Home.css';
 
-function Home () {
+interface HomeProps {
+    setPageTitle: (arg0: string) => void;
+}
+
+function Home ({ setPageTitle }: HomeProps) {
+
+    useEffect(() => {
+        setPageTitle("Home")
+    }, [])
     return (<><p>DADA</p></>);
 }
 
