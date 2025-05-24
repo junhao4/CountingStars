@@ -1,36 +1,49 @@
-import { type FormEvent, useState } from 'react';
+import { type FormEvent, use, useEffect, useState } from 'react';
 import './Login.css';
 import { Link } from 'react-router-dom';
 // import Register from './Register.tsx';
-import { signInWithEmailAndPassword, type Auth, type User, signOut } from 'firebase/auth';
+import supabase from '../../helper/supabaseClient.ts';
+import type { User } from '@supabase/auth-js';
 
 interface LoginProps {
-    auth: Auth;
-    user: User | null;
-    handleUserLogin: (user: User | null) => void;
+    setPageTitle: (arg0: string) => void;
 }
 
-function Login({auth, user, handleUserLogin}: LoginProps) {
-    const handleLogin = (e: FormEvent<HTMLFormElement>) => {
+function Login({ setPageTitle }: LoginProps) {
+    const [authenticated, setAuthenticated] = useState<boolean>(false);
+    const [user, setUser] = useState<User | null>(null);
+    const [message, setMessage] = useState<string>("");
+
+    const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        signInWithEmailAndPassword(auth, email, password).then(user => handleUserLogin(user.user));  
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email, password
+        });
+        if (error) {
+            setMessage(error.message);
+            return;
+        }
+        if (data) {
+            setAuthenticated(true);
+        }
     }
 
     const handleLogout = () => {
-        signOut(auth);
-        handleUserLogin(null);
+        supabase.auth.signOut();
+        setAuthenticated(false);
     }
-
-    // onAuthStateChanged(auth, user => {
-    //     console.log(1);
-    // })
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    useEffect(() => {
+        setPageTitle("Login")
+        supabase.auth.getSession().then(session => {setAuthenticated(!!session.data);setUser(session.data.session?.user || null);})
+    }, []);
+
     return (
-        user
-        ? <div><p>WELCOME, {user.email}</p><button onClick={handleLogout}>Log out</button></div>
+        authenticated
+        ? <div><p>WELCOME, {user?.email}</p><button onClick={handleLogout}>Log out</button></div>
         : <div className='login-container'>
             <form onSubmit={handleLogin} className='form-container'>
                 <div className='form-field'>
