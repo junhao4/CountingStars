@@ -3,7 +3,6 @@ import './Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 // import Register from './Register.tsx';
 import supabase from '../../helper/supabaseClient.ts';
-import type { User } from '@supabase/auth-js';
 
 interface LoginProps {
     setPageTitle: (arg0: string) => void;
@@ -32,25 +31,34 @@ function Login({ setPageTitle }: LoginProps) {
 
     useEffect(() => {
         setPageTitle("Login")
-        supabase.auth.getSession().then(session => session.data.session ? navigate('/dashboard/' + session.data.session.user.id) : null)
+        supabase.auth.getSession().then(session => 
+            {
+                if (session.error) {
+                    console.log(session.error)
+                } else if (!!!session.data.session) {
+
+                } else {
+                    navigate('/dashboard/' + session.data.session!.user.id)
+                }
+            })
     }, []);
 
     return (<div className='login-container'>
-            <form id='login' onSubmit={handleLogin} className='form-container'>
-                <div className='form-field'>
-                    <label htmlFor="email">Email:
+        <form id='login' onSubmit={handleLogin} className='form-container'>
+            <div className='form-field'>
+                <label htmlFor="email">Email:
                     <input id='email' type="text" value={email} onChange={e => setEmail(e.target.value)} /></label><br />
-                </div>
-                <div className='form-field'>
+            </div>
+            <div className='form-field'>
                 <label htmlFor="password">Password:
-                <input id='password' type="password" value={password} onChange={e => setPassword(e.target.value)} /></label>
-                </div>
-                <div className='form-footer'>
-                    <button type="submit">Login</button>
-                </div>
-            </form> 
-            <p>{message}</p>
-        </div>
+                    <input id='password' type="password" value={password} onChange={e => setPassword(e.target.value)} /></label>
+            </div>
+            <div className='form-footer'>
+                <button type="submit">Login</button>
+            </div>
+        </form>
+        <p>{message}</p>
+    </div>
     );
 }
 

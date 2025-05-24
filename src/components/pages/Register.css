@@ -32,7 +32,6 @@
 
 .form-field > label {
     display: flex;
-    flex-shrink: 1;
     margin-left: 5%;
     margin-right: 5%;
     justify-content: space-between;

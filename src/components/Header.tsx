@@ -2,16 +2,35 @@ import React, { useEffect, useState } from 'react';
 import './Header.css';
 import stars from '../assets/stars.jpg';
 import noUser from '../assets/no_user.jpg';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import type { User } from '@supabase/supabase-js'
+import supabase from '../helper/supabaseClient';
 
 interface HeaderProps {
-    user: User | null;
     pageTitle: string;
-    handleUserLogout: () => void;
 }
 
-function Header({ user, pageTitle, handleUserLogout }: HeaderProps) {
+function Header({ pageTitle }: HeaderProps) {
+    const navigate = useNavigate()
+    const [email, setEmail] = useState<string | undefined>("")
+
+    useEffect(() => {
+        supabase.auth.getSession().then(session => {
+            if (session.error) {
+
+            } else if (!!!session.data.session) {
+                
+            } else {
+                setEmail(session.data.session!.user.email || undefined)
+            }
+        })
+    }, [])
+
+    const handleUserLogout = () => {
+        supabase.auth.signOut()
+        setEmail(undefined)
+        navigate('/')
+    }
 
     return (
         <div className='header-container'>
@@ -20,10 +39,10 @@ function Header({ user, pageTitle, handleUserLogout }: HeaderProps) {
             </Link>
             <h1 className='header-title'>{pageTitle + " Page"}</h1>
             <div className='header-user-details'>
-                {user
+                {email
                     ? <><img src={noUser} alt='No User Image Default' width='50' height='50' />
                         <div>
-                            <p>Welcome, {user.email}</p>
+                            <p>Welcome, {email}</p>
                             <button onClick={handleUserLogout}>Log out</button>
                         </div>
 

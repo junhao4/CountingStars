@@ -5,18 +5,14 @@ import Header from './components/Header.tsx'
 import Home from './components/pages/Home.tsx'
 import Login from './components/pages/Login.tsx'
 import Register from './components/pages/Register.tsx'
-import Dashboard from './components/pages/Dashboard.tsx'
+import Dashboard from './components/pages/dashboard/Dashboard.tsx'
 import NotFound from './components/pages/NotFound.tsx'
 
-import { createClient, type SupabaseClient, type User } from '@supabase/supabase-js'
 import supabase from './helper/supabaseClient.ts'
 
 function App() {
-  // Create a single supabase client for interacting with your database
-  const [user, setUser] = useState<User | null>(null);
   const { data } = supabase.auth.onAuthStateChange((event, session) => {
     console.log(event, session)
-    setUser(session?.user || null);
     if (event === 'INITIAL_SESSION') {
       // handle initial session
     } else if (event === 'SIGNED_IN') {
@@ -41,12 +37,12 @@ function App() {
     <main>
       <div>
         <BrowserRouter>
-          <Header pageTitle={pageTitle} user={user || null} handleUserLogout={() => {setUser(null);}}/>
+          <Header pageTitle={pageTitle}/>
           <Routes>
             <Route index path='/' element={<Home setPageTitle={setPageTitle}/>} />
             <Route path='/login' element={<Login setPageTitle={setPageTitle}/>} />
             <Route path='/register' element={<Register setPageTitle={setPageTitle}/>} />
-            <Route path='/dashboard/*' element={<Dashboard />} />
+            <Route path='/dashboard/:userId' element={<Dashboard />} />
             <Route path='*' element={<NotFound />} />
           </Routes> 
         </BrowserRouter>
