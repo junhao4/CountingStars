@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Header from './components/Header.tsx'
 import './App.css'
+import Header from './components/Header.tsx'
 import Home from './components/pages/Home.tsx'
 import Login from './components/pages/Login.tsx'
 import Register from './components/pages/Register.tsx'
+import Dashboard from './components/pages/Dashboard.tsx'
 import NotFound from './components/pages/NotFound.tsx'
+
 import { createClient, type SupabaseClient, type User } from '@supabase/supabase-js'
 import supabase from './helper/supabaseClient.ts'
 
@@ -41,10 +43,11 @@ function App() {
         <BrowserRouter>
           <Header pageTitle={pageTitle} user={user || null} handleUserLogout={() => {setUser(null);}}/>
           <Routes>
-            <Route index path='/' element={<Home setPageTitle={setPageTitle}/>}></Route>
-            <Route path='/login' element={<Login setPageTitle={setPageTitle}/>}></Route>
-            <Route path='/register' element={<Register setPageTitle={setPageTitle}/>}></Route>
-            <Route path='*' element={<NotFound />}></Route>
+            <Route index path='/' element={<Home setPageTitle={setPageTitle}/>} />
+            <Route path='/login' element={<Login setPageTitle={setPageTitle}/>} />
+            <Route path='/register' element={<Register setPageTitle={setPageTitle}/>} />
+            <Route path='/dashboard/*' element={<Dashboard />} />
+            <Route path='*' element={<NotFound />} />
           </Routes> 
         </BrowserRouter>
       </div>

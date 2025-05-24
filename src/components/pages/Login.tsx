@@ -1,6 +1,6 @@
 import { type FormEvent, use, useEffect, useState } from 'react';
 import './Login.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 // import Register from './Register.tsx';
 import supabase from '../../helper/supabaseClient.ts';
 import type { User } from '@supabase/auth-js';
@@ -10,9 +10,10 @@ interface LoginProps {
 }
 
 function Login({ setPageTitle }: LoginProps) {
-    const [authenticated, setAuthenticated] = useState<boolean>(false);
-    const [user, setUser] = useState<User | null>(null);
+    let navigate = useNavigate();
     const [message, setMessage] = useState<string>("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -24,40 +25,31 @@ function Login({ setPageTitle }: LoginProps) {
             return;
         }
         if (data) {
-            setAuthenticated(true);
+            console.log(data)
+            navigate('/dashboard/' + data.user.id)
         }
     }
 
-    const handleLogout = () => {
-        supabase.auth.signOut();
-        setAuthenticated(false);
-    }
-
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-
     useEffect(() => {
         setPageTitle("Login")
-        supabase.auth.getSession().then(session => {setAuthenticated(!!session.data);setUser(session.data.session?.user || null);})
+        supabase.auth.getSession().then(session => session.data.session ? navigate('/dashboard/' + session.data.session.user.id) : null)
     }, []);
 
-    return (
-        authenticated
-        ? <div><p>WELCOME, {user?.email}</p><button onClick={handleLogout}>Log out</button></div>
-        : <div className='login-container'>
-            <form onSubmit={handleLogin} className='form-container'>
+    return (<div className='login-container'>
+            <form id='login' onSubmit={handleLogin} className='form-container'>
                 <div className='form-field'>
-                    <label htmlFor="email">Email:</label>
-                    <input type="text" value={email} onChange={e => setEmail(e.target.value)} /><br />
+                    <label htmlFor="email">Email:
+                    <input id='email' type="text" value={email} onChange={e => setEmail(e.target.value)} /></label><br />
                 </div>
                 <div className='form-field'>
-                <label htmlFor="password">Password:</label>
-                <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
+                <label htmlFor="password">Password:
+                <input id='password' type="password" value={password} onChange={e => setPassword(e.target.value)} /></label>
                 </div>
                 <div className='form-footer'>
                     <button type="submit">Login</button>
                 </div>
             </form> 
+            <p>{message}</p>
         </div>
     );
 }

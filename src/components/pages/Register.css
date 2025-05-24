@@ -1,5 +1,6 @@
 .register-container {
     display: flex;
+    flex-direction: column;
     flex-grow: 1;
     height: 300px;
     margin: 50px 15% 0 15%;
@@ -10,6 +11,7 @@
 
     min-width: 400px;
 }
+
 
 .form-container {
     background-color: purple;
@@ -22,26 +24,24 @@
     gap: 50px; 
 }
 
-.form-container > .form-field {
+.form-field {
     display: flex;
     justify-content: right;
     margin: 0 50px 0 0;
 }
 
-.form-container > .form-field > input {
-    border: 0;
-    outline: 2px solid black;
-}
-
-.form-container > div > label {
-    margin-left: 10%;
-}
-
-.form-container > div > input {
-    outline: 2px solid black;
+.form-field > label {
+    display: flex;
+    flex-shrink: 1;
     margin-left: 5%;
     margin-right: 5%;
-    width: calc(80% - 100px);
+    justify-content: space-between;
+    width: 90%;
+}
+
+.form-field > label > input {
+    outline: 2px solid black;
+    width: 80%;
 
 }
 
