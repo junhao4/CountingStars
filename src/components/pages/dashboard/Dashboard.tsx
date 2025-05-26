@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router';
 import './Dashboard.css'
 import supabase from '../../../helper/supabaseClient';
 import type { User } from '@supabase/auth-js';
+import { usePageTitleContext } from '../../PageTitleContext';
 
 interface DashboardProps {
     setPageTitle: (arg0: string) => void;
@@ -12,7 +13,7 @@ interface DashboardProps {
 export default function Dashboard({ setPageTitle }: DashboardProps) {
     const navigate = useNavigate();
     const [user, setUser] = useState<User | null>(null);
-
+    const { setTitle } = usePageTitleContext();
 
     const handleLogout = () => {
         supabase.auth.signOut()
@@ -20,7 +21,8 @@ export default function Dashboard({ setPageTitle }: DashboardProps) {
     }
 
     useEffect(() => {
-        setPageTitle("Dashboard")
+
+        setTitle("Dashboard");
         supabase.auth.getUser().then(response => {
             if (response.error) {
                 console.log(response.error)
