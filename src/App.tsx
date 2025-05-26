@@ -42,7 +42,7 @@ function App() {
             <Route index path='/' element={<Home setPageTitle={setPageTitle}/>} />
             <Route path='/login' element={<Login setPageTitle={setPageTitle}/>} />
             <Route path='/register' element={<Register setPageTitle={setPageTitle}/>} />
-            <Route path='/dashboard/:userId' element={<Dashboard />} />
+            <Route path='/dashboard/:userId' element={<Dashboard setPageTitle={setPageTitle} />} />
             <Route path='*' element={<NotFound />} />
           </Routes> 
         </BrowserRouter>

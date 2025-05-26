@@ -5,7 +5,12 @@ import supabase from '../../../helper/supabaseClient';
 import type { User } from '@supabase/auth-js';
 import Organizations from './Organizations';
 
-function Dashboard() {
+interface DashboardProps {
+    setPageTitle: (arg0: string) => void;
+}
+
+
+function Dashboard({ setPageTitle }: DashboardProps) {
     const { userId } = useParams();
     const navigate = useNavigate();
     const [user, setUser] = useState<User | null>(null);
@@ -16,6 +21,7 @@ function Dashboard() {
     }
 
     useEffect(() => {
+        setPageTitle("Dashboard")
         supabase.auth.getUser().then(response => {
             if (response.error) {
                 console.log(response.error)

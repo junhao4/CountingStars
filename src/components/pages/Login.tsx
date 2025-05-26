@@ -25,6 +25,7 @@ function Login({ setPageTitle }: LoginProps) {
         }
         if (data) {
             console.log(data)
+            setPageTitle("Dashboard")
             navigate('/dashboard/' + data.user.id)
         }
     }
@@ -58,7 +59,6 @@ function Login({ setPageTitle }: LoginProps) {
             </div>
         </form>
         <p>{message}</p>
-        <p>HELLO</p>
     </div>
     );
 }
