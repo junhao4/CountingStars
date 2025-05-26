@@ -5,6 +5,7 @@ import noUser from '../assets/no_user.jpg';
 import { Link, useNavigate } from 'react-router-dom'
 import type { User } from '@supabase/supabase-js'
 import supabase from '../helper/supabaseClient';
+import { usePageTitleContext } from './PageTitleContext';
 
 interface HeaderProps {
     pageTitle: string;
@@ -37,7 +38,7 @@ function Header({ pageTitle }: HeaderProps) {
             <Link to='/' className='header-logo'>Counting Stars
                 <img className='header-icon' width="50" height="50" src={stars}></img>
             </Link>
-            <h1 className='header-title'>{pageTitle + " Page"}</h1>
+            <h1 className='header-title'>{usePageTitleContext().title} + " Page"</h1>
             <div className='header-user-details'>
                 {email
                     ? <div>

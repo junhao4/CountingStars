@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router';
 import supabase from '../../../helper/supabaseClient';
 import type { User } from '@supabase/auth-js';
 import Button from '@mui/material/Button';
+import { usePageTitleContext } from '../../PageTitleContext';
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
@@ -22,6 +23,8 @@ export default function Dashboard({ setPageTitle }: DashboardProps) {
         e.preventDefault()
         // TODO
     }
+    
+    const { title, setTitle } = usePageTitleContext();
 
     const handleLogout = () => {
         supabase.auth.signOut()
@@ -29,7 +32,9 @@ export default function Dashboard({ setPageTitle }: DashboardProps) {
     }
 
     useEffect(() => {
-        setPageTitle("Dashboard")
+        console.log("Setting title to Dashboard")
+        setTitle("Dashboard");
+        console.log(title)
         supabase.auth.getUser().then(response => {
             if (response.error) {
                 console.log(response.error)
