@@ -20,11 +20,13 @@ function Register({ setPageTitle }: RegisterProps) {
             email, password
         });
         if (error) {
+            console.log(error)
             setMessage(error.message);
             return;
         }
         if (data) {
-
+            console.log(data)
+            setMessage("A link has been sent to your email");
         }
     }
 
@@ -47,6 +49,7 @@ function Register({ setPageTitle }: RegisterProps) {
                 <button type="submit">Register</button>
             </div>
         </form>
+        <p>{message}</p>
     </div>
     );
 }

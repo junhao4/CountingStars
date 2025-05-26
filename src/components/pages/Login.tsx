@@ -58,6 +58,7 @@ function Login({ setPageTitle }: LoginProps) {
             </div>
         </form>
         <p>{message}</p>
+        <p>HELLO</p>
     </div>
     );
 }
