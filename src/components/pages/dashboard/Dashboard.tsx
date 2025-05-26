@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import supabase from '../../../helper/supabaseClient';
 import type { User } from '@supabase/auth-js';
-import Button from '../../Button';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
@@ -17,6 +17,11 @@ export default function Dashboard({ setPageTitle }: DashboardProps) {
     const navigate = useNavigate();
     const [user, setUser] = useState<User | null>(null);
 
+    // Shows pop-up when the button is clicked
+    const handleAddOrganization = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        // TODO
+    }
 
     const handleLogout = () => {
         supabase.auth.signOut()
@@ -43,9 +48,12 @@ export default function Dashboard({ setPageTitle }: DashboardProps) {
             <button onClick={handleLogout}>Log out</button>
         </div>
         <Organizations />
-        <div>
-            <Button onClick={e => { e.preventDefault(); }}>Add Organization</Button>
-            <Button onClick={e => { e.preventDefault(); }}>Delete Organization</Button>
+        <div style={{display:'flex',position:'fixed',bottom:'0',left:'0',width:'100vw',
+            padding:'16px 0',justifyContent:'space-evenly',backgroundColor:'blue',
+            overflow:'auto'}}>
+            <Button onClick={handleAddOrganization}
+                variant='contained'
+                >Add Organization</Button>
         </div>
     </>
     )
