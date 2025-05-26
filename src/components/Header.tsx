@@ -5,6 +5,7 @@ import noUser from '../assets/no_user.jpg';
 import { Link, useNavigate } from 'react-router-dom'
 import type { User } from '@supabase/supabase-js'
 import supabase from '../helper/supabaseClient';
+import { usePageTitleContext } from './PageTitleContext';
 
 interface HeaderProps {
     pageTitle: string;
@@ -19,7 +20,7 @@ function Header({ pageTitle }: HeaderProps) {
             if (session.error) {
 
             } else if (!!!session.data.session) {
-                
+
             } else {
                 setEmail(session.data.session!.user.email || undefined)
             }
@@ -37,16 +38,13 @@ function Header({ pageTitle }: HeaderProps) {
             <Link to='/' className='header-logo'>Counting Stars
                 <img className='header-icon' width="50" height="50" src={stars}></img>
             </Link>
-            <h1 className='header-title'>{pageTitle + " Page"}</h1>
+            <h1 className='header-title'>{usePageTitleContext().title} + " Page"</h1>
             <div className='header-user-details'>
                 {email
-                    ? <><img src={noUser} alt='No User Image Default' width='50' height='50' />
-                        <div>
-                            <p>Welcome, {email}</p>
-                            <button onClick={handleUserLogout}>Log out</button>
-                        </div>
-
-                    </>
+                    ? <div>
+                        <p>Welcome, {email}</p>
+                        <button onClick={handleUserLogout}>Log out</button>
+                    </div>
                     : <><Link to='/login'>Login</Link><Link to='/register'>Register</Link></>}
             </div>
         </div>

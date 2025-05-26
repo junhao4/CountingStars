@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import './Dashboard.css'
 import supabase from '../../../helper/supabaseClient';
 import type { User } from '@supabase/auth-js';
 import { usePageTitleContext } from '../../PageTitleContext';
+import Button from '../../Button';
+import Card from '@mui/material/Card'
+import CardHeader from '@mui/material/CardHeader';
+import CardActions from '@mui/material/CardActions';
+import Grid from '@mui/material/Grid';
 
 interface DashboardProps {
     setPageTitle: (arg0: string) => void;
@@ -13,7 +17,7 @@ interface DashboardProps {
 export default function Dashboard({ setPageTitle }: DashboardProps) {
     const navigate = useNavigate();
     const [user, setUser] = useState<User | null>(null);
-    const { setTitle } = usePageTitleContext();
+    const { title, setTitle } = usePageTitleContext();
 
     const handleLogout = () => {
         supabase.auth.signOut()
@@ -21,8 +25,9 @@ export default function Dashboard({ setPageTitle }: DashboardProps) {
     }
 
     useEffect(() => {
-
+        console.log("Setting title to Dashboard")
         setTitle("Dashboard");
+        console.log(title)
         supabase.auth.getUser().then(response => {
             if (response.error) {
                 console.log(response.error)
@@ -40,13 +45,13 @@ export default function Dashboard({ setPageTitle }: DashboardProps) {
             <p>WELCOME, {user?.id}</p>
             <button onClick={handleLogout}>Log out</button>
         </div>
-        <Organizations user={user} />
+        <Organizations />
+        <div>
+            <Button onClick={e => { e.preventDefault(); }}>Add Organization</Button>
+            <Button onClick={e => { e.preventDefault(); }}>Delete Organization</Button>
+        </div>
     </>
     )
-}
-
-interface OrganizationsProps {
-    user: User | null
 }
 
 interface Table {
@@ -54,37 +59,35 @@ interface Table {
     organization: string | null;
 }
 
-export function Organizations({ user }: OrganizationsProps) {
+export function Organizations() {
     const [loading, setLoading] = useState(true)
     const [data, setData] = useState<Table[] | null>(null)
 
     useEffect(() => {
-        setTimeout(async () => {
-
-            const { data, error } = await supabase
-                .from('Organizations')
-                .select('*')
-
-            console.log(error?.message)
-            console.log(data)
-            setLoading(false)
-            setData(data)
-
-        }, 0)
+        supabase
+            .from('Organizations')
+            .select('*')
+            .then(response => {
+                response.error
+                    ? console.log(response.error.message)
+                    : setData(response.data)
+                setLoading(false)
+                setData(response.data)
+            })
     }, [])
 
     return loading
         ? (<>
             <div className="organization-loading">Loading...</div>
         </>)
-        : (<div className="organization-container">
-            {data?.filter(index => index.organization).map((key, index) =>
-                <div key={index} className="organization-component">
-                    <p>{key.organization!}</p>
-                    <div className="organization-component-buttons">
-                        <button>Edit</button>
-                        <button>Delete</button>
-                    </div>
-                </div>)}
-        </div>)
+        : (<Grid container spacing={2} justifyContent={'center'}>{
+                data?.filter(index => index.organization).map((key, index) =>
+                    <Card key={index}>
+                        <CardHeader title={key.organization}></CardHeader>
+                        <CardActions style={{justifyContent:'space-evenly'}}>
+                            <button>Edit</button>
+                            <button>Delete</button>
+                        </CardActions>
+                    </Card>)
+            }</Grid>)
 }

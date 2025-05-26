@@ -46,7 +46,7 @@ export function Login() {
         }
         if (data) {
             console.log(data)
-            navigate('/dashboard/' + data.user.id)
+            navigate('/dashboard')
         }
     }
 
@@ -92,9 +92,7 @@ export function Register() {
             setMessage("Email address is already taken.")
         }
     }
-        useEffect(() => {
-            supabase.auth.getSession().then(session => session.data.session ? navigate('/dashboard/' + session.data.session.user.id) : null)
-        }, []);
+        
 
     return (<div className='auth-container'>
         <form onSubmit={handleRegister} className='form-container'>
