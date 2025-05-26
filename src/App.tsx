@@ -8,6 +8,7 @@ import NotFound from './components/pages/NotFound.tsx'
 
 import supabase from './helper/supabaseClient.ts'
 import Auth from './components/pages/Auth.tsx'
+import AuthWrapper from './components/AuthWrapper.tsx'
 
 function App() {
   const { data } = supabase.auth.onAuthStateChange((event, session) => {
@@ -39,9 +40,19 @@ function App() {
           <Header pageTitle={pageTitle} />
           <Routes>
             <Route index path='/' element={<Home setPageTitle={setPageTitle} />} />
-            <Route path='/login' element={<Auth state='login' setPageTitle={setPageTitle} />} />
-            <Route path='/register' element={<Auth state='register' setPageTitle={setPageTitle} />} />
-            <Route path='/dashboard/:userId' element={<Dashboard setPageTitle={setPageTitle}/>} />
+            <Route path='/login' element={
+              <AuthWrapper>
+                <Auth user={null} state='login' setPageTitle={setPageTitle} />
+              </AuthWrapper>
+            } />
+
+            <Route path='/register' element={
+              <AuthWrapper>
+                <Auth user={null} state='register' setPageTitle={setPageTitle} />
+              </AuthWrapper>
+            } />
+
+            <Route path='/dashboard/:userId' element={<Dashboard setPageTitle={setPageTitle} />} />
             <Route path='*' element={<NotFound />} />
           </Routes>
         </BrowserRouter>
