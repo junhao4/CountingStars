@@ -19,7 +19,7 @@ function Header({ pageTitle }: HeaderProps) {
             if (session.error) {
 
             } else if (!!!session.data.session) {
-                
+
             } else {
                 setEmail(session.data.session!.user.email || undefined)
             }
@@ -40,13 +40,10 @@ function Header({ pageTitle }: HeaderProps) {
             <h1 className='header-title'>{pageTitle + " Page"}</h1>
             <div className='header-user-details'>
                 {email
-                    ? <><img src={noUser} alt='No User Image Default' width='50' height='50' />
-                        <div>
-                            <p>Welcome, {email}</p>
-                            <button onClick={handleUserLogout}>Log out</button>
-                        </div>
-
-                    </>
+                    ? <div>
+                        <p>Welcome, {email}</p>
+                        <button onClick={handleUserLogout}>Log out</button>
+                    </div>
                     : <><Link to='/login'>Login</Link><Link to='/register'>Register</Link></>}
             </div>
         </div>

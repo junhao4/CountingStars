@@ -46,25 +46,10 @@ export function Login() {
         }
         if (data) {
             console.log(data)
-            navigate('/dashboard/' + data.user.id)
+            navigate('/dashboard')
         }
     }
 
-<<<<<<< HEAD
-=======
-    useEffect(() => {
-        supabase.auth.getSession().then(session => {
-            if (session.error) {
-                console.log(session.error)
-            } else if (!!!session.data.session) {
-
-            } else {
-                navigate('/dashboard/' + session.data.session!.user.id)
-            }
-        })
-    }, []);
-
->>>>>>> 9f06e5506f4e488b3e9289ce1b95735b55629299
     return (<div className='auth-container'>
         <form id='login' onSubmit={handleLogin} className='form-container'>
             <div className='form-field'>
@@ -107,15 +92,8 @@ export function Register() {
             setMessage("Email address is already taken.")
         }
     }
-        useEffect(() => {
-            supabase.auth.getSession().then(session => session.data.session ? navigate('/dashboard/' + session.data.session.user.id) : null)
-        }, []);
+        
 
-<<<<<<< HEAD
-=======
-    
-
->>>>>>> 9f06e5506f4e488b3e9289ce1b95735b55629299
     return (<div className='auth-container'>
         <form onSubmit={handleRegister} className='form-container'>
             <div className='form-field'>
