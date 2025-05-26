@@ -3,9 +3,11 @@ import './Auth.css';
 import { Link, useNavigate } from 'react-router-dom';
 // import Register from './Register.tsx';
 import supabase from '../../helper/supabaseClient.ts';
+import type { User } from '@supabase/supabase-js';
 
-interface AuthProps {
+export interface AuthProps {
     state: string
+    user: User | null
     setPageTitle: (arg0: string) => void
 }
 
