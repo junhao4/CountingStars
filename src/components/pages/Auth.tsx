@@ -1,5 +1,5 @@
 import { type FormEvent, use, useEffect, useState } from 'react';
-import './Login.css';
+import './Auth.css';
 import { Link, useNavigate } from 'react-router-dom';
 // import Register from './Register.tsx';
 import supabase from '../../helper/supabaseClient.ts';

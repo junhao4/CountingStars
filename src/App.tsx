@@ -3,8 +3,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
 import Header from './components/Header.tsx'
 import Home from './components/pages/Home.tsx'
-import Login from './components/pages/Login.tsx'
-import Register from './components/pages/Register.tsx'
 import Dashboard from './components/pages/dashboard/Dashboard.tsx'
 import NotFound from './components/pages/NotFound.tsx'
 

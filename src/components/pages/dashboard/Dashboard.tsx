@@ -4,16 +4,12 @@ import './Dashboard.css'
 import supabase from '../../../helper/supabaseClient';
 import type { User } from '@supabase/auth-js';
 
-<<<<<<< HEAD
-export default function Dashboard() {
-=======
 interface DashboardProps {
     setPageTitle: (arg0: string) => void;
 }
 
 
-function Dashboard({ setPageTitle }: DashboardProps) {
->>>>>>> 2b3d373c9cca083a9c90e32bf2dfb4a9e6cd51d3
+export default function Dashboard({ setPageTitle }: DashboardProps) {
     const { userId } = useParams();
     const navigate = useNavigate();
     const [user, setUser] = useState<User | null>(null);
