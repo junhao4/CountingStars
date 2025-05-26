@@ -10,9 +10,9 @@ interface DashboardProps {
 
 
 export default function Dashboard({ setPageTitle }: DashboardProps) {
-    const { userId } = useParams();
     const navigate = useNavigate();
     const [user, setUser] = useState<User | null>(null);
+
 
     const handleLogout = () => {
         supabase.auth.signOut()
@@ -27,25 +27,18 @@ export default function Dashboard({ setPageTitle }: DashboardProps) {
                 alert("Session does not exist or is expired!")
                 navigate('/')
             } else {
-                if (userId === response.data.user.id) {
-                    setUser(user);
-                } else {
-                    console.log(userId)
-                    console.log(response.data.user.id)
-                    console.log('User ID does not match URL link!')
-                    alert('User ID does not match URL link!')
-                    navigate('/')
-                }
+                console.log(response.data.user)
+                console.log(response.data.user.id)
             }
         })
     }, [])
 
     return (<>
         <div>
-            <p>WELCOME, {userId}</p>
+            <p>WELCOME, {user?.id}</p>
             <button onClick={handleLogout}>Log out</button>
         </div>
-        <Organizations user={user}/>
+        <Organizations user={user} />
     </>
     )
 }

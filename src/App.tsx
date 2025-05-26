@@ -52,7 +52,7 @@ function App() {
               </AuthWrapper>
             } />
 
-            <Route path='/dashboard/:userId' element={<Dashboard setPageTitle={setPageTitle} />} />
+            <Route path='/dashboard' element={<Dashboard setPageTitle={setPageTitle} />} />
             <Route path='*' element={<NotFound />} />
           </Routes>
         </BrowserRouter>

@@ -18,18 +18,19 @@ export default function AuthWrapper({ children, ...otherProps }: AuthWrapperProp
             .then(response => {
                 setUser(response.data.session?.user || null);
                 setLoading(false)
+                console.log(user)
             })
     }, [])
+
+    console.log(loading)
+    console.log(user)
 
 
     if (loading) {
         console.log(1)
         return (<p>Loading...</p>)
-    } else if (!!!user) {
-        console.log(2)
-        return React.cloneElement(children, { ...otherProps, user })
     } else {
-        console.log(3)
-        return (<></>)
-    }
+        console.log(2)
+        return React.cloneElement(children, {...otherProps, user})
+    } 
 }

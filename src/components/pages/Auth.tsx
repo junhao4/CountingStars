@@ -11,16 +11,19 @@ export interface AuthProps {
     setPageTitle: (arg0: string) => void
 }
 
-export default function Auth({ state, setPageTitle }: AuthProps) {
+export default function Auth({ state, setPageTitle, user }: AuthProps) {
     let navigate = useNavigate();
 
     useEffect(() => {
-        setPageTitle(state.charAt(0).toUpperCase() + state.slice(1, state.length))
-    }, [state])
+        if (!!user) {
+            console.log(44)
+            navigate('/dashboard')
+        }
+    }, [])
 
     return (state === 'login'
         ? <Login />
-        : state ==='register'
+        : state === 'register'
             ? <Register />
             : <p>Error!</p>
     )
@@ -46,19 +49,6 @@ export function Login() {
             navigate('/dashboard/' + data.user.id)
         }
     }
-
-    useEffect(() => {
-        supabase.auth.getSession().then(session => 
-            {
-                if (session.error) {
-                    console.log(session.error)
-                } else if (!!!session.data.session) {
-
-                } else {
-                    navigate('/dashboard/' + session.data.session!.user.id)
-                }
-            })
-    }, []);
 
     return (<div className='auth-container'>
         <form id='login' onSubmit={handleLogin} className='form-container'>
@@ -98,10 +88,6 @@ export function Register() {
 
         }
     }
-
-    useEffect(() => {
-        supabase.auth.getSession().then(session => session.data.session ? navigate('/dashboard/' + session.data.session.user.id) : null)
-    }, []);
 
     return (<div className='auth-container'>
         <form onSubmit={handleRegister} className='form-container'>
