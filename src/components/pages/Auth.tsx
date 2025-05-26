@@ -18,7 +18,7 @@ export default function Auth({ state, setPageTitle }: AuthProps) {
 
     return (state === 'login'
         ? <Login />
-        : state ==='register'
+        : state === 'register'
             ? <Register />
             : <p>Error!</p>
     )
@@ -46,16 +46,15 @@ export function Login() {
     }
 
     useEffect(() => {
-        supabase.auth.getSession().then(session => 
-            {
-                if (session.error) {
-                    console.log(session.error)
-                } else if (!!!session.data.session) {
+        supabase.auth.getSession().then(session => {
+            if (session.error) {
+                console.log(session.error)
+            } else if (!!!session.data.session) {
 
-                } else {
-                    navigate('/dashboard/' + session.data.session!.user.id)
-                }
-            })
+            } else {
+                navigate('/dashboard/' + session.data.session!.user.id)
+            }
+        })
     }, []);
 
     return (<div className='auth-container'>
@@ -92,14 +91,19 @@ export function Register() {
             setMessage(error.message);
             return;
         }
-        if (data) {
-
+        if (data.user?.identities && data.user.identities.length > 0) {
+            console.log("Sign-up successful!");
+            setMessage("A link was sent to your email")
+        } else {
+            console.log("Email address is already taken.");
+            setMessage("Email address is already taken.")
         }
     }
+        useEffect(() => {
+            supabase.auth.getSession().then(session => session.data.session ? navigate('/dashboard/' + session.data.session.user.id) : null)
+        }, []);
 
-    useEffect(() => {
-        supabase.auth.getSession().then(session => session.data.session ? navigate('/dashboard/' + session.data.session.user.id) : null)
-    }, []);
+    
 
     return (<div className='auth-container'>
         <form onSubmit={handleRegister} className='form-container'>
@@ -115,6 +119,8 @@ export function Register() {
                 <button type="submit">Register</button>
             </div>
         </form>
+        <p>{message}</p>
     </div>
     );
+
 }
