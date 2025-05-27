@@ -1,15 +1,20 @@
 import React, { useEffect } from 'react';
 import './Home.css';
+import { usePageTitleContext } from '../contexts/PageTitleContext';
 
-interface HomeProps {
-    setPageTitle: (arg0: string) => void;
-}
 
-function Home ({ setPageTitle }: HomeProps) {
+function Home () {
 
+    //Set header title to Home
+    const { title, setTitle } = usePageTitleContext();
+    
     useEffect(() => {
-        setPageTitle("Home")
+        console.log("Setting title to Home")
+        setTitle("Home");
+        console.log(title)
     }, [])
+    //
+
     return (<><p>DADA</p></>);
 }
 

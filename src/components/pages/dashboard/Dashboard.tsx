@@ -1,22 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import supabase from '../../../helper/supabaseClient';
-import type { User } from '@supabase/auth-js';
 import Button from '@mui/material/Button';
-import { usePageTitleContext } from '../../PageTitleContext';
+import { usePageTitleContext } from '../../contexts/PageTitleContext';
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
 import Grid from '@mui/material/Grid';
-
-interface DashboardProps {
-    setPageTitle: (arg0: string) => void;
-}
+import { useSession } from '../../contexts/SessionContext';
 
 
-export default function Dashboard({ setPageTitle }: DashboardProps) {
+export default function Dashboard() {
     const navigate = useNavigate();
-    const [user, setUser] = useState<User | null>(null);
+    const { session } = useSession();
 
     // Shows pop-up when the button is clicked
     const handleAddOrganization = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -35,21 +31,13 @@ export default function Dashboard({ setPageTitle }: DashboardProps) {
         console.log("Setting title to Dashboard")
         setTitle("Dashboard");
         console.log(title)
-        supabase.auth.getUser().then(response => {
-            if (response.error) {
-                console.log(response.error)
-                alert("Session does not exist or is expired!")
-                navigate('/')
-            } else {
-                console.log(response.data.user)
-                console.log(response.data.user.id)
-            }
-        })
+        console.log(session)
+
     }, [])
 
     return (<>
         <div>
-            <p>WELCOME, {user?.id}</p>
+            <p>WELCOME, {session?.user.email}</p>
             <button onClick={handleLogout}>Log out</button>
         </div>
         <Organizations />

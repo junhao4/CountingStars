@@ -3,19 +3,19 @@ import './Auth.css';
 import { Link, useNavigate } from 'react-router-dom';
 // import Register from './Register.tsx';
 import supabase from '../../helper/supabaseClient.ts';
-import type { User } from '@supabase/supabase-js';
+import { usePageTitleContext } from '../contexts/PageTitleContext';
+import { useSession } from '../contexts/SessionContext.tsx';
 
 export interface AuthProps {
     state: string
-    user: User | null
-    setPageTitle: (arg0: string) => void
 }
 
-export default function Auth({ state, setPageTitle, user }: AuthProps) {
+export default function Auth({ state }: AuthProps) {
     let navigate = useNavigate();
+    const { session } = useSession();
 
     useEffect(() => {
-        if (!!user) {
+        if (session) {
             console.log(44)
             navigate('/dashboard')
         }
@@ -49,6 +49,16 @@ export function Login() {
             navigate('/dashboard')
         }
     }
+
+    //Set header title to Login
+    const { title, setTitle } = usePageTitleContext();
+
+    useEffect(() => {
+        console.log("Setting title to Login")
+        setTitle("Login");
+        console.log(title)
+    }, [])
+    //
 
     return (<div className='auth-container'>
         <form id='login' onSubmit={handleLogin} className='form-container'>
@@ -92,6 +102,16 @@ export function Register() {
             setMessage("Email address is already taken.")
         }
     }
+
+    //Set header title to Register
+    const { title, setTitle } = usePageTitleContext();
+
+    useEffect(() => {
+        console.log("Setting title to Register")
+        setTitle("Register");
+        console.log(title)
+    }, [])
+    //
         
 
     return (<div className='auth-container'>

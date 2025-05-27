@@ -1,36 +1,28 @@
-import React, { useEffect, useState } from "react"
-import supabase from "../helper/supabaseClient"
-import type { User } from "@supabase/supabase-js"
+
 import { Navigate, useNavigate } from "react-router-dom"
-import type { AuthProps } from "./pages/Auth"
+import { useSession } from "./contexts/SessionContext"
 
 interface AuthWrapperProps {
-    children: React.ReactElement<AuthProps>
+    children: React.ReactNode
 }
 
-export default function AuthWrapper({ children, ...otherProps }: AuthWrapperProps) {
+export default function AuthWrapper({ children }: AuthWrapperProps) {
     const navigate = useNavigate()
-    const [loading, setLoading] = useState(true)
-    const [user, setUser] = useState<User | null>(null)
+    const { session, loading } = useSession();
 
-    useEffect(() => {
-        supabase.auth.getSession()
-            .then(response => {
-                setUser(response.data.session?.user || null);
-                setLoading(false)
-                console.log(user)
-            })
-    }, [])
-
-    console.log(loading)
-    console.log(user)
-
-
+    //ensures users are logged in before rendering the page
     if (loading) {
         console.log(1)
         return (<p>Loading...</p>)
-    } else {
+    } else if (!session) {
         console.log(2)
-        return React.cloneElement(children, {...otherProps, user})
-    } 
+        alert("Session does not exist or is expired! Please login again")
+        return (<Navigate to='/login' />)
+    } else {
+        return (
+        <>
+            {children}
+        </>
+        )
+    }
 }

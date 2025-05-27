@@ -5,31 +5,16 @@ import noUser from '../assets/no_user.jpg';
 import { Link, useNavigate } from 'react-router-dom'
 import type { User } from '@supabase/supabase-js'
 import supabase from '../helper/supabaseClient';
-import { usePageTitleContext } from './PageTitleContext';
+import { usePageTitleContext } from './contexts/PageTitleContext';
+import { useSession } from './contexts/SessionContext';
 
-interface HeaderProps {
-    pageTitle: string;
-}
 
-function Header({ pageTitle }: HeaderProps) {
+function Header() {
+    const { session, loading } = useSession();
     const navigate = useNavigate()
-    const [email, setEmail] = useState<string | undefined>("")
-
-    useEffect(() => {
-        supabase.auth.getSession().then(session => {
-            if (session.error) {
-
-            } else if (!!!session.data.session) {
-
-            } else {
-                setEmail(session.data.session!.user.email || undefined)
-            }
-        })
-    }, [])
 
     const handleUserLogout = () => {
         supabase.auth.signOut()
-        setEmail(undefined)
         navigate('/')
     }
 
@@ -38,11 +23,11 @@ function Header({ pageTitle }: HeaderProps) {
             <Link to='/' className='header-logo'>Counting Stars
                 <img className='header-icon' width="50" height="50" src={stars}></img>
             </Link>
-            <h1 className='header-title'>{usePageTitleContext().title} + " Page"</h1>
+            <h1 className='header-title'>{usePageTitleContext().title + " Page"}</h1>
             <div className='header-user-details'>
-                {email
+                {session
                     ? <div>
-                        <p>Welcome, {email}</p>
+                        <p>Welcome, {session.user.email}</p>
                         <button onClick={handleUserLogout}>Log out</button>
                     </div>
                     : <><Link to='/login'>Login</Link><Link to='/register'>Register</Link></>}

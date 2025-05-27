@@ -5,10 +5,13 @@ import Header from './components/Header.tsx'
 import Home from './components/pages/Home.tsx'
 import Dashboard from './components/pages/dashboard/Dashboard.tsx'
 import NotFound from './components/pages/NotFound.tsx'
-
+import { PageTitleProvider } from './components/contexts/PageTitleContext.tsx'
+import { SessionProvider } from './components/contexts/SessionContext.tsx'
 import supabase from './helper/supabaseClient.ts'
 import Auth from './components/pages/Auth.tsx'
 import AuthWrapper from './components/AuthWrapper.tsx'
+
+
 
 function App() {
   const { data } = supabase.auth.onAuthStateChange((event, session) => {
@@ -31,31 +34,33 @@ function App() {
   // call unsubscribe to remove the callback
   data.subscription.unsubscribe();
 
-  const [pageTitle, setPageTitle] = useState("Home");
-
   return (
     <main>
       <div>
-        <BrowserRouter>
-          <Header pageTitle={pageTitle} />
-          <Routes>
-            <Route index path='/' element={<Home setPageTitle={setPageTitle} />} />
-            <Route path='/login' element={
-              <AuthWrapper>
-                <Auth user={null} state='login' setPageTitle={setPageTitle} />
-              </AuthWrapper>
-            } />
+        <SessionProvider>
+        <PageTitleProvider>
+          <BrowserRouter>
+            <Header />
+            <Routes>
+              <Route index path='/' element={<Home />} />
+              <Route path='/login' element={
+                  <Auth state='login' />
+              } />
 
-            <Route path='/register' element={
-              <AuthWrapper>
-                <Auth user={null} state='register' setPageTitle={setPageTitle} />
-              </AuthWrapper>
-            } />
-
-            <Route path='/dashboard' element={<Dashboard setPageTitle={setPageTitle} />} />
-            <Route path='*' element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+              <Route path='/register' element={
+                  <Auth state='register' />
+              } />
+                <Route path='/dashboard' element={ 
+                  <AuthWrapper>
+                     <Dashboard /> 
+                  </AuthWrapper>
+              } />
+              
+              <Route path='*' element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </PageTitleProvider>
+        </SessionProvider>
       </div>
     </main>
   )
