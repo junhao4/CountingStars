@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from 'react';
 import './Header.css';
 import stars from '../assets/stars.jpg';
-import noUser from '../assets/no_user.jpg';
 import { Link, useNavigate } from 'react-router-dom'
-import type { User } from '@supabase/supabase-js'
 import supabase from '../helper/supabaseClient';
 import { usePageTitleContext } from './contexts/PageTitleContext';
 import { useSession } from './contexts/SessionContext';

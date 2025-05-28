@@ -11,19 +11,41 @@ export type Database = {
     Tables: {
       Organizations: {
         Row: {
-          id: string
-          organization: string | null
+          user_id: string
+          name: string
+          image_file?: string
         }
         Insert: {
-          id: string
-          organization?: string | null
+          user_id: string
+          name?: string
+          image_file?: string
         }
         Update: {
-          id?: string
-          organization?: string | null
+          user_id?: string
+          name?: string
+          image_file?: string
         }
         Relationships: []
-      }
+      },
+
+      users_organizations: {
+        Row: {
+          id: number
+          user_id: string
+          organization_id: string
+        }
+        Insert: {
+          id: number
+          user_id: string
+          organization?: string
+        }
+        Update: {
+          id: number
+          user_id?: string
+          organization?: string
+        }
+        Relationships: []
+      },
     }
     Views: {
       [_ in never]: never
