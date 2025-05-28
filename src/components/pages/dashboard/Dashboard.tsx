@@ -78,6 +78,12 @@ export function Organizations({ user }: { user: User }) {
                         : console.log(response.data)
                     return response;
                 })
+            
+            if (data?.length == 0) {
+                setLoading(false)
+                return
+            }
+
 
             // Maps organization ids to their names and image file
             data?.map(async d => {
@@ -123,7 +129,7 @@ export function Organizations({ user }: { user: User }) {
             ? (<>
                 <div className="organization-loading">Loading...</div>
             </>)
-            : data
+            : data.length > 0
                 ? (<Grid container spacing={2} justifyContent={'center'} overflow={'auto'} wrap='wrap' >{
                     data.map((key, index) =>
                         <Card sx={{ width: 'max(25%,200px)' }} key={index}>
