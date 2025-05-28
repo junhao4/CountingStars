@@ -42,6 +42,7 @@ export function Login() {
         });
         if (error) {
             setMessage(error.message);
+            setPassword("")
             return;
         }
         if (data) {
