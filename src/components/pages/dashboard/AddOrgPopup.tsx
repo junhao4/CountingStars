@@ -4,6 +4,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { useState } from "react"
 import supabase from '../../../helper/supabaseClient';
 import { useSessionContext } from '../../contexts/SessionContext';
+import { red } from '@mui/material/colors';
 
 interface AddOrgPopupProps {
     trigger: boolean
@@ -25,6 +26,7 @@ const VisuallyHiddenInput = styled('input')({
 export default function AddOrgPopup({ trigger, closePopup }: AddOrgPopupProps) {
     const [name, setName] = useState("")
     const [img, setImg] = useState<FileList | null>(null)
+    const [errorMessage, setErrorMessage] = useState("")
     const { session } = useSessionContext()
 
     const handleAddOrganization = async () => {
@@ -44,18 +46,26 @@ export default function AddOrgPopup({ trigger, closePopup }: AddOrgPopupProps) {
             return
         }
 
-        const img_name = img?.length == 1 ? img[0].name : undefined
+        // Check that organization name is unique for the user
+        const { data: org } = await supabase.from('Organizations')
+            .select('id')
+            .eq('name',name)
 
-        img?.length == 1
-            ? supabase.storage.from('organization-images').upload('' + img_name!, img[0], {
+        if (org?.length !== 0) {
+            alert("You already have an organization with the same name. Please choose another name.")
+            return
+        }
+
+        img?.length === 1
+            ? supabase.storage.from('organization-images').upload(img[0].name, img[0], {
                 cacheControl: '3600',
                 upsert: false
-            }).then(res => console.log(res.error?.message))
+            }).then(res => setErrorMessage((prev) => prev + res.error?.message))
             : null
 
-        await supabase.from('Organizations')
-            .insert({ name, image_file: img_name })
-            .then(res => console.log(res.error))
+        supabase.from('Organizations')
+            .insert({ name, image_file: img?.[0].name })
+            .then(res => {console.log(res);setErrorMessage((prev) => prev + res.error?.message)}    )
 
         const { data, error } = await supabase.from('Organizations')
             .select('id')
@@ -64,12 +74,22 @@ export default function AddOrgPopup({ trigger, closePopup }: AddOrgPopupProps) {
         if (error) {
             console.log(error.message)
         } else {
+            if (data.length !== 1) {
+                alert("Error while fetching: Zero or More than one organization with the same name in database")
+                return
+            }
             supabase.from('users_organizations')
                 .insert({ user_id: session!.user.id, organization_id: data[0].id, access_level: 'owner' })
-                .then(res => console.log(res.error?.message))
+                .then(res => setErrorMessage((prev) => prev + res.error?.message))
                 .then(closePopup)
         }
+
+        if (errorMessage !== '') {
+            alert(errorMessage)
+            setErrorMessage("")
+        }
     }
+
     return (<>
         <Modal open={trigger}
             onClose={closePopup}>
