@@ -9,14 +9,14 @@ import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
 import Grid from '@mui/material/Grid';
-import { useSession } from '../../contexts/SessionContext';
+import { useSessionContext } from '../../contexts/SessionContext';
 import { CardMedia } from '@mui/material';
 
 
 export default function Dashboard() {
     const navigate = useNavigate()
     const { title, setTitle } = usePageTitleContext()
-    const { session } = useSession()
+    const { session } = useSessionContext()
     // Renders the Add Organization Pop-up if true
     const [trigger, setTrigger] = useState(false)
 

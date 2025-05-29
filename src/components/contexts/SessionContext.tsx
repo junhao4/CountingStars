@@ -40,4 +40,4 @@ export const SessionProvider = ({ children } : { children: React.ReactNode }) =>
     );
 };
 
-export const useSession = () => useContext(SessionContext)
+export const useSessionContext = () => useContext(SessionContext)

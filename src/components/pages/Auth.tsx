@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 // import Register from './Register.tsx';
 import supabase from '../../helper/supabaseClient.ts';
 import { usePageTitleContext } from '../contexts/PageTitleContext';
-import { useSession } from '../contexts/SessionContext.tsx';
+import { useSessionContext } from '../contexts/SessionContext.tsx';
 
 export interface AuthProps {
     state: string
@@ -12,7 +12,7 @@ export interface AuthProps {
 
 export default function Auth({ state }: AuthProps) {
     let navigate = useNavigate();
-    const { session } = useSession();
+    const { session } = useSessionContext();
 
     useEffect(() => {
         if (session) {
