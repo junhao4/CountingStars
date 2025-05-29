@@ -1,0 +1,160 @@
+{
+  "hash": "12462657",
+  "configHash": "c353fd7c",
+  "lockfileHash": "dc69bba9",
+  "browserHash": "29738350",
+  "optimized": {
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "39b729e9",
+      "needsInterop": true
+    },
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "056e69d6",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "64090659",
+      "needsInterop": true
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/react-router-dom/dist/index.mjs",
+      "file": "react-router-dom.js",
+      "fileHash": "48face13",
+      "needsInterop": false
+    },
+    "@supabase/supabase-js": {
+      "src": "../../node_modules/@supabase/supabase-js/dist/module/index.js",
+      "file": "@supabase_supabase-js.js",
+      "fileHash": "e84e0006",
+      "needsInterop": false
+    },
+    "react-router": {
+      "src": "../../node_modules/react-router/dist/development/index.mjs",
+      "file": "react-router.js",
+      "fileHash": "f6fe3f5f",
+      "needsInterop": false
+    },
+    "@mui/material/Button": {
+      "src": "../../node_modules/@mui/material/esm/Button/index.js",
+      "file": "@mui_material_Button.js",
+      "fileHash": "7a34760d",
+      "needsInterop": false
+    },
+    "@mui/material/Card": {
+      "src": "../../node_modules/@mui/material/esm/Card/index.js",
+      "file": "@mui_material_Card.js",
+      "fileHash": "74e4d6f5",
+      "needsInterop": false
+    },
+    "@mui/material/CardHeader": {
+      "src": "../../node_modules/@mui/material/esm/CardHeader/index.js",
+      "file": "@mui_material_CardHeader.js",
+      "fileHash": "93ca1525",
+      "needsInterop": false
+    },
+    "@mui/material/CardActions": {
+      "src": "../../node_modules/@mui/material/esm/CardActions/index.js",
+      "file": "@mui_material_CardActions.js",
+      "fileHash": "b8a2696a",
+      "needsInterop": false
+    },
+    "@mui/material/Grid": {
+      "src": "../../node_modules/@mui/material/esm/Grid/index.js",
+      "file": "@mui_material_Grid.js",
+      "fileHash": "b947f12c",
+      "needsInterop": false
+    },
+    "@mui/material": {
+      "src": "../../node_modules/@mui/material/esm/index.js",
+      "file": "@mui_material.js",
+      "fileHash": "d4e8cfbd",
+      "needsInterop": false
+    },
+    "@mui/material/styles": {
+      "src": "../../node_modules/@mui/material/esm/styles/index.js",
+      "file": "@mui_material_styles.js",
+      "fileHash": "07a58fc7",
+      "needsInterop": false
+    },
+    "@mui/icons-material/CloudUpload": {
+      "src": "../../node_modules/@mui/icons-material/esm/CloudUpload.js",
+      "file": "@mui_icons-material_CloudUpload.js",
+      "fileHash": "ab1df21d",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-OQTEHWOU": {
+      "file": "chunk-OQTEHWOU.js"
+    },
+    "chunk-XWCRRY4G": {
+      "file": "chunk-XWCRRY4G.js"
+    },
+    "chunk-2HWYBLTZ": {
+      "file": "chunk-2HWYBLTZ.js"
+    },
+    "chunk-WKHF7UVQ": {
+      "file": "chunk-WKHF7UVQ.js"
+    },
+    "browser-J6IYAAS7": {
+      "file": "browser-J6IYAAS7.js"
+    },
+    "browser-2YNC6QW7": {
+      "file": "browser-2YNC6QW7.js"
+    },
+    "chunk-7W32CK3N": {
+      "file": "chunk-7W32CK3N.js"
+    },
+    "chunk-7VFJSRIG": {
+      "file": "chunk-7VFJSRIG.js"
+    },
+    "chunk-V4K6L3EG": {
+      "file": "chunk-V4K6L3EG.js"
+    },
+    "chunk-G4FQZWC4": {
+      "file": "chunk-G4FQZWC4.js"
+    },
+    "chunk-QY6B7Z6K": {
+      "file": "chunk-QY6B7Z6K.js"
+    },
+    "chunk-65MYGDHS": {
+      "file": "chunk-65MYGDHS.js"
+    },
+    "chunk-A6VN6OYH": {
+      "file": "chunk-A6VN6OYH.js"
+    },
+    "chunk-MWUQT4FA": {
+      "file": "chunk-MWUQT4FA.js"
+    },
+    "chunk-VLBX76VC": {
+      "file": "chunk-VLBX76VC.js"
+    },
+    "chunk-JX37XSKT": {
+      "file": "chunk-JX37XSKT.js"
+    },
+    "chunk-672RU7J7": {
+      "file": "chunk-672RU7J7.js"
+    },
+    "chunk-TD3SZGN2": {
+      "file": "chunk-TD3SZGN2.js"
+    },
+    "chunk-74CWLEMY": {
+      "file": "chunk-74CWLEMY.js"
+    },
+    "chunk-AJGNT5AL": {
+      "file": "chunk-AJGNT5AL.js"
+    },
+    "chunk-4X6FFAZQ": {
+      "file": "chunk-4X6FFAZQ.js"
+    },
+    "chunk-EWTE5DHJ": {
+      "file": "chunk-EWTE5DHJ.js"
+    }
+  }
+}
