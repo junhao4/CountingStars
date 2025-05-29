@@ -16,10 +16,11 @@ export default function Auth({ state }: AuthProps) {
 
     useEffect(() => {
         if (session) {
-            console.log(44)
             navigate('/dashboard')
         }
     }, [])
+
+    
 
     return (state === 'login'
         ? <Login />

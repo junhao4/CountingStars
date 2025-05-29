@@ -4,6 +4,7 @@ import supabase from '../../../helper/supabaseClient';
 import { type User } from '@supabase/supabase-js'
 import Button from '@mui/material/Button';
 import { usePageTitleContext } from '../../contexts/PageTitleContext';
+import AddOrgPopup from './AddOrgPopup';
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
@@ -17,14 +18,7 @@ export default function Dashboard() {
     const { title, setTitle } = usePageTitleContext()
     const { session } = useSessionContext()
     // Renders the Add Organization Pop-up if true
-    const [popup, setPopup] = useState(false)
-
-    // Shows pop-up when the button is clicked
-    const handleAddOrganization = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault()
-        // TODO
-        setPopup(true)
-    }
+    const [trigger, setTrigger] = useState(false)
 
     // Logs user out and navigate to home page
     const handleLogout = () => {
@@ -53,15 +47,13 @@ export default function Dashboard() {
             padding: '16px 0', justifyContent: 'space-evenly', backgroundColor: 'blue',
             overflow: 'auto'
         }}>
-            <Button onClick={handleAddOrganization}
+            <Button onClick={(e) => setTrigger(true)}
                 variant='contained'
             >Add Organization</Button>
         </div>
 
         {/* Show pop-up for user to submit organization details and add */}
-        <div hidden={!popup} style={{ position: 'absolute', top: '25%', left: '25%' }}>
-            HELLO
-        </div>
+        <AddOrgPopup trigger={trigger} closePopup={() => setTrigger(false)} />
     </>
     )
 }
@@ -71,7 +63,7 @@ interface OrganizationFetch {
     image: string
 }
 
-export function Organizations({ user }: { user: User }) {
+function Organizations({ user }: { user: User }) {
     const [loading, setLoading] = useState(true)
     const [data, setData] = useState<OrganizationFetch[]>([])
     const [img, setImg] = useState<(string)[]>([])
