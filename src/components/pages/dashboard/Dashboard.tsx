@@ -43,9 +43,9 @@ export default function Dashboard() {
 
         {/* Displays the footer with Add Organization button that unhides pop-up */}
         <div style={{
-            display: 'flex', position: 'absolute', bottom: '0', left: '0', width: '100vw',
+            display: 'flex', bottom: '0', left: '0', width: '100vw',
             padding: '16px 0', justifyContent: 'space-evenly', backgroundColor: 'blue',
-            overflow: 'auto'
+            overflow: 'auto', position: 'fixed'
         }}>
             <Button onClick={(e) => setTrigger(true)}
                 variant='contained'
@@ -134,7 +134,9 @@ function Organizations({ user }: { user: User }) {
             <div className="organization-loading">Loading...</div>
         </>)
         : data.length > 0
-            ? (<Grid container padding={'2px'} spacing={2} justifyContent={'center'} overflow={'auto'} wrap='wrap' >{
+            ? (
+                <>
+            <Grid container padding={'2px'} spacing={2} justifyContent={'center'} overflow={'auto'} wrap='wrap' >{
                 data.map((key, index) =>
                     <Card sx={{ width: 'max(25%,200px)' }} key={index}>
                         {img[index]
@@ -147,6 +149,8 @@ function Organizations({ user }: { user: User }) {
                             <button>Delete</button>
                         </CardActions>
                     </Card>)
-            }</Grid>)
+            }</Grid>
+            <div style={{height: '80px'}}></div>
+            </>)
             : (<>No Organizations found!</>)
 }
