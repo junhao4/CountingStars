@@ -19,11 +19,21 @@ export default function Dashboard() {
     const { session } = useSessionContext()
     // Renders the Add Organization Pop-up if true
     const [trigger, setTrigger] = useState(false)
+    const [refresh, setRefresh] = useState(true)
+    const [org, setOrg] = useState<OrganizationFetch | null>(null)
+    const [add, setAdd] = useState(true)
 
     // Logs user out and navigate to home page
     const handleLogout = () => {
         supabase.auth.signOut()
         navigate('/')
+    }
+
+    // When the Add button is clicked
+    const addOrg = () => {
+        setAdd(true)
+        setOrg(null)
+        setTrigger(true)
     }
 
     // On mount, set header title to 'Dashboard'
@@ -39,7 +49,7 @@ export default function Dashboard() {
         </div>
 
         {/* Fetches organizations from the database and displays in a grid */}
-        <Organizations user={session!.user} />
+        <Organizations user={session!.user} refresh={refresh} setRefresh={setRefresh} setOrg={setOrg} setTrigger={setTrigger} setAdd={setAdd}/>
 
         {/* Displays the footer with Add Organization button that unhides pop-up */}
         <div style={{
@@ -47,29 +57,43 @@ export default function Dashboard() {
             padding: '16px 0', justifyContent: 'space-evenly', backgroundColor: 'blue',
             overflow: 'auto', position: 'fixed'
         }}>
-            <Button onClick={(e) => setTrigger(true)}
+            <Button onClick={(e) => addOrg()}
                 variant='contained'
             >Add Organization</Button>
         </div>
 
         {/* Show pop-up for user to submit organization details and add */}
-        <AddOrgPopup trigger={trigger} closePopup={() => setTrigger(false)} />
+        <AddOrgPopup trigger={trigger} closePopup={() => setTrigger(false)} setRefresh={setRefresh} refresh={refresh} add={add} org={org} setAdd={setAdd}/>
     </>
     )
 }
 
-interface OrganizationFetch {
+export interface OrganizationFetch {
     name: string
     image: string
+    id: number
 }
 
-function Organizations({ user }: { user: User }) {
+interface OrganizationsProps {
+    user : User
+    refresh: boolean
+    setRefresh : (refresh : boolean) => void
+    setOrg: (org : OrganizationFetch) => void
+    setTrigger: (trigger : boolean) => void
+    setAdd: (add : boolean) => void
+}
+
+function Organizations({ user, refresh, setRefresh, setOrg, setTrigger, setAdd }: OrganizationsProps) {
     const [loading, setLoading] = useState(true)
     const [data, setData] = useState<OrganizationFetch[]>([])
     const [img, setImg] = useState<(string)[]>([])
 
+
     // On render, fetch organization ids
     useEffect(() => {
+        setData([]);
+        setImg([]);
+        setLoading(true);
         new Promise<OrganizationFetch>(async () => {
             // Retrieves an array of organization ids
             const { data, error } = await supabase
@@ -92,12 +116,12 @@ function Organizations({ user }: { user: User }) {
             data?.map(async d => {
                 const images: string[] = await supabase
                     .from('Organizations')
-                    .select('name, image_file')
+                    .select('name, image_file, id')
                     .eq('id', d.organization_id)
                     .then(response => {
                         response.error
                             ? console.log(response.error.message)
-                            : response.data.forEach(f => { setData(prev => [...prev, { name: f.name, image: f.image_file || '' }]) })
+                            : response.data.forEach(f => { setData(prev => [...prev, { name: f.name, image: f.image_file || '', id: f.id }]) })
                         return response.data
                             ? response.data.map(f => f.image_file || '')
                             : []
@@ -124,8 +148,31 @@ function Organizations({ user }: { user: User }) {
                 })
             })
         })
-        // return () => URL.revokeObjectURL(img)
-    }, [])
+    }, [refresh])
+
+    const deleteOrg = async (key : OrganizationFetch) => {
+        const confirm = window.confirm("Are you sure you want to delete? This action is permanent!")
+        if (!confirm) {
+            return
+        }
+        const { data, error } = await supabase
+            .from("Organizations")
+            .delete()
+            .eq("id", key.id)
+
+        if (error) {
+            console.log("error deleting: ", error)
+        } else {
+            console.log("deleted" , key.id)
+            setRefresh(!refresh)
+        }
+    }
+
+    const editOrg = async (key : OrganizationFetch) => {
+        setOrg(key)
+        setAdd(false)
+        setTrigger(true)
+    }
 
     // Renders loading screen. If no data, display "No organizations found", else display the organizations in Cards.
     // Note: In production, components are rendered twice due to StrictMode enabled
@@ -145,8 +192,8 @@ function Organizations({ user }: { user: User }) {
                         }
                         <CardHeader title={key.name}></CardHeader>
                         <CardActions style={{ justifyContent: 'space-evenly' }}>
-                            <button>Edit</button>
-                            <button>Delete</button>
+                            <button onClick={() => editOrg(key)}>Edit</button>
+                            <button onClick={() => deleteOrg(key)}>Delete</button>
                         </CardActions>
                     </Card>)
             }</Grid>
