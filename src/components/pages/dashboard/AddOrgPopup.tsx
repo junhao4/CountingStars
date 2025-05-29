@@ -67,6 +67,7 @@ export default function AddOrgPopup({ trigger, closePopup }: AddOrgPopupProps) {
             supabase.from('users_organizations')
                 .insert({ user_id: session!.user.id, organization_id: data[0].id, access_level: 'owner' })
                 .then(res => console.log(res.error?.message))
+                .then(closePopup)
         }
     }
     return (<>
