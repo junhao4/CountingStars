@@ -4,7 +4,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import './AddOrgPopup.css'
 import { useRef, useState } from "react"
 import supabase from '../../../helper/supabaseClient';
-import { useSession } from '../../contexts/SessionContext';
+import { useSessionContext } from '../../contexts/SessionContext';
 
 interface AddOrgPopupProps {
     trigger: boolean
@@ -28,7 +28,7 @@ const VisuallyHiddenInput = styled('input')({
 export default function AddOrgPopup({ trigger, closePopup }: AddOrgPopupProps) {
     const [name, setName] = useState("")
     const [img, setImg] = useState<FileList | null>(null)
-    const { session } = useSession()
+    const { session } = useSessionContext()
 
     const handleAddOrganization = async () => {
         const img_name = img?.length == 1 ? img[0].name : undefined

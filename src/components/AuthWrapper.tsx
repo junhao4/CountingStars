@@ -1,6 +1,6 @@
 
 import { useNavigate } from "react-router-dom"
-import { useSession } from "./contexts/SessionContext"
+import { useSessionContext } from "./contexts/SessionContext"
 
 interface AuthWrapperProps {
     children: React.ReactNode
@@ -8,7 +8,7 @@ interface AuthWrapperProps {
 
 export default function AuthWrapper({ children }: AuthWrapperProps) {
     const navigate = useNavigate()
-    const { session, loading } = useSession();
+    const { session, loading } = useSessionContext();
 
     // Ensures users are logged in before rendering the page
     if (loading) {
