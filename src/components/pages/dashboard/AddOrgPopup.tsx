@@ -8,6 +8,8 @@ import { useSessionContext } from '../../contexts/SessionContext';
 interface AddOrgPopupProps {
     trigger: boolean
     closePopup: () => void
+    setRefresh: (refresh : boolean) => void
+    refresh : boolean
 }
 
 const VisuallyHiddenInput = styled('input')({
@@ -22,7 +24,7 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
-export default function AddOrgPopup({ trigger, closePopup }: AddOrgPopupProps) {
+export default function AddOrgPopup({ trigger, closePopup, setRefresh ,refresh}: AddOrgPopupProps) {
     const [name, setName] = useState("")
     const [img, setImg] = useState<FileList | null>(null)
     const { session } = useSessionContext()
@@ -68,6 +70,9 @@ export default function AddOrgPopup({ trigger, closePopup }: AddOrgPopupProps) {
                 .insert({ user_id: session!.user.id, organization_id: data[0].id, access_level: 'owner' })
                 .then(res => console.log(res.error?.message))
                 .then(closePopup)
+                .then(() => setRefresh(!refresh))
+            
+
         }
     }
     return (<>

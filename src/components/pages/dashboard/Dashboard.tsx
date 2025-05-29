@@ -19,6 +19,7 @@ export default function Dashboard() {
     const { session } = useSessionContext()
     // Renders the Add Organization Pop-up if true
     const [trigger, setTrigger] = useState(false)
+    const [refresh, setRefresh] = useState(true)
 
     // Logs user out and navigate to home page
     const handleLogout = () => {
@@ -39,7 +40,7 @@ export default function Dashboard() {
         </div>
 
         {/* Fetches organizations from the database and displays in a grid */}
-        <Organizations user={session!.user} />
+        <Organizations user={session!.user} refresh={refresh} />
 
         {/* Displays the footer with Add Organization button that unhides pop-up */}
         <div style={{
@@ -53,7 +54,7 @@ export default function Dashboard() {
         </div>
 
         {/* Show pop-up for user to submit organization details and add */}
-        <AddOrgPopup trigger={trigger} closePopup={() => setTrigger(false)} />
+        <AddOrgPopup trigger={trigger} closePopup={() => setTrigger(false)} setRefresh={setRefresh} refresh={refresh} />
     </>
     )
 }
@@ -63,13 +64,21 @@ interface OrganizationFetch {
     image: string
 }
 
-function Organizations({ user }: { user: User }) {
+interface OrganizationsProps {
+    user : User
+    refresh: boolean
+}
+
+function Organizations({ user, refresh }: OrganizationsProps) {
     const [loading, setLoading] = useState(true)
     const [data, setData] = useState<OrganizationFetch[]>([])
     const [img, setImg] = useState<(string)[]>([])
 
     // On render, fetch organization ids
     useEffect(() => {
+        setData([]);
+        setImg([]);
+        setLoading(true);
         new Promise<OrganizationFetch>(async () => {
             // Retrieves an array of organization ids
             const { data, error } = await supabase
@@ -125,7 +134,7 @@ function Organizations({ user }: { user: User }) {
             })
         })
         // return () => URL.revokeObjectURL(img)
-    }, [])
+    }, [refresh])
 
     // Renders loading screen. If no data, display "No organizations found", else display the organizations in Cards.
     // Note: In production, components are rendered twice due to StrictMode enabled
