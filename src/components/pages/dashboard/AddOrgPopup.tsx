@@ -22,15 +22,13 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
-// ISSUE 1: VisuallyHiddenInput, after selecting a file once, and removing it, then attempting to set the same file will result in nothing happening.
-
 export default function AddOrgPopup({ trigger, closePopup }: AddOrgPopupProps) {
     const [name, setName] = useState("")
     const [img, setImg] = useState<FileList | null>(null)
     const { session } = useSessionContext()
 
     const handleAddOrganization = async () => {
-        // Check that image size is < 2MB, and that organization name is not empty
+        // Check that image size is < 2MB, type is correct, and that organization name is not empty
         if (img && img[0].size > 2097152) {
             alert("Image size must be < 2MB!")
             return
@@ -38,6 +36,11 @@ export default function AddOrgPopup({ trigger, closePopup }: AddOrgPopupProps) {
 
         if (img && !(img[0].type === 'image/jpeg' || img[0].type === 'image/png')) {
             alert("File type not accepted!")
+            return
+        }
+
+        if (name === '') {
+            alert("Organization name must not be empty!")
             return
         }
 
