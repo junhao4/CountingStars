@@ -7,45 +7,86 @@ export type Json =
   | Json[]
 
 export type Database = {
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          operationName?: string
+          query?: string
+          variables?: Json
+          extensions?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       Organizations: {
         Row: {
-          user_id: string
+          created_at: string
+          id: number
+          image_file: string | null
           name: string
-          image_file?: string
         }
         Insert: {
-          user_id: string
-          name?: string
-          image_file?: string
+          created_at?: string
+          id?: number
+          image_file?: string | null
+          name: string
         }
         Update: {
-          user_id?: string
+          created_at?: string
+          id?: number
+          image_file?: string | null
           name?: string
-          image_file?: string
         }
         Relationships: []
-      },
-
+      }
       users_organizations: {
         Row: {
+          access_level: string
+          created_at: string
           id: number
+          organization_id: number
           user_id: string
-          organization_id: string
         }
         Insert: {
-          id: number
+          access_level: string
+          created_at?: string
+          id?: number
+          organization_id: number
           user_id: string
-          organization?: string
         }
         Update: {
-          id: number
+          access_level?: string
+          created_at?: string
+          id?: number
+          organization_id?: number
           user_id?: string
-          organization?: string
         }
-        Relationships: []
-      },
+        Relationships: [
+          {
+            foreignKeyName: "users_organizations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "Organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -168,6 +209,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {},
   },
