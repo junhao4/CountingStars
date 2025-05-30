@@ -4,16 +4,16 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { useEffect, useState } from "react"
 import supabase from '../../../helper/supabaseClient';
 import { useSessionContext } from '../../contexts/SessionContext';
+import type { OrganizationFetch } from './Dashboard';
 import type { AddEditOrgProps } from './AddEditOrg';
 import { VisuallyHiddenInput } from './AddEditOrg';
 
-
-export default function AddOrgPopup({ trigger, closePopup, setRefresh, refresh, add, org, setAdd }: AddEditOrgProps) {
+export default function EditOrgPopup({ trigger, closePopup, setRefresh, refresh, add, org, setAdd }: AddEditOrgProps) {
     const [name, setName] = useState("")
     const [img, setImg] = useState<FileList | null>(null)
     const { session } = useSessionContext()
 
-    const handleAddOrganization = async () => {
+    const handleEditOrganization = async (key: OrganizationFetch) => {
         // Check that image size is < 2MB, type is correct, and that organization name is not empty
         if (img && img[0].size > 2097152) {
             alert("Image size must be < 2MB!")
@@ -40,7 +40,7 @@ export default function AddOrgPopup({ trigger, closePopup, setRefresh, refresh, 
             return
         }
 
-        img?.length === 1
+        img?.length == 1
             ? supabase.storage.from('organization-images').upload(img[0].name, img[0], {
                 cacheControl: '3600',
                 upsert: false
@@ -48,8 +48,9 @@ export default function AddOrgPopup({ trigger, closePopup, setRefresh, refresh, 
             : null
 
         await supabase.from('Organizations')
-            .insert({ name, image_file: img?.[0].name })
-            .then(res => console.log(res.error?.message))
+            .update({ name, image_file: img?.[0].name })
+            .eq("id", key.id)
+            .then(res => console.log(res.error))
 
         const { data, error } = await supabase.from('Organizations')
             .select('id')
@@ -58,24 +59,22 @@ export default function AddOrgPopup({ trigger, closePopup, setRefresh, refresh, 
         if (error) {
             console.log(error.message)
         } else {
-            console.log(data)
-            if (data.length !== 1) {
-                alert("Error while fetching: Zero or More than one organization with the same name in database")
-                return
-            }
             supabase.from('users_organizations')
-                .insert({ user_id: session!.user.id, organization_id: data[0].id, access_level: 'owner' })
+                .update({ user_id: session!.user.id, organization_id: data[0].id, access_level: 'owner' })
+                .eq("id", key.id)
                 .then(res => console.log(res.error?.message))
+                .then(() => setAdd(true))
                 .then(closePopup)
                 .then(() => setRefresh(!refresh))
         }
     }
 
     useEffect(() => {
-        setName("")
-        setImg(null)
+            setName(org?.name || "")
+            setImg(null)
     }, [trigger])
-    
+    // Sets name popup field to organization name in Edit mode
+
     return (<>
         <Modal open={trigger}
             onClose={closePopup}>
@@ -83,7 +82,7 @@ export default function AddOrgPopup({ trigger, closePopup, setRefresh, refresh, 
                 position: 'absolute', top: '50%', left: '50%', transform: 'translateY(-50%) translateX(-50%)', height: '50%',
                 backgroundColor: 'beige', outline: '4px solid black', padding: '16px', borderRadius: '8px',
                 display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', gap: '8px', overflow: 'auto'
-            }}> <Typography variant="h4" component="h2">{'Add Organization'}</Typography>
+            }}> <Typography variant="h4" component="h2">{'Editing ' + org?.name}</Typography>
 
                 <Typography variant="h6" component="h2">
                     Organization Name:
@@ -111,7 +110,7 @@ export default function AddOrgPopup({ trigger, closePopup, setRefresh, refresh, 
                 
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: 'auto', gap: '32px' }}>
                     <Button color='primary' variant='contained'
-                        onClick={e => handleAddOrganization()} size='large' loading={false}>{add ? "Add" : "Edit"}</Button>
+                        onClick={e => handleEditOrganization(org!)} size='large' loading={false}>{add ? "Add" : "Edit"}</Button>
                     <Button color='error' variant='outlined'
                         onClick={e => closePopup()} size="large">Close</Button>
                 </div>
