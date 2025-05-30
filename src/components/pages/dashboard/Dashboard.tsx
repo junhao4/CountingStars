@@ -10,7 +10,7 @@ import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
 import Grid from '@mui/material/Grid';
 import { useSessionContext } from '../../contexts/SessionContext';
-import { CardMedia } from '@mui/material';
+import { CardMedia, Typography } from '@mui/material';
 
 
 export default function Dashboard() {
@@ -43,22 +43,18 @@ export default function Dashboard() {
 
     // Session and User is not null due to AuthWrapper authentication
     return (<>
-        <div>
-            <p>WELCOME, {session!.user.email}</p>
-            <button onClick={handleLogout}>Log out</button>
-        </div>
-
+        
         {/* Fetches organizations from the database and displays in a grid */}
         <Organizations user={session!.user} refresh={refresh} setRefresh={setRefresh} setOrg={setOrg} setTrigger={setTrigger} setAdd={setAdd}/>
 
         {/* Displays the footer with Add Organization button that unhides pop-up */}
         <div style={{
             display: 'flex', bottom: '0', left: '0', width: '100vw',
-            padding: '16px 0', justifyContent: 'space-evenly', backgroundColor: 'blue',
-            overflow: 'auto', position: 'fixed'
+            padding: '16px 0', justifyContent: 'space-evenly', backgroundColor: 'yellow',
+            overflow: 'auto', position: 'fixed', outline:'2px solid black'
         }}>
             <Button onClick={(e) => addOrg()}
-                variant='contained'
+                variant='contained' sx={{color:'white', backgroundColor:'black'}}
             >Add Organization</Button>
         </div>
 
@@ -94,6 +90,7 @@ function Organizations({ user, refresh, setRefresh, setOrg, setTrigger, setAdd }
         setData([]);
         setImg([]);
         setLoading(true);
+        
         new Promise<OrganizationFetch>(async () => {
             // Retrieves an array of organization ids
             const { data, error } = await supabase
@@ -183,7 +180,8 @@ function Organizations({ user, refresh, setRefresh, setOrg, setTrigger, setAdd }
         : data.length > 0
             ? (
                 <>
-            <Grid container padding={'2px'} spacing={2} justifyContent={'center'} overflow={'auto'} wrap='wrap' >{
+            <Typography sx={{margin:'32px 0 32px 0', justifySelf:'center'}}variant='h3' component='h1'>Your Organizations</Typography>
+            <Grid container padding={'8px'} spacing={2} justifyContent={'center'} overflow={'auto'} wrap='wrap' >{
                 data.map((key, index) =>
                     <Card sx={{ width: 'max(25%,200px)' }} key={index}>
                         {img[index]
