@@ -4,13 +4,14 @@ import supabase from '../../../helper/supabaseClient';
 import { type User } from '@supabase/supabase-js'
 import Button from '@mui/material/Button';
 import { usePageTitleContext } from '../../contexts/PageTitleContext';
-import AddOrgPopup from './AddOrgPopup';
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { useSessionContext } from '../../contexts/SessionContext';
-import { CardMedia, Typography } from '@mui/material';
+import AddEditOrg from './AddEditOrg';
 
 
 export default function Dashboard() {
@@ -59,7 +60,7 @@ export default function Dashboard() {
         </div>
 
         {/* Show pop-up for user to submit organization details and add */}
-        <AddOrgPopup trigger={trigger} closePopup={() => setTrigger(false)} setRefresh={setRefresh} refresh={refresh} add={add} org={org} setAdd={setAdd}/>
+        <AddEditOrg trigger={trigger} closePopup={() => setTrigger(false)} setRefresh={setRefresh} refresh={refresh} add={add} org={org} setAdd={setAdd}/>
     </>
     )
 }
