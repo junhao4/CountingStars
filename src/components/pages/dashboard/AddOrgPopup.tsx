@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { Box, Button, Modal, Typography } from "@mui/material"
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import supabase from '../../../helper/supabaseClient';
 import { useSessionContext } from '../../contexts/SessionContext';
 import type { OrganizationFetch } from './Dashboard';
@@ -9,11 +9,11 @@ import type { OrganizationFetch } from './Dashboard';
 interface AddOrgPopupProps {
     trigger: boolean
     closePopup: () => void
-    setRefresh: (refresh : boolean) => void
+    setRefresh: (refresh: boolean) => void
     refresh: boolean
     add: boolean
     org: OrganizationFetch | null
-    setAdd: (add : boolean) => void
+    setAdd: (add: boolean) => void
 }
 
 const VisuallyHiddenInput = styled('input')({
@@ -28,7 +28,7 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
-export default function AddOrgPopup({ trigger, closePopup, setRefresh , refresh, add, org, setAdd}: AddOrgPopupProps) {
+export default function AddOrgPopup({ trigger, closePopup, setRefresh, refresh, add, org, setAdd }: AddOrgPopupProps) {
     const [name, setName] = useState("")
     const [img, setImg] = useState<FileList | null>(null)
     const { session } = useSessionContext()
@@ -50,18 +50,26 @@ export default function AddOrgPopup({ trigger, closePopup, setRefresh , refresh,
             return
         }
 
-        const img_name = img?.length == 1 ? img[0].name : undefined
+        // Check that organization name is unique for the user
+        const { data: org } = await supabase.from('Organizations')
+            .select('id')
+            .eq('name', name)
 
-        img?.length == 1
-            ? supabase.storage.from('organization-images').upload('' + img_name!, img[0], {
+        if (org?.length !== 0) {
+            alert("You already have an organization with the same name. Please choose another name.")
+            return
+        }
+
+        img?.length === 1
+            ? supabase.storage.from('organization-images').upload(img[0].name, img[0], {
                 cacheControl: '3600',
                 upsert: false
             }).then(res => console.log(res.error?.message))
             : null
 
         await supabase.from('Organizations')
-            .insert({ name, image_file: img_name })
-            .then(res => console.log(res.error))
+            .insert({ name, image_file: img?.[0].name })
+            .then(res => console.log(res.error?.message))
 
         const { data, error } = await supabase.from('Organizations')
             .select('id')
@@ -70,16 +78,20 @@ export default function AddOrgPopup({ trigger, closePopup, setRefresh , refresh,
         if (error) {
             console.log(error.message)
         } else {
+            console.log(data)
+            if (data.length !== 1) {
+                alert("Error while fetching: Zero or More than one organization with the same name in database")
+                return
+            }
             supabase.from('users_organizations')
                 .insert({ user_id: session!.user.id, organization_id: data[0].id, access_level: 'owner' })
                 .then(res => console.log(res.error?.message))
                 .then(closePopup)
                 .then(() => setRefresh(!refresh))
-            
-
         }
     }
-        const handleEditOrganization = async (key : OrganizationFetch) => {
+
+    const handleEditOrganization = async (key: OrganizationFetch) => {
         // Check that image size is < 2MB, type is correct, and that organization name is not empty
         if (img && img[0].size > 2097152) {
             alert("Image size must be < 2MB!")
@@ -96,17 +108,25 @@ export default function AddOrgPopup({ trigger, closePopup, setRefresh , refresh,
             return
         }
 
-        const img_name = img?.length == 1 ? img[0].name : undefined
+        // Check that organization name is unique for the user
+        const { data: org } = await supabase.from('Organizations')
+            .select('id')
+            .eq('name', name)
+
+        if (org?.length !== 0) {
+            alert("You already have an organization with the same name. Please choose another name.")
+            return
+        }
 
         img?.length == 1
-            ? supabase.storage.from('organization-images').upload('' + img_name!, img[0], {
+            ? supabase.storage.from('organization-images').upload(img[0].name, img[0], {
                 cacheControl: '3600',
                 upsert: false
             }).then(res => console.log(res.error?.message))
             : null
 
         await supabase.from('Organizations')
-            .update({ name, image_file: img_name })
+            .update({ name, image_file: img?.[0].name })
             .eq("id", key.id)
             .then(res => console.log(res.error))
 
@@ -124,84 +144,60 @@ export default function AddOrgPopup({ trigger, closePopup, setRefresh , refresh,
                 .then(() => setAdd(true))
                 .then(closePopup)
                 .then(() => setRefresh(!refresh))
-                
-            
-
         }
     }
-    if (add == true) {
-        return (<>
-            <Modal open={trigger}
-                onClose={closePopup}>
-                <Box sx={{ position:'absolute', top:'50%', left:'50%', transform:'translateY(-50%) translateX(-50%)', height:'50%',
-                    backgroundColor: 'beige', outline: '4px solid black', padding: '16px', borderRadius:'8px', 
-                    display:'flex', flexDirection:'column',justifyContent:'space-evenly',gap:'8px',overflow:'auto'
-                }}>
-                    <Typography variant="h6" component="h2">
-                        Organization Name: 
-                            <input id='name' type="text" value={name}
-                                style={{ marginLeft: '8px', fontSize: '20px' }} onChange={e => setName(e.target.value)} />
-                    </Typography>
-                    <Typography variant="h6" component="h2">
-                        Organization Logo: {'(.jpg or .png, < 2MB)'}
-                    </Typography>
-                    <Button component='label' variant='contained' startIcon={<CloudUploadIcon />}>
-                        Upload File<VisuallyHiddenInput type='file' onChange={(e) => setImg(e.target.files)} />
-                    </Button>
-                    {
-                        img?.length == 1
-                            ? <p style={{ fontSize: '24px', margin: '0', alignSelf: 'center' }}>File name: {img[0].name}</p>
-                            : <></>
-                    }
-                    <div style={{ display: 'flex', height: '50%', justifyContent: 'center' }}>
-                        {img?.length == 1 ? <img style={{ margin: '8px' }} width='50%' src={URL.createObjectURL(img[0])} /> : <></>}
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: 'auto', gap: '32px' }}>
-                        <Button color='primary' variant='contained'
-                            onClick={e => handleAddOrganization()} size='large' loading={false}>Add</Button>
-                        <Button color='error' variant='outlined'
-                            onClick={e => closePopup()} size="large">Close</Button>
-                    </div>
-                </Box>
-            </Modal>
-        </>
-        )
-    } else {
-        return (<>
-            <Modal open={trigger}
-                onClose={closePopup}>
-                <Box sx={{ position:'absolute', top:'50%', left:'50%', transform:'translateY(-50%) translateX(-50%)', height:'50%',
-                    backgroundColor: 'beige', outline: '4px solid black', padding: '16px', borderRadius:'8px', 
-                    display:'flex', flexDirection:'column',justifyContent:'space-evenly',gap:'8px',overflow:'auto'
-                }}> <h1>Editing {org?.name}</h1>
-                    <Typography variant="h6" component="h2">
-                        Organization Name: 
-                            <input id='name' type="text" value={name}
-                                style={{ marginLeft: '8px', fontSize: '20px' }} onChange={e => setName(e.target.value)} />
-                    </Typography>
-                    <Typography variant="h6" component="h2">
-                        Organization Logo: {'(.jpg or .png, < 2MB)'}
-                    </Typography>
-                    <Button component='label' variant='contained' startIcon={<CloudUploadIcon />}>
-                        Upload File<VisuallyHiddenInput type='file' onChange={(e) => setImg(e.target.files)} />
-                    </Button>
-                    {
-                        img?.length == 1
-                            ? <p style={{ fontSize: '24px', margin: '0', alignSelf: 'center' }}>File name: {img[0].name}</p>
-                            : <></>
-                    }
-                    <div style={{ display: 'flex', height: '50%', justifyContent: 'center' }}>
-                        {img?.length == 1 ? <img style={{ margin: '8px' }} width='50%' src={URL.createObjectURL(img[0])} /> : <></>}
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: 'auto', gap: '32px' }}>
-                        <Button color='primary' variant='contained'
-                            onClick={e => handleEditOrganization(org!)} size='large' loading={false}>Edit</Button>
-                        <Button color='error' variant='outlined'
-                            onClick={e => closePopup()} size="large">Close</Button>
-                    </div>
-                </Box>
-            </Modal>
-        </>
-        )
-    }
+
+    useEffect(() => {
+        if (trigger && !add) {
+            setName(org?.name || "")
+            setImg(null)
+        } else if (trigger && add) {
+            setName("")
+            setImg(null)
+        }
+    }, [trigger])
+    // Sets name popup field to organization name in Edit mode
+    return (<>
+        <Modal open={trigger}
+            onClose={closePopup}>
+            <Box sx={{
+                position: 'absolute', top: '50%', left: '50%', transform: 'translateY(-50%) translateX(-50%)', height: '50%',
+                backgroundColor: 'beige', outline: '4px solid black', padding: '16px', borderRadius: '8px',
+                display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', gap: '8px', overflow: 'auto'
+            }}> <Typography variant="h4" component="h2">{add ? 'Add Organization' : 'Editing ' + org?.name}</Typography>
+
+                <Typography variant="h6" component="h2">
+                    Organization Name:
+                    <input id='name' type="text" value={name}
+                        style={{ marginLeft: '8px', fontSize: '20px' }} onChange={e => setName(e.target.value)} />
+                </Typography>
+
+                <Typography variant="h6" component="h2">
+                    Organization Logo: {'(.jpg or .png, < 2MB)'}
+                </Typography>
+
+                <Button component='label' variant='contained' startIcon={<CloudUploadIcon />}>
+                    Upload File<VisuallyHiddenInput type='file' onChange={(e) => setImg(e.target.files)} />
+                </Button>
+
+                {
+                    img?.length == 1
+                        ? <p style={{ fontSize: '24px', margin: '0', alignSelf: 'center' }}>File name: {img[0].name}</p>
+                        : <></>
+                }
+
+                <div style={{ display: 'flex', height: '50%', justifyContent: 'center' }}>
+                    {img?.length == 1 ? <img style={{ margin: '8px' }} width='50%' src={URL.createObjectURL(img[0])} /> : <></>}
+                </div>
+                
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: 'auto', gap: '32px' }}>
+                    <Button color='primary' variant='contained'
+                        onClick={e => add ? handleAddOrganization() : handleEditOrganization(org!)} size='large' loading={false}>{add ? "Add" : "Edit"}</Button>
+                    <Button color='error' variant='outlined'
+                        onClick={e => closePopup()} size="large">Close</Button>
+                </div>
+            </Box>
+        </Modal>
+    </>
+    )
 }

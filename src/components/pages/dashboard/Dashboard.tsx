@@ -29,6 +29,13 @@ export default function Dashboard() {
         navigate('/')
     }
 
+    // When the Add button is clicked
+    const addOrg = () => {
+        setAdd(true)
+        setOrg(null)
+        setTrigger(true)
+    }
+
     // On mount, set header title to 'Dashboard'
     useEffect(() => {
         setTitle("Dashboard");
@@ -50,7 +57,7 @@ export default function Dashboard() {
             padding: '16px 0', justifyContent: 'space-evenly', backgroundColor: 'blue',
             overflow: 'auto', position: 'fixed'
         }}>
-            <Button onClick={(e) => setTrigger(true)}
+            <Button onClick={(e) => addOrg()}
                 variant='contained'
             >Add Organization</Button>
         </div>
@@ -141,7 +148,6 @@ function Organizations({ user, refresh, setRefresh, setOrg, setTrigger, setAdd }
                 })
             })
         })
-        // return () => URL.revokeObjectURL(img)
     }, [refresh])
 
     const deleteOrg = async (key : OrganizationFetch) => {
