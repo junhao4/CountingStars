@@ -11,22 +11,31 @@ export function Register() {
     const [message, setMessage] = useState<string>("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false)
 
     const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const { data, error } = await supabase.auth.signUp({
-            email, password
-        });
-        if (error) {
-            setMessage(error.message);
-            return;
-        }
-        if (data.user?.identities && data.user.identities.length > 0) {
-            console.log("Sign-up successful!");
-            setMessage("A link was sent to your email")
+        setLoading(true);
+        if (email == "" || password == "") {
+            setMessage("Please fill in the blanks")
+            setLoading(false)
         } else {
-            console.log("Email address is already taken.");
-            setMessage("Email address is already taken.")
+            const { data, error } = await supabase.auth.signUp({
+                email, password
+            });
+            if (error) {
+                setMessage(error.message);
+                return;
+            }
+            if (data.user?.identities && data.user.identities.length > 0) {
+                console.log("Sign-up successful!");
+                setMessage("A link was sent to your email")
+                setLoading(false)
+            } else {
+                console.log("Email address is already taken.");
+                setMessage("Email address is already taken.")
+                setLoading(false)
+            }
         }
     }
 
@@ -52,7 +61,7 @@ export function Register() {
                     <input type="password" value={password} onChange={e => setPassword(e.target.value)} /></label>
             </div>
             <div className='form-footer'>
-                <button type="submit">Register</button>
+                <button type="submit" disabled={loading} style={ !loading ? {} :{ color: "grey" }}>Register</button>
             </div>
         </form>
         <p>{message}</p>
