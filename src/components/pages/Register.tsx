@@ -44,7 +44,7 @@ export function Register() {
 
     useEffect(() => {
         console.log("Setting title to Register")
-        setTitle("Register");
+        setTitle("Registration");
         console.log(title)
     }, [])
     //
