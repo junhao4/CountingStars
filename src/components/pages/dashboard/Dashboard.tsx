@@ -23,6 +23,7 @@ export default function Dashboard() {
     const [refresh, setRefresh] = useState(true)
     const [org, setOrg] = useState<OrganizationFetch | null>(null)
     const [add, setAdd] = useState(true)
+    const [imgUrl, setImgUrl] = useState<string>("")
 
     // Logs user out and navigate to home page
     const handleLogout = () => {
@@ -46,7 +47,7 @@ export default function Dashboard() {
     return (<>
         
         {/* Fetches organizations from the database and displays in a grid */}
-        <Organizations user={session!.user} refresh={refresh} setRefresh={setRefresh} setOrg={setOrg} setTrigger={setTrigger} setAdd={setAdd}/>
+        <Organizations user={session!.user} refresh={refresh} setRefresh={setRefresh} setOrg={setOrg} setTrigger={setTrigger} setAdd={setAdd} setImgUrl={setImgUrl}/>
 
         {/* Displays the footer with Add Organization button that unhides pop-up */}
         <div style={{
@@ -60,7 +61,7 @@ export default function Dashboard() {
         </div>
 
         {/* Show pop-up for user to submit organization details and add */}
-        <AddEditOrg trigger={trigger} closePopup={() => setTrigger(false)} setRefresh={setRefresh} refresh={refresh} add={add} org={org} setAdd={setAdd}/>
+        <AddEditOrg trigger={trigger} closePopup={() => setTrigger(false)} setRefresh={setRefresh} refresh={refresh} add={add} org={org} setAdd={setAdd} imgUrl={imgUrl}/>
     </>
     )
 }
@@ -78,12 +79,14 @@ interface OrganizationsProps {
     setOrg: (org : OrganizationFetch) => void
     setTrigger: (trigger : boolean) => void
     setAdd: (add : boolean) => void
+    setImgUrl : (img : string) => void
 }
 
-function Organizations({ user, refresh, setRefresh, setOrg, setTrigger, setAdd }: OrganizationsProps) {
+function Organizations({ user, refresh, setRefresh, setOrg, setTrigger, setAdd, setImgUrl }: OrganizationsProps) {
     const [loading, setLoading] = useState(true)
     const [data, setData] = useState<OrganizationFetch[]>([])
     const [img, setImg] = useState<(string)[]>([])
+    
 
 
     // On render, fetch organization ids
@@ -166,7 +169,8 @@ function Organizations({ user, refresh, setRefresh, setOrg, setTrigger, setAdd }
         }
     }
 
-    const editOrg = async (key : OrganizationFetch) => {
+    const editOrg = async (key : OrganizationFetch, imgUrl : string) => {
+        setImgUrl(imgUrl)
         setOrg(key)
         setAdd(false)
         setTrigger(true)
@@ -191,7 +195,7 @@ function Organizations({ user, refresh, setRefresh, setOrg, setTrigger, setAdd }
                         }
                         <CardHeader title={key.name}></CardHeader>
                         <CardActions style={{ justifyContent: 'space-evenly' }}>
-                            <button onClick={() => editOrg(key)}>Edit</button>
+                            <button onClick={() => editOrg(key, img[index])}>Edit</button>
                             <button onClick={() => deleteOrg(key)}>Delete</button>
                         </CardActions>
                     </Card>)

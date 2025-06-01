@@ -11,6 +11,7 @@ export interface AddEditOrgProps {
     add: boolean
     org: OrganizationFetch | null
     setAdd: (add: boolean) => void
+    imgUrl: string
 }
 
 export const VisuallyHiddenInput = styled('input')({
@@ -25,10 +26,10 @@ export const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
-export default function AddEditOrg({ trigger, closePopup, setRefresh, refresh, add, org, setAdd }: AddEditOrgProps) {
+export default function AddEditOrg({ trigger, closePopup, setRefresh, refresh, add, org, setAdd, imgUrl }: AddEditOrgProps) {
     if (add == true) {
-        return <AddOrgPopup trigger={trigger} closePopup={closePopup} setRefresh={setRefresh} refresh={refresh} add={add} org={org} setAdd={setAdd}/>
+        return <AddOrgPopup trigger={trigger} closePopup={closePopup} setRefresh={setRefresh} refresh={refresh} add={add} org={org} setAdd={setAdd} imgUrl=''/>
     } else {
-        return <EditOrgPopup trigger={trigger} closePopup={closePopup} setRefresh={setRefresh} refresh={refresh} add={add} org={org} setAdd={setAdd}/>
+        return <EditOrgPopup trigger={trigger} closePopup={closePopup} setRefresh={setRefresh} refresh={refresh} add={add} org={org} setAdd={setAdd} imgUrl={imgUrl}/>
     }
 }

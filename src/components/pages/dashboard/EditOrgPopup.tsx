@@ -8,7 +8,7 @@ import type { OrganizationFetch } from './Dashboard';
 import type { AddEditOrgProps } from './AddEditOrg';
 import { VisuallyHiddenInput } from './AddEditOrg';
 
-export default function EditOrgPopup({ trigger, closePopup, setRefresh, refresh, add, org, setAdd }: AddEditOrgProps) {
+export default function EditOrgPopup({ trigger, closePopup, setRefresh, refresh, add, org, setAdd, imgUrl }: AddEditOrgProps) {
     const [name, setName] = useState("")
     const [img, setImg] = useState<FileList | null>(null)
     const { session } = useSessionContext()
@@ -72,6 +72,9 @@ export default function EditOrgPopup({ trigger, closePopup, setRefresh, refresh,
     useEffect(() => {
             setName(org?.name || "")
             setImg(null)
+
+                           
+                        
     }, [trigger])
     // Sets name popup field to organization name in Edit mode
 
@@ -105,7 +108,7 @@ export default function EditOrgPopup({ trigger, closePopup, setRefresh, refresh,
                 }
 
                 <div style={{ display: 'flex', height: '50%', justifyContent: 'center' }}>
-                    {img?.length == 1 ? <img style={{ margin: '8px' }} width='50%' src={URL.createObjectURL(img[0])} /> : <></>}
+                    {img?.length == 1 ? <img style={{ margin: '8px' }} width='50%' src={URL.createObjectURL(img[0])} /> : <><img style={{ margin: '8px' }} width='50%' src={imgUrl} /></>}
                 </div>
                 
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: 'auto', gap: '32px' }}>
