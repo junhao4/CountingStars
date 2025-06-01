@@ -34,8 +34,8 @@ export default function EditOrgPopup({ trigger, closePopup, setRefresh, refresh,
         const { data: org } = await supabase.from('Organizations')
             .select('id')
             .eq('name', name)
-
-        if (org?.length !== 0) {
+        console.log(org);
+        if (key.name != name && org?.length !== 0) {
             alert("You already have an organization with the same name. Please choose another name.")
             return
         }
