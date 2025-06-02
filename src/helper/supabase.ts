@@ -7,22 +7,85 @@ export type Json =
   | Json[]
 
 export type Database = {
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          operationName?: string
+          query?: string
+          variables?: Json
+          extensions?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       Organizations: {
         Row: {
-          id: string
-          organization: string | null
+          created_at: string
+          id: number
+          image_file: string | null
+          name: string
         }
         Insert: {
-          id: string
-          organization?: string | null
+          created_at?: string
+          id?: number
+          image_file?: string | null
+          name: string
         }
         Update: {
-          id?: string
-          organization?: string | null
+          created_at?: string
+          id?: number
+          image_file?: string | null
+          name?: string
         }
         Relationships: []
+      }
+      users_organizations: {
+        Row: {
+          access_level: string
+          created_at: string
+          id: number
+          organization_id: number
+          user_id: string
+        }
+        Insert: {
+          access_level: string
+          created_at?: string
+          id?: number
+          organization_id: number
+          user_id: string
+        }
+        Update: {
+          access_level?: string
+          created_at?: string
+          id?: number
+          organization_id?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_organizations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "Organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -146,6 +209,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {},
   },

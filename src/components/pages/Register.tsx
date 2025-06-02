@@ -1,41 +1,56 @@
-import { type FormEvent, useEffect, useState } from 'react';
-import './Register.css';
+import { type FormEvent, use, useEffect, useState } from 'react';
+import './Auth.css';
 import { Link, useNavigate } from 'react-router-dom';
-import type { User } from '@supabase/auth-js';
-import supabase from '../../helper/supabaseClient';
+import supabase from '../../helper/supabaseClient.ts';
+import { usePageTitleContext } from '../contexts/PageTitleContext';
 
-interface RegisterProps {
-    setPageTitle: (arg0: string) => void;
-}
 
-function Register({ setPageTitle }: RegisterProps) {
+
+export function Register() {
     const navigate = useNavigate();
     const [message, setMessage] = useState<string>("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false)
 
     const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const { data, error } = await supabase.auth.signUp({
-            email, password
-        });
-        if (error) {
-            console.log(error)
-            setMessage(error.message);
-            return;
-        }
-        if (data) {
-            console.log(data)
-            setMessage("A link has been sent to your email");
+        setLoading(true);
+        if (email == "" || password == "") {
+            setMessage("Please fill in the blanks")
+            setLoading(false)
+        } else {
+            const { data, error } = await supabase.auth.signUp({
+                email, password
+            });
+            if (error) {
+                setMessage(error.message);
+                return;
+            }
+            if (data.user?.identities && data.user.identities.length > 0) {
+                console.log("Sign-up successful!");
+                setMessage("A link was sent to your email")
+                setLoading(false)
+            } else {
+                console.log("Email address is already taken.");
+                setMessage("Email address is already taken.")
+                setLoading(false)
+            }
         }
     }
 
-    useEffect(() => {
-        setPageTitle("Registration")
-        supabase.auth.getSession().then(session => session.data.session ? navigate('/dashboard/' + session.data.session.user.id) : null)
-    }, []);
+    //Set header title to Register
+    const { title, setTitle } = usePageTitleContext();
 
-    return (<div className='register-container'>
+    useEffect(() => {
+        console.log("Setting title to Register")
+        setTitle("Registration");
+        console.log(title)
+    }, [])
+    //
+        
+
+    return (<div className='auth-container'>
         <form onSubmit={handleRegister} className='form-container'>
             <div className='form-field'>
                 <label htmlFor="email">Email:
@@ -46,12 +61,11 @@ function Register({ setPageTitle }: RegisterProps) {
                     <input type="password" value={password} onChange={e => setPassword(e.target.value)} /></label>
             </div>
             <div className='form-footer'>
-                <button type="submit">Register</button>
+                <button type="submit" disabled={loading} style={ !loading ? {} :{ color: "grey" }}>Register</button>
             </div>
         </form>
         <p>{message}</p>
     </div>
     );
-}
 
-export default Register;
+}

@@ -1,53 +1,47 @@
-import React, { useEffect, useState } from 'react';
 import './Header.css';
 import stars from '../assets/stars.jpg';
-import noUser from '../assets/no_user.jpg';
 import { Link, useNavigate } from 'react-router-dom'
-import type { User } from '@supabase/supabase-js'
 import supabase from '../helper/supabaseClient';
+import { usePageTitleContext } from './contexts/PageTitleContext';
+import { useSessionContext } from './contexts/SessionContext';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import { Button } from '@mui/material';
 
-interface HeaderProps {
-    pageTitle: string;
-}
 
-function Header({ pageTitle }: HeaderProps) {
+function Header() {
+    const { session, loading } = useSessionContext();
     const navigate = useNavigate()
-    const [email, setEmail] = useState<string | undefined>("")
-
-    useEffect(() => {
-        supabase.auth.getSession().then(session => {
-            if (session.error) {
-
-            } else if (!!!session.data.session) {
-                
-            } else {
-                setEmail(session.data.session!.user.email || undefined)
-            }
-        })
-    }, [])
 
     const handleUserLogout = () => {
         supabase.auth.signOut()
-        setEmail(undefined)
         navigate('/')
     }
 
     return (
         <div className='header-container'>
             <Link to='/' className='header-logo'>Counting Stars
-                <img className='header-icon' width="50" height="50" src={stars}></img>
+                <AutoAwesomeIcon sx={{ color: 'yellow', fontSize: '50px' }} />
             </Link>
-            <h1 className='header-title'>{pageTitle + " Page"}</h1>
+            <h1 className='header-title'>{usePageTitleContext().title + " Page"}</h1>
             <div className='header-user-details'>
-                {email
-                    ? <><img src={noUser} alt='No User Image Default' width='50' height='50' />
-                        <div>
-                            <p>Welcome, {email}</p>
-                            <button onClick={handleUserLogout}>Log out</button>
+                {session
+                    ? <div style={{
+                        display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: '8px',
+                        marginRight: '48px'
+                    }}>
+                        <p style={{ fontSize: '20px', margin: '0' }}>Welcome, {session.user.email}</p>
+                        <div style={{ display:'flex', width:'100%', justifyContent:'space-evenly' }}>
+                            <Button style={{backgroundColor:'white', color:'black'}} onClick={() => navigate('/dashboard')}> Dashboard </Button>
+                            <Button style={{backgroundColor:'white', color:'black'}} onClick={handleUserLogout}>Log out</Button>
                         </div>
-
-                    </>
-                    : <><Link to='/login'>Login</Link><Link to='/register'>Register</Link></>}
+                    </div>
+                    : <div style={{
+                        display: 'flex', gap: '64px',
+                        marginRight: '80px'
+                    }}>
+                        <Link to='/login' style={{ color: 'white', fontSize: '24px' }}>Login</Link>
+                        <Link to='/register' style={{ color: 'white', fontSize: '24px' }}>Register</Link>
+                    </div>}
             </div>
         </div>
     );

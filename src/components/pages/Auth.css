@@ -1,4 +1,4 @@
-.login-container {
+.auth-container {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -7,15 +7,13 @@
 
     outline: 4px solid black;
     border-radius: 4px;
-    background-color: #00fff0;
+    background-color: palegoldenrod;
 
     min-width: 400px;
 }
 
 
 .form-container {
-    background-color: purple;
-    
     display: flex;
     flex-direction: column;
     margin: 50px 0 50px 0;

@@ -1,14 +1,11 @@
 import { type FormEvent, use, useEffect, useState } from 'react';
-import './Login.css';
+import './Auth.css';
 import { Link, useNavigate } from 'react-router-dom';
-// import Register from './Register.tsx';
 import supabase from '../../helper/supabaseClient.ts';
+import { usePageTitleContext } from '../contexts/PageTitleContext';
 
-interface LoginProps {
-    setPageTitle: (arg0: string) => void;
-}
 
-function Login({ setPageTitle }: LoginProps) {
+export function Login() {
     let navigate = useNavigate();
     const [message, setMessage] = useState<string>("");
     const [email, setEmail] = useState("");
@@ -21,29 +18,26 @@ function Login({ setPageTitle }: LoginProps) {
         });
         if (error) {
             setMessage(error.message);
+            setPassword("")
             return;
         }
         if (data) {
             console.log(data)
-            navigate('/dashboard/' + data.user.id)
+            navigate('/dashboard')
         }
     }
 
+    //Set header title to Login
+    const { title, setTitle } = usePageTitleContext();
+
     useEffect(() => {
-        setPageTitle("Login")
-        supabase.auth.getSession().then(session => 
-            {
-                if (session.error) {
-                    console.log(session.error)
-                } else if (!!!session.data.session) {
+        console.log("Setting title to Login")
+        setTitle("Login");
+        console.log(title)
+    }, [])
+    //
 
-                } else {
-                    navigate('/dashboard/' + session.data.session!.user.id)
-                }
-            })
-    }, []);
-
-    return (<div className='login-container'>
+    return (<div className='auth-container'>
         <form id='login' onSubmit={handleLogin} className='form-container'>
             <div className='form-field'>
                 <label htmlFor="email">Email:
@@ -58,9 +52,6 @@ function Login({ setPageTitle }: LoginProps) {
             </div>
         </form>
         <p>{message}</p>
-        <p>HELLO</p>
     </div>
     );
 }
-
-export default Login;
