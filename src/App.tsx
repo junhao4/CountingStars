@@ -8,6 +8,8 @@ import { PageTitleProvider } from './components/contexts/PageTitleContext.tsx'
 import { SessionProvider } from './components/contexts/SessionContext.tsx'
 import Auth from './components/pages/Auth.tsx'
 import AuthWrapper from './components/AuthWrapper.tsx'
+import ResetPassword from './components/pages/ResetPassword.tsx'
+import ForgotPassword from './components/pages/ForgotPassword.tsx'
 
 
 
@@ -33,7 +35,8 @@ function App() {
                      <Dashboard /> 
                   </AuthWrapper>
               } />
-              
+              <Route path='/forgot' element={<ForgotPassword />} />
+              <Route path='/reset' element={<ResetPassword />} />
               <Route path='*' element={<NotFound />} />
             </Routes>
           </BrowserRouter>

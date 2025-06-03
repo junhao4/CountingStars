@@ -47,11 +47,21 @@ export function Login() {
                 <label htmlFor="password">Password:
                     <input id='password' type="password" value={password} onChange={e => setPassword(e.target.value)} /></label>
             </div>
+
+            
+           
             <div className='form-footer'>
                 <button type="submit">Login</button>
             </div>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <p style={{marginLeft: 20, marginBottom: 0, marginTop: 0}}>
+                {message}
+                </p>
+             <Link to='/forgot' style={{ color: 'grey' , textAlign: 'right', marginTop:0, marginBottom:0, marginRight:80}} >Forgot Password?</Link>
+            
+            </div>
         </form>
-        <p>{message}</p>
+        
     </div>
     );
 }
