@@ -25,6 +25,7 @@ export function Register() {
             });
             if (error) {
                 setMessage(error.message);
+                setLoading(false)
                 return;
             }
             if (data.user?.identities && data.user.identities.length > 0) {
