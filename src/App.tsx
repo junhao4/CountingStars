@@ -10,6 +10,7 @@ import Auth from './components/pages/Auth.tsx'
 import AuthWrapper from './components/AuthWrapper.tsx'
 import ResetPassword from './components/pages/ResetPassword.tsx'
 import ForgotPassword from './components/pages/ForgotPassword.tsx'
+import Profile from './components/pages/Profile.tsx'
 
 
 
@@ -37,6 +38,7 @@ function App() {
               } />
               <Route path='/forgot' element={<ForgotPassword />} />
               <Route path='/reset' element={<ResetPassword />} />
+              <Route path='/profile' element={<Profile />} />
               <Route path='*' element={<NotFound />} />
             </Routes>
           </BrowserRouter>

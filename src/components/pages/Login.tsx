@@ -11,6 +11,30 @@ export function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const handleUser = async () => {
+        const { data: { user } } = await supabase.auth.getUser()
+        const { data, error } = await supabase
+            .from('Users')
+            .select()
+            .eq('user_id', user!.id)
+
+        if (data!.length > 0) {
+            console.log("user exists" , data)
+        } else {
+            const { data, error } = await supabase
+                .from('Users')
+                .insert({ user_id: user?.id, name: null, image_file: null, user_email: user?.email })
+                .select()
+
+            if (data) {
+                console.log("user successfully added")
+            } else {
+                console.log("error", error)
+            }
+        }
+  
+    }
+
     const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const { data, error } = await supabase.auth.signInWithPassword({
@@ -23,6 +47,8 @@ export function Login() {
         }
         if (data) {
             console.log(data)
+            await handleUser()
+            console.log("Going to dashboard")
             navigate('/dashboard')
         }
     }

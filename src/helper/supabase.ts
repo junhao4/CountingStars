@@ -55,6 +55,27 @@ export type Database = {
         }
         Relationships: []
       }
+      Users: {
+        Row: {
+          created_at: string
+          image_file: string | null
+          name: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          image_file?: string | null
+          name?: string | null
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          image_file?: string | null
+          name?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       users_organizations: {
         Row: {
           access_level: string
