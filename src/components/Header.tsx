@@ -1,5 +1,4 @@
 import './Header.css';
-import stars from '../assets/stars.jpg';
 import { Link, useNavigate } from 'react-router-dom'
 import supabase from '../helper/supabaseClient';
 import { usePageTitleContext } from './contexts/PageTitleContext';

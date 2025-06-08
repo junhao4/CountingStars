@@ -1,6 +1,6 @@
 
 import { useNavigate } from "react-router-dom"
-import { useSessionContext } from "./contexts/SessionContext"
+import { useSessionContext } from "../../contexts/SessionContext"
 
 interface AuthWrapperProps {
     children: React.ReactNode

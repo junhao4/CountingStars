@@ -1,4 +1,3 @@
-import './NotFound.css'
 import Button from '../Button'
 
 function NotFound() {

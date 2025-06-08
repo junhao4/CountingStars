@@ -1,8 +1,8 @@
 import { type FormEvent, use, useEffect, useState } from 'react';
 import './Auth.css';
 import { Link, useNavigate } from 'react-router-dom';
-import supabase from '../../helper/supabaseClient.ts';
-import { usePageTitleContext } from '../contexts/PageTitleContext';
+import supabase from '../../../helper/supabaseClient.ts';
+import { usePageTitleContext } from '../../contexts/PageTitleContext.tsx';
 
 
 export function Login() {

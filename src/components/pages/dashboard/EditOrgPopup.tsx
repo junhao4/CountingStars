@@ -35,46 +35,40 @@ export default function EditOrgPopup({ trigger, closePopup, setRefresh, refresh,
             .select('id')
             .eq('name', name)
         console.log(org);
-        if (key.name != name && org?.length !== 0) {
+        if (key.name !== name && org?.length !== 0) {
             alert("You already have an organization with the same name. Please choose another name.")
             return
         }
 
-        img?.length == 1
-            ? supabase.storage.from('organization-images').upload(img[0].name, img[0], {
-                cacheControl: '3600',
-                upsert: false
-            }).then(res => console.log(res.error?.message))
-            : null
+        if (img?.length === 1) {
+            if (key.imageName) supabase.storage.from('organization-images')
+                .remove([key.imageName])
+                .then(res => { if (res.error) console.log(res.error.message); })
+
+            supabase.storage.from('organization-images')
+                .upload(img[0].name, img[0], {
+                    cacheControl: '3600',
+                    upsert: false
+                })
+                .then(res => console.log(res.error?.message))
+        }
 
         await supabase.from('Organizations')
             .update({ name, image_file: img?.[0].name })
             .eq("id", key.id)
             .then(res => console.log(res.error))
+            .then(() => setAdd(true))
+            .then(closePopup)
+            .then(() => setRefresh(!refresh))
 
-        const { data, error } = await supabase.from('Organizations')
-            .select('id')
-            .eq('name', name)
-
-        if (error) {
-            console.log(error.message)
-        } else {
-            supabase.from('users_organizations')
-                .update({ user_id: session!.user.id, organization_id: data[0].id, access_level: 'owner' })
-                .eq("id", key.id)
-                .then(res => console.log(res.error?.message))
-                .then(() => setAdd(true))
-                .then(closePopup)
-                .then(() => setRefresh(!refresh))
-        }
     }
 
     useEffect(() => {
-            setName(org?.name || "")
-            setImg(null)
+        setName(org?.name || "")
+        setImg(null)
 
-                           
-                        
+
+
     }, [trigger])
     // Sets name popup field to organization name in Edit mode
 
@@ -82,7 +76,7 @@ export default function EditOrgPopup({ trigger, closePopup, setRefresh, refresh,
         <Modal open={trigger}
             onClose={closePopup}>
             <Box sx={{
-                position: 'absolute', top: '50%', left: '50%', transform: 'translateY(-50%) translateX(-50%)', height: '50%',
+                position: 'absolute', top: '50%', left: '50%', transform: 'translateY(-50%) translateX(-50%)', height: '55%',
                 backgroundColor: 'beige', outline: '4px solid black', padding: '16px', borderRadius: '8px',
                 display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', gap: '8px', overflow: 'auto'
             }}> <Typography variant="h4" component="h2">{'Editing ' + org?.name}</Typography>
@@ -108,9 +102,11 @@ export default function EditOrgPopup({ trigger, closePopup, setRefresh, refresh,
                 }
 
                 <div style={{ display: 'flex', height: '50%', justifyContent: 'center' }}>
-                    {img?.length == 1 ? <img style={{ margin: '8px' }} width='50%' src={URL.createObjectURL(img[0])} /> : <><img style={{ margin: '8px' }} width='50%' src={imgUrl} /></>}
+                    {img?.length == 1
+                        ? <img style={{ margin: '8px' }} width='60%' src={URL.createObjectURL(img[0])} />
+                        : <><img style={{ margin: '8px' }} width='60%' src={imgUrl} /></>}
                 </div>
-                
+
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: 'auto', gap: '32px' }}>
                     <Button color='primary' variant='contained'
                         onClick={e => handleEditOrganization(org!)} size='large' loading={false}>{add ? "Add" : "Edit"}</Button>

@@ -60,18 +60,21 @@ export type Database = {
           created_at: string
           image_file: string | null
           name: string | null
+          user_email: string | null
           user_id: string
         }
         Insert: {
           created_at?: string
           image_file?: string | null
           name?: string | null
+          user_email?: string | null
           user_id?: string
         }
         Update: {
           created_at?: string
           image_file?: string | null
           name?: string | null
+          user_email?: string | null
           user_id?: string
         }
         Relationships: []
@@ -80,21 +83,18 @@ export type Database = {
         Row: {
           access_level: string
           created_at: string
-          id: number
           organization_id: number
           user_id: string
         }
         Insert: {
           access_level: string
           created_at?: string
-          id?: number
           organization_id: number
           user_id: string
         }
         Update: {
           access_level?: string
           created_at?: string
-          id?: number
           organization_id?: number
           user_id?: string
         }
@@ -105,6 +105,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "Organizations"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_organizations_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "Users"
+            referencedColumns: ["user_id"]
           },
         ]
       }

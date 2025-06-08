@@ -1,5 +1,5 @@
 import React, { useState, type FormEvent } from 'react'
-import supabase from '../../helper/supabaseClient';
+import supabase from '../../../helper/supabaseClient';
 import './Auth.css';
 
 function ForgotPassword() {

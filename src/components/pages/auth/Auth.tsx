@@ -1,7 +1,7 @@
 import { type FormEvent, use, useEffect, useState } from 'react';
 import './Auth.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSessionContext } from '../contexts/SessionContext.tsx';
+import { useSessionContext } from '../../contexts/SessionContext.tsx';
 import { Login } from './Login.tsx';
 import { Register } from './Register.tsx';
 

@@ -80,7 +80,7 @@ export default function AddOrgPopup({ trigger, closePopup, setRefresh, refresh, 
         <Modal open={trigger}
             onClose={closePopup}>
             <Box sx={{
-                position: 'absolute', top: '50%', left: '50%', transform: 'translateY(-50%) translateX(-50%)', height: '50%',
+                position: 'absolute', top: '50%', left: '50%', transform: 'translateY(-50%) translateX(-50%)', height: '55%',
                 backgroundColor: 'beige', outline: '4px solid black', padding: '16px', borderRadius: '8px',
                 display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', gap: '8px', overflow: 'auto'
             }}> <Typography variant="h4" component="h2">{'Add Organization'}</Typography>
