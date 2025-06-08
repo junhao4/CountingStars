@@ -23,7 +23,7 @@ export function Login() {
         } else {
             const { data, error } = await supabase
                 .from('Users')
-                .insert({ user_id: user?.id, name: null, image_file: null, user_email: user?.email })
+                .insert({ user_id: user?.id, name: null, image_file: 'Default_pfp.jpg', user_email: user?.email })
                 .select()
 
             if (data) {
