@@ -16,68 +16,68 @@ function Profile() {
   const { session } = useSessionContext()
 
   const updateProfile = async (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault()
-      const { data, error } = await supabase
-        .from('Users')
-        .update({ name: username })
-        .eq('user_id', session!.user.id)
-        .select()
-      
-      if (data) {
-        setMessage(username + " set as username")
-        setName(username)
-      } else {
-        setMessage("error")
-        console.log(error)
-      }
+    e.preventDefault()
+    const { data, error } = await supabase
+      .from('Users')
+      .update({ name: username })
+      .eq('user_id', session!.user.id)
+      .select()
+
+    if (data) {
+      setMessage(username + " set as username")
+      setName(username)
+    } else {
+      setMessage("error")
+      console.log(error)
+    }
   }
 
   const updateImage = async (e: ChangeEvent<HTMLInputElement>) => {
-      console.log("Updating image")
- 
-      if (!e.target.files || e.target.files.length === 0) {
-        setMessage('You must select an image to upload.')
-        return
-      }
-      
-      const file = e.target.files[0]
-      const fileExt = file.name.split('.').pop()
-      const fileName = `${crypto.randomUUID()}.${fileExt}`
-      console.log("File", file.name, file.size, file.type)
-      const { error } = await supabase.storage.from('profile-images').upload(fileName, file)
-      if (error) {
-        alert("upload error")
-        console.log(error.message)
-        return
-      } else {
+    console.log("Updating image")
+
+    if (!e.target.files || e.target.files.length === 0) {
+      setMessage('You must select an image to upload.')
+      return
+    }
+
+    const file = e.target.files[0]
+    const fileExt = file.name.split('.').pop()
+    const fileName = `${crypto.randomUUID()}.${fileExt}`
+    console.log("File", file.name, file.size, file.type)
+    const { error } = await supabase.storage.from('profile-images').upload(fileName, file)
+    if (error) {
+      alert("upload error")
+      console.log(error.message)
+      return
+    } else {
 
       console.log("uploaded img")
 
       await supabase.from('Users')
-            .update({ image_file: fileName })
-            .eq("user_id", session!.user.id)
-            .then(res => console.log(res.error))
-      }
+        .update({ image_file: fileName })
+        .eq("user_id", session!.user.id)
+        .then(res => console.log(res.error))
+    }
   }
-  
+
 
   useEffect(() => {
     console.log(session?.user.email)
     if (session?.user) {
-    const fetchUser =  async () => {
-      const { data, error } = await supabase
+      const fetchUser = async () => {
+        const { data, error } = await supabase
           .from('Users')
           .select()
           .eq('user_id', session!.user.id)
           .single()
 
-      setName(data!.name)
-      console.log(data!.name)
-      setProfileUrl(data!.image_file)
-    }
+        setName(data!.name)
+        console.log(data!.name)
+        setProfileUrl(data!.image_file)
+      }
 
-   fetchUser()
-  }
+      fetchUser()
+    }
   }, [session])
 
   useEffect(() => {
@@ -94,39 +94,39 @@ function Profile() {
       }
     }
 
-   downloadImage()
-  
+    downloadImage()
+
   }, [profileUrl])
 
 
-   //Set header title to Login
-      const { title, setTitle } = usePageTitleContext();
-  
-      useEffect(() => {
-          console.log("Setting title to Profile")
-          setTitle("Profile");
-          console.log(title)
-      }, [])
-      //
+  //Set header title to Login
+  const { title, setTitle } = usePageTitleContext();
+
+  useEffect(() => {
+    console.log("Setting title to Profile")
+    setTitle("Profile");
+    console.log(title)
+  }, [])
+  //
 
   return (
     <>
-    <h1>{name}</h1>
-    <Card sx={{ width: 'max(25%,200px)' }}><CardMedia sx={{ height: '200px' }} image={img} /></Card>
-    <form onSubmit={updateProfile} >
+      <h1>{name}</h1>
+      <Card sx={{ width: 'max(25%,200px)' }}><CardMedia sx={{ height: '200px' }} image={img} /></Card>
+      <form onSubmit={updateProfile} >
         <input type="text" placeholder="Your username" value={username!} onChange={e => setUsername(e.target.value)} />
         <button type="submit">Submit</button>
         <Button component='label' variant='contained' startIcon={<CloudUploadIcon />}>
-                    Upload File 
-                    <VisuallyHiddenInput type='file' onChange={(e) => updateImage(e)} />
-                      
+          Upload File
+          <VisuallyHiddenInput type='file' onChange={(e) => updateImage(e)} />
+
         </Button>
-        
-    </form> 
-    <div>{message}</div>
+
+      </form>
+      <div>{message}</div>
 
 
-    
+
     </>
   )
 }

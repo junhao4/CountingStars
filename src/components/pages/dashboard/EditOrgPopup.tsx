@@ -2,7 +2,7 @@ import { Box, Button, Modal, Typography } from "@mui/material"
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { useEffect, useState } from "react"
 import supabase from '../../../helper/supabaseClient';
-import type { OrganizationFetch } from './Dashboard';
+import type { DashboardOrgFetch } from './Dashboard';
 import type { AddEditOrgProps } from './AddEditOrg';
 import { VisuallyHiddenInput } from './AddEditOrg';
 
@@ -10,7 +10,7 @@ export default function EditOrgPopup({ trigger, closePopup, setRefresh, org, set
     const [name, setName] = useState("")
     const [img, setImg] = useState<FileList | null>(null)
 
-    const handleEditOrganization = async (key: OrganizationFetch) => {
+    const handleEditOrganization = async (key: DashboardOrgFetch) => {
         // Check that image size is < 2MB, type is correct, and that organization name is not empty
         if (img && img[0].size > 2097152) {
             alert("Image size must be < 2MB!")
@@ -63,9 +63,6 @@ export default function EditOrgPopup({ trigger, closePopup, setRefresh, org, set
     useEffect(() => {
         setName(org?.name || "")
         setImg(null)
-
-
-
     }, [trigger])
     // Sets name popup field to organization name in Edit mode
 

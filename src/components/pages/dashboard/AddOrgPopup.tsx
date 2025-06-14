@@ -53,17 +53,13 @@ export default function AddOrgPopup({ trigger, closePopup, setRefresh }: AddEdit
         const { data, error } = await supabase.from('Organizations')
             .select('id')
             .eq('name', name)
+            .single()
 
         if (error) {
             console.log(error.message)
         } else {
-            console.log(data)
-            if (data.length !== 1) {
-                alert("Error while fetching: Zero or More than one organization with the same name in database")
-                return
-            }
             supabase.from('users_organizations')
-                .insert({ user_id: session!.user.id, organization_id: data[0].id, access_level: 'owner' })
+                .insert({ user_id: session!.user.id, organization_id: data.id, role: 'owner' })
                 .then(res => console.log(res.error?.message))
                 .then(closePopup)
                 .then(() => setRefresh(prev => !prev))

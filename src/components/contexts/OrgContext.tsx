@@ -1,11 +1,14 @@
 import { createContext, useContext, useEffect, useState } from "react"
-import { type OrganizationFetch } from "../pages/dashboard/Dashboard";
 
-
+interface OrgProps {
+    id: number
+    name: string
+    role: string
+}
 
 interface OrgContextProps {
-    getOrgContext: () => OrganizationFetch | null
-    setOrgContext: (arg0: OrganizationFetch | null) => void
+    getOrgContext: () => OrgProps | null
+    setOrgContext: (arg0: OrgProps | null) => void
     loading: boolean
 }
 
@@ -16,7 +19,7 @@ export const OrgContext = createContext<OrgContextProps>({
 });
 
 export const OrgProvider = ({ children } : { children: React.ReactNode }) => {
-  const [orgContext, set] = useState<OrganizationFetch | null>(null);
+  const [orgContext, set] = useState<OrgProps | null>(null);
   const [loading, setLoading] = useState(true);
 
     const getOrgContext = () => {
@@ -26,7 +29,7 @@ export const OrgProvider = ({ children } : { children: React.ReactNode }) => {
         return null
     }
 
-    const setOrgContext = (arg0: OrganizationFetch | null) => {
+    const setOrgContext = (arg0: OrgProps | null) => {
         set(arg0)
         if (!!!arg0) localStorage.removeItem('orgContext')
         else localStorage.setItem('orgContext', JSON.stringify(arg0))

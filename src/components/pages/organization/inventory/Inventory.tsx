@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid"
 import Item from "@mui/material/Grid"
 import { Autocomplete, Box, Button, TextField, type AutocompleteRenderInputParams } from "@mui/material"
 import supabase from "../../../../helper/supabaseClient"
-import OrgAddItemPopup from "../AddItemPopup"
+import OrgAddItemPopup from "./AddItemPopup"
 import ItemTable from "./ItemTable"
 import type { GridRowSelectionModel } from "@mui/x-data-grid/models"
 

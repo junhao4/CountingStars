@@ -11,11 +11,11 @@ import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { useEffect, useState, type FormEvent } from "react";
 import { type SelectChangeEvent } from "@mui/material";
-import supabase from "../../../helper/supabaseClient";
-import { useOrgContext } from "../../contexts/OrgContext";
+import supabase from "../../../../helper/supabaseClient";
+import { useOrgContext } from "../../../contexts/OrgContext";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import type { Dayjs } from "dayjs";
-import type { CategoryFetch } from "./inventory/Inventory";
+import type { CategoryFetch } from "./Inventory";
 
 interface OrgAddItemPopupProps {
     trigger: boolean,

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type SetStateAction } from 'react';
 import supabase from '../../../helper/supabaseClient';
 import { type User } from '@supabase/supabase-js'
 import Button from '@mui/material/Button';
@@ -60,7 +60,7 @@ export default function Dashboard() {
     )
 }
 
-interface DashboardOrgFetch {
+export interface DashboardOrgFetch {
     id: number
     name: string
     role: string
@@ -71,40 +71,40 @@ interface DashboardOrgFetch {
 interface OrganizationsProps {
     user: User
     refresh: boolean
-    setRefresh: (refresh: boolean) => void
+    setRefresh: React.Dispatch<SetStateAction<boolean>>
     setOrg: (org: DashboardOrgFetch) => void
     setTrigger: (trigger: boolean) => void
     setAdd: (add: boolean) => void
     setImgUrl: (img: string) => void
 }
 
-function Organizations({ user, refresh, setRefresh, setOrg, setTrigger, setAdd, setImgUrl }: OrganizationsProps) {
+function Organizations({ user, setOrg, setTrigger, setAdd, setImgUrl }: OrganizationsProps) {
     const [loading, setLoading] = useState(true)
     const [orgs, setOrgs] = useState<DashboardOrgFetch[]>([])
-    const { getOrgContext, setOrgContext } = useOrgContext()
+    const { setOrgContext } = useOrgContext()
     const navigate = useNavigate()
 
     // On render, fetch organization ids
+    const [refresh, setRefresh] = useState<boolean>(true)
     useEffect(() => {
-        setOrgs([]);
-        setLoading(true);
-
         fetchData()
     }, [refresh])
 
     // Fetch organizational data
     const fetchData = async () => {
+        setOrgs(() => [])
         supabase.from('users_organizations')
             .select(`organization_id, role`)
             .eq('user_id', user.id)
             .then(async response => {
                 if (response.error) {
                     console.log(response.error.message)
-                    return PromiseRejectionEvent
+                    return false
                 } else if (!response.data || response.data.length === 0) {
                     console.log('No data found!')
-                    return PromiseRejectionEvent
+                    return false
                 }
+
                 return Promise.all(response.data.map(async d => {
                     return await supabase.from('Organizations')
                         .select(`id, name, image_file`)
@@ -113,18 +113,20 @@ function Organizations({ user, refresh, setRefresh, setOrg, setTrigger, setAdd, 
                         .then(async response => {
                             if (response.error) {
                                 console.log(response.error.message)
-                                return PromiseRejectionEvent
+                                return null
                             }
                             const data = { ...response.data, role: d.role }
                             const image = await fetchImage(data.image_file)
                             const result = {
                                 id: data.id, name: data.name, role: data.role, imageName: data.image_file, imageUrlBlob: image
                             }
-                            setOrgs(prev => [...prev, result])
-                            return PromiseRejectionEvent
+                            return result
                         })
                 }))
-            }).then(res => {
+            }).then(data => {
+                if (data) {
+                    setOrgs(data.filter(d => !!d))
+                }
                 setLoading(false)
             })
     }
@@ -162,7 +164,7 @@ function Organizations({ user, refresh, setRefresh, setOrg, setTrigger, setAdd, 
             console.log("error deleting: ", error)
         } else {
             console.log("deleted", key.id)
-            setRefresh(!refresh)
+            setRefresh(prev => !prev)
         }
     }
 

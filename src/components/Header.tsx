@@ -21,7 +21,7 @@ function Header() {
             <Link to='/' className='header-logo'>Counting Stars
                 <AutoAwesomeIcon sx={{ color: 'yellow', fontSize: '50px' }} />
             </Link>
-            <h1 className='header-title'>{usePageTitleContext().title + " Page"}</h1>
+            <h1 className='header-title'>{usePageTitleContext().title}</h1>
             <div className='header-user-details'>
                 {session
                     ? <div style={{

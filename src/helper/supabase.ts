@@ -163,21 +163,21 @@ export type Database = {
           created_at: string
           image_file: string | null
           name: string | null
-          user_email: string | null
+          email: string | null
           user_id: string
         }
         Insert: {
           created_at?: string
           image_file?: string | null
           name?: string | null
-          user_email?: string | null
+          email?: string | null
           user_id?: string
         }
         Update: {
           created_at?: string
           image_file?: string | null
           name?: string | null
-          user_email?: string | null
+          email?: string | null
           user_id?: string
         }
         Relationships: []

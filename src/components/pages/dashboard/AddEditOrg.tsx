@@ -1,15 +1,16 @@
 import { styled } from '@mui/material/styles';
-import type { OrganizationFetch } from './Dashboard';
+import type { DashboardOrgFetch } from './Dashboard';
 import AddOrgPopup from './AddOrgPopup';
 import EditOrgPopup from './EditOrgPopup';
+import type { SetStateAction } from 'react';
 
 export interface AddEditOrgProps {
     trigger: boolean
     closePopup: () => void
-    setRefresh: (func0: (arg0:boolean) => boolean) => void
+    setRefresh: React.Dispatch<SetStateAction<boolean>>
     refresh: boolean
     add: boolean
-    org: OrganizationFetch | null
+    org: DashboardOrgFetch | null
     setAdd: (add: boolean) => void
     imgUrl: string
 }
