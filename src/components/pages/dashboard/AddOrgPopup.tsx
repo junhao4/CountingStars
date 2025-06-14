@@ -1,4 +1,3 @@
-
 import { Box, Button, Modal, Typography } from "@mui/material"
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { useEffect, useState } from "react"
@@ -8,7 +7,7 @@ import type { AddEditOrgProps } from './AddEditOrg';
 import { VisuallyHiddenInput } from './AddEditOrg';
 
 
-export default function AddOrgPopup({ trigger, closePopup, setRefresh, refresh, add, org, setAdd }: AddEditOrgProps) {
+export default function AddOrgPopup({ trigger, closePopup, setRefresh }: AddEditOrgProps) {
     const [name, setName] = useState("")
     const [img, setImg] = useState<FileList | null>(null)
     const { session } = useSessionContext()
@@ -67,7 +66,7 @@ export default function AddOrgPopup({ trigger, closePopup, setRefresh, refresh, 
                 .insert({ user_id: session!.user.id, organization_id: data[0].id, access_level: 'owner' })
                 .then(res => console.log(res.error?.message))
                 .then(closePopup)
-                .then(() => setRefresh(!refresh))
+                .then(() => setRefresh(prev => !prev))
         }
     }
 
@@ -111,7 +110,7 @@ export default function AddOrgPopup({ trigger, closePopup, setRefresh, refresh, 
                 
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: 'auto', gap: '32px' }}>
                     <Button color='primary' variant='contained'
-                        onClick={e => handleAddOrganization()} size='large' loading={false}>{add ? "Add" : "Edit"}</Button>
+                        onClick={e => handleAddOrganization()} size='large' loading={false}>{"Add"}</Button>
                     <Button color='error' variant='outlined'
                         onClick={e => closePopup()} size="large">Close</Button>
                 </div>

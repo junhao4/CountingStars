@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { useSessionContext } from '../../contexts/SessionContext';
 import AddEditOrg from './AddEditOrg';
+import { useNavigate } from 'react-router-dom';
+import { useOrgContext } from '../../contexts/OrgContext';
 
 
 export default function Dashboard() {
@@ -19,7 +21,7 @@ export default function Dashboard() {
     // Renders the Add Organization Pop-up if true
     const [trigger, setTrigger] = useState(false)
     const [refresh, setRefresh] = useState(true)
-    const [org, setOrg] = useState<OrganizationFetch | null>(null)
+    const [org, setOrg] = useState<DashboardOrgFetch | null>(null)
     const [add, setAdd] = useState(true)
     const [imgUrl, setImgUrl] = useState<string>("")
 
@@ -58,9 +60,10 @@ export default function Dashboard() {
     )
 }
 
-export interface OrganizationFetch {
+interface DashboardOrgFetch {
     id: number
     name: string
+    role: string
     imageName: string | null
     imageUrlBlob: string | null
 }
@@ -69,7 +72,7 @@ interface OrganizationsProps {
     user: User
     refresh: boolean
     setRefresh: (refresh: boolean) => void
-    setOrg: (org: OrganizationFetch) => void
+    setOrg: (org: DashboardOrgFetch) => void
     setTrigger: (trigger: boolean) => void
     setAdd: (add: boolean) => void
     setImgUrl: (img: string) => void
@@ -77,7 +80,9 @@ interface OrganizationsProps {
 
 function Organizations({ user, refresh, setRefresh, setOrg, setTrigger, setAdd, setImgUrl }: OrganizationsProps) {
     const [loading, setLoading] = useState(true)
-    const [orgs, setOrgs] = useState<OrganizationFetch[]>([])
+    const [orgs, setOrgs] = useState<DashboardOrgFetch[]>([])
+    const { getOrgContext, setOrgContext } = useOrgContext()
+    const navigate = useNavigate()
 
     // On render, fetch organization ids
     useEffect(() => {
@@ -85,37 +90,44 @@ function Organizations({ user, refresh, setRefresh, setOrg, setTrigger, setAdd, 
         setLoading(true);
 
         fetchData()
-
     }, [refresh])
 
     // Fetch organizational data
     const fetchData = async () => {
-            supabase
-                .from('Users')
-                .select(`user_id, name,
-                            Organizations (id, name, image_file)`)
-                .eq('user_id', user.id)
-                .then(response => {
-                    if (response.error) {
-                        console.log(response.error.message)
-                    } else if (response.data.length === 0) {
-                        console.log('No data found!')
-                    }
-                    console.log(response.data)
-                    return response.data
-                })
-                .then(data => {
-                    data![0].Organizations.map(async org => {
-                        const image = await fetchImage(org.image_file)
-                        const result = {
-                            id: org.id, name: org.name, imageName: org.image_file, imageUrlBlob: image
-                        }
-                        console.log(image)
-                        setOrgs(prev => [...prev, result])
-                    })
-                })
-            setLoading(false)
-        }
+        supabase.from('users_organizations')
+            .select(`organization_id, role`)
+            .eq('user_id', user.id)
+            .then(async response => {
+                if (response.error) {
+                    console.log(response.error.message)
+                    return PromiseRejectionEvent
+                } else if (!response.data || response.data.length === 0) {
+                    console.log('No data found!')
+                    return PromiseRejectionEvent
+                }
+                return Promise.all(response.data.map(async d => {
+                    return await supabase.from('Organizations')
+                        .select(`id, name, image_file`)
+                        .eq('id', d.organization_id)
+                        .single()
+                        .then(async response => {
+                            if (response.error) {
+                                console.log(response.error.message)
+                                return PromiseRejectionEvent
+                            }
+                            const data = { ...response.data, role: d.role }
+                            const image = await fetchImage(data.image_file)
+                            const result = {
+                                id: data.id, name: data.name, role: data.role, imageName: data.image_file, imageUrlBlob: image
+                            }
+                            setOrgs(prev => [...prev, result])
+                            return PromiseRejectionEvent
+                        })
+                }))
+            }).then(res => {
+                setLoading(false)
+            })
+    }
 
     // After retrieving organization data, this function is called to retrieve the image blob and returns an URL to it.
     const fetchImage = async (name: string | null) => {
@@ -131,16 +143,16 @@ function Organizations({ user, refresh, setRefresh, setOrg, setTrigger, setAdd, 
         return URL.createObjectURL(data)
     }
 
-    const deleteOrg = async (key: OrganizationFetch) => {
+    const deleteOrg = async (key: DashboardOrgFetch) => {
         const confirm = window.confirm("Are you sure you want to delete? This action is permanent!")
         if (!confirm) {
             return
         }
 
         if (key.imageName) supabase.storage.from('organization-images')
-                .remove([key.imageName])
-                .then(res => { if (res.error) console.log(res.error.message); })
-                    
+            .remove([key.imageName])
+            .then(res => { if (res.error) console.log(res.error.message); })
+
         const { data, error } = await supabase
             .from("Organizations")
             .delete()
@@ -154,11 +166,16 @@ function Organizations({ user, refresh, setRefresh, setOrg, setTrigger, setAdd, 
         }
     }
 
-    const editOrg = async (key: OrganizationFetch) => {
+    const editOrg = async (key: DashboardOrgFetch) => {
         setImgUrl(key.imageUrlBlob || 'No Image Found!')
         setOrg(key)
         setAdd(false)
         setTrigger(true)
+    }
+
+    const enterOrg = (index: number) => {
+        setOrgContext(orgs[index])
+        navigate('organization')
     }
 
     // Renders loading screen. If no data, display "No organizations found", else display the organizations in Cards.
@@ -171,19 +188,20 @@ function Organizations({ user, refresh, setRefresh, setOrg, setTrigger, setAdd, 
             ? (
                 <>
                     <Typography sx={{ margin: '32px 0 32px 0', justifySelf: 'center' }} variant='h3' component='h1'>Your Organizations</Typography>
-                    <Grid container padding={'8px'} spacing={2} justifyContent={'center'} overflow={'auto'} wrap='wrap' >{
-                        orgs.map((key, index) =>
-                            <Card sx={{ width: 'max(25%,200px)' }} key={index}>
+                    <Grid container padding='8px' spacing={2} justifyContent='center' overflow='auto' wrap='wrap' >{
+                        orgs.map((key, index) => {
+                            return (<Card sx={{ width: 'max(25%,200px)' }} key={index}>
                                 {orgs[index].imageUrlBlob
                                     ? <CardMedia sx={{ height: '200px' }} image={orgs[index].imageUrlBlob} />
                                     : <CardMedia />
                                 }
                                 <CardHeader title={key.name}></CardHeader>
                                 <CardActions style={{ justifyContent: 'space-evenly' }}>
+                                    <button onClick={() => enterOrg(index)}>Enter</button>
                                     <button onClick={() => editOrg(key)}>Edit</button>
-                                    <button onClick={() => deleteOrg(key)}>Delete</button>
                                 </CardActions>
                             </Card>)
+                        })
                     }</Grid>
                     <div style={{ height: '80px' }}></div>
                 </>)

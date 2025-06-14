@@ -34,6 +34,109 @@ export type Database = {
   }
   public: {
     Tables: {
+      Categories: {
+        Row: {
+          created_at: string
+          id: number
+          name: string
+          org_id: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          name: string
+          org_id: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          name?: string
+          org_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Categories_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "Organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      Items: {
+        Row: {
+          created_at: string
+          description: string | null
+          expiry_date: string | null
+          id: number
+          last_modified: string | null
+          name: string
+          org_id: number
+          quantity: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          expiry_date?: string | null
+          id?: number
+          last_modified?: string | null
+          name: string
+          org_id: number
+          quantity: number
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          expiry_date?: string | null
+          id?: number
+          last_modified?: string | null
+          name?: string
+          org_id?: number
+          quantity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Items_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "Organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      items_categories: {
+        Row: {
+          category_id: number
+          created_at: string
+          item_id: number
+        }
+        Insert: {
+          category_id: number
+          created_at?: string
+          item_id: number
+        }
+        Update: {
+          category_id?: number
+          created_at?: string
+          item_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "items_categories_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "Categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "items_categories_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "Items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       Organizations: {
         Row: {
           created_at: string
@@ -81,21 +184,21 @@ export type Database = {
       }
       users_organizations: {
         Row: {
-          access_level: string
           created_at: string
           organization_id: number
+          role: string
           user_id: string
         }
         Insert: {
-          access_level: string
           created_at?: string
           organization_id: number
+          role: string
           user_id: string
         }
         Update: {
-          access_level?: string
           created_at?: string
           organization_id?: number
+          role?: string
           user_id?: string
         }
         Relationships: [

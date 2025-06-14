@@ -6,7 +6,7 @@ import EditOrgPopup from './EditOrgPopup';
 export interface AddEditOrgProps {
     trigger: boolean
     closePopup: () => void
-    setRefresh: (refresh: boolean) => void
+    setRefresh: (func0: (arg0:boolean) => boolean) => void
     refresh: boolean
     add: boolean
     org: OrganizationFetch | null

@@ -1,17 +1,14 @@
-
 import { Box, Button, Modal, Typography } from "@mui/material"
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { useEffect, useState } from "react"
 import supabase from '../../../helper/supabaseClient';
-import { useSessionContext } from '../../contexts/SessionContext';
 import type { OrganizationFetch } from './Dashboard';
 import type { AddEditOrgProps } from './AddEditOrg';
 import { VisuallyHiddenInput } from './AddEditOrg';
 
-export default function EditOrgPopup({ trigger, closePopup, setRefresh, refresh, add, org, setAdd, imgUrl }: AddEditOrgProps) {
+export default function EditOrgPopup({ trigger, closePopup, setRefresh, org, setAdd, imgUrl }: AddEditOrgProps) {
     const [name, setName] = useState("")
     const [img, setImg] = useState<FileList | null>(null)
-    const { session } = useSessionContext()
 
     const handleEditOrganization = async (key: OrganizationFetch) => {
         // Check that image size is < 2MB, type is correct, and that organization name is not empty
@@ -59,7 +56,7 @@ export default function EditOrgPopup({ trigger, closePopup, setRefresh, refresh,
             .then(res => console.log(res.error))
             .then(() => setAdd(true))
             .then(closePopup)
-            .then(() => setRefresh(!refresh))
+            .then(() => setRefresh(prev => !prev))
 
     }
 
@@ -109,7 +106,7 @@ export default function EditOrgPopup({ trigger, closePopup, setRefresh, refresh,
 
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: 'auto', gap: '32px' }}>
                     <Button color='primary' variant='contained'
-                        onClick={e => handleEditOrganization(org!)} size='large' loading={false}>{add ? "Add" : "Edit"}</Button>
+                        onClick={e => handleEditOrganization(org!)} size='large' loading={false}>{"Edit"}</Button>
                     <Button color='error' variant='outlined'
                         onClick={e => closePopup()} size="large">Close</Button>
                 </div>
