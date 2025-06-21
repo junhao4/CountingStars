@@ -1,0 +1,17 @@
+.notifications-table {
+    justify-self: center;
+    min-height: auto;
+}   
+
+
+
+.notifications-table-header {
+    background-color: #ccc;
+}
+
+.notifications-table-row > td {
+    outline: 2px solid black;
+    height: 32px;
+    width: fit-content;
+    padding: 0 32px;
+}

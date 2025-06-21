@@ -2,10 +2,20 @@ import React, { useEffect, useState, type ChangeEvent, type FormEvent } from 're
 import { usePageTitleContext } from '../contexts/PageTitleContext'
 import supabase from '../../helper/supabaseClient'
 import { useSessionContext } from '../contexts/SessionContext'
-import { Button, Card, CardMedia } from '@mui/material'
-import { VisuallyHiddenInput } from './dashboard/AddEditOrg'
+import { Button, Card, CardMedia, styled } from '@mui/material'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 
+const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+})
 
 function Profile() {
   const [username, setUsername] = useState<string | null>("")

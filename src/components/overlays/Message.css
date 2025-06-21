@@ -1,0 +1,52 @@
+.message-box {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+
+        outline: 2px solid black;
+        padding: 8px;
+
+        display: flex;
+        flex-direction: column;
+        min-width: calc(max(20%, 200px));
+        min-height: 10%;
+        font-size: large;
+        z-index: 2;
+}
+
+.message-box-enter {
+        transform: translateY(0%) translateX(-20%);
+        opacity: 0;
+}
+
+.message-box-enter-active {
+        transform: translateY(-20%) translateX(-20%);
+        opacity: 1;
+        transition: opacity 500ms, transform 500ms;
+}
+
+.message-box-enter-done {
+        transform: translateY(-20%) translateX(-20%);
+}
+
+.message-box-exit {
+        transform: translateY(-20%) translateX(-20%);
+        opacity: 1;
+}
+
+.message-box-exit-active {
+        transform: translateY(0%) translateX(-20%);
+        opacity: 0;
+        transition: opacity 500ms, transform 500ms;
+}
+
+.message-box-exit-done {
+        transform: translateY(-20%) translateX(-20%);
+}
+
+
+.message-box-button {
+        width: fit-content;
+        align-self: flex-end;
+        background-color: #00ee00;
+}

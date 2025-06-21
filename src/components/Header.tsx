@@ -5,7 +5,7 @@ import { usePageTitleContext } from './contexts/PageTitleContext';
 import { useSessionContext } from './contexts/SessionContext';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { Button } from '@mui/material';
-
+import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 
 function Header() {
     const { session, loading } = useSessionContext();
@@ -30,8 +30,10 @@ function Header() {
                     }}>
                         <p style={{ fontSize: '20px', margin: '0' }}>Welcome, {session.user.email}</p>
                         <div style={{ display:'flex', width:'100%', justifyContent:'space-evenly' }}>
-                            <Button style={{backgroundColor:'white', color:'black'}} onClick={() => navigate('/dashboard')}> Dashboard </Button>
-                            <Button style={{backgroundColor:'white', color:'black'}} onClick={handleUserLogout}>Log out</Button>
+                            <Button size='small' color='secondary' variant='outlined' onClick={() => navigate('/dashboard')}> Dashboard </Button>
+                            <Button size='small' color='secondary' variant='outlined' onClick={() => navigate('/dashboard/notifications')}>
+                                <CircleNotificationsIcon /></Button>
+                            <Button size='small' color='secondary' variant='outlined' onClick={handleUserLogout}>Log out</Button>
                         </div>
                     </div>
                     : <div style={{

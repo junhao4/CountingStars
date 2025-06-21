@@ -3,23 +3,26 @@ import './Auth.css';
 import { Link, useNavigate } from 'react-router-dom';
 import supabase from '../../../helper/supabaseClient.ts';
 import { usePageTitleContext } from '../../contexts/PageTitleContext.tsx';
+import type { User } from '@supabase/supabase-js';
+import { useSessionContext } from '../../contexts/SessionContext.tsx';
 
 
 export function Login() {
     let navigate = useNavigate();
+    const { session } = useSessionContext()
+    const { setTitle } = usePageTitleContext();
     const [message, setMessage] = useState<string>("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleUser = async () => {
-        const { data: { user } } = await supabase.auth.getUser()
+    const handleFirstTimeUser = async (user: User) => {
         const { data, error } = await supabase
             .from('Users')
             .select()
             .eq('user_id', user!.id)
 
         if (data!.length > 0) {
-            console.log("user exists" , data)
+            console.log("user exists", data)
         } else {
             const { data, error } = await supabase
                 .from('Users')
@@ -27,12 +30,12 @@ export function Login() {
                 .select()
 
             if (data) {
-                console.log("user successfully added")
+                console.log("User successfully added")
             } else {
-                console.log("error", error)
+                console.log(error.message)
             }
         }
-  
+
     }
 
     const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
@@ -47,47 +50,48 @@ export function Login() {
         }
         if (data) {
             console.log(data)
-            await handleUser()
+            await handleFirstTimeUser(data.user)
             console.log("Going to dashboard")
             navigate('/dashboard')
         }
     }
 
-    //Set header title to Login
-    const { title, setTitle } = usePageTitleContext();
+    useEffect(() => {
+        setTitle("Login");
+    }, [])
 
     useEffect(() => {
-        console.log("Setting title to Login")
-        setTitle("Login");
-        console.log(title)
-    }, [])
-    //
+        if (session) {
+            navigate('/dashboard')
+        }
+    }, [session])
 
-    return (<div className='auth-container'>
-        <form id='login' onSubmit={handleLogin} className='form-container'>
-            <div className='form-field'>
-                <label htmlFor="email">Email:
-                    <input id='email' type="text" value={email} onChange={e => setEmail(e.target.value)} /></label><br />
-            </div>
-            <div className='form-field'>
-                <label htmlFor="password">Password:
-                    <input id='password' type="password" value={password} onChange={e => setPassword(e.target.value)} /></label>
-            </div>
+    return (
+        <div className='auth-container'>
+            <form id='login' onSubmit={handleLogin} className='form-container'>
+                <div className='form-field'>
+                    <label htmlFor="email">Email:
+                        <input id='email' type="text" value={email} onChange={e => setEmail(e.target.value)} /></label><br />
+                </div>
+                <div className='form-field'>
+                    <label htmlFor="password">Password:
+                        <input id='password' type="password" value={password} onChange={e => setPassword(e.target.value)} /></label>
+                </div>
 
-            
-           
-            <div className='form-footer'>
-                <button type="submit">Login</button>
-            </div>
-            <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                <p style={{marginLeft: 20, marginBottom: 0, marginTop: 0}}>
-                {message}
-                </p>
-             <Link to='/forgot' style={{ color: 'grey' , textAlign: 'right', marginTop:0, marginBottom:0, marginRight:80}} >Forgot Password?</Link>
-            
-            </div>
-        </form>
-        
-    </div>
+
+
+                <div className='form-footer'>
+                    <button type="submit">Login</button>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <p style={{ marginLeft: 20, marginBottom: 0, marginTop: 0 }}>
+                        {message}
+                    </p>
+                    <Link to='/forgot' style={{ color: 'grey', textAlign: 'right', marginTop: 0, marginBottom: 0, marginRight: 80 }} >Forgot Password?</Link>
+
+                </div>
+            </form>
+
+        </div>
     );
 }

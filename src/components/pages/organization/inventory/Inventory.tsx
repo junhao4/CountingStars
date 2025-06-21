@@ -91,8 +91,6 @@ export default function OrgInventory() {
 
     useEffect(() => {
         if (orgProps === null) navigate('/dashboard')
-        fetchItems()
-        fetchCategoryOptions()
         setTitle(orgProps!.name)
     }, [])
 

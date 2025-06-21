@@ -1,9 +1,15 @@
 import { createContext, useContext, useEffect, useState } from "react"
 
-interface OrgProps {
+export type UserRoles = 
+    | "pending"
+    | "member"
+    | "admin"
+    | "owner"
+
+export interface OrgProps {
     id: number
     name: string
-    role: string
+    role: UserRoles
 }
 
 interface OrgContextProps {
@@ -14,7 +20,7 @@ interface OrgContextProps {
 
 export const OrgContext = createContext<OrgContextProps>({
     getOrgContext: () => null,
-    setOrgContext: (arg0) => null,
+    setOrgContext: (arg0: OrgProps | null) => null,
     loading: true
 });
 

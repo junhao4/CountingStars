@@ -1,12 +1,30 @@
-import { Box, Button, Modal, Typography } from "@mui/material"
+import { Box, Button, Modal, styled, Typography } from "@mui/material"
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
-import { useEffect, useState } from "react"
+import { useEffect, useState, type SetStateAction } from "react"
 import supabase from '../../../helper/supabaseClient';
 import type { DashboardOrgFetch } from './Dashboard';
-import type { AddEditOrgProps } from './AddEditOrg';
-import { VisuallyHiddenInput } from './AddEditOrg';
 
-export default function EditOrgPopup({ trigger, closePopup, setRefresh, org, setAdd, imgUrl }: AddEditOrgProps) {
+const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+})
+
+interface EditOrgPopupProps {
+    trigger: boolean,
+    closePopup: () => void,
+    setRefresh: React.Dispatch<SetStateAction<boolean>>,
+    org: DashboardOrgFetch | null,
+    imgUrl: string,
+}
+
+export default function EditOrgPopup({ trigger, closePopup, setRefresh, org, imgUrl }: EditOrgPopupProps) {
     const [name, setName] = useState("")
     const [img, setImg] = useState<FileList | null>(null)
 
@@ -54,7 +72,6 @@ export default function EditOrgPopup({ trigger, closePopup, setRefresh, org, set
             .update({ name, image_file: img?.[0].name })
             .eq("id", key.id)
             .then(res => console.log(res.error))
-            .then(() => setAdd(true))
             .then(closePopup)
             .then(() => setRefresh(prev => !prev))
 

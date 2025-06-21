@@ -161,23 +161,23 @@ export type Database = {
       Users: {
         Row: {
           created_at: string
+          email: string | null
           image_file: string | null
           name: string | null
-          email: string | null
           user_id: string
         }
         Insert: {
           created_at?: string
+          email?: string | null
           image_file?: string | null
           name?: string | null
-          email?: string | null
           user_id?: string
         }
         Update: {
           created_at?: string
+          email?: string | null
           image_file?: string | null
           name?: string | null
-          email?: string | null
           user_id?: string
         }
         Relationships: []
@@ -223,7 +223,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      search_books_by_title_prefix: {
+        Args: { prefix: string }
+        Returns: unknown[]
+      }
+      search_organizations_by_name_prefix: {
+        Args: { prefix: string }
+        Returns: unknown[]
+      }
     }
     Enums: {
       [_ in never]: never

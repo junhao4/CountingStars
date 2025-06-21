@@ -1,18 +1,17 @@
 import { useEffect } from 'react';
-import './Home.css';
 import { usePageTitleContext } from '../contexts/PageTitleContext';
-import { Box, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 
 function Home() {
-
+    const navigate = useNavigate()
     //Set header title to Home
     const { title, setTitle } = usePageTitleContext();
 
     useEffect(() => {
         setTitle("Home");
     }, [])
-    //
 
     return (
         <Box component="section" sx={{ p: 2, border: '2px solid black' }}>

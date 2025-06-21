@@ -1,31 +1,48 @@
-import { Box, Button, Modal, Typography } from "@mui/material"
+import { Box, Button, Modal, styled, Typography } from "@mui/material"
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
-import { useEffect, useState } from "react"
+import { useEffect, useState, type SetStateAction } from "react"
 import supabase from '../../../helper/supabaseClient';
 import { useSessionContext } from '../../contexts/SessionContext';
-import type { AddEditOrgProps } from './AddEditOrg';
-import { VisuallyHiddenInput } from './AddEditOrg';
+import { useMessageContext } from "../../contexts/MessageContext";
 
+const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+})
 
-export default function AddOrgPopup({ trigger, closePopup, setRefresh }: AddEditOrgProps) {
+interface CreateOrgPopupProps {
+    trigger: boolean,
+    closePopup: () => void,
+    setRefresh: React.Dispatch<SetStateAction<boolean>>
+}
+
+export default function CreateOrgPopup({ trigger, closePopup, setRefresh }: CreateOrgPopupProps) {
     const [name, setName] = useState("")
     const [img, setImg] = useState<FileList | null>(null)
     const { session } = useSessionContext()
+    const { createMessage } = useMessageContext()
 
     const handleAddOrganization = async () => {
         // Check that image size is < 2MB, type is correct, and that organization name is not empty
         if (img && img[0].size > 2097152) {
-            alert("Image size must be < 2MB!")
+            createMessage("failure", "Image size must be < 2MB!")
             return
         }
 
         if (img && !(img[0].type === 'image/jpeg' || img[0].type === 'image/png')) {
-            alert("File type not accepted!")
+            createMessage("failure", "File type not accepted!")
             return
         }
 
         if (name === '') {
-            alert("Organization name must not be empty!")
+            createMessage("failure", "Organization name must not be empty!")
             return
         }
 
@@ -35,7 +52,7 @@ export default function AddOrgPopup({ trigger, closePopup, setRefresh }: AddEdit
             .eq('name', name)
 
         if (org?.length !== 0) {
-            alert("You already have an organization with the same name. Please choose another name.")
+            createMessage("failure", "You already have an organization with the same name. Please choose another name.")
             return
         }
 
@@ -43,12 +60,12 @@ export default function AddOrgPopup({ trigger, closePopup, setRefresh }: AddEdit
             ? supabase.storage.from('organization-images').upload(img[0].name, img[0], {
                 cacheControl: '3600',
                 upsert: false
-            }).then(res => console.log(res.error?.message))
+            }).then(res => {if (res.error) {createMessage("failure", res.error.message)}})
             : null
 
         await supabase.from('Organizations')
             .insert({ name, image_file: img?.[0].name })
-            .then(res => console.log(res.error?.message))
+            .then(res => {if (res.error) {createMessage("failure", res.error.message)}})
 
         const { data, error } = await supabase.from('Organizations')
             .select('id')
@@ -56,11 +73,11 @@ export default function AddOrgPopup({ trigger, closePopup, setRefresh }: AddEdit
             .single()
 
         if (error) {
-            console.log(error.message)
+            createMessage("failure", error.message)
         } else {
             supabase.from('users_organizations')
                 .insert({ user_id: session!.user.id, organization_id: data.id, role: 'owner' })
-                .then(res => console.log(res.error?.message))
+                .then(res => {if (res.error) {createMessage("failure", res.error.message)}})
                 .then(closePopup)
                 .then(() => setRefresh(prev => !prev))
         }

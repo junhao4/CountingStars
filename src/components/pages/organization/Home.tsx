@@ -21,6 +21,7 @@ export default function OrgHome() {
             Welcome! This is the home page for your organization. {orgProps!.id}
             <Button onClick={() => navigate('users')}>Users</Button>
             <Button onClick={() => navigate('inventory')}>Inventory</Button>
+            <Button onClick={() => navigate('settings')}>Settings</Button>
         </>
     )
 }
