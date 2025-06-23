@@ -1,4 +1,4 @@
-import { DataGrid, GridActionsCellItem, GridRowEditStopReasons, GridRowModes, type GridColDef, type GridComparatorFn, type GridEventListener, type GridRenderCellParams, type GridRowId, type GridRowModel, type GridRowModesModel, type GridRowsProp } from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem, GridRowEditStopReasons, GridRowModes, type GridColDef, type GridComparatorFn, type GridEventListener, type GridRenderCellParams, type GridRowId, type GridRowModel, type GridRowModesModel, type GridRowParams, type GridRowsProp } from "@mui/x-data-grid";
 import { useOrgContext, type OrgProps, type UserRoles } from "../../../contexts/OrgContext";
 import { useEffect, useMemo, useState, type SetStateAction } from "react";
 import supabase from "../../../../helper/supabaseClient";
@@ -6,6 +6,8 @@ import { Avatar, Box, Button, MenuItem, Select, Typography, type SelectChangeEve
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { usePageTitleContext } from "../../../contexts/PageTitleContext";
 import Loading from "../../../general/Loading";
 import { useSessionContext } from "../../../contexts/SessionContext";
@@ -25,12 +27,12 @@ export default function OrgUsers() {
     const orgProps = getOrgContext()!
     const { setTitle } = usePageTitleContext()
 
-    const [users, setUsers] = useState<UserFetch[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [addUserTrigger, setAddUserTrigger] = useState(false)
 
-    const [rows, setRows] = useState<GridRowsProp<UserFetch>>(users)
-    const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
+    const [rows, setRows] = useState<GridRowsProp<UserFetch>>([])
+    const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
+    const numOwners = rows.filter(row => row.role === 'owner').length
 
     const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
         // If focus is outside, do not automatically commit row edit changes yet
@@ -39,25 +41,35 @@ export default function OrgUsers() {
         }
     };
     const processRowUpdate = (newRow: GridRowModel<UserFetch>) => {
-        setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
+        setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)))
+        new Promise(() =>
+            supabase.from('users_organizations')
+                .update({ role: newRow.role })
+                .eq('user_id', newRow.id)
+                .eq('organization_id', orgProps.id)
+                .single()
+                .then(res => {
+                    if (res.error) { console.log(res.error.message) }
+                }))
         return newRow;
     }
 
-    const roleSortComparator: GridComparatorFn<string> = (v1, v2) => {
-        return v1 === v2
-            ? 0
-            : v1 === 'pending'
-                ? 1
-                : v2 === 'pending'
-                    ? -1
-                    : v1 === 'owner'
-                        ? 1
-                        : v2 === 'owner'
-                            ? -1
-                            : v1 === 'admin'
-                                ? 1
-                                : -1
-    }
+    const roleSortComparator: ((arg0: string, arg1: string) => -1 | 0 | 1) =
+        (v1: string, v2: string) => {
+            return v1 === v2
+                ? 0
+                : v1 === 'pending'
+                    ? 1
+                    : v2 === 'pending'
+                        ? -1
+                        : v1 === 'owner'
+                            ? 1
+                            : v2 === 'owner'
+                                ? -1
+                                : v1 === 'admin'
+                                    ? 1
+                                    : -1
+        }
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'User ID', width: 140, align: 'left', headerAlign: 'left', type: 'string' },
@@ -85,50 +97,80 @@ export default function OrgUsers() {
         { field: 'email', headerName: 'Email', width: 280, align: 'left', headerAlign: 'left', type: 'string' },
         {
             field: 'actions', headerName: 'Actions', width: 280, align: 'left', headerAlign: 'left', type: 'actions',
-            getActions: ({ id }) => {
-                const handleEditClick = (id: GridRowId) => () => {
+            getActions: ({ id, row }: GridRowParams<UserFetch>) => {
+                const handleEditClick = () => {
                     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
                 };
 
-                const handleSaveClick = (id: GridRowId) => () => {
-                    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+                const handleSaveClick = async () => {
+                    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
                 }
 
-                const handleDeleteClick = (id: GridRowId) => async () => {
-                    setRows(rows.filter((row) => row.id !== id))
-                    // await supabase.from('users_organizations')
-                    //     .delete()
-                    //     .eq('user_id', session!.user.id)
-                    //     .eq('organization_id', orgProps.id)
-                    // setRefresh(prev => !prev)
+                const handleDeleteClick = async () => {
+                    await supabase.from('users_organizations')
+                        .delete()
+                        .eq('user_id', session!.user.id)
+                        .eq('organization_id', orgProps.id)
+                        .then(res => {
+                            if (res.error) console.log(res.error.message)
+                            else setRows(rows.filter((row) => row.id !== id))
+                        })
                 }
 
-                const handleCancelClick = (id: GridRowId) => () => {
+                const handleCancelClick = () => {
                     setRowModesModel({
                         ...rowModesModel,
                         [id]: { mode: GridRowModes.View, ignoreModifications: true },
                     });
                 }
 
+                // Prevent deletion of user if user's role is higher than current user's role.
+                // Or if there will be no 'owner' roles remaining after the deletion.
+                const isDisabled = roleSortComparator(row.role, orgProps.role) > 0
+                    || numOwners === 1 && row.role === 'owner'
 
-                // const isDisabled = roles.indexOf(userRole) < roles.indexOf(params.row.role)
-                //     || userId === params.row.id
 
                 const acceptPendingUser = async () => {
+                    const newUser = rows.find(row => row.id === id)!
+                    setRows([...rows.filter(row => row.id !== id), { ...newUser, role: 'member' }])
                     await supabase.from("users_organizations")
                         .update({ role: 'member' })
+                        .eq('user_id', row.id)
+                        .eq('organization_id', orgProps.id)
+                        .single()
                         .then(res => { if (res.error) { console.log(res.error.message) } })
                 }
 
                 const rejectPendingUser = async () => {
+                    setRows(rows.filter(row => row.id !== id))
                     await supabase.from("users_organizations")
                         .delete()
-                        .eq('user_id', session!.user.id)
+                        .eq('user_id', row.id)
                         .eq('organization_id', orgProps.id)
+                        .single()
+                        .then(res => { if (res.error) { console.log(res.error.message) } })
+                }
+
+                if (row.role === 'pending') {
+                    return [
+                        <GridActionsCellItem
+                            icon={<CheckCircleIcon />}
+                            label='save'
+                            // @ts-expect-error
+                            color='info'
+                            onClick={acceptPendingUser}
+                        />,
+                        <GridActionsCellItem
+                            icon={<CancelIcon />}
+                            label='save'
+                            // @ts-expect-error
+                            color='info'
+                            onClick={rejectPendingUser}
+                        />,
+                    ]
                 }
 
                 const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
                 if (isInEditMode) {
                     return [
                         <GridActionsCellItem
@@ -136,24 +178,33 @@ export default function OrgUsers() {
                             label='save'
                             // @ts-expect-error
                             color='info'
-                            onClick={handleSaveClick(id)}
+                            onClick={handleSaveClick}
                         />,
                         <GridActionsCellItem
                             icon={<CancelIcon />}
                             label='save'
                             // @ts-expect-error
                             color='info'
-                            onClick={handleSaveClick(id)}
+                            onClick={handleCancelClick}
                         />,
                     ]
                 }
+
                 return [
                     <GridActionsCellItem
                         icon={<EditIcon />}
                         label='save'
                         // @ts-expect-error
                         color='info'
-                        onClick={handleEditClick(id)}
+                        onClick={handleEditClick}
+                    />,
+                    <GridActionsCellItem
+                        icon={<DeleteIcon />}
+                        label='save'
+                        // @ts-expect-error 
+                        color='info'
+                        onClick={handleDeleteClick}
+                        disabled={isDisabled}
                     />,
                 ]
             }
@@ -161,7 +212,6 @@ export default function OrgUsers() {
     ]
 
     const fetchUsers = async () => {
-        setUsers(() => [])
         await supabase.from('users_organizations')
             .select('user_id, role')
             .eq('organization_id', orgProps.id)
@@ -195,7 +245,6 @@ export default function OrgUsers() {
 
                 Promise.all(promises).then(data => {
                     if (data) {
-                        setUsers(data.filter(d => !!d))
                         setRows(data.filter(d => !!d))
                         setLoading(false)
                     }
@@ -217,51 +266,30 @@ export default function OrgUsers() {
         loading
             ? <Loading></Loading>
             : <Box>
-                <UserTable orgProps={orgProps} users={rows} columns={columns} processRowUpdate={processRowUpdate}
-                    handleRowEditStop={handleRowEditStop} rowModesModel={rowModesModel} setRowModesModel={setRowModesModel} />
+                <DataGrid
+                    columns={columns}
+                    rows={rows.map(user => {
+                        return { ...user, name: user.name + ',' + user.image_file }
+                    })}
+                    editMode="row"
+                    getRowId={(row: UserFetch) => row.id}
+                    getRowHeight={() => 'auto'}
+                    rowModesModel={rowModesModel}
+                    onRowModesModelChange={newRowMode => setRowModesModel(newRowMode)}
+                    onRowEditStop={handleRowEditStop}
+                    processRowUpdate={processRowUpdate}
+                    initialState={{
+                        sorting: {
+                            sortModel: [{ field: 'role', sort: 'desc' }]
+                        }
+                    }}
+                >
+                </DataGrid>
 
                 <div hidden={!(orgProps.role === 'owner' || orgProps.role === 'admin')}>
                     <Button variant='contained' onClick={() => setAddUserTrigger(true)}>Add user</Button>
                     <AddUserPopup trigger={addUserTrigger} closePopup={() => { setAddUserTrigger(false) }} setRefresh={setRefresh} />
                 </div>
             </Box>
-    )
-}
-
-interface UserTableProps {
-    orgProps: OrgProps
-    users: GridRowsProp<UserFetch>
-    columns: GridColDef[]
-    processRowUpdate: (newRow: GridRowModel<UserFetch>) => UserFetch
-    handleRowEditStop: GridEventListener<'rowEditStop'>
-    rowModesModel: GridRowModesModel
-    setRowModesModel: React.Dispatch<SetStateAction<GridRowModesModel>>
-}
-
-function UserTable({ orgProps, users, columns, processRowUpdate, handleRowEditStop, rowModesModel, setRowModesModel }: UserTableProps) {
-    const rows = users.map(user => {
-        return { ...user, name: user.name + ',' + user.image_file }
-    })
-    return (
-        <>
-            {<DataGrid
-                columns={columns}
-                rows={rows}
-                editMode="row"
-                getRowId={(row: UserFetch) => row.id}
-                getRowHeight={() => 'auto'}
-                rowModesModel={rowModesModel}
-                onRowModesModelChange={newRowMode => setRowModesModel(newRowMode)}
-                onRowEditStop={handleRowEditStop}
-                processRowUpdate={processRowUpdate}
-                initialState={{
-                    sorting: {
-                        sortModel: [{ field: 'role', sort: 'desc' }]
-                    }
-                }}
-            >
-
-            </DataGrid>}
-        </>
     )
 }
