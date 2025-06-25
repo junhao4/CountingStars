@@ -98,7 +98,7 @@ export default function OrgSettings() {
       setOrgContext( {
         id: orgProps.id,
         name: data[0].name,
-        role: orgProps.role
+        role: orgProps.role 
       })
       console.log(orgProps.name)
     } else {
