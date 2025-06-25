@@ -34,6 +34,7 @@ function Profile() {
   const [img, setImg] = useState("");
   const { session } = useSessionContext();
 
+  //Updates username
   const updateProfile = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { data, error } = await supabase
@@ -51,6 +52,7 @@ function Profile() {
     }
   };
 
+  //Updates Image
   const updateImage = async (e: ChangeEvent<HTMLInputElement>) => {
     console.log("Updating image");
 
@@ -83,6 +85,7 @@ function Profile() {
     }
   };
 
+  //Fetches preexisting user info
   useEffect(() => {
     console.log(session?.user.email);
     if (session?.user) {
@@ -93,7 +96,7 @@ function Profile() {
           .eq("user_id", session!.user.id)
           .single();
 
-        setName(data!.name ?? 'New User');
+        setName(data!.name ?? "New User");
         console.log(data!.name);
         setProfileUrl(data!.image_file);
       };
@@ -102,6 +105,7 @@ function Profile() {
     }
   }, [session]);
 
+  //Downloads user image from storage
   useEffect(() => {
     const downloadImage = async () => {
       const { data, error } = await supabase.storage
