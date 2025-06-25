@@ -41,6 +41,7 @@ export default function OrgSettings() {
   const { session } = useSessionContext();
   const [message, setMessage] = useState("");
   const { setTitle } = usePageTitleContext();
+  const { setOrgContext } = useOrgContext();
 
   //Delete Org
   const handleDelete = async () => {
@@ -94,6 +95,11 @@ export default function OrgSettings() {
       createMessage("success", inputName + " set as organization's name");
       setName(inputName);
       setTitle(inputName)
+      setOrgContext( {
+        id: orgProps.id,
+        name: data[0].name,
+        role: orgProps.role
+      })
       console.log(orgProps.name)
     } else {
       createMessage("failure", "error");
