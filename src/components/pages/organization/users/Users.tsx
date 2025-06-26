@@ -13,6 +13,7 @@ import Loading from "../../../general/Loading";
 import { useSessionContext } from "../../../contexts/SessionContext";
 import AddUserPopup from "./AddUserPopup";
 import { useNavigate } from "react-router-dom";
+import { useMessageContext } from "../../../contexts/MessageContext";
 
 interface UserFetch {
     id: string,
@@ -28,6 +29,7 @@ export default function OrgUsers() {
     const orgProps = getOrgContext()!
     const { setTitle } = usePageTitleContext()
     const navigate = useNavigate()
+    const { createMessage } = useMessageContext()
 
     const [loading, setLoading] = useState<boolean>(true)
     const [addUserTrigger, setAddUserTrigger] = useState(false)
@@ -43,6 +45,13 @@ export default function OrgUsers() {
         }
     };
     const processRowUpdate = (newRow: GridRowModel<UserFetch>) => {
+
+        const oldRow = rows.find(row => row.id === newRow.id)
+        if (oldRow?.role === 'owner' && newRow.role !== 'owner' && numOwners === 1) {
+            createMessage("failure", "The organization needs at least 1 owner!")
+            return oldRow;
+        }
+
         setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)))
         new Promise(() =>
             supabase.from('users_organizations')
@@ -133,9 +142,10 @@ export default function OrgUsers() {
 
                 // Prevent deletion of user if user's role is higher than current user's role.
                 // Or if there will be no 'owner' roles remaining after the deletion.
-                const isDisabled = roleSortComparator(row.role, orgProps.role) > 0
+                const isDisabled = roleSortComparator(row.role, orgProps.role) >= 0
                     || numOwners === 1 && row.role === 'owner'
 
+                const editDisabled = roleSortComparator(row.role, orgProps.role) >= 0 && row.role !== 'owner'
 
                 const acceptPendingUser = async () => {
                     const newUser = rows.find(row => row.id === id)!
@@ -204,6 +214,8 @@ export default function OrgUsers() {
                         // @ts-expect-error
                         color='info'
                         onClick={handleEditClick}
+                        disabled={editDisabled}
+
                     />,
                     <GridActionsCellItem
                         icon={<DeleteIcon />}
