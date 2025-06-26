@@ -2,6 +2,8 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, TextFiel
 import { useState } from "react";
 import supabase from "../../../../helper/supabaseClient";
 import { useOrgContext } from "../../../contexts/OrgContext";
+import { addNotification } from "../../notifications/Notifications";
+import { useSessionContext } from "../../../contexts/SessionContext";
 
 interface AddUserPopupProps {
     trigger: boolean,
@@ -13,6 +15,7 @@ export default function AddUserPopup({ trigger, closePopup, setRefresh }: AddUse
     const orgProps = getOrgContext()
     const [email, setEmail] = useState<string>('')
     const [role, setRole] = useState<string>('member')
+    const { session } = useSessionContext()
 
     const handleSubmit = async () => {
         const { data, error } = await supabase.from('Users')
@@ -32,7 +35,8 @@ export default function AddUserPopup({ trigger, closePopup, setRefresh }: AddUse
             if (error) {
                 console.log(error)
             }
-
+            //notify user of addition to org
+            addNotification(session!.user.id, data.user_id, orgProps!.id, 1)
             setRefresh(prev => !prev)
         } else {
             console.log('Email not found - Please ensure they have signed up')

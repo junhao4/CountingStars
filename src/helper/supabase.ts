@@ -137,6 +137,58 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          created_at: string
+          id: number
+          notifier: string | null
+          organisation: number | null
+          receiver: string | null
+          status: boolean | null
+          type: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          notifier?: string | null
+          organisation?: number | null
+          receiver?: string | null
+          status?: boolean | null
+          type?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          notifier?: string | null
+          organisation?: number | null
+          receiver?: string | null
+          status?: boolean | null
+          type?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_notifier_fkey"
+            columns: ["notifier"]
+            isOneToOne: false
+            referencedRelation: "Users"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "notifications_organisation_fkey"
+            columns: ["organisation"]
+            isOneToOne: false
+            referencedRelation: "Organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_receiver_fkey"
+            columns: ["receiver"]
+            isOneToOne: false
+            referencedRelation: "Users"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       Organizations: {
         Row: {
           created_at: string
