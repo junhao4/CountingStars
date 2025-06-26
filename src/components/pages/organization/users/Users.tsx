@@ -145,7 +145,7 @@ export default function OrgUsers() {
                 const isDisabled = roleSortComparator(row.role, orgProps.role) >= 0
                     || numOwners === 1 && row.role === 'owner'
 
-                const editDisabled = roleSortComparator(row.role, orgProps.role) >= 0 && row.role !== 'owner'
+                const editDisabled = roleSortComparator(row.role, orgProps.role) >= 0 && orgProps.role !== 'owner'
 
                 const acceptPendingUser = async () => {
                     const newUser = rows.find(row => row.id === id)!
