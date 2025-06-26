@@ -12,6 +12,7 @@ import { usePageTitleContext } from "../../../contexts/PageTitleContext";
 import Loading from "../../../general/Loading";
 import { useSessionContext } from "../../../contexts/SessionContext";
 import AddUserPopup from "./AddUserPopup";
+import { useNavigate } from "react-router-dom";
 
 interface UserFetch {
     id: string,
@@ -26,6 +27,7 @@ export default function OrgUsers() {
     const { getOrgContext } = useOrgContext()
     const orgProps = getOrgContext()!
     const { setTitle } = usePageTitleContext()
+    const navigate = useNavigate()
 
     const [loading, setLoading] = useState<boolean>(true)
     const [addUserTrigger, setAddUserTrigger] = useState(false)
@@ -106,15 +108,20 @@ export default function OrgUsers() {
                     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
                 }
 
+
                 const handleDeleteClick = async () => {
                     await supabase.from('users_organizations')
                         .delete()
-                        .eq('user_id', session!.user.id)
+                        .eq('user_id', row.id)
                         .eq('organization_id', orgProps.id)
                         .then(res => {
                             if (res.error) console.log(res.error.message)
                             else setRows(rows.filter((row) => row.id !== id))
                         })
+
+                    if (row.id == session?.user.id) {
+                        navigate("/dashboard")
+                    }
                 }
 
                 const handleCancelClick = () => {
