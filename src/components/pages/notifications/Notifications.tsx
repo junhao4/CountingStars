@@ -83,7 +83,7 @@ export default function Notifications() {
   
 })
 //TEST
-addNotification("a4deac40-68ec-4e03-a837-2c97256919b5", "a4deac40-68ec-4e03-a837-2c97256919b5",1,2)
+//addNotification("a4deac40-68ec-4e03-a837-2c97256919b5", "a4deac40-68ec-4e03-a837-2c97256919b5",1,2)
 
 console.log(currentTimeInSGT)
     getNoti();
