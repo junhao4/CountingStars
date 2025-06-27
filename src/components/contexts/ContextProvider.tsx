@@ -5,6 +5,7 @@ import { OrgProvider } from "./OrgContext";
 import { PageTitleProvider } from "./PageTitleContext";
 import { MessageProvider } from "./MessageContext";
 import ThemeUsage from "./ThemeProvider";
+import { NotificationProvider } from "./NotificationContext";
 
 
 export default function ContextProvider({ children }: { children: React.ReactNode }) {
@@ -15,7 +16,9 @@ export default function ContextProvider({ children }: { children: React.ReactNod
                     <OrgProvider>
                         <PageTitleProvider>
                             <MessageProvider>
+                                <NotificationProvider>
                                 {children}
+                                </NotificationProvider>
                             </MessageProvider>
                         </PageTitleProvider>
                     </OrgProvider>
