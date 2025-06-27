@@ -167,11 +167,11 @@ export default function Dashboard() {
             ? (
                 <Box sx={{ overflow: 'auto', outline: '2px solid black', margin: '2rem' }}>
 
-                    <Box display='flex' textAlign='center' alignItems='center' justifyContent='center' gap='2rem' margin='2rem 0 2rem 0' overflow='hidden'>
+                    <Box display='flex' textAlign='center' alignItems='center' justifyContent='center' gap='2rem' margin='2rem 0 2rem 0' flexWrap='wrap'>
                         <Typography variant='h4'>Your Organizations</Typography>
 
                         <Button onClick={(e) => navigate('new')}
-                            variant='contained' sx={{ flexShrink: 0 }}>
+                            variant='outlined' sx={{ flexShrink: 0 }}>
                             Create Organization
                         </Button>
 
@@ -179,13 +179,14 @@ export default function Dashboard() {
                             <Input placeholder='Organization ID' disableUnderline sx={{ width: '8rem', marginLeft: '1rem' }}
                                 value={joinId} onChange={(e) => setJoinId(e.target.value)} />
                             <Button onClick={joinOrg}
-                                variant='contained' sx={{ flexShrink: 0 }}>
+                                variant='outlined' sx={{ flexShrink: 0 }}>
                                 Join Organization
                             </Button>
                         </div>
                     </Box>
 
-                    <Grid container padding='8px' spacing={2} justifyContent='center' overflow='auto' wrap='wrap' >{
+                    <Grid container padding='2rem' spacing={2} justifyContent='center' overflow='auto' wrap='wrap' 
+                        boxShadow='0 -2px 0 #000'>{
                         orgs.map((key, index) => {
                             return (
                             <Card sx={{ width: 'max(25%,200px)' }} key={index}>
@@ -195,7 +196,7 @@ export default function Dashboard() {
                                 }
                                 <CardHeader sx={{ textAlign: 'center' }} title={key.name}></CardHeader>
                                 <CardActions style={{ justifyContent: 'space-evenly' }}>
-                                    <Button variant='contained' onClick={() => enterOrg(index)}>Enter</Button>
+                                    <Button variant='outlined' onClick={() => enterOrg(index)}>Enter</Button>
                                 </CardActions>
                             </Card>)
                         })

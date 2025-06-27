@@ -3,13 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import supabase from "../helper/supabaseClient";
 import { usePageTitleContext } from "./contexts/PageTitleContext";
 import { useSessionContext } from "./contexts/SessionContext";
+import Typography from "@mui/material/Typography"
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
-import { Badge, Button } from "@mui/material";
+import { Badge, Box, Button, useTheme } from "@mui/material";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNotificationContext } from "./contexts/NotificationContext";
 
 function Header() {
+    const theme = useTheme()
     const { session, loading } = useSessionContext();
     const navigate = useNavigate();
     const { unread } = useNotificationContext();
@@ -21,10 +23,10 @@ function Header() {
 
     return (
         <div className="header-container">
-            <Link to="/" className="header-logo">
-                Counting Stars
-                <AutoAwesomeIcon sx={{ color: "yellow", fontSize: "50px" }} />
-            </Link>
+            <div onClick={() => navigate('/')} className="header-logo">
+                <Typography variant='h4'>Counting Stars</Typography>
+                <AutoAwesomeIcon sx={{ fontSize: "50px"}} />
+            </div>
             <h1 className="header-title">{usePageTitleContext().title}</h1>
             <div className="header-user-details">
                 {session ? (

@@ -1,11 +1,12 @@
-import Button from '../Button'
+import Button from "@mui/material/Button"
+import { useNavigate } from "react-router-dom"
 
 function NotFound() {
-
+    const navigate = useNavigate()
     return (
         <>
             <h1 className="head">Oops! This page does not exist.</h1>
-            <Button to="/">Back to Home</Button>
+            <Button onClick={() => navigate('/')}>Back to Home</Button>
         </>
     )
 }

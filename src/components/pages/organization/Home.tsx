@@ -1,10 +1,9 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useOrgContext } from "../../contexts/OrgContext"
 import { usePageTitleContext } from "../../contexts/PageTitleContext"
 import { useNavigate } from "react-router-dom"
 import Button from "@mui/material/Button"
-
-
+import Sidebar from "./Sidebar"
 
 export default function OrgHome() {
     const navigate = useNavigate()
@@ -16,12 +15,15 @@ export default function OrgHome() {
         setTitle(orgProps!.name)
     }, [])
 
+
     return (
         <>
+            {/* <Sidebar /> */}
             Welcome! This is the home page for your organization. {orgProps!.id}
-            <Button onClick={() => navigate('users')}>Users</Button>
+            <Button variant='outlined' color='primary' onClick={() => navigate('users')}>Users</Button>
             <Button onClick={() => navigate('inventory')}>Inventory</Button>
             <Button onClick={() => navigate('settings')}>Settings</Button>
+
         </>
     )
 }

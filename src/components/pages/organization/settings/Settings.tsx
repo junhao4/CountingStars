@@ -58,7 +58,7 @@ export default function OrgSettings() {
       .eq("id", orgProps.id)
       .then((res) => {
         if (res.error) {
-          createMessage("failure", res.error.message);
+          createMessage("error", res.error.message);
         } else {
           createMessage("success", "Successfully deleted organization!");
           navigate("/dashboard");
@@ -74,15 +74,13 @@ export default function OrgSettings() {
     const { data: org } = await supabase
       .from("Organizations")
       .select("id")
-      .eq("name", inputName);
-    console.log("org", org);
-    console.log("inputName", inputName)
-    console.log("name", name)
+      .eq("name", inputName)
+
     if (inputName !== name && org?.length !== 0) {
       alert(
         "You already have an organization with the same name. Please choose another name."
-      );
-      return;
+      )
+      return
     }
 
     const { data, error } = await supabase
@@ -102,7 +100,7 @@ export default function OrgSettings() {
       })
       console.log(orgProps.name)
     } else {
-      createMessage("failure", "error");
+      createMessage("error", "error");
       console.log(error);
     }
   };
@@ -112,7 +110,7 @@ export default function OrgSettings() {
     console.log("Updating image");
 
     if (!e.target.files || e.target.files.length === 0) {
-      createMessage("failure", "You must select an image to upload.");
+      createMessage("error", "You must select an image to upload.");
       return;
     }
 

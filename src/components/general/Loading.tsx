@@ -4,7 +4,7 @@ export default function Loading() {
     return (
         <Modal open>
             <Box sx={{position: 'absolute', top: '50%', left: '50%', transform: 'translateY(-50%) translateX(-50%)',
-                backgroundColor:'white', padding:'64px', outline:'4px solid black', borderRadius:'8px'}}>
+                padding:'64px', outline:'4px solid black', borderRadius:'8px'}}>
                 <Typography>Loading...</Typography>
             </Box>
         </Modal>

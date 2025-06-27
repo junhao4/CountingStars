@@ -1,26 +1,36 @@
 .header-container {
-    background-color: black;
-    color: white;
+    color: var(--primary-foreground);
+    background-color: var(--primary);
     display: flex;
     width: 100%;
-    height: 96px;
+    height: 5rem;
     justify-content: center;
     align-items: center;
+    flex-shrink: 0;
+    overflow: hidden;
 }
 
 .header-logo {
+    color: var(--secondary);
     justify-self: flex-start;
     display: flex;
-    color: white;
     padding: 0 2%;
     font-size: xx-large;
     align-items: center;
+    text-wrap: nowrap;
+}
+
+.header-logo:hover {
+    color: #646cff;
 }
 
 .header-title {
-    color: white;
     text-decoration: solid;
     text-decoration-color: white;
     font-size: 40px;
     margin: 0 auto 0 auto;
+}
+
+.header-user-details {
+    flex-shrink: 0;
 }
