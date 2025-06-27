@@ -1,11 +1,13 @@
 import { createContext, useContext, useState, type SetStateAction } from "react"
 
+type variantType = "success"|"info"|"warning"|"error"
+
 interface MessageProps {
-    variant: "success" | "failure",
+    variant: variantType,
     text: string,
     trigger: boolean,
     setTrigger: React.Dispatch<SetStateAction<boolean>>,
-    createMessage: (arg0: "success" | "failure", arg1: string) => void,
+    createMessage: (arg0: variantType, arg1: string) => void,
 }
 
 
@@ -20,13 +22,13 @@ export const MessageContext =
 
 
 export const MessageProvider = ({ children }: { children: React.ReactNode }) => {
-  const [variant, setVariant] = useState<"success"|"failure">("success")
+  const [variant, setVariant] = useState<variantType>("success")
   const [text, setText] = useState<string>("Welcome!")
   const [trigger, setTrigger] = useState<boolean>(false)
 
-  const createMessage = (variant: "success" | "failure", text: string) => {
+  const createMessage = (vari: variantType, text: string) => {
     setText(text)
-    setVariant(variant)
+    setVariant(vari)
     setTrigger(true)
   }
 

@@ -13,10 +13,8 @@ import { useSessionContext } from '../../contexts/SessionContext';
 import { useNavigate } from 'react-router-dom';
 import { useOrgContext, type UserRoles } from '../../contexts/OrgContext';
 import Loading from '../../general/Loading';
-import { Box, Tab, Tabs, TextField } from '@mui/material';
-import CreateOrgPopup from './CreateOrgPopup';
-import EditOrgPopup from './EditOrgPopup';
-import JoinOrgPopup from './JoinOrgPopup';
+import { Box, FormControl, Input, InputLabel, Tab, Tabs, TextField } from '@mui/material';
+import { useMessageContext } from '../../contexts/MessageContext';
 
 export interface DashboardOrgFetch {
     id: number
@@ -27,41 +25,16 @@ export interface DashboardOrgFetch {
 }
 
 export default function Dashboard() {
+    const { session } = useSessionContext()!
+    const [loading, setLoading] = useState(true)
     const { setTitle } = usePageTitleContext()
-    const { session } = useSessionContext()
 
     // Renders the Add Organization Pop-up if true
     const [refresh, setRefresh] = useState(true)
-
-    // On mount, set header title to 'Dashboard'
-    useEffect(() => {
-        setTitle("Dashboard");
-    }, [])
-
-    // Session and User is not null due to AuthWrapper authentication
-    return (<>
-        {/* Fetches organizations from the database and displays in a grid */}
-        <Organizations user={session!.user} refresh={refresh} setRefresh={setRefresh} />
-
-        {/* Displays the footer with Add Organization button that unhides pop-up */}
-        <DashboardFooter setRefresh={setRefresh} />
-    </>
-    )
-}
-
-interface OrganizationsProps {
-    user: User
-    refresh: boolean
-    setRefresh: React.Dispatch<SetStateAction<boolean>>
-}
-
-function Organizations({ user, refresh, setRefresh }: OrganizationsProps) {
-    const [loading, setLoading] = useState(true)
-    const [trigger, setTrigger] = useState<boolean>(false)
-    const [org, setOrg] = useState<DashboardOrgFetch | null>(null)
+    
     const [orgs, setOrgs] = useState<DashboardOrgFetch[]>([])
-    const [imgUrl, setImgUrl] = useState<string>("")
     const { setOrgContext } = useOrgContext()
+    const { createMessage } = useMessageContext()
     const navigate = useNavigate()
 
     // On render, fetch organization ids
@@ -69,12 +42,16 @@ function Organizations({ user, refresh, setRefresh }: OrganizationsProps) {
         fetchData()
     }, [refresh])
 
+    useEffect(() => {
+        setTitle("Dashboard");
+    }, [])
+
     // Fetch organizational data
     const fetchData = async () => {
         setOrgs(() => [])
         supabase.from('users_organizations')
             .select(`organization_id, role`)
-            .eq('user_id', user.id)
+            .eq('user_id', session!.user.id)
             .then(async response => {
                 if (response.error) {
                     console.log(response.error.message)
@@ -152,10 +129,35 @@ function Organizations({ user, refresh, setRefresh }: OrganizationsProps) {
         navigate('organization')
     }
 
-    const editOrg = async (key: DashboardOrgFetch) => {
-        setImgUrl(key.imageUrlBlob || 'No Image Found!')
-        setOrg(key)
-        setTrigger(true)
+
+    const [joinId, setJoinId] = useState<string>('')
+    const joinOrg = async () => {
+        var isNumber = true
+        for (var i = 0; i < joinId.length; i++) {
+            if (!(joinId.charAt(i) >= '0' && joinId.charAt(i) <= '9')) {
+                isNumber = false
+            }
+        }
+        if (!isNumber || joinId === '') {
+            createMessage("warning", "Not a valid organization id number!")
+            return
+        }
+        const organization_id = Number.parseInt(joinId)
+        await supabase.from("users_organizations")
+            .select("")
+            .eq("user_id", session!.user.id)
+            .eq("organization_id", organization_id)
+            .then(res => {
+                if (res.error) {
+                    createMessage('error', res.error.message)
+                } else if (res.data.length === 1) {
+                    createMessage('error', "Error: Already in organization or still pending approval!")
+                } else {
+                    supabase.from("users_organizations")
+                        .insert({ user_id: session!.user.id, organization_id, role: "pending" })
+                        .then(res => { if (res.error) { createMessage('error', res.error.message) } })
+                }
+            })
     }
 
     // Renders loading screen. If no data, display "No organizations found", else display the organizations in Cards.
@@ -163,71 +165,41 @@ function Organizations({ user, refresh, setRefresh }: OrganizationsProps) {
         ? <Loading></Loading>
         : orgs.length > 0
             ? (
-                <Box sx={{overflow: 'auto', marginBottom:'100px'}}>
-                    <Typography sx={{ margin: '32px 0 32px 0', justifySelf: 'center' }} variant='h3' component='h1'>Your Organizations</Typography>
+                <Box sx={{ overflow: 'auto', outline: '2px solid black', margin: '2rem' }}>
+
+                    <Box display='flex' textAlign='center' alignItems='center' justifyContent='center' gap='2rem' margin='2rem 0 2rem 0' overflow='hidden'>
+                        <Typography variant='h4'>Your Organizations</Typography>
+
+                        <Button onClick={(e) => navigate('new')}
+                            variant='contained' sx={{ flexShrink: 0 }}>
+                            Create Organization
+                        </Button>
+
+                        <div style={{ display: 'flex', gap: '1rem', outline: '1px solid black' }}>
+                            <Input placeholder='Organization ID' disableUnderline sx={{ width: '8rem', marginLeft: '1rem' }}
+                                value={joinId} onChange={(e) => setJoinId(e.target.value)} />
+                            <Button onClick={joinOrg}
+                                variant='contained' sx={{ flexShrink: 0 }}>
+                                Join Organization
+                            </Button>
+                        </div>
+                    </Box>
+
                     <Grid container padding='8px' spacing={2} justifyContent='center' overflow='auto' wrap='wrap' >{
                         orgs.map((key, index) => {
-                            return (<Card sx={{ width: 'max(25%,200px)' }} key={index}>
+                            return (
+                            <Card sx={{ width: 'max(25%,200px)' }} key={index}>
                                 {orgs[index].imageUrlBlob
                                     ? <CardMedia sx={{ height: '200px' }} image={orgs[index].imageUrlBlob} />
                                     : <CardMedia />
                                 }
-                                <CardHeader sx={{textAlign:'center'}} title={key.name}></CardHeader>
+                                <CardHeader sx={{ textAlign: 'center' }} title={key.name}></CardHeader>
                                 <CardActions style={{ justifyContent: 'space-evenly' }}>
                                     <Button variant='contained' onClick={() => enterOrg(index)}>Enter</Button>
-                                    <Button variant='contained' onClick={() => editOrg(key)}>Edit</Button>
                                 </CardActions>
                             </Card>)
                         })
                     }</Grid>
-
-                    <EditOrgPopup trigger={trigger} closePopup={() => setTrigger(false)} setRefresh={setRefresh} org={org}
-                        imgUrl={imgUrl}
-                    />
                 </Box>)
             : (<>No Organizations found!</>)
-}
-
-interface DashboardFooterProps {
-    setRefresh: React.Dispatch<SetStateAction<boolean>>,
-}
-
-function DashboardFooter({ setRefresh }: DashboardFooterProps) {
-    // When the Create button is clicked
-    const [createTrigger, setCreateTrigger] = useState<boolean>(false)
-    const createOrg = () => {
-        setCreateTrigger(true)
-    }
-
-    // When the Join button is clicked
-    const [joinTrigger, setJoinTrigger] = useState<boolean>(false)
-    const requestJoinOrg = async () => {
-        setJoinTrigger(true)
-    }
-
-    return (
-        <>
-            <Box sx={{
-                display: 'flex', bottom: '0', left: '0', width: '100vw',
-                padding: '16px 0', justifyContent: 'center', gap:'20%', backgroundColor: 'yellow',
-                overflow: 'auto', position: 'fixed', outline: '2px solid black'
-            }}>
-                <Button onClick={(e) => setCreateTrigger(true)}
-                    variant='contained'>
-                    Create Organization
-                </Button>
-
-                <Button onClick={() => setJoinTrigger(true)}
-                    variant='contained'>
-                    Join Organization
-                </Button>
-            </Box>
-
-            {/* Show pop-up for user to submit organization details and add */}
-            <CreateOrgPopup trigger={createTrigger} closePopup={() => setCreateTrigger(false)}
-                setRefresh={setRefresh} />
-
-            <JoinOrgPopup trigger={joinTrigger} closePopup={() => setJoinTrigger(false)} />
-        </>
-    )
 }

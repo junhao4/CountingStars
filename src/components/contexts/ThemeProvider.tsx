@@ -4,7 +4,7 @@ import type React from "react";
 
 const customTheme = createTheme({
     colorSchemes: {
-        dark: false
+        dark: true,
     },
 
     typography: {
@@ -14,7 +14,7 @@ const customTheme = createTheme({
     },
 
     palette: {
-        mode: "light",
+        mode: "dark",
 
         primary: { // Black
             light: "#6b6b6b",
@@ -42,13 +42,22 @@ const customTheme = createTheme({
             main: "#f00",
             dark: "#faa",
             contrastText: "#000"
+        },
+
+        success: { // Green
+            light: '#61a655',
+            main: '#61a655',
+            dark: '#61a655',
+            contrastText: '#000'
         }
     },
+    defaultColorScheme: 'dark',
+
     components: {
         MuiButton: {
             styleOverrides: {
                 root: {
-                    minWidth: '0'
+                    minWidth: '0',
                 },
 
             },
@@ -60,7 +69,20 @@ const customTheme = createTheme({
                 variant: 'outlined',
             },
             
-        }
+        },
+
+        MuiPaper: {
+            styleOverrides: {
+                root: {
+                    padding: '1rem',
+                    color: 'var(--card)',
+                    backgroundColor: 'var(--card-foreground)'
+                },
+            },
+            defaultProps: {
+                elevation: 2
+            }
+        },
     }
 
 })
