@@ -25,11 +25,10 @@ export default function OrgUsers() {
     const orgProps = getOrgContext()!
     const { setTitle } = usePageTitleContext()
 
-    const [users, setUsers] = useState<UserFetch[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [addUserTrigger, setAddUserTrigger] = useState(false)
 
-    const [rows, setRows] = useState<GridRowsProp<UserFetch>>(users)
+    const [rows, setRows] = useState<GridRowsProp<UserFetch>>([])
     const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
 
     const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
@@ -161,7 +160,6 @@ export default function OrgUsers() {
     ]
 
     const fetchUsers = async () => {
-        setUsers(() => [])
         await supabase.from('users_organizations')
             .select('user_id, role')
             .eq('organization_id', orgProps.id)
@@ -195,7 +193,6 @@ export default function OrgUsers() {
 
                 Promise.all(promises).then(data => {
                     if (data) {
-                        setUsers(data.filter(d => !!d))
                         setRows(data.filter(d => !!d))
                         setLoading(false)
                     }

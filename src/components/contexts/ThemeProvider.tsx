@@ -64,28 +64,28 @@ const customTheme = createTheme({
             light: "#6b6b6b",
             main: "#000",
             dark: "#3b3b3b",
-            contrastText: "white",
+            contrastText: "#fff",
         },
 
         secondary: { // Yellow
             light: "#fffdb3",
             main: "#fff700",
             dark: `#e8b235`,
-            contrastText: "black",
+            contrastText: "#000",
         },
 
         info: { // Blue
             light: "#96eaff",
             main: "#2990ff",
             dark: "#0021c7",
-            contrastText: "black",
+            contrastText: "#000",
         },
 
         error: { // Red
             light: "#a00",
             main: "#f00",
             dark: "#faa",
-            contrastText: "black"
+            contrastText: "#000"
         }
     },
     components: {
