@@ -82,7 +82,7 @@ export default function OrgUsers() {
       newRow.role !== "owner" &&
       numOwners === 1
     ) {
-      createMessage("failure", "The organization needs at least 1 owner!");
+      createMessage("error", "The organization needs at least 1 owner!");
       return oldRow;
     }
 
