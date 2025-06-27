@@ -17,6 +17,7 @@ import Message from './components/overlays/Message.tsx';
 import ContextProvider from './components/contexts/ContextProvider.tsx';
 import OrgSettings from './components/pages/organization/settings/Settings.tsx'
 import Notifications from './components/pages/notifications/Notifications.tsx'
+import Verify from './components/pages/auth/Verify.tsx'
 
 
 
@@ -32,11 +33,13 @@ function App() {
               <Route index path='/' element={<Home />} />
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
+              <Route path='/verify' element={<Verify />} />
+             
               <Route path='/dashboard/*' element={
                 <AuthWrapper>
                   <Routes>
                     <Route index element={<Dashboard />} />
-                    <Route path='/profile' element={<Profile />} />
+                     <Route path='/profile' element={<Profile />} />
                     <Route path='/notifications' element={<Notifications />} />
                     <Route path='/organization/*' element={
                       <Routes>

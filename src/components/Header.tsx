@@ -6,6 +6,7 @@ import { useSessionContext } from './contexts/SessionContext';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { Button } from '@mui/material';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 function Header() {
     const { session, loading } = useSessionContext();
@@ -16,12 +17,14 @@ function Header() {
         navigate('/')
     }
 
+    const title = usePageTitleContext().title
+
     return (
         <div className='header-container'>
             <Link to='/' className='header-logo'>Counting Stars
                 <AutoAwesomeIcon sx={{ color: 'yellow', fontSize: '50px' }} />
             </Link>
-            <h1 className='header-title'>{usePageTitleContext().title}</h1>
+            <h1 className='header-title'>{title}</h1>
             <div className='header-user-details'>
                 {session
                     ? <div style={{
@@ -29,7 +32,9 @@ function Header() {
                         marginRight: '48px'
                     }}>
                         <p style={{ fontSize: '20px', margin: '0' }}>Welcome, {session.user.email}</p>
-                        <div style={{ display:'flex', width:'100%', justifyContent:'space-evenly' }}>
+                        <div style={{ display:'flex', width:'100%', justifyContent:'space-evenly', gap: '4px'}}>
+                             <Button size='small' color='secondary' variant='outlined' onClick={() => navigate('/dashboard/profile')}>
+                                <AccountCircleIcon /></Button>
                             <Button size='small' color='secondary' variant='outlined' onClick={() => navigate('/dashboard')}> Dashboard </Button>
                             <Button size='small' color='secondary' variant='outlined' onClick={() => navigate('/dashboard/notifications')}>
                                 <CircleNotificationsIcon /></Button>

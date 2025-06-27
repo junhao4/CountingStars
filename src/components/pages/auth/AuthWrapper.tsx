@@ -1,29 +1,55 @@
-
-import { useNavigate } from "react-router-dom"
-import { useSessionContext } from "../../contexts/SessionContext"
+import { useNavigate } from "react-router-dom";
+import { useSessionContext } from "../../contexts/SessionContext";
 import Loading from "../../general/Loading";
 import { useMessageContext } from "../../contexts/MessageContext";
+import supabase from "../../../helper/supabaseClient";
+import type { User } from "@supabase/supabase-js";
+import { useEffect } from "react";
+import { usePageTitleContext } from "../../contexts/PageTitleContext";
 
 interface AuthWrapperProps {
-    children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export default function AuthWrapper({ children }: AuthWrapperProps) {
-    const navigate = useNavigate()
-    const { session, loading } = useSessionContext()
-    const { createMessage } = useMessageContext()
+  const navigate = useNavigate();
+  const { session, loading } = useSessionContext();
+  const { createMessage } = useMessageContext();
+  const { title } = usePageTitleContext();
 
-    // Ensures users are logged in before rendering the page
-    if (loading) {
-        return (<Loading />)
-    } else if (!session) {
-        createMessage("failure", "Session does not exist or is expired! Please login again" )
-        navigate('/login')
-    } else {
-        return (
-        <>
-            {children}
-        </>
-        )
+  useEffect(() => {
+    const haveName = async (user: User | undefined) => {
+      console.log(title);
+      const { data, error } = await supabase
+        .from("Users")
+        .select("name")
+        .eq("user_id", user!.id);
+
+      if (title == "Profile" || data![0].name != null) {
+        console.log("name exists", data);
+        return true;
+      } else {
+        console.log("name dosent exists", data);
+        createMessage("failure", "Please enter in a username");
+        navigate("/dashboard/profile");
+      }
+    };
+
+    if (!haveName(session?.user)) {
     }
+  });
+
+  // Ensures users are logged in before rendering the page
+  if (loading) {
+    return <Loading />;
+  } else if (!session) {
+    createMessage(
+      "failure",
+      "Session does not exist or is expired! Please login again"
+    );
+    navigate("/login");
+  } else {
+    console.log("user and name exists");
+    return <>{children}</>;
+  }
 }
