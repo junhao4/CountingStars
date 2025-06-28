@@ -1,31 +1,20 @@
-/* :root {
+:root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: var(--foreground-text);
+  background-color: var(--background);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-} */
-
-/* a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -35,37 +24,9 @@ h1 {
   line-height: 1.1;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
+.MuiBox-root {
+  background-color: var(--foreground);
 }
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-} */
 
 @theme inline {
 
@@ -144,25 +105,27 @@ button:focus-visible {
 
   --radius: 0.625rem;
 
-  --background: oklch(1 0 0);
+  --background: oklch(35.233% 0.00004 271.152);
 
-  --foreground: oklch(0.141 0.005 285.823);
+  --foreground: oklch(39.136% 0.01065 84.573);
 
-  --card: oklch(1 0 0);
+  --foreground-text: oklch(100% 0.00011 271.152);
 
-  --card-foreground: oklch(0.141 0.005 285.823);
+  --card: oklch(42.347% 0.02285 93.941);
 
-  --popover: oklch(1 0 0);
+  --card-foreground: oklch(100% 0.00011 271.152);
 
-  --popover-foreground: oklch(0.141 0.005 285.823);
+  --popover: oklch(0% 0 0);
+
+  --popover-foreground: oklch(27.685% 0.00003 271.152);
 
   --primary: oklch(0.21 0.006 285.885);
 
   --primary-foreground: oklch(0.985 0 0);
 
-  --secondary: oklch(0.967 0.001 286.375);
+  --secondary: oklch(95.776% 0.21432 113.499);
 
-  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --secondary-foreground: oklch(0% 0 0);
 
   --muted: oklch(0.967 0.001 286.375);
 
@@ -207,7 +170,84 @@ button:focus-visible {
   --sidebar-ring: oklch(0.705 0.015 286.067);
 }
 
-.dark {
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: oklch(100% 0.00011 271.152);
+
+    --foreground: oklch(98.243% 0.03295 97.709);
+
+    --foreground-text: oklch(0% 0 0);
+
+    --card: oklch(96.3% 0.06881 97.713);
+
+    --card-foreground: oklch(0% 0 0);
+
+    --popover: oklch(92.493% 0.19365 102.87);
+
+    --popover-foreground: oklch(0% 0 0);
+
+    --primary: oklch(94.597% 0.15719 103.949);
+
+    --primary-foreground: oklch(0% 0 0);
+
+    --secondary: oklch(51.161% 0.27801 296.898);
+
+    --secondary-foreground: oklch(0% 0 0);
+
+    --muted: oklch(0.274 0.006 286.033);
+
+    --muted-foreground: oklch(0.705 0.015 286.067);
+
+    --accent: oklch(0.274 0.006 286.033);
+
+    --accent-foreground: oklch(0.985 0 0);
+
+    --destructive: oklch(0.704 0.191 22.216);
+
+    --border: oklch(1 0 0 / 10%);
+
+    --input: oklch(1 0 0 / 15%);
+
+    --ring: oklch(0.552 0.016 285.938);
+
+    --chart-1: oklch(0.488 0.243 264.376);
+
+    --chart-2: oklch(0.696 0.17 162.48);
+
+    --chart-3: oklch(0.769 0.188 70.08);
+
+    --chart-4: oklch(0.627 0.265 303.9);
+
+    --chart-5: oklch(0.645 0.246 16.439);
+
+    --sidebar: oklch(0.21 0.006 285.885);
+
+    --sidebar-foreground: oklch(0.985 0 0);
+
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+
+    --sidebar-accent: oklch(0.274 0.006 286.033);
+
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+
+    --sidebar-border: oklch(1 0 0 / 10%);
+
+    --sidebar-ring: oklch(0.552 0.016 285.938);
+  }
+/* 
+  a:hover {
+    color: #747bff;
+  }
+
+  button {
+    background-color: #f9f9f9;
+  } */
+}
+
+
+/* .dark {
 
   --background: oklch(0.141 0.005 285.823);
 
@@ -270,12 +310,13 @@ button:focus-visible {
   --sidebar-border: oklch(1 0 0 / 10%);
 
   --sidebar-ring: oklch(0.552 0.016 285.938);
-}
+} */
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
