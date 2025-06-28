@@ -13,6 +13,7 @@ import {
     Typography,
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import type { User } from "@supabase/supabase-js";
 
 const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -33,6 +34,29 @@ function Profile() {
     const [message, setMessage] = useState("");
     const [img, setImg] = useState("");
     const { session } = useSessionContext();
+
+    const handleFirstTimeUser = async (user: User | undefined) => {
+        const { data, error } = await supabase
+            .from('Users')
+            .select()
+            .eq('user_id', user!.id)
+
+        if (data!.length > 0) {
+            console.log("user exists", data)
+        } else {
+            const { data, error } = await supabase
+                .from('Users')
+                .insert({ user_id: user?.id, name: null, image_file: 'Default_pfp.jpg', email: user?.email })
+                .select()
+
+            if (data) {
+                console.log("User successfully added")
+            } else {
+                console.log(error.message)
+            }
+        }
+
+    }
 
     //Updates username
     const updateProfile = async (e: FormEvent<HTMLFormElement>) => {
@@ -97,6 +121,7 @@ function Profile() {
 
     //Fetches preexisting user info
     useEffect(() => {
+        handleFirstTimeUser(session?.user)
         console.log(session?.user.email);
         if (session?.user) {
             const fetchUser = async () => {
