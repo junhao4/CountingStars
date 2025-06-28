@@ -1,10 +1,11 @@
-import { Button, Input, styled, TextField, Typography } from "@mui/material";
+import { Button, Input, styled, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import supabase from "../../../helper/supabaseClient";
 import { useSessionContext } from "../../contexts/SessionContext";
+import { useMessageContext } from "../../contexts/MessageContext";
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -21,23 +22,24 @@ const VisuallyHiddenInput = styled('input')({
 export default function CreateOrg() {
     const navigate = useNavigate()
     const { session } = useSessionContext()!
+    const { createMessage } = useMessageContext()
     const [image, setImage] = useState<FileList | null>(null)
     const [name, setName] = useState<string>("")
 
     const handleAddOrganization = async () => {
         // Check that image size is < 2MB, type is correct, and that organization name is not empty
         if (image && image[0].size > 2097152) {
-            createMessage("failure", "Image size must be < 2MB!")
+            createMessage("error", "Image size must be < 2MB!")
             return
         }
 
         if (image && !(image[0].type === 'image/jpeg' || image[0].type === 'image/png')) {
-            createMessage("failure", "File type not accepted!")
+            createMessage("error", "File type not accepted!")
             return
         }
 
         if (name === '') {
-            createMessage("failure", "Organization name must not be empty!")
+            createMessage("error", "Organization name must not be empty!")
             return
         }
 
@@ -47,7 +49,7 @@ export default function CreateOrg() {
             .eq('name', name)
 
         if (org?.length !== 0) {
-            createMessage("failure", "You already have an organization with the same name. Please choose another name.")
+            createMessage("error", "You already have an organization with the same name. Please choose another name.")
             return
         }
 
@@ -55,12 +57,12 @@ export default function CreateOrg() {
             ? supabase.storage.from('organization-images').upload(image[0].name, image[0], {
                 cacheControl: '3600',
                 upsert: false
-            }).then(res => { if (res.error) { createMessage("failure", res.error.message) } })
+            }).then(res => { if (res.error) { createMessage("error", res.error.message) } })
             : null
 
         await supabase.from('Organizations')
             .insert({ name, image_file: image?.[0].name })
-            .then(res => { if (res.error) { createMessage("failure", res.error.message) } })
+            .then(res => { if (res.error) { createMessage("error", res.error.message) } })
 
         const { data, error } = await supabase.from('Organizations')
             .select('id')
@@ -68,11 +70,11 @@ export default function CreateOrg() {
             .single()
 
         if (error) {
-            createMessage("failure", error.message)
+            createMessage("error", error.message)
         } else {
             supabase.from('users_organizations')
                 .insert({ user_id: session!.user.id, organization_id: data.id, role: 'owner' })
-                .then(res => { if (res.error) { createMessage("failure", res.error.message) } })
+                .then(res => { if (res.error) { createMessage("error", res.error.message) } })
                 .then(() => navigate('/dashboard'))
         }
     }
@@ -112,6 +114,4 @@ export default function CreateOrg() {
         </Box>)
 }
 
-function createMessage(arg0: string, arg1: string) {
-    throw new Error("Function not implemented.");
-}
+

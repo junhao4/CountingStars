@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 import { usePageTitleContext } from '../contexts/PageTitleContext';
-import { Avatar, Box, Button, Paper, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Avatar, Box, Paper, Typography } from '@mui/material';
 import supabase from '../../helper/supabaseClient';
 import { useMessageContext } from '../contexts/MessageContext';
 
 
 function Home() {
-    const navigate = useNavigate()
     const { setTitle } = usePageTitleContext()
     const { createMessage } = useMessageContext()
     const [logo, setLogo] = useState<string>()

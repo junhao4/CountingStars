@@ -1,4 +1,4 @@
-import React, { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState } from "react";
 import supabase from "../../../helper/supabaseClient";
 import Box from "@mui/material/Box";
 import { usePageTitleContext } from "../../contexts/PageTitleContext";
@@ -11,7 +11,7 @@ function ForgotPassword() {
   const { createMessage } = useMessageContext()
 
   const handleSubmit = async () => {
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: "http://localhost:5173/reset",
     });
     if (error) {

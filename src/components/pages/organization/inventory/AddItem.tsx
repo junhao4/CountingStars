@@ -1,6 +1,5 @@
 import Box from "@mui/material/Box";
 import { useEffect, useState } from "react";
-import { usePageTitleContext } from "../../../contexts/PageTitleContext";
 import {
   Button,
   Chip,
@@ -92,7 +91,7 @@ export default function OrgAddItem() {
                   })
               : Promise.resolve(true);
           })
-        ).then((val) => {
+        ).then(() => {
           navigate("/dashboard/organization/inventory");
         });
       });

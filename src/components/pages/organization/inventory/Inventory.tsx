@@ -6,7 +6,6 @@ import Grid from "@mui/material/Grid";
 import Item from "@mui/material/Grid";
 import {
   Autocomplete,
-  Box,
   Button,
   TextField,
   type AutocompleteRenderInputParams,
@@ -165,7 +164,6 @@ interface QueryBarProps {
 }
 
 function QueryBar({
-  id,
   categoryOptions,
   category,
   setCategory,
@@ -187,9 +185,11 @@ function QueryBar({
             })}
             value={category?.name || "No category selected"}
             onChange={(e, newValue) =>
+              {if (e)
               setCategory(
                 categoryOptions.find((pred) => pred.name === newValue) || null
               )
+            }
             }
           />
         </Item>

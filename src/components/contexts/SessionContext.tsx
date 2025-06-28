@@ -26,6 +26,7 @@ export const SessionProvider = ({ children } : { children: React.ReactNode }) =>
 
     //checks and dynamically updates session state throughout all components that have access to context
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
+        if (event)
         setSession(session);
     });
 

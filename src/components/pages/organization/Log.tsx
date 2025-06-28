@@ -1,10 +1,11 @@
-import { useOrgContext } from "../../contexts/OrgContext";
+// import { useOrgContext } from "../../contexts/OrgContext";
 
 
-export default function orgLog() {
-    const { getOrgContext } = useOrgContext(); const orgProps = getOrgContext()
+// export default function orgLog() {
+//     const { getOrgContext } = useOrgContext(); 
+//     const orgProps = getOrgContext()
 
-    return (
-        <></>
-    )
-}
+//     return (
+//         <></>
+//     )
+// }

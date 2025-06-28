@@ -1,4 +1,4 @@
-import React, { useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import supabase from '../../../helper/supabaseClient';
 
 function ResetPassword() {

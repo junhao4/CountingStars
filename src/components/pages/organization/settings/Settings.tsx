@@ -39,7 +39,6 @@ export default function OrgSettings() {
     const [imgUrl, setImgUrl] = useState("");
     const [img, setImg] = useState("");
     const { session } = useSessionContext();
-    const [message, setMessage] = useState("");
     const { setTitle } = usePageTitleContext();
     const { setOrgContext } = useOrgContext();
 
@@ -97,7 +96,6 @@ export default function OrgSettings() {
         if (data) {
             createMessage("success", inputName + " set as organization's name");
             setName(inputName);
-            setTitle(inputName);
             setOrgContext({
                 id: orgProps.id,
                 name: data[0].name,
@@ -172,7 +170,7 @@ export default function OrgSettings() {
     };
 
     const getOrg = async () => {
-        const { data, error } = await supabase
+        const { data } = await supabase
             .from("Organizations")
             .select()
             .eq("id", orgProps.id)
@@ -193,6 +191,10 @@ export default function OrgSettings() {
     useEffect(() => {
         getOrg();
     }, [session]);
+
+    useEffect(() => {
+        setTitle("Settings")
+    })
 
     useEffect(() => {
         const downloadImage = async () => {
