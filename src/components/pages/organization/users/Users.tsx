@@ -4,10 +4,8 @@ import {
   GridRowEditStopReasons,
   GridRowModes,
   type GridColDef,
-  type GridComparatorFn,
   type GridEventListener,
   type GridRenderCellParams,
-  type GridRowId,
   type GridRowModel,
   type GridRowModesModel,
   type GridRowParams,
@@ -15,19 +13,15 @@ import {
 } from "@mui/x-data-grid";
 import {
   useOrgContext,
-  type OrgProps,
   type UserRoles,
 } from "../../../contexts/OrgContext";
-import { useEffect, useMemo, useState, type SetStateAction } from "react";
+import { useEffect, useState } from "react";
 import supabase from "../../../../helper/supabaseClient";
 import {
   Avatar,
   Box,
   Button,
-  MenuItem,
-  Select,
   Typography,
-  type SelectChangeEvent,
 } from "@mui/material";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import EditIcon from "@mui/icons-material/Edit";

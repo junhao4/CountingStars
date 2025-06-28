@@ -36,7 +36,7 @@ function Profile() {
     const { session } = useSessionContext();
 
     const handleFirstTimeUser = async (user: User | undefined) => {
-        const { data, error } = await supabase
+        const { data } = await supabase
             .from('Users')
             .select()
             .eq('user_id', user!.id)
@@ -125,7 +125,7 @@ function Profile() {
         console.log(session?.user.email);
         if (session?.user) {
             const fetchUser = async () => {
-                const { data, error } = await supabase
+                const { data } = await supabase
                     .from("Users")
                     .select()
                     .eq("user_id", session!.user.id)

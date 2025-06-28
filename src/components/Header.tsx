@@ -5,13 +5,13 @@ import { usePageTitleContext } from "./contexts/PageTitleContext";
 import { useSessionContext } from "./contexts/SessionContext";
 import Typography from "@mui/material/Typography"
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
-import { Badge, Box, Button, useTheme } from "@mui/material";
+import { Badge, Button } from "@mui/material";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNotificationContext } from "./contexts/NotificationContext";
 
 function Header() {
-    const { session, loading } = useSessionContext()
+    const { session } = useSessionContext()
     const navigate = useNavigate()
     const { unread } = useNotificationContext()
 

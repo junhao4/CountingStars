@@ -20,7 +20,7 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
   useEffect(() => {
     const haveName = async (user: User | undefined) => {
       console.log(title);
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from("Users")
         .select("name")
         .eq("user_id", user!.id);

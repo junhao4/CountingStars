@@ -27,7 +27,7 @@ export const NotificationProvider = ({
             setUnread(0);
             return;
         }
-        const { data, error } = await supabase
+        const { data } = await supabase
             .from("notifications")
             .select("id")
             .eq("receiver", session!.user.id)

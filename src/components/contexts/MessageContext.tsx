@@ -16,8 +16,8 @@ export const MessageContext =
         variant: "success",
         text: "Welcome!",
         trigger: false,
-        setTrigger: (arg0) => {},
-        createMessage: (arg0, arg1) => {},
+        setTrigger: () => {},
+        createMessage: () => {},
     })
 
 

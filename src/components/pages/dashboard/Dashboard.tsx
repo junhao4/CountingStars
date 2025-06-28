@@ -1,6 +1,5 @@
-import { useEffect, useState, type SetStateAction } from 'react';
+import { useEffect, useState } from 'react';
 import supabase from '../../../helper/supabaseClient';
-import { type User } from '@supabase/supabase-js'
 import Button from '@mui/material/Button';
 import { usePageTitleContext } from '../../contexts/PageTitleContext';
 import Card from '@mui/material/Card'
@@ -13,7 +12,7 @@ import { useSessionContext } from '../../contexts/SessionContext';
 import { useNavigate } from 'react-router-dom';
 import { useOrgContext, type UserRoles } from '../../contexts/OrgContext';
 import Loading from '../../general/Loading';
-import { Box, FormControl, Input, InputLabel, Tab, Tabs, TextField } from '@mui/material';
+import { Box, Input } from '@mui/material';
 import { useMessageContext } from '../../contexts/MessageContext';
 
 export interface DashboardOrgFetch {
@@ -30,7 +29,7 @@ export default function Dashboard() {
     const { setTitle } = usePageTitleContext()
 
     // Renders the Add Organization Pop-up if true
-    const [refresh, setRefresh] = useState(true)
+    const [refresh] = useState(true)
     
     const [orgs, setOrgs] = useState<DashboardOrgFetch[]>([])
     const { setOrgContext } = useOrgContext()
@@ -101,28 +100,6 @@ export default function Dashboard() {
         return URL.createObjectURL(data)
     }
 
-    const deleteOrg = async (key: DashboardOrgFetch) => {
-        const confirm = window.confirm("Are you sure you want to delete? This action is permanent!")
-        if (!confirm) {
-            return
-        }
-
-        if (key.imageName) supabase.storage.from('organization-images')
-            .remove([key.imageName])
-            .then(res => { if (res.error) console.log(res.error.message); })
-
-        const { data, error } = await supabase
-            .from("Organizations")
-            .delete()
-            .eq("id", key.id)
-
-        if (error) {
-            console.log("error deleting: ", error)
-        } else {
-            console.log("deleted", key.id)
-            setRefresh(prev => !prev)
-        }
-    }
 
     const enterOrg = (index: number) => {
         if (orgs[index].role == 'pending') {
@@ -176,7 +153,7 @@ export default function Dashboard() {
                         gap='2rem' margin='1rem 0' flexWrap='wrap'>
                         <Typography variant='h4'>Your Organizations</Typography>
 
-                        <Button onClick={(e) => navigate('new')}
+                        <Button onClick={() => navigate('new')}
                             variant='outlined' sx={{ flexShrink: 0 }}>
                             Create Organization
                         </Button>
@@ -215,7 +192,7 @@ export default function Dashboard() {
                     <Box display='flex' textAlign='center' alignItems='center' justifyContent='center' gap='2rem' margin='2rem 0 2rem 0' flexWrap='wrap'>
                         <Typography variant='h4'>No Organizations</Typography>
 
-                        <Button onClick={(e) => navigate('new')}
+                        <Button onClick={() => navigate('new')}
                             variant='outlined' sx={{ flexShrink: 0 }}>
                             Create Organization
                         </Button>

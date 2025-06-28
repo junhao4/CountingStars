@@ -1,11 +1,10 @@
-import { type FormEvent, use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import supabase from '../../../helper/supabaseClient.ts';
 import { usePageTitleContext } from '../../contexts/PageTitleContext.tsx';
-import type { User } from '@supabase/supabase-js';
 import { useSessionContext } from '../../contexts/SessionContext.tsx';
 import Box from '@mui/material/Box';
-import { Button, FormLabel, Input, Typography } from '@mui/material';
+import { Button, Input, Typography } from '@mui/material';
 import { useMessageContext } from '../../contexts/MessageContext.tsx';
 
 

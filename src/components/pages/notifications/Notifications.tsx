@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useMessageContext } from "../../contexts/MessageContext";
 import "./Notifications.css";
-import { useOrgContext } from "../../contexts/OrgContext";
 import { useSessionContext } from "../../contexts/SessionContext";
 import { usePageTitleContext } from "../../contexts/PageTitleContext";
 import supabase from "../../../helper/supabaseClient";
@@ -20,7 +19,6 @@ const createNotificationMessage = async (
     notificationType: number,
     notifierId: string,
     organizationId: number,
-    receiverId: string
 ) => {
     const { data: notifier, error: notifierError } = await supabase
         .from("Users")
@@ -28,11 +26,19 @@ const createNotificationMessage = async (
         .eq("user_id", notifierId)
         .single();
 
+        if (notifierError) {
+            console.log("user does not exits")
+        }
+
     const { data: org, error: orgError } = await supabase
         .from("Organizations")
         .select()
         .eq("id", organizationId)
         .single();
+
+         if (orgError) {
+            console.log("org does not exist")
+        }
 
     switch (notificationType) {
         // Added to organization
@@ -99,26 +105,16 @@ export async function addNotification(
 
 export default function Notifications() {
     const { createMessage } = useMessageContext();
-    const { getOrgContext } = useOrgContext();
-    const orgProps = getOrgContext()!;
     const { setTitle } = usePageTitleContext();
     const [notifications, setNotifications] = useState<
         (NotificationFetch | undefined)[]
     >([]);
     const { session } = useSessionContext();
-    const { unread, countUnread } = useNotificationContext();
+    const { countUnread } = useNotificationContext();
 
     useEffect(() => {
         setTitle("Notifications");
     }, []);
-
-    useEffect(() => {
-        console.log("TEST");
-        let currentTimeInSGT = new Date().toLocaleString("en-SG", {
-            timeZone: "Asia/Singapore",
-            hour12: false,
-        });
-    });
 
     useEffect(() => {
         getNoti();
@@ -129,21 +125,21 @@ export default function Notifications() {
     //addNotification("a4deac40-68ec-4e03-a837-2c97256919b5", "a4deac40-68ec-4e03-a837-2c97256919b5",1,2)
 
     const markAsRead = async () => {
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from("notifications")
             .update({ status: false })
             .eq("receiver", session!.user.id)
             .eq("status", true);
 
         if (error) {
-            console.log(error);
+            createMessage("error", error.message);
         }
     };
 
     //Gets notifications from supabase and creates the messages then puts into an array
     const getNoti = async () => {
         const user = session!.user;
-        const { data, error } = await supabase
+        const { data } = await supabase
             .from("notifications")
             .select()
             .eq("receiver", user.id)
@@ -156,7 +152,6 @@ export default function Notifications() {
                         notif.type!,
                         notif.notifier!,
                         notif.organisation!,
-                        orgProps.name
                     );
                     return { id: notif.id, msg: msg, time: notif.created_at };
                 })
@@ -167,7 +162,7 @@ export default function Notifications() {
     };
 
     const deleteNotification = async (id: number) => {
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from("notifications")
             .delete()
             .eq("id", id);

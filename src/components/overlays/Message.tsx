@@ -1,6 +1,5 @@
-import { Alert, AlertTitle, Box, Button, Grid, Grow } from "@mui/material";
+import { Alert, AlertTitle, Button, Grow } from "@mui/material";
 import { useMessageContext } from "../contexts/MessageContext";
-import { blue, red } from "@mui/material/colors";
 import CloseIcon from "@mui/icons-material/Close";
 
 export default function Message() {

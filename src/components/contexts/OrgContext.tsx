@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useState } from "react"
 
 export type UserRoles = 
     | "pending"
@@ -20,13 +20,13 @@ interface OrgContextProps {
 
 export const OrgContext = createContext<OrgContextProps>({
     getOrgContext: () => null,
-    setOrgContext: (arg0: OrgProps | null) => null,
+    setOrgContext: () => null,
     loading: true
 });
 
 export const OrgProvider = ({ children } : { children: React.ReactNode }) => {
   const [orgContext, set] = useState<OrgProps | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading] = useState(true);
 
     const getOrgContext = () => {
         if (orgContext !== null) return orgContext

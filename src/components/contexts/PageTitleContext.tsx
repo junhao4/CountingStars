@@ -9,7 +9,7 @@ import { createContext, useContext, useState } from "react"
 export const PageTitleContext = 
     createContext<PageTitleProps>({
         title: "",
-        setTitle: (arg0: string) => {},
+        setTitle: () => {},
     })
 
 
