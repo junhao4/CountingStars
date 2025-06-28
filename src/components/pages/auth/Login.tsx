@@ -5,6 +5,8 @@ import supabase from '../../../helper/supabaseClient.ts';
 import { usePageTitleContext } from '../../contexts/PageTitleContext.tsx';
 import type { User } from '@supabase/supabase-js';
 import { useSessionContext } from '../../contexts/SessionContext.tsx';
+import Box from '@mui/material/Box';
+import { Button, FormLabel, Input, Typography } from '@mui/material';
 
 
 export function Login() {
@@ -38,8 +40,7 @@ export function Login() {
 
     }
 
-    const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const handleLogin = async () => {
         const { data, error } = await supabase.auth.signInWithPassword({
             email, password
         });
@@ -67,31 +68,23 @@ export function Login() {
     }, [session])
 
     return (
-        <div className='auth-container'>
-            <form id='login' onSubmit={handleLogin} className='form-container'>
-                <div className='form-field'>
-                    <label htmlFor="email">Email:
-                        <input id='email' type="text" value={email} onChange={e => setEmail(e.target.value)} /></label><br />
-                </div>
-                <div className='form-field'>
-                    <label htmlFor="password">Password:
-                        <input id='password' type="password" value={password} onChange={e => setPassword(e.target.value)} /></label>
-                </div>
-
-
-
-                <div className='form-footer'>
-                    <button type="submit">Login</button>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <p style={{ marginLeft: 20, marginBottom: 0, marginTop: 0 }}>
-                        {message}
-                    </p>
-                    <Link to='/forgot' style={{ color: 'grey', textAlign: 'right', marginTop: 0, marginBottom: 0, marginRight: 80 }} >Forgot Password?</Link>
-
-                </div>
-            </form>
-
-        </div>
-    );
+        <Box display='flex' flexDirection='column' justifySelf='center' alignItems='center' color='var(--foreground)'
+            sx={{ outline: '2px solid black', borderRadius: '2px', margin: '2rem' }}>
+            <Box display='flex' gap='2rem' alignItems='center' margin='2rem 2rem 0 2rem'>
+                <Typography>Email: </Typography>
+                <Input value={email} onChange={(e) => setEmail(e.target.value)}
+                    placeholder='Email' />
+            </Box>
+            <Box display='flex' gap='2rem' alignItems='center' margin='2rem'>
+                <Typography>Password: </Typography>
+                <Input value={password} onChange={(e) => setPassword(e.target.value)}
+                    placeholder='Password' sx={{ marginRight: '1.75rem' }} />
+            </Box>
+            <Button onClick={handleLogin} sx={{ justifySelf: 'center' }}>Login</Button>
+            <Link to='/forgot' style={{
+                color: 'grey', width: '90%', justifySelf: 'right', textAlign: 'right',
+                padding: '1rem'
+            }} >Forgot Password?</Link>
+        </Box>
+    )
 }

@@ -3,21 +3,22 @@ import "./Auth.css";
 import supabase from "../../../helper/supabaseClient.ts";
 import { usePageTitleContext } from "../../contexts/PageTitleContext";
 import { useSessionContext } from "../../contexts/SessionContext.tsx";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Box, Typography, Input, Button } from "@mui/material";
+import { useMessageContext } from "../../contexts/MessageContext.tsx";
 
 export function Register() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  const { createMessage } = useMessageContext()
   const { session } = useSessionContext();
-  const [message, setMessage] = useState<string>("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleRegister = async () => {
     setLoading(true);
     if (email == "" || password == "") {
-      setMessage("Please fill in the blanks");
+      createMessage('warning', "Please fill in the blanks");
       setLoading(false);
       return;
     } else {
@@ -29,26 +30,25 @@ export function Register() {
         },
       });
       if (error) {
-        console.log(error.message);
-        setMessage(error.message);
+        createMessage("error", error.message)
         setLoading(false);
         return;
       }
 
       if (data.user?.identities && data.user.identities.length > 0) {
         console.log("Sign-up successful!");
-        setMessage("A link was sent to your email");
+        createMessage('success', "A link was sent to your email");
         setLoading(false);
       } else {
         console.log("Email address is already taken.");
-        setMessage("Email address is already taken.");
+        createMessage('warning', "Email address is already taken.");
         setLoading(false);
       }
     }
   };
 
   //Set header title to Register
-  const { title, setTitle } = usePageTitleContext();
+  const { setTitle } = usePageTitleContext();
 
   useEffect(() => {
     setTitle("Registration");
@@ -61,40 +61,19 @@ export function Register() {
   }, [session]);
 
   return (
-    <div className="auth-container">
-      <form onSubmit={handleRegister} className="form-container">
-        <div className="form-field">
-          <label htmlFor="email">
-            Email:
-            <input
-              type="text"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </label>
-          <br />
-        </div>
-        <div className="form-field">
-          <label htmlFor="password">
-            Password:
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </label>
-        </div>
-        <div className="form-footer">
-          <button
-            type="submit"
-            disabled={loading}
-            style={!loading ? {} : { color: "grey" }}
-          >
-            Register
-          </button>
-        </div>
-      </form>
-      <p>{message}</p>
-    </div>
-  );
+    <Box display='flex' flexDirection='column' justifySelf='center' alignItems='center' color='var(--foreground)'
+      sx={{ outline: '2px solid black', borderRadius: '2px', margin: '2rem' }}>
+      <Box display='flex' gap='2rem' alignItems='center' margin='2rem 2rem 0 2rem'>
+        <Typography>Email: </Typography>
+        <Input value={email} onChange={(e) => setEmail(e.target.value)}
+          placeholder='Email' />
+      </Box>
+      <Box display='flex' gap='2rem' alignItems='center' margin='2rem'>
+        <Typography>Password: </Typography>
+        <Input value={password} onChange={(e) => setPassword(e.target.value)}
+          placeholder='Password' sx={{ marginRight: '1.75rem' }} />
+      </Box>
+      <Button onClick={handleRegister} sx={{ justifySelf: 'center', marginBottom:'3.5rem' }}>Register</Button>
+    </Box>
+  )
 }
