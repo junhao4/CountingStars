@@ -25,7 +25,7 @@ function Header() {
         <div className="header-container">
             <div onClick={() => navigate('/')} className="header-logo">
                 <Typography variant='h4'>Counting Stars</Typography>
-                <AutoAwesomeIcon sx={{ fontSize: "50px"}} />
+                <AutoAwesomeIcon sx={{ fontSize: "50px" }} />
             </div>
             <h1 className="header-title">{usePageTitleContext().title}</h1>
             <div className="header-user-details">
@@ -94,7 +94,7 @@ function Header() {
                         style={{
                             display: "flex",
                             gap: "64px",
-                            marginRight: "80px",
+                            margin: "0 60px",
                         }}
                     >
                         <Link
