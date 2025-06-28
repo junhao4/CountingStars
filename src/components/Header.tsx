@@ -98,13 +98,13 @@ function Header() {
                     >
                         <Link
                             to="/login"
-                            style={{ color: "white", fontSize: "24px" }}
+                            style={{ color: "var(--foreground)", fontSize: "24px" }}
                         >
                             Login
                         </Link>
                         <Link
                             to="/register"
-                            style={{ color: "white", fontSize: "24px" }}
+                            style={{ color: "var(--foreground)", fontSize: "24px" }}
                         >
                             Register
                         </Link>

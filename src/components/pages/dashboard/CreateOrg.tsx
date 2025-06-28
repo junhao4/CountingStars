@@ -79,7 +79,7 @@ export default function CreateOrg() {
 
     return (
         <Box display={"flex"} flexDirection='column' sx={{
-            outline: '2px solid black', width: '30rem', borderRadius: '0.25rem', justifySelf: 'center', margin:'2rem'
+            outline: '2px solid black', width: '30rem', borderRadius: '0.25rem', justifySelf: 'center', margin:'1rem'
         }}>
             <Typography variant='h6' sx={{ padding: '1rem' }}>Create a new organization</Typography>
 

@@ -155,8 +155,8 @@ export default function OrgUsers() {
         }
         const val = params.value.split(",");
         return (
-          <Box
-            sx={{
+          <div
+            style={{
               display: "flex",
               flexDirection: "row",
               justifyContent: "left",
@@ -165,7 +165,7 @@ export default function OrgUsers() {
           >
             <Avatar src={val[1]}></Avatar>
             <Typography sx={{ alignSelf: "center" }}>{val[0]}</Typography>
-          </Box>
+          </div>
         );
       },
     },
