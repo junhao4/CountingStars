@@ -7,15 +7,16 @@ import type { User } from '@supabase/supabase-js';
 import { useSessionContext } from '../../contexts/SessionContext.tsx';
 import Box from '@mui/material/Box';
 import { Button, FormLabel, Input, Typography } from '@mui/material';
+import { useMessageContext } from '../../contexts/MessageContext.tsx';
 
 
 export function Login() {
     let navigate = useNavigate();
     const { session } = useSessionContext()
-    const { setTitle } = usePageTitleContext();
-    const [message, setMessage] = useState<string>("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const { setTitle } = usePageTitleContext()
+    const { createMessage } = useMessageContext()
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
 
     const handleFirstTimeUser = async (user: User) => {
         const { data, error } = await supabase
@@ -24,17 +25,15 @@ export function Login() {
             .eq('user_id', user!.id)
 
         if (data!.length > 0) {
-            console.log("user exists", data)
+            // Not first-time user, do nothing
         } else {
             const { data, error } = await supabase
                 .from('Users')
                 .insert({ user_id: user?.id, name: null, image_file: 'Default_pfp.jpg', email: user?.email })
                 .select()
 
-            if (data) {
-                console.log("User successfully added")
-            } else {
-                console.log(error.message)
+            if (error) {
+                createMessage('error', error.message)
             }
         }
 
@@ -45,14 +44,12 @@ export function Login() {
             email, password
         });
         if (error) {
-            setMessage(error.message);
+            createMessage('error', error.message);
             setPassword("")
             return;
         }
         if (data) {
-            console.log(data)
             await handleFirstTimeUser(data.user)
-            console.log("Going to dashboard")
             navigate('/dashboard')
         }
     }
@@ -77,7 +74,7 @@ export function Login() {
             </Box>
             <Box display='flex' gap='2rem' alignItems='center' margin='2rem'>
                 <Typography>Password: </Typography>
-                <Input value={password} onChange={(e) => setPassword(e.target.value)}
+                <Input value={password} onChange={(e) => setPassword(e.target.value)} type='password'
                     placeholder='Password' sx={{ marginRight: '1.75rem' }} />
             </Box>
             <Button onClick={handleLogin} sx={{ justifySelf: 'center' }}>Login</Button>

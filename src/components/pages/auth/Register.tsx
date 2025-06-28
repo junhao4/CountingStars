@@ -70,7 +70,7 @@ export function Register() {
       </Box>
       <Box display='flex' gap='2rem' alignItems='center' margin='2rem'>
         <Typography>Password: </Typography>
-        <Input value={password} onChange={(e) => setPassword(e.target.value)}
+        <Input value={password} onChange={(e) => setPassword(e.target.value)} type='password'
           placeholder='Password' sx={{ marginRight: '1.75rem' }} />
       </Box>
       <Button onClick={handleRegister} sx={{ justifySelf: 'center', marginBottom:'3.5rem' }}>Register</Button>

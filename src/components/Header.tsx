@@ -11,14 +11,13 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNotificationContext } from "./contexts/NotificationContext";
 
 function Header() {
-    const theme = useTheme()
-    const { session, loading } = useSessionContext();
-    const navigate = useNavigate();
-    const { unread } = useNotificationContext();
+    const { session, loading } = useSessionContext()
+    const navigate = useNavigate()
+    const { unread } = useNotificationContext()
 
     const handleUserLogout = () => {
-        supabase.auth.signOut();
-        navigate("/");
+        supabase.auth.signOut()
+        navigate("/")
     };
 
     return (
