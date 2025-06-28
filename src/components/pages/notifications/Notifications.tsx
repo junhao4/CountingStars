@@ -150,7 +150,7 @@ export default function Notifications() {
                     return { id: notif.id, msg: msg, time: notif.created_at };
                 })
             );
-            setNotifications(noti);
+            setNotifications(noti.reverse());
         }
         console.log("data", data);
     };
