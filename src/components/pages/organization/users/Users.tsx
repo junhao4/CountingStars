@@ -266,6 +266,8 @@ export default function OrgUsers() {
                 console.log(res.error.message);
               }
             });
+          
+           addNotification(session?.user.id!, row.id, orgProps.id, 5) 
         };
 
         const rejectPendingUser = async () => {
@@ -281,6 +283,7 @@ export default function OrgUsers() {
                 console.log(res.error.message);
               }
             });
+            addNotification(session?.user.id!, row.id, orgProps.id, 6)
         };
 
         if (row.role === "pending") {

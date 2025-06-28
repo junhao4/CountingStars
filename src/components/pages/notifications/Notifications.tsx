@@ -59,6 +59,16 @@ const createNotificationMessage = async (
             return (
                 notifier?.name + " has changed your role within " + org?.name
             );
+        // Join request accepted
+        case 5:
+             return (
+                notifier?.name + " has accepted your request to join " + org?.name
+            );
+        // Join request rejected
+         case 6:
+             return (
+                notifier?.name + " has rejected your request to join " + org?.name
+            );
     }
 };
 
@@ -136,7 +146,8 @@ export default function Notifications() {
         const { data, error } = await supabase
             .from("notifications")
             .select()
-            .eq("receiver", user.id);
+            .eq("receiver", user.id)
+            .order("id", { ascending: false});
 
         if (data) {
             const noti: NotificationFetch[] = await Promise.all(
@@ -150,7 +161,7 @@ export default function Notifications() {
                     return { id: notif.id, msg: msg, time: notif.created_at };
                 })
             );
-            setNotifications(noti.reverse());
+            setNotifications(noti);
         }
         console.log("data", data);
     };
