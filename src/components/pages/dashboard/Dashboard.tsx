@@ -125,6 +125,11 @@ export default function Dashboard() {
     }
 
     const enterOrg = (index: number) => {
+        if (orgs[index].role == 'pending') {
+            createMessage('error', 'Your request to join this organization is still pending approval')
+            setOrgContext(null)
+            return
+        }
         setOrgContext(orgs[index])
         navigate('organization')
     }
@@ -203,5 +208,27 @@ export default function Dashboard() {
                         })
                     }</Grid>
                 </Box>)
-            : (<>No Organizations found!</>)
+            : (<>
+            
+            <Box sx={{ overflow: 'auto', outline: '2px solid black', margin: '2rem' }}>
+
+                    <Box display='flex' textAlign='center' alignItems='center' justifyContent='center' gap='2rem' margin='2rem 0 2rem 0' flexWrap='wrap'>
+                        <Typography variant='h4'>No Organizations</Typography>
+
+                        <Button onClick={(e) => navigate('new')}
+                            variant='outlined' sx={{ flexShrink: 0 }}>
+                            Create Organization
+                        </Button>
+
+                        <div style={{ display: 'flex', gap: '1rem', outline: '1px solid black' }}>
+                            <Input placeholder='Organization ID' disableUnderline sx={{ width: '8rem', marginLeft: '1rem' }}
+                                value={joinId} onChange={(e) => setJoinId(e.target.value)} />
+                            <Button onClick={joinOrg}
+                                variant='outlined' sx={{ flexShrink: 0 }}>
+                                Join Organization
+                            </Button>
+                        </div>
+                    </Box>
+                    </Box>
+                    </>)
 }

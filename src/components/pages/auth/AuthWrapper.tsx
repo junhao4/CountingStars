@@ -30,7 +30,7 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
         return true;
       } else {
         console.log("name dosent exists", data);
-        createMessage("failure", "Please enter in a username");
+        createMessage("error", "Please enter in a username");
         navigate("/dashboard/profile");
       }
     };
@@ -44,7 +44,7 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
     return <Loading />;
   } else if (!session) {
     createMessage(
-      "failure",
+      "error",
       "Session does not exist or is expired! Please login again"
     );
     navigate("/login");

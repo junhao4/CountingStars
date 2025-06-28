@@ -17,26 +17,6 @@ export function Login() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    const handleFirstTimeUser = async (user: User) => {
-        const { data, error } = await supabase
-            .from('Users')
-            .select()
-            .eq('user_id', user!.id)
-
-        if (data!.length > 0) {
-            // Not first-time user, do nothing
-        } else {
-            const { data, error } = await supabase
-                .from('Users')
-                .insert({ user_id: user?.id, name: null, image_file: 'Default_pfp.jpg', email: user?.email })
-                .select()
-
-            if (error) {
-                createMessage('error', error.message)
-            }
-        }
-
-    }
 
     const handleLogin = async () => {
         const { data, error } = await supabase.auth.signInWithPassword({
@@ -48,7 +28,6 @@ export function Login() {
             return;
         }
         if (data) {
-            await handleFirstTimeUser(data.user)
             navigate('/dashboard')
         }
     }
