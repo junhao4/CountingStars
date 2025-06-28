@@ -17,28 +17,6 @@ export function Login() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    const handleFirstTimeUser = async (user: User) => {
-        const { data, error } = await supabase
-            .from('Users')
-            .select()
-            .eq('user_id', user!.id)
-
-        if (data!.length > 0) {
-            console.log("user exists", data)
-        } else {
-            const { data, error } = await supabase
-                .from('Users')
-                .insert({ user_id: user?.id, name: null, image_file: 'Default_pfp.jpg', email: user?.email })
-                .select()
-
-            if (data) {
-                console.log("User successfully added")
-            } else {
-                console.log(error.message)
-            }
-        }
-
-    }
 
     const handleLogin = async () => {
         const { data, error } = await supabase.auth.signInWithPassword({
