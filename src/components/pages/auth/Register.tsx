@@ -54,7 +54,7 @@ export function Register() {
   }, [session]);
 
   return (
-    <Box display='flex' flexDirection='column' justifySelf='center' alignItems='center' color='var(--foreground)'
+    <Box display='flex' flexDirection='column' justifySelf='center' alignItems='center' color='var(--foreground-text)'
       sx={{ outline: '2px solid black', borderRadius: '2px', margin: '2rem' }}>
       <Box display='flex' gap='2rem' alignItems='center' margin='2rem 2rem 0 2rem'>
         <Typography>Email: </Typography>

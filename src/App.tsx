@@ -19,6 +19,7 @@ import Notifications from "./components/pages/notifications/Notifications.tsx";
 import Verify from "./components/pages/auth/Verify.tsx";
 import CreateOrg from "./components/pages/dashboard/CreateOrg.tsx";
 import OrgAddItem from "./components/pages/organization/inventory/AddItem.tsx";
+import OrgLog from "./components/pages/organization/Log.tsx";
 
 function App() {
   return (
@@ -52,8 +53,7 @@ function App() {
                           <Routes>
                             <Route index element={<OrgHome />} />
                             <Route path="/users" element={<OrgUsers />} />
-                            <Route
-                              path="/inventory/*"
+                            <Route path="/inventory/*"
                               element={
                                 <Routes>
                                   <Route index element={<OrgInventory />} />
@@ -61,6 +61,7 @@ function App() {
                                 </Routes>
                               }
                             />
+                            <Route path="/log" element={<OrgLog />} />
                             <Route path="/settings" element={<OrgSettings />} />
                           </Routes>
                         }

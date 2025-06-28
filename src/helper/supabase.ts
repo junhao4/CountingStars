@@ -66,6 +66,7 @@ export type Database = {
       Items: {
         Row: {
           created_at: string
+          deleted: boolean
           description: string | null
           expiry_date: string | null
           id: number
@@ -76,6 +77,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          deleted?: boolean
           description?: string | null
           expiry_date?: string | null
           id?: number
@@ -86,6 +88,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          deleted?: boolean
           description?: string | null
           expiry_date?: string | null
           id?: number
@@ -137,33 +140,85 @@ export type Database = {
           },
         ]
       }
+      Logs: {
+        Row: {
+          created_at: string
+          id: number
+          item_id: number
+          metadata: Json
+          organization_id: number
+          performer_id: string
+          type: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          item_id: number
+          metadata: Json
+          organization_id: number
+          performer_id: string
+          type: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          item_id?: number
+          metadata?: Json
+          organization_id?: number
+          performer_id?: string
+          type?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Log_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "Organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Log_performer_id_fkey"
+            columns: ["performer_id"]
+            isOneToOne: false
+            referencedRelation: "Users"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "Logs_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "Items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           created_at: string
           id: number
           notifier: string | null
-          organisation: number | null
-          receiver: string | null
+          organisation: number
+          receiver: string
           status: boolean | null
-          type: number | null
+          type: number
         }
         Insert: {
-          created_at?: string
+          created_at: string
           id?: number
           notifier?: string | null
-          organisation?: number | null
-          receiver?: string | null
+          organisation: number
+          receiver: string
           status?: boolean | null
-          type?: number | null
+          type: number
         }
         Update: {
           created_at?: string
           id?: number
           notifier?: string | null
-          organisation?: number | null
-          receiver?: string | null
+          organisation?: number
+          receiver?: string
           status?: boolean | null
-          type?: number | null
+          type?: number
         }
         Relationships: [
           {

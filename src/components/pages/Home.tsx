@@ -38,7 +38,10 @@ function Home() {
     }, [])
 
     return (
-        <Box component="section" sx={{ display: 'flex', flexDirection: 'column', p: 2, border: '2px solid black', margin: '4rem', padding: '2rem' }}>
+        <Box component="section" sx={{
+            display: 'flex', flexDirection: 'column', p: 2, border: '2px solid black', margin: '2rem 8rem', padding: '2rem',
+            minWidth: '16rem'
+        }}>
             <img style={{ alignSelf: 'center' }} width='30%' src={logo} />
             <Typography sx={{ alignSelf: 'center' }} variant="h4" component="h1">
                 Introducing, CS!
@@ -49,7 +52,7 @@ function Home() {
             <Box display='flex' justifyContent='center' gap='100px'
                 textAlign='center' flexWrap='wrap'>
                 <Paper>
-                    <Avatar src={yitaoAvatar} sx={{ width: 150, height: 150, marginBottom: '2rem', justifySelf:'center' }}>YT</Avatar>
+                    <Avatar src={yitaoAvatar} sx={{ width: 150, height: 150, marginBottom: '2rem', justifySelf: 'center' }}>YT</Avatar>
 
                     <Typography variant='h4'>
                         Ding Yitao
@@ -59,7 +62,7 @@ function Home() {
                     </Typography>
                 </Paper>
                 <Paper>
-                    <Avatar sx={{ width: 150, height: 150, marginBottom: '2rem', justifySelf:'center' }}>JH</Avatar>
+                    <Avatar sx={{ width: 150, height: 150, marginBottom: '2rem', justifySelf: 'center' }}>JH</Avatar>
                     <Typography variant='h4'>
                         Ng Jun Hao
                     </Typography>

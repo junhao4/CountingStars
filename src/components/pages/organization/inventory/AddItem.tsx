@@ -81,14 +81,14 @@ export default function OrgAddItem() {
             const row = categoryOptions.find((cat) => cat.name === value);
             return row
               ? supabase
-                  .from("items_categories")
-                  .insert({ item_id: res.data[0].id, category_id: row.id })
-                  .then((res) => {
-                    if (res.error) {
-                      console.log(res.error.message);
-                    }
-                    return true;
-                  })
+                .from("items_categories")
+                .insert({ item_id: res.data[0].id, category_id: row.id })
+                .then((res) => {
+                  if (res.error) {
+                    console.log(res.error.message);
+                  }
+                  return true;
+                })
               : Promise.resolve(true);
           })
         ).then(() => {
@@ -107,7 +107,7 @@ export default function OrgAddItem() {
       flexDirection="column"
       justifySelf="center"
       alignItems="end"
-      color="var(--foreground)"
+      color="var(--foreground-text)"
       width="40%"
       sx={{ outline: "2px solid black", borderRadius: "2px", margin: "2rem" }}
     >
@@ -171,6 +171,7 @@ export default function OrgAddItem() {
           multiline
           rows={3}
           sx={{ flexGrow: 1 }}
+          
         />
       </Box>
 
@@ -206,7 +207,7 @@ export default function OrgAddItem() {
             <MenuItem
               key={cat.id}
               value={cat.name}
-              // style={}
+            // style={}
             >
               {cat.name}
             </MenuItem>

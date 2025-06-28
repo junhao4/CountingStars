@@ -7,10 +7,10 @@ const customTheme = createTheme({
         dark: {
             palette: {
                 primary: { // Black
-                    light: "#6b6b6b",
-                    main: "#fff",
-                    dark: "#3b3b3b",
-                    contrastText: "#000",
+                    light:'rgb(63, 63, 62)',
+                    main:'rgb(28, 28, 27)',
+                    dark:'rgb(18, 18, 17)',
+                    contrastText: 'rgb(255, 255, 255)',
                 },
 
                 secondary: { // Yellow
