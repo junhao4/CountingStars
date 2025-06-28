@@ -46,31 +46,31 @@ const customTheme = createTheme({
         light: {
             palette: {
                 primary: { // Black
-                    light: "#2b2b2b",
-                    main: "#000",
-                    dark: "#000",
-                    contrastText: "#fff",
+                    light:'rgb(166, 166, 166)',
+                    main:'rgb(75, 75, 75)',
+                    dark:'rgb(0, 0, 0)',
+                    contrastText: "#ffffff",
                 },
 
                 secondary: { // Purple
-                    light: "#864ebf",
-                    main: "#850fff",
-                    dark: `#1b0433`,
-                    contrastText: "#000",
+                    light:'rgb(247, 159, 255)',
+                    main: 'rgb(215, 16, 255)',
+                    dark:'rgb(152, 0, 223)',
+                    contrastText: "#000000",
                 },
 
                 info: { // Blue
-                    light: "#96eaff",
-                    main: "#2990ff",
-                    dark: "#0021c7",
-                    contrastText: "#000",
+                    light: 'rgb(145, 233, 255)',
+                    main:'rgb(87, 168, 255)',
+                    dark:'rgb(19, 137, 255)',
+                    contrastText: "#000000",
                 },
 
                 error: { // Red
-                    light: "#a00",
-                    main: "#f00",
-                    dark: "#faa",
-                    contrastText: "#000"
+                    light:'rgb(255, 139, 139)',
+                    main:'rgb(255, 66, 66)',
+                    dark:'rgb(218, 0, 0)',
+                    contrastText: "#000000"
                 },
 
                 success: { // Green

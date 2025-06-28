@@ -165,9 +165,10 @@ export default function Dashboard() {
         ? <Loading></Loading>
         : orgs.length > 0
             ? (
-                <Box sx={{ overflow: 'auto', outline: '2px solid black', margin: '2rem' }}>
+                <Box sx={{ overflow: 'auto', outline: '2px solid black', margin: '1rem 4rem' }}>
 
-                    <Box display='flex' textAlign='center' alignItems='center' justifyContent='center' gap='2rem' margin='2rem 0 2rem 0' flexWrap='wrap'>
+                    <Box display='flex' textAlign='center' alignItems='center' justifyContent='center' 
+                        gap='2rem' margin='1rem 0' flexWrap='wrap'>
                         <Typography variant='h4'>Your Organizations</Typography>
 
                         <Button onClick={(e) => navigate('new')}
@@ -185,7 +186,7 @@ export default function Dashboard() {
                         </div>
                     </Box>
 
-                    <Grid container padding='2rem' spacing={2} justifyContent='center' overflow='auto' wrap='wrap' 
+                    <Grid container padding='2rem 0' spacing={2} justifyContent='center' overflow='auto' wrap='wrap' 
                         boxShadow='0 -2px 0 #000'>{
                         orgs.map((key, index) => {
                             return (
