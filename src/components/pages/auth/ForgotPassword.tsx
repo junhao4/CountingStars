@@ -1,6 +1,5 @@
 import React, { useEffect, useState, type FormEvent } from "react";
 import supabase from "../../../helper/supabaseClient";
-import "./Auth.css";
 import Box from "@mui/material/Box";
 import { usePageTitleContext } from "../../contexts/PageTitleContext";
 import { Button, Input, Typography } from "@mui/material";

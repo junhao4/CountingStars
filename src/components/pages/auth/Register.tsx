@@ -1,5 +1,4 @@
 import { type FormEvent, use, useEffect, useState } from "react";
-import "./Auth.css";
 import supabase from "../../../helper/supabaseClient.ts";
 import { usePageTitleContext } from "../../contexts/PageTitleContext";
 import { useSessionContext } from "../../contexts/SessionContext.tsx";
