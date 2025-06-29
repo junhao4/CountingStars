@@ -2,23 +2,25 @@ import "./Sidebar.css";
 import React, { useState } from "react";
 import { Typography } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
-import ViewListIcon from '@mui/icons-material/ViewList';
+import ViewListIcon from "@mui/icons-material/ViewList";
 import GroupIcon from "@mui/icons-material/Group";
 import SettingsIcon from "@mui/icons-material/Settings";
-import InventoryIcon from '@mui/icons-material/Inventory';
+import InventoryIcon from "@mui/icons-material/Inventory";
 import { useLocation, useNavigate } from "react-router-dom";
 
 interface NavBarItemProps {
   open: boolean;
+  selected: boolean;
   children: React.ReactNode;
   onClick: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const NavBarItem = ({ open, children, onClick }: NavBarItemProps) => {
+const NavBarItem = ({ open, selected, children, onClick }: NavBarItemProps) => {
   return (
     <div
       className={
-        open ? "nav-menu-item-container active" : "nav-menu-item-container"
+        (open ? "nav-menu-item-container active" : "nav-menu-item-container") +
+        (selected ? " selected" : "")
       }
       onClick={onClick}
     >
@@ -46,6 +48,7 @@ export default function Sidebar() {
           <>
             <NavBarItem
               open={open}
+              selected={location.pathname === "/dashboard/organization"}
               onClick={() => navigate("/dashboard/organization")}
             >
               <HomeIcon fontSize="large" />
@@ -54,6 +57,7 @@ export default function Sidebar() {
 
             <NavBarItem
               open={open}
+              selected={location.pathname === "/dashboard/organization/users"}
               onClick={() => navigate("/dashboard/organization/users")}
             >
               <GroupIcon fontSize="large" />
@@ -62,6 +66,9 @@ export default function Sidebar() {
 
             <NavBarItem
               open={open}
+              selected={
+                location.pathname === "/dashboard/organization/inventory"
+              }
               onClick={() => navigate("/dashboard/organization/inventory")}
             >
               <InventoryIcon fontSize="large" />
@@ -70,6 +77,9 @@ export default function Sidebar() {
 
             <NavBarItem
               open={open}
+              selected={
+                location.pathname === "/dashboard/organization/settings"
+              }
               onClick={() => navigate("/dashboard/organization/settings")}
             >
               <SettingsIcon fontSize="large" />
@@ -78,11 +88,11 @@ export default function Sidebar() {
           </>
         ) : (
           <>
-            <NavBarItem open={open} onClick={() => navigate("/")}>
+            <NavBarItem open={open} onClick={() => navigate("/")} selected={location.pathname === "/"}>
               <HomeIcon fontSize="large" />
               <Typography>Home</Typography>
             </NavBarItem>
-            <NavBarItem open={open} onClick={() => navigate("/dashboard")}>
+            <NavBarItem open={open} onClick={() => navigate("/dashboard")} selected={location.pathname === "/dashboard"}>
               <ViewListIcon fontSize="large" />
               <Typography>Dashboard</Typography>
             </NavBarItem>

@@ -28,7 +28,7 @@ h1 {
   background-color: var(--foreground);
 }
 
-@theme inline {
+/* @theme inline {
 
   --radius-sm: calc(var(--radius) - 4px);
 
@@ -99,7 +99,7 @@ h1 {
   --color-sidebar-border: var(--sidebar-border);
 
   --color-sidebar-ring: var(--sidebar-ring);
-}
+} */
 
 :root {
 
@@ -153,9 +153,11 @@ h1 {
 
   --chart-5: oklch(0.769 0.188 70.08);
 
-  --sidebar: oklch(0.985 0 0);
+  --sidebar: oklch(0% 0 0);
 
-  --sidebar-foreground: oklch(0.141 0.005 285.823);
+  --sidebar-foreground: oklch(38.017% 0.01668 17.769);
+
+  --sidebar-foreground-hover: oklch(56.187% 0.03368 78.547);
 
   --sidebar-primary: oklch(0.21 0.006 285.885);
 
