@@ -12,7 +12,7 @@ function ForgotPassword() {
 
   const handleSubmit = async () => {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "http://localhost:5173/reset",
+      redirectTo: "https://counting-stars-jade.vercel.app/reset",
     });
     if (error) {
       createMessage('error', error.message)

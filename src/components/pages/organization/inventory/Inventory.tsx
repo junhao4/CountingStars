@@ -99,18 +99,18 @@ export default function OrgInventory() {
   const handleDelete = async () => {
     Promise.all(
       Array.of(...rowSelectionModel.ids).map(async (id) => {
-
+        id = id as number
         const data = await supabase
           .from("Items")
           .update({deleted:true})
-          .eq("id", parseInt(id.toString()))
+          .eq("id", id)
           .single()
           .then((res) => {
             if (res.error) {
               createMessage('error', res.error.message)
               return false
             }
-            addLog(orgProps.id, LogTypes.DELETE, session!.user.id, parseInt(id.toString()), {})
+            addLog(orgProps.id, LogTypes.DELETE, session!.user.id, id, {})
               .then(err => { if (err) { createMessage('error', err) } })
             return true
           });

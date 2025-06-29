@@ -34,7 +34,7 @@ const generateLogMessage = (type: number, performer_name: string, item_name: str
     switch (type) {
         // Insert new item
         case 1:
-            return performer_name + " has inserted a new item " + item_name
+            return performer_name + " has added a new item " + item_name
 
         // Updated item quantity
         case 2:
@@ -67,12 +67,13 @@ export default function OrgLog() {
         await supabase.from('Logs')
             .select('id, Users!performer_id(name), Items!item_id(name), type, created_at, metadata')
             .eq('organization_id', orgProps.id)
+            .order('id', {ascending : false})
             .then(res => {
                 if (res.error) createMessage('error', res.error.message)
                 else setLogs(res.data.map(log => {
                     return {
                         ...log, user_name: log.Users.name || 'DELETED USER',
-                        item_name: log.Items?.name || "DELETED ITEM",
+                        item_name: log.Items?.name,
                     }
                 }))
             })
