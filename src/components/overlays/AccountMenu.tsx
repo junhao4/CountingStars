@@ -114,9 +114,9 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem sx={{py : 0, color: 'white', pointerEvents: 'none'}}>
-            <Typography sx={{fontWeight: 900, color: 'white',  "&.Mui-disabled": {
-          color: "white", opacity : 1}}}>
+        <MenuItem sx={{py : 0, color: "var(--foreground-primary)", pointerEvents: 'none'}}>
+            <Typography sx={{fontWeight: 900, color: "var(--foreground-primary)",  "&.Mui-disabled": {
+         opacity : 1}}}>
                 { userName }
             </Typography>
         </MenuItem>
