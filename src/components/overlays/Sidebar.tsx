@@ -79,9 +79,9 @@ export default function Sidebar() {
             <NavBarItem
               open={open}
               selected={
-                location.pathname === "/dashboard/organization/logs"
+                location.pathname === "/dashboard/organization/log"
               }
-              onClick={() => navigate("/dashboard/organization/logs")}
+              onClick={() => navigate("/dashboard/organization/log")}
             >
               <HistoryIcon fontSize="large" />
               <Typography>Logs</Typography>
