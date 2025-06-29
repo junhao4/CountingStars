@@ -1,5 +1,5 @@
 .header-container {
-    position: sticky;
+    position:sticky;
     top: 0;
     
     color: var(--primary-foreground);
@@ -13,6 +13,7 @@
     align-items: center;
     flex-shrink: 0;
     overflow: hidden;
+    z-index: 2;
 }
 
 .header-logo {
@@ -25,18 +26,33 @@
 }
 
 .header-logo:hover {
-    color: #646cff;
+    color: var(--secondary-alternative);
+}
+
+.header-breadcrumbs {
+    color: var(--secondary);
+    text-decoration: none;
+    font-size: 0.75rem
+}
+
+.header-breadcrumbs:hover {
+    color: var(--secondary-alternative);
 }
 
 .header-title {
+    width: 30%;
+    text-align: center;
     text-decoration: solid;
     text-decoration-color: white;
     font-size: 30px;
     margin: 0 auto 0 auto;
+
+    overflow: hidden;
+    text-wrap-mode: nowrap;
+    text-overflow: ellipsis;
 }
 
 .header-user-details {
-    width: 220px;
-    flex-shrink: 0;
+    width: 40%;
 
 }

@@ -124,7 +124,9 @@ h1 {
 
   --primary-foreground: oklch(0.985 0 0);
 
-  --secondary: oklch(95.776% 0.21432 113.499);
+  --secondary: oklch(94.118% 0.20031 105.701);
+
+  --secondary-alternative: oklch(76.523% 0.17515 62.566);
 
   --secondary-foreground: oklch(0% 0 0);
 
@@ -194,6 +196,8 @@ h1 {
     --primary-foreground: oklch(0% 0 0);
 
     --secondary: oklch(51.161% 0.27801 296.898);
+
+    --secondary-alternative: oklch(64.83% 0.30524 319.247);
 
     --secondary-foreground: oklch(0% 0 0);
 
@@ -318,7 +322,7 @@ h1 {
   --sidebar-ring: oklch(0.552 0.016 285.938);
 } */
 
-@layer base {
+/* @layer base {
   * {
     @apply border-border outline-ring/50;
   }
@@ -326,4 +330,4 @@ h1 {
   body {
     @apply bg-background text-foreground;
   }
-}
+} */

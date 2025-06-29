@@ -18,8 +18,8 @@ import { Avatar } from '@mui/material';
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { session, userName } = useSessionContext();
-  const [ profileUrl, setProfileUrl ] = useState("");
-  const [ img, setImg ] = useState("")
+  const [profileUrl, setProfileUrl] = useState("");
+  const [img, setImg] = useState("")
 
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -44,43 +44,44 @@ export default function AccountMenu() {
   }
 
   //Fetches preexisting user info
-    useEffect(() => {
-        if (session?.user) {
-            const fetchUser = async () => {
-                const { data } = await supabase
-                    .from("Users")
-                    .select()
-                    .eq("user_id", session!.user.id)
-                    .single()
+  useEffect(() => {
+    if (session?.user) {
+      const fetchUser = async () => {
+        const { data } = await supabase
+          .from("Users")
+          .select()
+          .eq("user_id", session!.user.id)
+          .single()
 
-                console.log(data!.name);
-                setProfileUrl(data!.image_file!);
-            };
+        console.log(data!.name);
+        setProfileUrl(data!.image_file!);
+      };
 
-            fetchUser();
-        }
-    }, [session, userName]);
+      fetchUser();
+    }
+  }, [session, userName]);
 
-    //Downloads user image from storage
-    useEffect(() => {
-        const downloadImage = async () => {
-            const { data, error } = await supabase.storage
-                .from("profile-images")
-                .download(profileUrl!);
-            if (error) {
-                console.error("Error downloading image:", error.message);
-            } else {
-                const url = URL.createObjectURL(data);
-                setImg(url);
-            }
-        };
+  //Downloads user image from storage
+  useEffect(() => {
+    if (profileUrl === "") return
+    const downloadImage = async () => {
+      const { data, error } = await supabase.storage
+        .from("profile-images")
+        .download(profileUrl!);
+      if (error) {
+        console.error("Error downloading image:", error.message);
+      } else {
+        const url = URL.createObjectURL(data);
+        setImg(url);
+      }
+    };
 
-        downloadImage();
-    }, [profileUrl]);
+    downloadImage();
+  }, [profileUrl]);
 
   return (
     <>
-      <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', bgcolor: 'transparent'}}>
+      <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', bgcolor: 'transparent' }}>
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleClick}
@@ -90,7 +91,7 @@ export default function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-         <Avatar src={img} sx={{ width: 40, height : 40}}/>
+            <Avatar src={img} sx={{ width: 40, height: 40 }} />
           </IconButton>
         </Tooltip>
       </Box>
@@ -107,23 +108,26 @@ export default function AccountMenu() {
             sx: {
               overflow: 'visible',
               mt: 1.5,
-              padding : 0,
+              padding: 0,
             },
           },
         }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem sx={{py : 0, color: "var(--foreground-primary)", pointerEvents: 'none'}}>
-            <Typography sx={{fontWeight: 900, color: "var(--foreground-primary)",  "&.Mui-disabled": {
-         opacity : 1}}}>
-                { userName }
-            </Typography>
+        <MenuItem sx={{ py: 0, color: "var(--foreground-primary)", pointerEvents: 'none' }}>
+          <Typography sx={{
+            fontWeight: 900, color: "var(--foreground-primary)", "&.Mui-disabled": {
+              opacity: 1
+            }
+          }}>
+            {userName}
+          </Typography>
         </MenuItem>
-        <MenuItem disabled sx={{py : 0}}>
+        <MenuItem disabled sx={{ py: 0 }}>
           <Typography >
-            { session?.user.email }
-        </Typography>
+            {session?.user.email}
+          </Typography>
         </MenuItem>
         <Divider />
         <MenuItem onClick={handleProfile}>

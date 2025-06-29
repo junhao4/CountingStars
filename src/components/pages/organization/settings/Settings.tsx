@@ -197,6 +197,7 @@ export default function OrgSettings() {
     })
 
     useEffect(() => {
+        if (imgUrl === "") return
         const downloadImage = async () => {
             const { data, error } = await supabase.storage
                 .from("organization-images")

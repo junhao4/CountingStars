@@ -184,9 +184,7 @@ function Profile() {
                     >
                         {name}
                     </Typography>
-                    <Card sx={{ width: "400px" }}>
-                        <CardMedia sx={{ height: "300px" }} image={img} />
-                    </Card>
+                    <img height={300} width={300} src={img}></img>
                     <form onSubmit={updateProfile}>
                         <Stack
                             spacing={2}
@@ -206,6 +204,7 @@ function Profile() {
                             <Button
                                 component="label"
                                 variant="outlined"
+                                color="secondary"
                                 startIcon={<CloudUploadIcon />}
                                 fullWidth
                             >

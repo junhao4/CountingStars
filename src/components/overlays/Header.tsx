@@ -1,10 +1,10 @@
 import "./Header.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { usePageTitleContext } from "../contexts/PageTitleContext";
 import { useSessionContext } from "../contexts/SessionContext";
 import Typography from "@mui/material/Typography"
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
-import { Badge, Button } from "@mui/material";
+import { Badge, Breadcrumbs, Button } from "@mui/material";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import { useNotificationContext } from "../contexts/NotificationContext";
 import AccountMenu from "./AccountMenu.tsx";
@@ -13,13 +13,31 @@ function Header() {
     const { session } = useSessionContext()
     const navigate = useNavigate()
     const { unread } = useNotificationContext()
+    const location = useLocation()
+
+    const breadcrumbPathnames: string[] = location.pathname.split('/')
+    const breadcrumbRoutenames: string[] = [(breadcrumbPathnames.length > 0 ? breadcrumbPathnames[0] : "")]
+
+    for (var i = 1; i < breadcrumbPathnames.length; i++) {
+        breadcrumbRoutenames[i] = breadcrumbRoutenames[i - 1] + '/' + breadcrumbPathnames[i]
+    }
 
     return (
         <div className="header-container">
-            <div onClick={() => navigate('/')} className="header-logo">
-                <AutoAwesomeIcon sx={{ fontSize: "2rem", margin:'0 0.5rem' }} />
-                <Typography variant='h5'>Counting Stars</Typography>
-                
+            <div style={{ width: '40%', display:'flex', alignItems:'center' }}>
+                <div className="header-logo" onClick={() => navigate('/')}>
+                    <AutoAwesomeIcon sx={{ fontSize: "2rem", margin: '0 0.5rem' }} />
+                    <Typography variant='h5'>Counting Stars</Typography>
+
+                </div>
+                <Breadcrumbs sx={{ fontSize: '0.5rem' }}>
+                    {breadcrumbPathnames.map((path, index) => {
+                        return (
+                            <Link to={breadcrumbRoutenames[index]}
+                                className="header-breadcrumbs">{path}</Link>
+                        )
+                    })}
+                </Breadcrumbs>
             </div>
             <h2 className="header-title">{usePageTitleContext().title}</h2>
             <div className="header-user-details">
@@ -41,27 +59,27 @@ function Header() {
                                 gap: "1rem",
                             }}
                         >
-                        <Button
-                            size="small"
-                            color="secondary"
-                            variant="text"
-                            onClick={() =>
-                                navigate("/dashboard/notifications")
-                            }
-                            sx={{fontSize : 24}}
-                        >
-                            <Badge badgeContent={unread} color="error">
-                                <CircleNotificationsIcon fontSize="inherit" />
-                            </Badge>
-                        </Button>
-                        <AccountMenu />
+                            <Button
+                                size="small"
+                                color="secondary"
+                                variant="text"
+                                onClick={() =>
+                                    navigate("/dashboard/notifications")
+                                }
+                                sx={{ fontSize: 24 }}
+                            >
+                                <Badge badgeContent={unread} color="error">
+                                    <CircleNotificationsIcon fontSize="inherit" />
+                                </Badge>
+                            </Button>
+                            <AccountMenu />
                         </div>
                     </div>
                 ) : (
                     <div
                         style={{
                             display: "flex",
-                            justifyContent:'space-evenly',
+                            justifyContent: 'space-evenly',
                         }}
                     >
                         <Link
