@@ -1,6 +1,5 @@
 import "./Header.css";
 import { Link, useNavigate } from "react-router-dom";
-import supabase from "../../helper/supabaseClient";
 import { usePageTitleContext } from "../contexts/PageTitleContext";
 import { useSessionContext } from "../contexts/SessionContext";
 import Typography from "@mui/material/Typography"
@@ -15,16 +14,11 @@ function Header() {
     const navigate = useNavigate()
     const { unread } = useNotificationContext()
 
-    const handleUserLogout = () => {
-        supabase.auth.signOut()
-        navigate("/")
-    };
-
     return (
         <div className="header-container">
             <div onClick={() => navigate('/')} className="header-logo">
                 <Typography variant='h6'>Counting Stars</Typography>
-                <AutoAwesomeIcon sx={{ fontSize: "30px" }} />
+                <AutoAwesomeIcon sx={{ fontSize: "20px" }} />
             </div>
             <h2 className="header-title">{usePageTitleContext().title}</h2>
             <div className="header-user-details">
