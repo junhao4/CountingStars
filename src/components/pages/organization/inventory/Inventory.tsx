@@ -6,6 +6,7 @@ import Grid from "@mui/material/Grid";
 import Item from "@mui/material/Grid";
 import {
   Autocomplete,
+  Box,
   Button,
   TextField,
   type AutocompleteRenderInputParams,
@@ -13,12 +14,14 @@ import {
 import supabase from "../../../../helper/supabaseClient";
 import ItemTable from "./ItemTable";
 import type { GridRowSelectionModel } from "@mui/x-data-grid/models";
+import { useMessageContext } from "../../../contexts/MessageContext";
+import { addLog, LogTypes } from "../Log";
+import { useSessionContext } from "../../../contexts/SessionContext";
 
 export interface ItemFetch {
   id: number;
   name: string;
   quantity: number;
-  description: string | null;
   last_modified: string | null;
   expiry_date: string | null;
   categories: CategoryFetch[] | null;
@@ -34,6 +37,8 @@ export default function OrgInventory() {
   const { setTitle } = usePageTitleContext();
   const { getOrgContext } = useOrgContext();
   const orgProps = getOrgContext()!;
+  const { session } = useSessionContext()!
+  const { createMessage } = useMessageContext()
 
   // rowSelectionModel.ids contains the rows that are selected in ItemTable, used in handleDelete function.
   const [rowSelectionModel, setRowSelectionModel] =
@@ -49,12 +54,13 @@ export default function OrgInventory() {
     await supabase
       .from("Items")
       .select(
-        `id, name, quantity, description, last_modified, expiry_date, categories:Categories(id, name)`
+        `id, name, quantity, last_modified, expiry_date, categories:Categories(id, name)`
       )
       .eq("org_id", orgProps.id)
+      .eq('deleted', false)
       .then((res) => {
         if (res.error) {
-          console.log(res.error.message);
+          createMessage('error', res.error.message);
           return;
         }
 
@@ -93,22 +99,26 @@ export default function OrgInventory() {
   const handleDelete = async () => {
     Promise.all(
       Array.of(...rowSelectionModel.ids).map(async (id) => {
+
         const data = await supabase
           .from("Items")
-          .delete()
+          .update({deleted:true})
           .eq("id", parseInt(id.toString()))
+          .single()
           .then((res) => {
             if (res.error) {
-              console.log(res.error.message);
-              return false;
+              createMessage('error', res.error.message)
+              return false
             }
-            return true;
+            addLog(orgProps.id, LogTypes.DELETE, session!.user.id, parseInt(id.toString()), {})
+              .then(err => { if (err) { createMessage('error', err) } })
+            return true
           });
         return data;
       })
     ).then((res) => {
       if (!res.reduce((prev, next) => prev && next, true)) {
-        console.log(false);
+        createMessage('error', "Delete error")
       }
       setRowSelectionModel({ type: "include", ids: new Set() });
       setRefresh((prev) => !prev);
@@ -127,7 +137,7 @@ export default function OrgInventory() {
   }, [refresh]);
 
   return (
-    <>
+    <Box margin='1rem 4rem' bgcolor='primary.main' sx={{ outline: '2px solid black', borderRadius: '2px' }}>
       <QueryBar
         id={orgProps.id}
         categoryOptions={categoryOptions}
@@ -141,13 +151,10 @@ export default function OrgInventory() {
 
       <ItemTable
         items={items}
-        categoryOptions={categoryOptions}
         rowSelectionModel={rowSelectionModel}
         setRowSelectionModel={setRowSelectionModel}
-        fetchItems={fetchItems}
-        fetchCategoryOptions={fetchCategoryOptions}
       />
-    </>
+    </Box>
   );
 }
 
@@ -184,11 +191,11 @@ function QueryBar({
               return d.name;
             })}
             value={category?.name || "No category selected"}
-            onChange={(e, newValue) =>
-              {if (e)
-              setCategory(
-                categoryOptions.find((pred) => pred.name === newValue) || null
-              )
+            onChange={(e, newValue) => {
+              if (e)
+                setCategory(
+                  categoryOptions.find((pred) => pred.name === newValue) || null
+                )
             }
             }
           />
@@ -196,13 +203,13 @@ function QueryBar({
       </Grid>
       <Grid size={8} gap="2rem" alignContent='center'>
         <Item display="flex" gap="2rem" justifySelf='left' width='100%'>
-          <Button variant="contained" color='info' onClick={fetchItems} sx={{marginRight:'auto'}}>
+          <Button variant="contained" color='info' onClick={fetchItems} sx={{ marginRight: 'auto' }}>
             Search
           </Button>
           <Button variant="contained" color="secondary" onClick={() => navigate("add")}>
             Add Item
           </Button>
-          <Button variant="contained" color="error" onClick={handleDelete} sx={{marginRight:'2rem'}}>
+          <Button variant="contained" color="error" onClick={handleDelete} sx={{ marginRight: '2rem' }}>
             Delete Selected
           </Button>
         </Item>

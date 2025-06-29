@@ -18,26 +18,30 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
   const { title } = usePageTitleContext();
 
   useEffect(() => {
-    const haveName = async (user: User | undefined) => {
-      console.log(title);
-      const { data } = await supabase
-        .from("Users")
-        .select("name")
-        .eq("user_id", user!.id);
+    if (!loading && !session) {
+      navigate('/')
+    } else if (!loading && session) {
+      const haveName = async (user: User) => {
+        console.log(title);
+        const { data } = await supabase
+          .from("Users")
+          .select("name")
+          .eq("user_id", user!.id);
 
-      if (title == "Profile" || data![0].name != null) {
-        console.log("name exists", data);
-        return true;
-      } else {
-        console.log("name dosent exists", data);
-        createMessage("error", "Please enter in a username");
-        navigate("/dashboard/profile");
+        if (title == "Profile" || data![0].name != null) {
+          console.log("name exists", data);
+          return true;
+        } else {
+          console.log("name dosent exists", data);
+          createMessage("error", "Please enter in a username");
+          navigate("/dashboard/profile");
+        }
       }
-    };
 
-    if (!haveName(session?.user)) {
+      haveName(session.user)
     }
-  });
+
+  }, [session]);
 
   // Ensures users are logged in before rendering the page
   if (loading) {

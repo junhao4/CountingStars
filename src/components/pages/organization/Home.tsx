@@ -23,6 +23,7 @@ export default function OrgHome() {
             <Button variant='outlined' color='primary' onClick={() => navigate('users')}>Users</Button>
             <Button onClick={() => navigate('inventory')}>Inventory</Button>
             <Button onClick={() => navigate('settings')}>Settings</Button>
+            <Button onClick={() => navigate('log')}>Log</Button>
 
         </>
     )

@@ -21,6 +21,11 @@ import {
   Avatar,
   Box,
   Button,
+  FormControl,
+  Input,
+  InputLabel,
+  MenuItem,
+  Select,
   Typography,
 } from "@mui/material";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
@@ -31,7 +36,6 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { usePageTitleContext } from "../../../contexts/PageTitleContext";
 import Loading from "../../../general/Loading";
 import { useSessionContext } from "../../../contexts/SessionContext";
-import AddUserPopup from "./AddUserPopup";
 import { useNavigate } from "react-router-dom";
 import { useMessageContext } from "../../../contexts/MessageContext";
 import { addNotification } from "../../notifications/Notifications";
@@ -53,8 +57,35 @@ export default function OrgUsers() {
   const { createMessage } = useMessageContext();
   const { setOrgContext } = useOrgContext();
 
+  const [email, setEmail] = useState<string>('')
+  const [role, setRole] = useState<string>('member')
+  const handleSubmit = async () => {
+    const { data, error } = await supabase.from('Users')
+      .select('user_id')
+      .eq('email', email)
+      .maybeSingle()
+
+    if (error) {
+      console.log(error.message)
+      return
+    }
+
+    if (data) {
+      const { error } = await supabase.from('users_organizations')
+        .insert({ user_id: data.user_id, organization_id: orgProps!.id, role })
+
+      if (error) {
+        console.log(error)
+      }
+      //notify user of addition to org
+      addNotification(session!.user.id, data.user_id, orgProps!.id, 1)
+      setRefresh(prev => !prev)
+    } else {
+      console.log('Email not found - Please ensure they have signed up')
+    }
+  }
+
   const [loading, setLoading] = useState<boolean>(true);
-  const [addUserTrigger, setAddUserTrigger] = useState(false);
 
   const [rows, setRows] = useState<GridRowsProp<UserFetch>>([]);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
@@ -69,6 +100,8 @@ export default function OrgUsers() {
       event.defaultMuiPrevented = true;
     }
   };
+
+  // Commits any changes to supabase + update table view
   const processRowUpdate = (newRow: GridRowModel<UserFetch>) => {
     const oldRow = rows.find((row) => row.id === newRow.id);
     if (
@@ -102,7 +135,7 @@ export default function OrgUsers() {
         role: newRow.role,
       });
     }
-    
+
     //notify user of role change
     addNotification(session!.user.id, newRow.id, orgProps.id, 4);
     return newRow;
@@ -260,8 +293,8 @@ export default function OrgUsers() {
                 console.log(res.error.message);
               }
             });
-          
-           addNotification(session?.user.id!, row.id, orgProps.id, 5) 
+
+          addNotification(session?.user.id!, row.id, orgProps.id, 5)
         };
 
         const rejectPendingUser = async () => {
@@ -277,7 +310,7 @@ export default function OrgUsers() {
                 console.log(res.error.message);
               }
             });
-            addNotification(session?.user.id!, row.id, orgProps.id, 6)
+          addNotification(session?.user.id!, row.id, orgProps.id, 6)
         };
 
         if (row.role === "pending") {
@@ -406,7 +439,35 @@ export default function OrgUsers() {
   return loading ? (
     <Loading></Loading>
   ) : (
-    <Box>
+    <Box margin='2rem 4rem' bgcolor='primary.main' sx={{outline:'2px solid black'}}>
+      <Box hidden={!(orgProps.role === "owner" || orgProps.role === "admin")}
+        sx={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'right', gap:'4rem', alignItems: 'center', bgcolor:'inherit', p:'1rem' }}>
+        <div style={{display:'flex', flexWrap:'nowrap', gap:'2rem', alignItems:'center'}}>
+          <Typography>Email: </Typography>
+          <Input value={email} onChange={(e) => setEmail(e.target.value)}
+            placeholder='Email' />
+        </div>
+        <div style={{display:'flex', flexWrap:'nowrap', gap:'2rem', alignItems:'center'}}>
+          <Typography>Role: </Typography>
+          <FormControl size="small">
+            <InputLabel id="role-select-label">Role</InputLabel>
+            <Select
+              labelId="role-select-label"
+              id="role-select"
+              value={role}
+              label="Role"
+              onChange={(e) => setRole(e.target.value)}
+            >
+              <MenuItem value={'owner'}>Owner</MenuItem>
+              <MenuItem value={'admin'}>Admin</MenuItem>
+              <MenuItem value={'member'}>Member</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+        <Button variant="contained" onClick={handleSubmit}>
+          Add user
+        </Button>
+      </Box>
       <DataGrid
         columns={columns}
         rows={rows.map((user) => {
@@ -425,19 +486,6 @@ export default function OrgUsers() {
           },
         }}
       ></DataGrid>
-
-      <div hidden={!(orgProps.role === "owner" || orgProps.role === "admin")}>
-        <Button variant="contained" onClick={() => setAddUserTrigger(true)}>
-          Add user
-        </Button>
-        <AddUserPopup
-          trigger={addUserTrigger}
-          closePopup={() => {
-            setAddUserTrigger(false);
-          }}
-          setRefresh={setRefresh}
-        />
-      </div>
     </Box>
   );
 }
