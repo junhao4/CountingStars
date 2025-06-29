@@ -29,7 +29,7 @@ function Header() {
                             flexDirection: "column",
                             justifyContent: "flex-start",
                             gap: "8px",
-                            marginRight: "48px",
+                            marginRight: "20px",
                         }}
                     >
                         <div
@@ -43,13 +43,14 @@ function Header() {
                         <Button
                             size="small"
                             color="secondary"
-                            variant="outlined"
+                            variant="text"
                             onClick={() =>
                                 navigate("/dashboard/notifications")
                             }
+                            sx={{fontSize : 24}}
                         >
                             <Badge badgeContent={unread} color="error">
-                                <CircleNotificationsIcon />
+                                <CircleNotificationsIcon fontSize="inherit" />
                             </Badge>
                         </Button>
                         <AccountMenu />

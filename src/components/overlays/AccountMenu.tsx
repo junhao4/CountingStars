@@ -9,17 +9,22 @@ import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSessionContext } from '../contexts/SessionContext';
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from 'react-router-dom';
 import supabase from '../../helper/supabaseClient';
+import { Avatar } from '@mui/material';
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { session, userName } = useSessionContext();
+  const [ profileUrl, setProfileUrl ] = useState("");
+  const [ img, setImg ] = useState("")
+
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -37,6 +42,42 @@ export default function AccountMenu() {
     supabase.auth.signOut()
     navigate("/")
   }
+
+  //Fetches preexisting user info
+    useEffect(() => {
+        if (session?.user) {
+            const fetchUser = async () => {
+                const { data } = await supabase
+                    .from("Users")
+                    .select()
+                    .eq("user_id", session!.user.id)
+                    .single()
+
+                console.log(data!.name);
+                setProfileUrl(data!.image_file!);
+            };
+
+            fetchUser();
+        }
+    }, [session, userName]);
+
+    //Downloads user image from storage
+    useEffect(() => {
+        const downloadImage = async () => {
+            const { data, error } = await supabase.storage
+                .from("profile-images")
+                .download(profileUrl!);
+            if (error) {
+                console.error("Error downloading image:", error.message);
+            } else {
+                const url = URL.createObjectURL(data);
+                setImg(url);
+            }
+        };
+
+        downloadImage();
+    }, [profileUrl]);
+
   return (
     <>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', bgcolor: 'transparent'}}>
@@ -49,7 +90,7 @@ export default function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-         <AccountCircleIcon />
+         <Avatar src={img} sx={{ width: 40, height : 40}}/>
           </IconButton>
         </Tooltip>
       </Box>
@@ -89,7 +130,7 @@ export default function AccountMenu() {
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
-          Settings
+          Profile Settings
         </MenuItem>
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
