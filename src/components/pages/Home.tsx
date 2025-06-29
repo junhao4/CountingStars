@@ -10,6 +10,7 @@ function Home() {
     const { createMessage } = useMessageContext()
     const [logo, setLogo] = useState<string>()
     const [yitaoAvatar, setYitaoAvatar] = useState<string>()
+    const [jhAvatar, setJhAvatar] = useState("")
 
     const fetchLogo = async () => {
         const { data, error } = await supabase.storage.from('website-resources')
@@ -31,10 +32,21 @@ function Home() {
         }
     }
 
+    const fetchJHAvatar = async () => {
+        const { data, error } = await supabase.storage.from('website-resources')
+            .download('Random 2.jpeg')
+        if (error) {
+            createMessage('error', "Error fetching JH's avatar from storage: " + error.message)
+        } else {
+            setJhAvatar(URL.createObjectURL(data))
+        }
+    }
+
     useEffect(() => {
         setTitle("Home")
         fetchLogo()
         fetchYitaoAvatar()
+        fetchJHAvatar()
     }, [])
 
     return (
@@ -61,7 +73,7 @@ function Home() {
                     </Typography>
                 </Paper>
                 <Paper>
-                    <Avatar sx={{ width: '6rem', height: '6rem', marginBottom: '1rem', justifySelf: 'center' }}>JH</Avatar>
+                    <Avatar src={jhAvatar} sx={{ width: '6rem', height: '6rem', marginBottom: '1rem', justifySelf: 'center' }}>JH</Avatar>
                     <Typography variant='body1'>
                         Ng Jun Hao
                     </Typography>

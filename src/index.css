@@ -207,7 +207,7 @@ h1 {
 
     --destructive: oklch(0.704 0.191 22.216);
 
-    --border: oklch(1 0 0 / 10%);
+    --border: rgb(0,0,0);
 
     --input: oklch(1 0 0 / 15%);
 
