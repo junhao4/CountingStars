@@ -1,0 +1,18 @@
+.log-table {
+    justify-self: center;
+    margin: 1rem;
+}
+
+.log-table-header {
+    background-color: var(--card);
+    text-align: center;
+}
+
+.log-table-body > tr {
+    background-color: var(--foreground);
+}
+
+.log-table-row > tr > td {
+    outline: 2px solid black;
+    padding: 0 2rem;
+}
