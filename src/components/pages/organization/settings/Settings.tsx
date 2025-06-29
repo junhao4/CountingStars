@@ -101,17 +101,13 @@ export default function OrgSettings() {
                 name: data[0].name,
                 role: orgProps.role,
             });
-            console.log(orgProps.name);
         } else {
-            createMessage("error", "error");
-            console.log(error);
+            createMessage("error", error.message);
         }
     };
 
     //Update org image
     const updateImage = async (e: ChangeEvent<HTMLInputElement>) => {
-        console.log("Updating image");
-
         if (!e.target.files || e.target.files.length === 0) {
             createMessage("error", "You must select an image to upload.");
             return;
@@ -144,27 +140,23 @@ export default function OrgSettings() {
             console.log(error.message);
             return;
         } else {
-            console.log("uploaded img");
-
             //remove old image from storage
-            console.log("old image", imgUrl)
             if (imgUrl && imgUrl !== "Stock Background.jpg") {
                 const { error } = await supabase.storage
                     .from("organization-images")
                     .remove([imgUrl]);
 
                 if (error) {
-                    console.log("fail to delete", error);
+                    createMessage('error', "Failed to delete old image: " + error.message);
                 }
             }
             await supabase
                 .from("Organizations")
                 .update({ image_file: fileName })
                 .eq("id", orgProps.id)
-                .then((res) => console.log(res.error));
+                .then((res) => { if (res.error) createMessage('error', res.error.message) });
 
             setImgUrl(fileName);
-            console.log("new image", fileName)
             createMessage("success", "Organization image updated");
         }
     };
@@ -184,7 +176,7 @@ export default function OrgSettings() {
                 setImgUrl(data.image_file!);
             }
         } else {
-            console.log("Error selecting org");
+            createMessage('error', "Error selecting org");
         }
     };
 

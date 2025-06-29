@@ -87,11 +87,11 @@ export default function OrgInventory() {
       .eq("org_id", orgProps.id)
       .then((res) => {
         if (res.error) {
-          console.log(res.error.message);
-          setCategoryOptions([]);
-          return;
+          createMessage('error', res.error.message)
+          setCategoryOptions([])
+          return
         }
-        setCategoryOptions(res.data);
+        setCategoryOptions(res.data)
       });
   };
 
@@ -102,7 +102,7 @@ export default function OrgInventory() {
 
         const data = await supabase
           .from("Items")
-          .update({deleted:true})
+          .update({ deleted: true })
           .eq("id", parseInt(id.toString()))
           .single()
           .then((res) => {
@@ -119,6 +119,8 @@ export default function OrgInventory() {
     ).then((res) => {
       if (!res.reduce((prev, next) => prev && next, true)) {
         createMessage('error', "Delete error")
+      } else {
+        createMessage('success', 'Successfully deleted items!')
       }
       setRowSelectionModel({ type: "include", ids: new Set() });
       setRefresh((prev) => !prev);

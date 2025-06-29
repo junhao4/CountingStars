@@ -71,9 +71,10 @@ export default function OrgAddItem() {
         expiry_date: itemExpiry?.toDate().toDateString(),
       })
       .select()
+      .single()
       .then((res) => {
         if (res.error) {
-          console.log(res.error.message);
+          createMessage('error', res.error.message);
           return Promise.reject(false);
         }
         Promise.all(
@@ -82,17 +83,20 @@ export default function OrgAddItem() {
             return row
               ? supabase
                 .from("items_categories")
-                .insert({ item_id: res.data[0].id, category_id: row.id })
+                .insert({ item_id: res.data.id, category_id: row.id })
                 .then((res) => {
                   if (res.error) {
-                    console.log(res.error.message);
+                    createMessage('error', res.error.message);
                   }
                   return true;
                 })
               : Promise.resolve(true);
           })
-        ).then(() => {
-          navigate("/dashboard/organization/inventory");
+        ).then((res) => {
+          if (res.reduce((prev, next) => prev && next, true)) {
+            createMessage('success', 'Successfully added item!')
+          }
+          navigate("/dashboard/organization/inventory")
         });
       });
   };
@@ -171,7 +175,6 @@ export default function OrgAddItem() {
           multiline
           rows={3}
           sx={{ flexGrow: 1 }}
-          
         />
       </Box>
 

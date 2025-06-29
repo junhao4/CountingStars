@@ -111,6 +111,8 @@ export default function OrgUsers() {
     ) {
       createMessage("error", "The organization needs at least 1 owner!");
       return oldRow;
+    } else if (oldRow?.role === newRow.role) {
+      return oldRow
     }
 
     setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
@@ -123,7 +125,9 @@ export default function OrgUsers() {
         .single()
         .then((res) => {
           if (res.error) {
-            console.log(res.error.message);
+            createMessage('error', res.error.message);
+          } else {
+            createMessage('success', 'Successfully updated user role!')
           }
         })
     );

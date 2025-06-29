@@ -74,14 +74,17 @@ export default function CreateOrg() {
         } else {
             supabase.from('users_organizations')
                 .insert({ user_id: session!.user.id, organization_id: data.id, role: 'owner' })
-                .then(res => { if (res.error) { createMessage("error", res.error.message) } })
+                .then(res => {
+                    if (res.error) { createMessage("error", res.error.message) }
+                    else { createMessage('success', "Successfully created organization!") }
+                })
                 .then(() => navigate('/dashboard'))
         }
     }
 
     return (
         <Box display={"flex"} flexDirection='column' sx={{
-            outline: '2px solid black', width: '30rem', borderRadius: '0.25rem', justifySelf: 'center', margin:'1rem'
+            outline: '2px solid black', width: '30rem', borderRadius: '0.25rem', justifySelf: 'center', margin: '1rem'
         }}>
             <Typography variant='h6' sx={{ padding: '1rem' }}>Create a new organization</Typography>
 

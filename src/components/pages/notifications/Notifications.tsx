@@ -100,6 +100,9 @@ export async function addNotification(
         });
     if (error) {
         console.log("Notification could not be added");
+        return error.message
+    } else {
+        return null
     }
 }
 
@@ -117,7 +120,7 @@ export default function Notifications() {
     }, []);
 
     useEffect(() => {
-        getNoti();
+        getNotification();
         markAsRead();
         countUnread();
     }, []);
@@ -137,9 +140,9 @@ export default function Notifications() {
     };
 
     //Gets notifications from supabase and creates the messages then puts into an array
-    const getNoti = async () => {
+    const getNotification = async () => {
         const user = session!.user;
-        const { data } = await supabase
+        const { data, error } = await supabase
             .from("notifications")
             .select()
             .eq("receiver", user.id)
@@ -157,8 +160,9 @@ export default function Notifications() {
                 })
             );
             setNotifications(noti);
+        } else {
+            createMessage('error', error.message)
         }
-        console.log("data", data);
     };
 
     const deleteNotification = async (id: number) => {
@@ -168,7 +172,7 @@ export default function Notifications() {
             .eq("id", id);
 
         if (error) {
-            console.log(error);
+            createMessage('error', error.message);
         } else {
             setNotifications(notifications.filter((notif) => notif?.id !== id));
         }

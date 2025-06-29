@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import type { User } from "@supabase/supabase-js";
+import { useMessageContext } from "../contexts/MessageContext";
 
 const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -28,31 +29,31 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 function Profile() {
+    const { session } = useSessionContext()
+    const { createMessage } = useMessageContext()
+
     const [username, setUsername] = useState<string | null>("");
     const [name, setName] = useState<string | null>("New User");
     const [profileUrl, setProfileUrl] = useState<string | null>("");
-    const [message, setMessage] = useState("");
     const [img, setImg] = useState("");
-    const { session } = useSessionContext();
 
     const handleFirstTimeUser = async (user: User | undefined) => {
         const { data } = await supabase
             .from('Users')
             .select()
             .eq('user_id', user!.id)
+            .single()
 
-        if (data!.length > 0) {
-            console.log("user exists", data)
+        if (data) {
+            // User exists already
         } else {
-            const { data, error } = await supabase
+            const { error } = await supabase
                 .from('Users')
                 .insert({ user_id: user?.id, name: null, image_file: 'Default_pfp.jpg', email: user?.email })
                 .select()
 
-            if (data) {
-                console.log("User successfully added")
-            } else {
-                console.log(error.message)
+            if (error) {
+                createMessage('error', error.message)
             }
         }
 
@@ -68,52 +69,46 @@ function Profile() {
             .select();
 
         if (data) {
-            setMessage(username + " set as username");
             setName(username);
+            createMessage('success', "Successfully set new username!")
         } else {
-            setMessage("error");
-            console.log(error);
+            createMessage('error', error.message);
         }
     };
 
     //Updates Image
     const updateImage = async (e: ChangeEvent<HTMLInputElement>) => {
-        console.log("Updating image");
-
         if (!e.target.files || e.target.files.length === 0) {
-            setMessage("You must select an image to upload.");
-            return;
+            createMessage('error', "You must select an image to upload.")
+            return
         }
 
         const file = e.target.files[0];
         const fileExt = file.name.split(".").pop();
         const fileName = `${crypto.randomUUID()}.${fileExt}`;
-        console.log("File", file.name, file.size, file.type);
+        // console.log("File", file.name, file.size, file.type);
         const { error } = await supabase.storage
             .from("profile-images")
             .upload(fileName, file);
         if (error) {
-            alert("upload error");
-            console.log(error.message);
+            createMessage('error', error.message);
             return;
         } else {
-            console.log("uploaded img");
             //remove old image from storage
-            console.log("old image", profileUrl);
             if (profileUrl && profileUrl !== "Default_pfp.jpg") {
                 const { error } = await supabase.storage
                     .from("profile-images")
                     .remove([profileUrl]);
-  
+
                 if (error) {
-                    console.log("fail to delete", error);
+                    createMessage('error', "Failed to delete old image: " + error.message);
                 }
             }
             await supabase
                 .from("Users")
                 .update({ image_file: fileName })
                 .eq("user_id", session!.user.id)
-                .then((res) => console.log(res.error));
+                .then((res) => {if (res.error) createMessage('error', res.error.message)});
 
             setProfileUrl(fileName);
         }
@@ -159,12 +154,10 @@ function Profile() {
     }, [profileUrl]);
 
     //Set header title to Login
-    const { title, setTitle } = usePageTitleContext();
+    const { setTitle } = usePageTitleContext();
 
     useEffect(() => {
-        console.log("Setting title to Profile");
         setTitle("Profile");
-        console.log(title);
     }, []);
     //
 
@@ -216,7 +209,6 @@ function Profile() {
                             </Button>
                         </Stack>
                     </form>
-                    <div>{message}</div>
                 </Stack>
             </Container>
         </>
