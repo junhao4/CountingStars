@@ -189,7 +189,7 @@ h1 {
 
     --popover-foreground: oklch(0% 0 0);
 
-    --primary: oklch(94.835% 0.19291 106.398);
+    --primary: rgb(255, 204, 0);
 
     --primary-foreground: oklch(0% 0 0);
 
@@ -223,9 +223,11 @@ h1 {
 
     --chart-5: oklch(64.346% 0.24522 16.485);
 
-    --sidebar: oklch(0.21 0.006 285.885);
+    --sidebar: rgb(255, 149, 0);
 
     --sidebar-foreground: oklch(0.985 0 0);
+
+    --sidebar-foreground-hover: rgb(182, 81, 27);
 
     --sidebar-primary: oklch(0.488 0.243 264.376);
 
@@ -237,7 +239,7 @@ h1 {
 
     --sidebar-border: oklch(1 0 0 / 10%);
 
-    --sidebar-ring: oklch(0.552 0.016 285.938);
+    --sidebar-ring: rgb(228, 101, 17);
   }
 
   /* 
