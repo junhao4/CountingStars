@@ -15,7 +15,7 @@ import supabase from "../../../../helper/supabaseClient";
 import ItemTable from "./ItemTable";
 import type { GridRowSelectionModel } from "@mui/x-data-grid/models";
 import { useMessageContext } from "../../../contexts/MessageContext";
-import { addLog, LogTypes } from "../Log";
+import { addLog, LogTypes } from "../log/Log";
 import { useSessionContext } from "../../../contexts/SessionContext";
 
 export interface ItemFetch {
@@ -137,7 +137,9 @@ export default function OrgInventory() {
   }, [refresh]);
 
   return (
-    <Box margin='1rem 4rem' bgcolor='primary.main' sx={{ outline: '2px solid black', borderRadius: '2px' }}>
+    <Box margin='2rem 4rem' bgcolor='primary.main' sx={{ outline: '2px solid black', borderRadius: '2px',
+      overflow:'hidden'
+     }}>
       <QueryBar
         id={orgProps.id}
         categoryOptions={categoryOptions}

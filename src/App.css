@@ -1,0 +1,9 @@
+.app-div {
+    display: flex;
+    width: inherit;
+}
+
+.app-div > div:nth-child(3) {
+    flex-grow: 1;
+    justify-self: center;
+}

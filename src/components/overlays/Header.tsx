@@ -1,14 +1,14 @@
 import "./Header.css";
 import { Link, useNavigate } from "react-router-dom";
-import supabase from "../helper/supabaseClient";
-import { usePageTitleContext } from "./contexts/PageTitleContext";
-import { useSessionContext } from "./contexts/SessionContext";
+import supabase from "../../helper/supabaseClient";
+import { usePageTitleContext } from "../contexts/PageTitleContext";
+import { useSessionContext } from "../contexts/SessionContext";
 import Typography from "@mui/material/Typography"
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import { Badge, Button } from "@mui/material";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { useNotificationContext } from "./contexts/NotificationContext";
+import { useNotificationContext } from "../contexts/NotificationContext";
 
 function Header() {
     const { session } = useSessionContext()

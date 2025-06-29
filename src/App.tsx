@@ -1,5 +1,6 @@
+import './App.css'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Header from "./components/Header.tsx";
+import Header from "./components/overlays/Header.tsx";
 import Home from "./components/pages/Home.tsx";
 import Dashboard from "./components/pages/dashboard/Dashboard.tsx";
 import NotFound from "./components/pages/NotFound.tsx";
@@ -19,7 +20,8 @@ import Notifications from "./components/pages/notifications/Notifications.tsx";
 import Verify from "./components/pages/auth/Verify.tsx";
 import CreateOrg from "./components/pages/dashboard/CreateOrg.tsx";
 import OrgAddItem from "./components/pages/organization/inventory/AddItem.tsx";
-import OrgLog from "./components/pages/organization/Log.tsx";
+import OrgLog from "./components/pages/organization/log/Log.tsx";
+import Sidebar from "./components/overlays/Sidebar.tsx";
 
 function App() {
   return (
@@ -29,51 +31,61 @@ function App() {
           <BrowserRouter>
             <Header />
             <Message />
-            <Routes>
-              <Route index path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/verify" element={<Verify />} />
+            <div className='app-div' >
+              <Sidebar />
+              <Routes>
+                <Route index path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/verify" element={<Verify />} />
 
-              <Route
-                path="/dashboard/*"
-                element={
-                  <AuthWrapper>
-                    <Routes>
-                      <Route index element={<Dashboard />} />
-                      <Route path="/new" element={<CreateOrg />} />
-                      <Route path="/profile" element={<Profile />} />
-                      <Route
-                        path="/notifications"
-                        element={<Notifications />}
-                      />
-                      <Route
-                        path="/organization/*"
-                        element={
-                          <Routes>
-                            <Route index element={<OrgHome />} />
-                            <Route path="/users" element={<OrgUsers />} />
-                            <Route path="/inventory/*"
-                              element={
-                                <Routes>
-                                  <Route index element={<OrgInventory />} />
-                                  <Route path="/add" element={<OrgAddItem />} />
-                                </Routes>
-                              }
-                            />
-                            <Route path="/log" element={<OrgLog />} />
-                            <Route path="/settings" element={<OrgSettings />} />
-                          </Routes>
-                        }
-                      />
-                    </Routes>
-                  </AuthWrapper>
-                }
-              />
-              <Route path="/forgot" element={<ForgotPassword />} />
-              <Route path="/reset" element={<ResetPassword />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+                <Route
+                  path="/dashboard/*"
+                  element={
+                    <AuthWrapper>
+                      <Routes>
+                        <Route index element={<Dashboard />} />
+                        <Route path="/new" element={<CreateOrg />} />
+                        <Route path="/profile" element={<Profile />} />
+                        <Route
+                          path="/notifications"
+                          element={<Notifications />}
+                        />
+                        <Route
+                          path="/organization/*"
+                          element={
+                            <Routes>
+                              <Route index element={<OrgHome />} />
+                              <Route path="/users" element={<OrgUsers />} />
+                              <Route
+                                path="/inventory/*"
+                                element={
+                                  <Routes>
+                                    <Route index element={<OrgInventory />} />
+                                    <Route
+                                      path="/add"
+                                      element={<OrgAddItem />}
+                                    />
+                                  </Routes>
+                                }
+                              />
+                              <Route path="/log" element={<OrgLog />} />
+                              <Route
+                                path="/settings"
+                                element={<OrgSettings />}
+                              />
+                            </Routes>
+                          }
+                        />
+                      </Routes>
+                    </AuthWrapper>
+                  }
+                />
+                <Route path="/forgot" element={<ForgotPassword />} />
+                <Route path="/reset" element={<ResetPassword />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </div>
           </BrowserRouter>
         </ContextProvider>
       </div>

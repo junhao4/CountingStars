@@ -26,7 +26,7 @@ function ForgotPassword() {
   }, []);
 
   return (
-    <Box display='flex' flexDirection='column' justifySelf='center' alignItems='start' color='var(--foreground)'
+    <Box display='flex' flexDirection='column' justifySelf='center' alignItems='start' color='var(--foreground-text)'
             sx={{ outline: '2px solid black', borderRadius: '2px', margin: '2rem' }}>
       <Typography variant="h6" padding='1rem 2rem 0 2rem'>Reset your Password</Typography>
       <Typography variant="body1" padding='0 2rem 1rem 2rem'>

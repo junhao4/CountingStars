@@ -147,10 +147,12 @@ export default function Dashboard() {
         ? <Loading></Loading>
         : orgs.length > 0
             ? (
-                <Box sx={{ overflow: 'auto', outline: '2px solid black', margin: '1rem 4rem' }}>
+                <Box sx={{ overflow: 'auto', outline: '2px solid black', margin: '1rem 4rem',
+                    justifySelf:'center'
+                 }}>
 
                     <Box display='flex' textAlign='center' alignItems='center' justifyContent='center' 
-                        gap='2rem' margin='1rem 0' flexWrap='wrap'>
+                        gap='2rem' margin='1rem' flexWrap='wrap'>
                         <Typography variant='h4'>Your Organizations</Typography>
 
                         <Button onClick={() => navigate('new')}
