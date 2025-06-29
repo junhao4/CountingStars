@@ -33,7 +33,7 @@ function Profile() {
     const [username, setUsername] = useState<string | null>("");
     const [name, setName] = useState<string | null>("New User");
     const [profileUrl, setProfileUrl] = useState<string | null>("");
-    const [img, setImg] = useState("");
+    const [img, setImg] = useState<string|undefined>();
 
     const handleFirstTimeUser = async (user: User | undefined) => {
         const { data } = await supabase
@@ -107,7 +107,7 @@ function Profile() {
                 .from("Users")
                 .update({ image_file: fileName })
                 .eq("user_id", session!.user.id)
-                .then((res) => {if (res.error) createMessage('error', res.error.message)});
+                .then((res) => { if (res.error) createMessage('error', res.error.message) });
 
             setProfileUrl(fileName);
         }
@@ -116,7 +116,6 @@ function Profile() {
     //Fetches preexisting user info
     useEffect(() => {
         handleFirstTimeUser(session?.user)
-        console.log(session?.user.email);
         if (session?.user) {
             const fetchUser = async () => {
                 const { data } = await supabase
@@ -127,7 +126,6 @@ function Profile() {
 
                 setName(data!.name ?? "New User");
                 setUsername(data!.name ?? "");
-                console.log(data!.name);
                 setProfileUrl(data!.image_file);
             };
 
@@ -149,7 +147,9 @@ function Profile() {
             }
         };
 
-        downloadImage();
+        if (profileUrl) {
+            downloadImage();
+        }
     }, [profileUrl]);
 
     //Set header title to Login
@@ -158,7 +158,6 @@ function Profile() {
     useEffect(() => {
         setTitle("Profile");
     }, []);
-    //
 
     return (
         <>

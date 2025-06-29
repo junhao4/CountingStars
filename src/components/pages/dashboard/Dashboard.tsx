@@ -54,10 +54,9 @@ export default function Dashboard() {
             .eq('user_id', session!.user.id)
             .then(async response => {
                 if (response.error) {
-                    console.log(response.error.message)
+                    createMessage('error', response.error.message)
                     return false
                 } else if (!response.data || response.data.length === 0) {
-                    console.log('No data found!')
                     return false
                 }
 
@@ -68,7 +67,7 @@ export default function Dashboard() {
                         .single()
                         .then(async response => {
                             if (response.error) {
-                                console.log(response.error.message)
+                                createMessage('error', response.error.message)
                                 return null
                             }
                             const data = { ...response.data, role: d.role }
@@ -95,7 +94,7 @@ export default function Dashboard() {
         const { data, error } = await supabase.storage.from('organization-images')
             .download(name)
         if (error) {
-            console.log(error.message)
+            createMessage('error', error.message)
             return null
         }
         return URL.createObjectURL(data)

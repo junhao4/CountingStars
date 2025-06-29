@@ -22,13 +22,13 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
       navigate('/')
     } else if (!loading && session) {
       const haveName = async (user: User) => {
-        console.log(title);
         const { data } = await supabase
           .from("Users")
           .select("name")
-          .eq("user_id", user!.id);
+          .eq("user_id", user!.id)
+          .single()
 
-        if (title == "Profile" || data![0].name != null) {
+        if (title == "Profile" || data?.name != null) {
           return true;
         } else {
           createMessage("error", "Please enter in a username");

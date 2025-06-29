@@ -50,7 +50,6 @@ export const SessionProvider = ({ children } : { children: React.ReactNode }) =>
                 .single()
             if (data) {
                 setuserName(data.name!)
-                console.log("Name context set", userName)
             }
             if (error) {
                 console.log("Name context not set", error)

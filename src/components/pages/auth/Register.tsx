@@ -54,19 +54,21 @@ export function Register() {
   }, [session]);
 
   return (
-    <Box display='flex' flexDirection='column' justifySelf='center' alignItems='center' color='var(--foreground-text)'
-      sx={{ outline: '2px solid black', borderRadius: '2px', margin: '2rem' }}>
-      <Box display='flex' gap='2rem' alignItems='center' margin='2rem 2rem 0 2rem'>
-        <Typography>Email: </Typography>
-        <Input value={email} onChange={(e) => setEmail(e.target.value)}
-          placeholder='Email' />
+    <form>
+      <Box display='flex' flexDirection='column' justifySelf='center' alignItems='center' color='var(--foreground-text)'
+        sx={{ outline: '2px solid black', borderRadius: '2px', margin: '2rem' }}>
+        <Box display='flex' gap='2rem' alignItems='center' margin='2rem 2rem 0 2rem'>
+          <Typography>Email: </Typography>
+          <Input value={email} onChange={(e) => setEmail(e.target.value)}
+            placeholder='Email' autoComplete="email"/>
+        </Box>
+        <Box display='flex' gap='2rem' alignItems='center' margin='2rem'>
+          <Typography>Password: </Typography>
+          <Input value={password} onChange={(e) => setPassword(e.target.value)} type='password'
+            placeholder='Password' autoComplete="new-password" sx={{ marginRight: '1.75rem' }} />
+        </Box>
+        <Button onClick={handleRegister} sx={{ justifySelf: 'center', marginBottom: '3.5rem' }}>Register</Button>
       </Box>
-      <Box display='flex' gap='2rem' alignItems='center' margin='2rem'>
-        <Typography>Password: </Typography>
-        <Input value={password} onChange={(e) => setPassword(e.target.value)} type='password'
-          placeholder='Password' sx={{ marginRight: '1.75rem' }} />
-      </Box>
-      <Button onClick={handleRegister} sx={{ justifySelf: 'center', marginBottom:'3.5rem' }}>Register</Button>
-    </Box>
+    </form>
   )
 }

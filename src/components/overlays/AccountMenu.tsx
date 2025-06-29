@@ -14,12 +14,15 @@ import { useSessionContext } from '../contexts/SessionContext';
 import { useNavigate } from 'react-router-dom';
 import supabase from '../../helper/supabaseClient';
 import { Avatar } from '@mui/material';
+import { useMessageContext } from '../contexts/MessageContext';
 
 export default function AccountMenu() {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { createMessage } = useMessageContext()
   const { session, userName } = useSessionContext();
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [profileUrl, setProfileUrl] = useState("");
-  const [img, setImg] = useState("")
+  const [img, setImg] = useState<string>()
 
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -47,14 +50,14 @@ export default function AccountMenu() {
   useEffect(() => {
     if (session?.user) {
       const fetchUser = async () => {
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from("Users")
           .select()
           .eq("user_id", session!.user.id)
           .single()
 
-        console.log(data!.name);
-        setProfileUrl(data!.image_file!);
+        if (error) { createMessage('error', error.message) }
+        else { setProfileUrl(data.image_file || "") }
       };
 
       fetchUser();
@@ -69,7 +72,7 @@ export default function AccountMenu() {
         .from("profile-images")
         .download(profileUrl!);
       if (error) {
-        console.error("Error downloading image:", error.message);
+        createMessage('error', "Error downloading image: " + error.message);
       } else {
         const url = URL.createObjectURL(data);
         setImg(url);

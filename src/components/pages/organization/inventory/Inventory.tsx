@@ -183,7 +183,7 @@ function QueryBar({
 }: QueryBarProps) {
   const navigate = useNavigate();
   return (
-    <Grid container spacing={2} sx={{ padding: "16px" }}>
+    <Grid container spacing={2} sx={{ padding: "1rem" }}>
       <Grid size={4}>
         <Item>
           <Autocomplete

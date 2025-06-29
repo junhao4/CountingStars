@@ -17,18 +17,27 @@ interface NotificationFetch {
 //Creates message based on data stored in supabase
 const createNotificationMessage = async (
     notificationType: number,
-    notifierId: string,
+    notifierId: string | null,
     organizationId: number,
 ) => {
-    const { data: notifier, error: notifierError } = await supabase
-        .from("Users")
-        .select()
-        .eq("user_id", notifierId)
-        .single();
+    var notifier = ""
+    if (notifierId) {
+        const { data: notifierData, error: notifierError } = await supabase
+            .from("Users")
+            .select()
+            .eq("user_id", notifierId)
+            .single();
 
         if (notifierError) {
-            console.log("user does not exits")
+            console.log("user does not exits", notifierError.message)
+            return "ERROR"
+        } else {
+            notifier = notifierData.name || "NO NAME"
         }
+    } else {
+        notifier = "DELETED_USER"
+    }
+
 
     const { data: org, error: orgError } = await supabase
         .from("Organizations")
@@ -36,44 +45,44 @@ const createNotificationMessage = async (
         .eq("id", organizationId)
         .single();
 
-         if (orgError) {
-            console.log("org does not exist")
-        }
+    if (orgError) {
+        console.log("org does not exist")
+    }
 
     switch (notificationType) {
         // Added to organization
         case 1:
             return (
-                notifier?.name +
+                notifier +
                 " has added you to the organization " +
                 org?.name
             );
         // Removed from organization
         case 2:
             return (
-                notifier?.name +
+                notifier +
                 " has removed you from the organization " +
                 org?.name
             );
         // Organization was deleted
         case 3:
             return (
-                notifier?.name + " has deleted the organization " + org?.name
+                notifier + " has deleted the organization " + org?.name
             );
         // Role update within organization
         case 4:
             return (
-                notifier?.name + " has changed your role within " + org?.name
+                notifier + " has changed your role within " + org?.name
             );
         // Join request accepted
         case 5:
-             return (
-                notifier?.name + " has accepted your request to join " + org?.name
+            return (
+                notifier + " has accepted your request to join " + org?.name
             );
         // Join request rejected
-         case 6:
-             return (
-                notifier?.name + " has rejected your request to join " + org?.name
+        case 6:
+            return (
+                notifier + " has rejected your request to join " + org?.name
             );
     }
 };
@@ -120,10 +129,12 @@ export default function Notifications() {
     }, []);
 
     useEffect(() => {
-        getNotification();
-        markAsRead();
-        countUnread();
-    }, []);
+        if (session) {
+            getNotification();
+            markAsRead();
+            countUnread();
+        }
+    }, [session]);
     //TEST
     //addNotification("a4deac40-68ec-4e03-a837-2c97256919b5", "a4deac40-68ec-4e03-a837-2c97256919b5",1,2)
 
@@ -144,17 +155,17 @@ export default function Notifications() {
         const user = session!.user;
         const { data, error } = await supabase
             .from("notifications")
-            .select()
+            .select('*')
             .eq("receiver", user.id)
-            .order("id", { ascending: false});
+            .order("id", { ascending: false });
 
         if (data) {
             const noti: NotificationFetch[] = await Promise.all(
                 data.map(async (notif) => {
                     const msg = await createNotificationMessage(
-                        notif.type!,
-                        notif.notifier!,
-                        notif.organisation!,
+                        notif.type,
+                        notif.notifier,
+                        notif.organisation,
                     );
                     return { id: notif.id, msg: msg, time: notif.created_at };
                 })

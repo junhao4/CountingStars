@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import { type GridColDef, type GridRenderCellParams, type GridRowSelectionModel, DataGrid } from "@mui/x-data-grid";
-import {  useEffect, useMemo, type SetStateAction } from "react";
+import {  useMemo, type SetStateAction } from "react";
 import type { CategoryFetch, ItemFetch } from "./Inventory";
 
 // Fetches and displays the items in a table
@@ -27,10 +27,6 @@ export default function ItemTable({ items, rowSelectionModel, setRowSelectionMod
     ], [items])
 
     const paginationModel = { page: 0, pageSize: 5 };
-
-    useEffect(() => {
-        console.log(rowSelectionModel)
-    }, [rowSelectionModel])
 
     return (
         <>
