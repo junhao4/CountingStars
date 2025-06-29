@@ -6,6 +6,7 @@ import ViewListIcon from "@mui/icons-material/ViewList";
 import GroupIcon from "@mui/icons-material/Group";
 import SettingsIcon from "@mui/icons-material/Settings";
 import InventoryIcon from "@mui/icons-material/Inventory";
+import HistoryIcon from '@mui/icons-material/History';
 import { useLocation, useNavigate } from "react-router-dom";
 
 interface NavBarItemProps {
@@ -73,6 +74,17 @@ export default function Sidebar() {
             >
               <InventoryIcon fontSize="large" />
               <Typography>Inventory</Typography>
+            </NavBarItem>
+
+            <NavBarItem
+              open={open}
+              selected={
+                location.pathname === "/dashboard/organization/log"
+              }
+              onClick={() => navigate("/dashboard/organization/log")}
+            >
+              <HistoryIcon fontSize="large" />
+              <Typography>Logs</Typography>
             </NavBarItem>
 
             <NavBarItem
