@@ -7,14 +7,13 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
-import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import { useState } from 'react';
-import { useSessionContext } from './contexts/SessionContext';
+import { useSessionContext } from '../contexts/SessionContext';
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from 'react-router-dom';
-import supabase from '../helper/supabaseClient';
+import supabase from '../../helper/supabaseClient';
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

@@ -1,0 +1,60 @@
+.nav-menu {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: 3rem;
+    height: calc(100vh - 5rem);
+    transition: 250ms;
+    background-color: #ff0000;
+    z-index: 2;
+}
+
+.nav-menu:hover {
+    width: 9rem;
+    transition: 250ms;
+    background-color: blue;
+}
+
+.nav-menu-item-container,
+.nav-menu-item-container.active {
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    height: 3rem;
+    width: 3rem;
+    transition: 250ms;
+}
+
+.nav-menu-item-container.active {
+    width: 9rem;
+    transition: 250ms;
+    background-color: aqua;
+}
+
+.nav-menu-item-container:hover {
+    background-color: blueviolet;
+    cursor: pointer;
+}
+
+.nav-menu-item,
+.nav-menu-item.active {
+    align-self: center;
+
+    display: flex;
+    background-color: purple;
+    border-radius: 0.25rem;
+    width: 3rem;
+    margin: 0.25rem;
+    padding: 0 0.125rem;
+    gap: 0.5rem;
+    overflow-x: hidden;
+
+    justify-content: left;
+    align-items: center;
+    transition: 250ms;
+}
+
+.nav-menu-item.active {
+    width: 9rem;
+    transition: 250ms;
+}

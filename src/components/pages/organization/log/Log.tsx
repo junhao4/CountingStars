@@ -1,9 +1,9 @@
 import './Log.css'
-import { useOrgContext } from "../../contexts/OrgContext"
-import supabase from '../../../helper/supabaseClient'
-import { useMessageContext } from '../../contexts/MessageContext'
+import { useOrgContext } from "../../../contexts/OrgContext"
+import supabase from '../../../../helper/supabaseClient'
+import { useMessageContext } from '../../../contexts/MessageContext'
 import { useEffect, useState } from 'react'
-import type { Json } from '../../../helper/supabase.ts'
+import type { Json } from '../../../../helper/supabase.ts'
 
 export const LogTypes = {
     "INSERT_NEW": 1,

@@ -29,10 +29,8 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
           .eq("user_id", user!.id);
 
         if (title == "Profile" || data![0].name != null) {
-          console.log("name exists", data);
           return true;
         } else {
-          console.log("name dosent exists", data);
           createMessage("error", "Please enter in a username");
           navigate("/dashboard/profile");
         }
@@ -53,7 +51,6 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
     );
     navigate("/login");
   } else {
-    console.log("user and name exists");
     return <>{children}</>;
   }
 }

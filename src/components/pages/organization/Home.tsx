@@ -3,6 +3,7 @@ import { useOrgContext } from "../../contexts/OrgContext"
 import { usePageTitleContext } from "../../contexts/PageTitleContext"
 import { useNavigate } from "react-router-dom"
 import Button from "@mui/material/Button"
+import Sidebar from "../../overlays/Sidebar"
 
 
 export default function OrgHome() {
@@ -17,14 +18,9 @@ export default function OrgHome() {
 
 
     return (
-        <>
-            {/* <Sidebar /> */}
+        <div>
             Welcome! This is the home page for your organization. {orgProps!.id}
-            <Button variant='outlined' color='primary' onClick={() => navigate('users')}>Users</Button>
-            <Button onClick={() => navigate('inventory')}>Inventory</Button>
-            <Button onClick={() => navigate('settings')}>Settings</Button>
-            <Button onClick={() => navigate('log')}>Log</Button>
 
-        </>
+        </div>
     )
 }
