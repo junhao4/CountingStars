@@ -22,7 +22,7 @@ export function Register() {
         email,
         password,
         options: {
-          emailRedirectTo: "http://localhost:5173/verify",
+          emailRedirectTo: "https://counting-stars-jade.vercel.app/verify",
         },
       });
       if (error) {
