@@ -17,8 +17,9 @@ function Header() {
     return (
         <div className="header-container">
             <div onClick={() => navigate('/')} className="header-logo">
-                <Typography variant='h6'>Counting Stars</Typography>
-                <AutoAwesomeIcon sx={{ fontSize: "20px" }} />
+                <AutoAwesomeIcon sx={{ fontSize: "2rem", margin:'0 0.5rem' }} />
+                <Typography variant='h5'>Counting Stars</Typography>
+                
             </div>
             <h2 className="header-title">{usePageTitleContext().title}</h2>
             <div className="header-user-details">
@@ -29,15 +30,15 @@ function Header() {
                             flexDirection: "column",
                             justifyContent: "flex-start",
                             gap: "8px",
-                            marginRight: "20px",
+                            marginRight: "1rem",
                         }}
                     >
                         <div
                             style={{
                                 display: "flex",
                                 width: "100%",
-                                justifyContent: "space-evenly",
-                                gap: "4px",
+                                justifyContent: "right",
+                                gap: "1rem",
                             }}
                         >
                         <Button
@@ -60,19 +61,18 @@ function Header() {
                     <div
                         style={{
                             display: "flex",
-                            gap: "64px",
-                            margin: "0 60px",
+                            justifyContent:'space-evenly',
                         }}
                     >
                         <Link
                             to="/login"
-                            style={{ color: "var(--foreground-text)", fontSize: "24px" }}
+                            style={{ color: "var(--foreground-text)", fontSize: "1rem" }}
                         >
                             Login
                         </Link>
                         <Link
                             to="/register"
-                            style={{ color: "var(--foreground-text)", fontSize: "24px" }}
+                            style={{ color: "var(--foreground-text)", fontSize: "1rem" }}
                         >
                             Register
                         </Link>
