@@ -15,7 +15,7 @@ import supabase from "../../../../helper/supabaseClient";
 import ItemTable from "./ItemTable";
 import type { GridRowSelectionModel } from "@mui/x-data-grid/models";
 import { useMessageContext } from "../../../contexts/MessageContext";
-import { addLog, LogTypes } from "../Log";
+import { addLog, LogTypes } from "../log/Log";
 import { useSessionContext } from "../../../contexts/SessionContext";
 
 export interface ItemFetch {
@@ -99,18 +99,23 @@ export default function OrgInventory() {
   const handleDelete = async () => {
     Promise.all(
       Array.of(...rowSelectionModel.ids).map(async (id) => {
-
+        id = id as number
         const data = await supabase
           .from("Items")
+<<<<<<< HEAD
           .update({ deleted: true })
           .eq("id", parseInt(id.toString()))
+=======
+          .update({deleted:true})
+          .eq("id", id)
+>>>>>>> aa29637daee523305580cae57acacd910e50a49c
           .single()
           .then((res) => {
             if (res.error) {
               createMessage('error', res.error.message)
               return false
             }
-            addLog(orgProps.id, LogTypes.DELETE, session!.user.id, parseInt(id.toString()), {})
+            addLog(orgProps.id, LogTypes.DELETE, session!.user.id, id, {})
               .then(err => { if (err) { createMessage('error', err) } })
             return true
           });
@@ -139,7 +144,9 @@ export default function OrgInventory() {
   }, [refresh]);
 
   return (
-    <Box margin='1rem 4rem' bgcolor='primary.main' sx={{ outline: '2px solid black', borderRadius: '2px' }}>
+    <Box margin='2rem 4rem' bgcolor='primary.main' sx={{ outline: '2px solid black', borderRadius: '2px',
+      overflow:'hidden'
+     }}>
       <QueryBar
         id={orgProps.id}
         categoryOptions={categoryOptions}

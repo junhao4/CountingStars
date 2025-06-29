@@ -1,11 +1,9 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
-import { usePageTitleContext } from "../contexts/PageTitleContext";
-import supabase from "../../helper/supabaseClient";
-import { useSessionContext } from "../contexts/SessionContext";
+import { usePageTitleContext } from "../../contexts/PageTitleContext";
+import supabase from "../../../helper/supabaseClient";
+import { useSessionContext } from "../../contexts/SessionContext";
 import {
     Button,
-    Card,
-    CardMedia,
     styled,
     Container,
     Stack,
@@ -36,6 +34,10 @@ function Profile() {
     const [name, setName] = useState<string | null>("New User");
     const [profileUrl, setProfileUrl] = useState<string | null>("");
     const [img, setImg] = useState("");
+<<<<<<< HEAD:src/components/pages/Profile.tsx
+=======
+    const { session, nameRefresh, setNameRefresh } = useSessionContext();
+>>>>>>> aa29637daee523305580cae57acacd910e50a49c:src/components/pages/account/Profile.tsx
 
     const handleFirstTimeUser = async (user: User | undefined) => {
         const { data } = await supabase
@@ -70,7 +72,11 @@ function Profile() {
 
         if (data) {
             setName(username);
+<<<<<<< HEAD:src/components/pages/Profile.tsx
             createMessage('success', "Successfully set new username!")
+=======
+            setNameRefresh(!nameRefresh)
+>>>>>>> aa29637daee523305580cae57acacd910e50a49c:src/components/pages/account/Profile.tsx
         } else {
             createMessage('error', error.message);
         }
@@ -176,9 +182,7 @@ function Profile() {
                     >
                         {name}
                     </Typography>
-                    <Card sx={{ width: "400px" }}>
-                        <CardMedia sx={{ height: "300px" }} image={img} />
-                    </Card>
+                    <img height={300} width={300} src={img}></img>
                     <form onSubmit={updateProfile}>
                         <Stack
                             spacing={2}
@@ -198,6 +202,7 @@ function Profile() {
                             <Button
                                 component="label"
                                 variant="outlined"
+                                color="secondary"
                                 startIcon={<CloudUploadIcon />}
                                 fullWidth
                             >

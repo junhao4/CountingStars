@@ -56,8 +56,8 @@ export function Login() {
             </Box>
             <Button onClick={handleLogin} sx={{ justifySelf: 'center' }}>Login</Button>
             <Link to='/forgot' style={{
-                color: 'grey', width: '90%', justifySelf: 'right', textAlign: 'right',
-                padding: '1rem'
+                color: 'grey', justifySelf: 'right', textAlign: 'right',
+                padding: '1rem', margin: '0 0 0 auto'
             }} >Forgot Password?</Link>
         </Box>
     )

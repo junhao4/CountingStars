@@ -38,7 +38,7 @@ import Loading from "../../../general/Loading";
 import { useSessionContext } from "../../../contexts/SessionContext";
 import { useNavigate } from "react-router-dom";
 import { useMessageContext } from "../../../contexts/MessageContext";
-import { addNotification } from "../../notifications/Notifications";
+import { addNotification } from "../../account/Notifications";
 
 interface UserFetch {
   id: string;
@@ -224,7 +224,7 @@ export default function OrgUsers() {
     {
       field: "actions",
       headerName: "Actions",
-      width: 280,
+      width: 70,
       align: "left",
       headerAlign: "left",
       type: "actions",
@@ -443,7 +443,7 @@ export default function OrgUsers() {
   return loading ? (
     <Loading></Loading>
   ) : (
-    <Box margin='2rem 4rem' bgcolor='primary.main' sx={{outline:'2px solid black'}}>
+    <Box margin='2rem 4rem' overflow='hidden' bgcolor='primary.main' sx={{outline:'2px solid black'}}>
       <Box hidden={!(orgProps.role === "owner" || orgProps.role === "admin")}
         sx={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'right', gap:'4rem', alignItems: 'center', bgcolor:'inherit', p:'1rem' }}>
         <div style={{display:'flex', flexWrap:'nowrap', gap:'2rem', alignItems:'center'}}>

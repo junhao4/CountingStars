@@ -19,12 +19,15 @@ import type { CategoryFetch } from "./Inventory";
 import { useNavigate } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useMessageContext } from "../../../contexts/MessageContext";
+import { addLog, LogTypes } from "../log/Log";
+import { useSessionContext } from "../../../contexts/SessionContext";
 
 export default function OrgAddItem() {
   const { getOrgContext } = useOrgContext();
   const orgProps = getOrgContext()!;
   const navigate = useNavigate();
   const { createMessage } = useMessageContext();
+  const { session } = useSessionContext();
 
   const [itemName, setItemName] = useState<string>("");
   const [itemQuantity, setItemQuantity] = useState<number>(1);
@@ -77,6 +80,7 @@ export default function OrgAddItem() {
           createMessage('error', res.error.message);
           return Promise.reject(false);
         }
+
         Promise.all(
           itemCategory.map(async (value) => {
             const row = categoryOptions.find((cat) => cat.name === value);
@@ -87,17 +91,23 @@ export default function OrgAddItem() {
                 .then((res) => {
                   if (res.error) {
                     createMessage('error', res.error.message);
+                    return false
                   }
-                  return true;
+                  return true
                 })
               : Promise.resolve(true);
           })
-        ).then((res) => {
-          if (res.reduce((prev, next) => prev && next, true)) {
-            createMessage('success', 'Successfully added item!')
+        ).then((b: boolean[]) => {
+          if (b.reduce((prev, next) => prev && next, true)) {
+            addLog(orgProps.id, LogTypes.INSERT_NEW, session?.user.id!, res.data.id, {})
+              .then(err => {
+                if (err) { createMessage('error', "Error adding insert item to logs") }
+                else { createMessage('success', "Successfully added item!") }
+              })
           }
           navigate("/dashboard/organization/inventory")
         });
+
       });
   };
 

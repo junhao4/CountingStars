@@ -28,7 +28,7 @@ h1 {
   background-color: var(--foreground);
 }
 
-@theme inline {
+/* @theme inline {
 
   --radius-sm: calc(var(--radius) - 4px);
 
@@ -99,9 +99,10 @@ h1 {
   --color-sidebar-border: var(--sidebar-border);
 
   --color-sidebar-ring: var(--sidebar-ring);
-}
+} */
 
 :root {
+  /* Default dark mode **/
 
   --radius: 0.625rem;
 
@@ -123,7 +124,9 @@ h1 {
 
   --primary-foreground: oklch(0.985 0 0);
 
-  --secondary: oklch(95.776% 0.21432 113.499);
+  --secondary: oklch(94.118% 0.20031 105.701);
+
+  --secondary-alternative: oklch(76.523% 0.17515 62.566);
 
   --secondary-foreground: oklch(0% 0 0);
 
@@ -137,7 +140,7 @@ h1 {
 
   --destructive: oklch(0.577 0.245 27.325);
 
-  --border: oklch(0.92 0.004 286.32);
+  --border: oklch(56.241% 0.00006 271.152);
 
   --input: oklch(0.92 0.004 286.32);
 
@@ -153,9 +156,11 @@ h1 {
 
   --chart-5: oklch(0.769 0.188 70.08);
 
-  --sidebar: oklch(0.985 0 0);
+  --sidebar: oklch(0% 0 0);
 
-  --sidebar-foreground: oklch(0.141 0.005 285.823);
+  --sidebar-foreground: oklch(38.017% 0.01668 17.769);
+
+  --sidebar-foreground-hover: oklch(56.187% 0.03368 78.547);
 
   --sidebar-primary: oklch(0.21 0.006 285.885);
 
@@ -186,11 +191,13 @@ h1 {
 
     --popover-foreground: oklch(0% 0 0);
 
-    --primary: oklch(94.835% 0.19291 106.398);
+    --primary: rgb(255, 204, 0);
 
     --primary-foreground: oklch(0% 0 0);
 
     --secondary: oklch(51.161% 0.27801 296.898);
+
+    --secondary-alternative: oklch(64.83% 0.30524 319.247);
 
     --secondary-foreground: oklch(0% 0 0);
 
@@ -204,7 +211,7 @@ h1 {
 
     --destructive: oklch(0.704 0.191 22.216);
 
-    --border: oklch(1 0 0 / 10%);
+    --border: rgb(0,0,0);
 
     --input: oklch(1 0 0 / 15%);
 
@@ -218,11 +225,13 @@ h1 {
 
     --chart-4: oklch(0.627 0.265 303.9);
 
-    --chart-5: oklch(0.645 0.246 16.439);
+    --chart-5: oklch(64.346% 0.24522 16.485);
 
-    --sidebar: oklch(0.21 0.006 285.885);
+    --sidebar: rgb(255, 149, 0);
 
     --sidebar-foreground: oklch(0.985 0 0);
+
+    --sidebar-foreground-hover: rgb(182, 81, 27);
 
     --sidebar-primary: oklch(0.488 0.243 264.376);
 
@@ -234,9 +243,10 @@ h1 {
 
     --sidebar-border: oklch(1 0 0 / 10%);
 
-    --sidebar-ring: oklch(0.552 0.016 285.938);
+    --sidebar-ring: rgb(228, 101, 17);
   }
-/* 
+
+  /* 
   a:hover {
     color: #747bff;
   }
@@ -312,7 +322,7 @@ h1 {
   --sidebar-ring: oklch(0.552 0.016 285.938);
 } */
 
-@layer base {
+/* @layer base {
   * {
     @apply border-border outline-ring/50;
   }
@@ -320,4 +330,4 @@ h1 {
   body {
     @apply bg-background text-foreground;
   }
-}
+} */
