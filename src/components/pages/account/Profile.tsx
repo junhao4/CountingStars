@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import type { User } from "@supabase/supabase-js";
-import { useMessageContext } from "../contexts/MessageContext";
+import { useMessageContext } from "../../contexts/MessageContext";
 
 const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -27,17 +27,13 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 function Profile() {
-    const { session } = useSessionContext()
+    const { session, nameRefresh, setNameRefresh } = useSessionContext();
     const { createMessage } = useMessageContext()
 
     const [username, setUsername] = useState<string | null>("");
     const [name, setName] = useState<string | null>("New User");
     const [profileUrl, setProfileUrl] = useState<string | null>("");
     const [img, setImg] = useState("");
-<<<<<<< HEAD:src/components/pages/Profile.tsx
-=======
-    const { session, nameRefresh, setNameRefresh } = useSessionContext();
->>>>>>> aa29637daee523305580cae57acacd910e50a49c:src/components/pages/account/Profile.tsx
 
     const handleFirstTimeUser = async (user: User | undefined) => {
         const { data } = await supabase
@@ -72,11 +68,8 @@ function Profile() {
 
         if (data) {
             setName(username);
-<<<<<<< HEAD:src/components/pages/Profile.tsx
             createMessage('success', "Successfully set new username!")
-=======
             setNameRefresh(!nameRefresh)
->>>>>>> aa29637daee523305580cae57acacd910e50a49c:src/components/pages/account/Profile.tsx
         } else {
             createMessage('error', error.message);
         }
