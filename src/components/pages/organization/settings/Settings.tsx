@@ -1,7 +1,5 @@
 import {
     Button,
-    Card,
-    CardMedia,
     styled,
     Container,
     Stack,
@@ -37,7 +35,7 @@ export default function OrgSettings() {
     const [name, setName] = useState("");
     const [inputName, setInputName] = useState(orgProps.name);
     const [imgUrl, setImgUrl] = useState("");
-    const [img, setImg] = useState("");
+    const [img, setImg] = useState<string>();
     const { session } = useSessionContext();
     const { setTitle } = usePageTitleContext();
     const { setOrgContext } = useOrgContext();
@@ -195,7 +193,7 @@ export default function OrgSettings() {
                 .from("organization-images")
                 .download(imgUrl!);
             if (error) {
-                console.error("Error downloading image:", error.message);
+                createMessage('error', "Error downloading image: " + error.message);
             } else {
                 const url = URL.createObjectURL(data);
                 setImg(url);
@@ -220,9 +218,7 @@ export default function OrgSettings() {
                     >
                         {name}
                     </Typography>
-                    <Card sx={{ width: "400px" }}>
-                        <CardMedia sx={{ height: "300px" }} image={img} />
-                    </Card>
+                    <img src={img} width={400} height={400}></img>
                     <form onSubmit={updateName}>
                         <Stack
                             spacing={2}
@@ -241,6 +237,7 @@ export default function OrgSettings() {
 
                             <Button
                                 component="label"
+                                color='secondary'
                                 variant="outlined"
                                 startIcon={<CloudUploadIcon />}
                                 fullWidth
@@ -254,7 +251,7 @@ export default function OrgSettings() {
                         </Stack>
                     </form>
 
-                    <Button onClick={handleDelete}>Delete organization</Button>
+                    <Button color='error' variant="contained" onClick={handleDelete}>Delete organization</Button>
                 </Stack>
             </Container>
         </>

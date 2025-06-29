@@ -11,7 +11,7 @@ export default function Message() {
         position: "fixed",
         width: "80vw",
         transform: "translateX(10%)",
-        zIndex: "1",
+        zIndex: "2",
       }}
       hidden={!trigger}
     >
