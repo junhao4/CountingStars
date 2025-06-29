@@ -102,6 +102,7 @@ h1 {
 } */
 
 :root {
+  /* Default dark mode **/
 
   --radius: 0.625rem;
 
@@ -137,7 +138,7 @@ h1 {
 
   --destructive: oklch(0.577 0.245 27.325);
 
-  --border: oklch(0.92 0.004 286.32);
+  --border: oklch(56.241% 0.00006 271.152);
 
   --input: oklch(0.92 0.004 286.32);
 
@@ -206,7 +207,7 @@ h1 {
 
     --destructive: oklch(0.704 0.191 22.216);
 
-    --border: oklch(1 0 0 / 10%);
+    --border: rgb(0,0,0);
 
     --input: oklch(1 0 0 / 15%);
 
@@ -220,7 +221,7 @@ h1 {
 
     --chart-4: oklch(0.627 0.265 303.9);
 
-    --chart-5: oklch(0.645 0.246 16.439);
+    --chart-5: oklch(64.346% 0.24522 16.485);
 
     --sidebar: rgb(255, 149, 0);
 
@@ -240,7 +241,8 @@ h1 {
 
     --sidebar-ring: rgb(228, 101, 17);
   }
-/* 
+
+  /* 
   a:hover {
     color: #747bff;
   }

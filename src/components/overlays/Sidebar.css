@@ -6,6 +6,7 @@
     height: calc(100vh - 3rem);
     transition: 250ms;
     background-color: var(--sidebar);
+    box-shadow: 2px 0 var(--border);
     z-index: 2;
 }
 
@@ -22,12 +23,12 @@
     justify-self: center;
     height: 3rem;
     width: 3rem;
-    transition: 250ms;
+    transition: 150ms;
 }
 
 .nav-menu-item-container.active {
-    width: 9rem;
-    transition: 250ms;
+    width: 8.75rem;
+    transition: 300ms;
 }
 
 .nav-menu-item-container.selected {
