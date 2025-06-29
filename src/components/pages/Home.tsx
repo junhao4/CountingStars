@@ -39,7 +39,7 @@ function Home() {
 
     return (
         <Box component="section" sx={{
-            display: 'flex', flexDirection: 'column', p: 2, border: '2px solid black', margin: '2rem 8rem'
+            display: 'flex', flexDirection: 'column', p: 2, border: '2px solid black', margin: '1rem 8rem'
         }}>
             <img style={{ alignSelf: 'center' }} width='200' height='200' src={logo} />
             <Typography sx={{ alignSelf: 'center' }} variant="h6">
