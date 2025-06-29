@@ -1,7 +1,7 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
-import { usePageTitleContext } from "../contexts/PageTitleContext";
-import supabase from "../../helper/supabaseClient";
-import { useSessionContext } from "../contexts/SessionContext";
+import { usePageTitleContext } from "../../contexts/PageTitleContext";
+import supabase from "../../../helper/supabaseClient";
+import { useSessionContext } from "../../contexts/SessionContext";
 import {
     Button,
     Card,
@@ -33,7 +33,7 @@ function Profile() {
     const [profileUrl, setProfileUrl] = useState<string | null>("");
     const [message, setMessage] = useState("");
     const [img, setImg] = useState("");
-    const { session } = useSessionContext();
+    const { session, nameRefresh, setNameRefresh } = useSessionContext();
 
     const handleFirstTimeUser = async (user: User | undefined) => {
         const { data } = await supabase
@@ -70,6 +70,7 @@ function Profile() {
         if (data) {
             setMessage(username + " set as username");
             setName(username);
+            setNameRefresh(!nameRefresh)
         } else {
             setMessage("error");
             console.log(error);

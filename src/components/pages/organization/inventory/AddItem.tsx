@@ -19,12 +19,15 @@ import type { CategoryFetch } from "./Inventory";
 import { useNavigate } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useMessageContext } from "../../../contexts/MessageContext";
+import { addLog, LogTypes } from "../Log";
+import { useSessionContext } from "../../../contexts/SessionContext";
 
 export default function OrgAddItem() {
   const { getOrgContext } = useOrgContext();
   const orgProps = getOrgContext()!;
   const navigate = useNavigate();
   const { createMessage } = useMessageContext();
+  const { session } = useSessionContext();
 
   const [itemName, setItemName] = useState<string>("");
   const [itemQuantity, setItemQuantity] = useState<number>(1);
@@ -71,6 +74,7 @@ export default function OrgAddItem() {
         expiry_date: itemExpiry?.toDate().toDateString(),
       })
       .select()
+      .single()
       .then((res) => {
         if (res.error) {
           console.log(res.error.message);
@@ -82,7 +86,7 @@ export default function OrgAddItem() {
             return row
               ? supabase
                 .from("items_categories")
-                .insert({ item_id: res.data[0].id, category_id: row.id })
+                .insert({ item_id: res.data.id, category_id: row.id })
                 .then((res) => {
                   if (res.error) {
                     console.log(res.error.message);
@@ -92,6 +96,7 @@ export default function OrgAddItem() {
               : Promise.resolve(true);
           })
         ).then(() => {
+          addLog(orgProps.id, LogTypes.INSERT_NEW, session?.user.id!, res.data.id, {})
           navigate("/dashboard/organization/inventory");
         });
       });
