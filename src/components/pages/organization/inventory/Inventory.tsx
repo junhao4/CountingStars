@@ -102,13 +102,8 @@ export default function OrgInventory() {
         id = id as number
         const data = await supabase
           .from("Items")
-<<<<<<< HEAD
-          .update({ deleted: true })
-          .eq("id", parseInt(id.toString()))
-=======
           .update({deleted:true})
           .eq("id", id)
->>>>>>> aa29637daee523305580cae57acacd910e50a49c
           .single()
           .then((res) => {
             if (res.error) {
