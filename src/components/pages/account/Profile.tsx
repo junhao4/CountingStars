@@ -4,8 +4,6 @@ import supabase from "../../../helper/supabaseClient";
 import { useSessionContext } from "../../contexts/SessionContext";
 import {
     Button,
-    Card,
-    CardMedia,
     styled,
     Container,
     Stack,
