@@ -56,7 +56,7 @@ export const SessionProvider = ({ children } : { children: React.ReactNode }) =>
                 console.log("Name context not set", error)
             }
         }
-        getName()
+        if (session) getName()
     }, [nameRefresh, session])
 
 
