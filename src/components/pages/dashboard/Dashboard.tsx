@@ -53,7 +53,8 @@ export default function Dashboard() {
             .eq('user_id', session!.user.id)
             .then(async response => {
                 if (response.error) {
-                    createMessage('error', response.error.message)
+                    console.log('error', response.error.message)
+                    //createMessage('error', response.error.message)
                     return false
                 } else if (!response.data || response.data.length === 0) {
                     return false

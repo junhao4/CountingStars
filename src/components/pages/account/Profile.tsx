@@ -13,6 +13,7 @@ import {
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import type { User } from "@supabase/supabase-js";
 import { useMessageContext } from "../../contexts/MessageContext";
+import { create } from "domain";
 
 const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -51,7 +52,7 @@ function Profile() {
                 .select()
 
             if (error) {
-                createMessage('error', error.message)
+                console.log('error', error.message)
             }
         }
 
@@ -71,7 +72,7 @@ function Profile() {
             createMessage('success', "Successfully set new username!")
             setNameRefresh(!nameRefresh)
         } else {
-            createMessage('error', error.message);
+            console.log('error', error.message);
         }
     };
 
