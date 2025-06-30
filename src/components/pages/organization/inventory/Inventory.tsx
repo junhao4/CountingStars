@@ -6,7 +6,6 @@ import Grid from "@mui/material/Grid";
 import Item from "@mui/material/Grid";
 import {
   Autocomplete,
-  Box,
   Button,
   TextField,
   type AutocompleteRenderInputParams,
