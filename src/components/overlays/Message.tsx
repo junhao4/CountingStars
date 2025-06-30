@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Button, Grow } from "@mui/material";
+import { Alert, AlertTitle, Box, Button, Grow } from "@mui/material";
 import { useMessageContext } from "../contexts/MessageContext";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -6,14 +6,15 @@ export default function Message() {
   const { variant, text, trigger, setTrigger } = useMessageContext();
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        width: "80vw",
-        transform: "translateX(10%)",
-        zIndex: "2",
-      }}
-      hidden={!trigger}
+    <Box
+      sx={{
+          ...(trigger ? {}: {pointerEvents: 'none'}),
+          position: "fixed",
+          width: "80vw",
+          transform: "translateX(10%)",
+          zIndex: "2",
+          backgroundColor: 'transparent',
+        }}
     >
       <Grow
         in={trigger}
@@ -28,7 +29,7 @@ export default function Message() {
             <Button
               color="inherit"
               size="small"
-              onClick={() => setTrigger((prev) => !prev)}
+              onClick={() => setTrigger(false)}
             >
               <CloseIcon></CloseIcon>
             </Button>
@@ -40,6 +41,6 @@ export default function Message() {
           {text}
         </Alert>
       </Grow>
-    </div>
+    </Box>
   );
 }
