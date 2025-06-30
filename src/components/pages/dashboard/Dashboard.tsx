@@ -137,7 +137,8 @@ export default function Dashboard() {
                 } else {
                     supabase.from("users_organizations")
                         .insert({ user_id: session!.user.id, organization_id, role: "pending" })
-                        .then(res => { if (res.error) { createMessage('error', res.error.message) } })
+                        .then(res => { if (res.error) { createMessage('error', res.error.message) }
+                    fetchData() })
                 }
             })
     }
