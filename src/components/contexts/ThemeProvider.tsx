@@ -140,8 +140,12 @@ const customTheme = createTheme({
                     outline:'1px solid black',
                     border: 0,
                     textAlign: 'center',
+                    textWrap: 'wrap'
                 }
             },
+            defaultProps: {
+                
+            }
         }
     }
 

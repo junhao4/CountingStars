@@ -39,7 +39,7 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
       haveName(session.user)
     }
 
-  }, [session, loading]);
+  });
 
   // Ensures users are logged in before rendering the page
   if (loading) {

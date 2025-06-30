@@ -101,7 +101,7 @@ export default function OrgInventory() {
         id = id as number
         const data = await supabase
           .from("Items")
-          .update({deleted:true})
+          .update({ deleted: true })
           .eq("id", id)
           .single()
           .then((res) => {
@@ -138,7 +138,7 @@ export default function OrgInventory() {
   }, [refresh]);
 
   return (
-    <div style={{maxWidth: '70%', margin:'1rem 0'}}>
+    <div style={{ maxWidth: '70%', margin: '1rem 0' }}>
       <QueryBar
         id={orgProps.id}
         categoryOptions={categoryOptions}
@@ -208,7 +208,10 @@ function QueryBar({
             Search
           </Button>
           <Button variant="contained" color="secondary" onClick={() => navigate("add")}>
-            Add Item
+            Add New Item
+          </Button>
+          <Button variant="contained" color="info" onClick={() => navigate("categories")}>
+            Modify Categories
           </Button>
           <Button variant="contained" color="error" onClick={handleDelete} sx={{ marginRight: '2rem' }}>
             Delete Selected
