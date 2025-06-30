@@ -53,7 +53,8 @@ export default function Dashboard() {
             .eq('user_id', session!.user.id)
             .then(async response => {
                 if (response.error) {
-                    createMessage('error', response.error.message)
+                    console.log('error', response.error.message)
+                    //createMessage('error', response.error.message)
                     return false
                 } else if (!response.data || response.data.length === 0) {
                     return false
@@ -136,7 +137,8 @@ export default function Dashboard() {
                 } else {
                     supabase.from("users_organizations")
                         .insert({ user_id: session!.user.id, organization_id, role: "pending" })
-                        .then(res => { if (res.error) { createMessage('error', res.error.message) } })
+                        .then(res => { if (res.error) { createMessage('error', res.error.message) }
+                    fetchData() })
                 }
             })
     }

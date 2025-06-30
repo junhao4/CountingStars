@@ -32,7 +32,7 @@ export function Register() {
 
       if (data.user?.identities && data.user.identities.length > 0) {
         console.log("Sign-up successful!");
-        createMessage('success', "A link was sent to your email");
+        createMessage('success', "A link will be sent to your email, this may take up to a few minutes");
       } else {
         console.log("Email address is already taken.");
         createMessage('warning', "Email address is already taken.");
