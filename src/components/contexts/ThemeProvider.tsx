@@ -1,5 +1,6 @@
 import { ThemeProvider, createTheme } from "@mui/material";
 import type React from "react";
+import type { } from '@mui/x-data-grid/themeAugmentation';
 
 
 const customTheme = createTheme({
@@ -7,9 +8,9 @@ const customTheme = createTheme({
         dark: {
             palette: {
                 primary: { // Black
-                    light:'rgb(63, 63, 62)',
-                    main:'rgb(28, 28, 27)',
-                    dark:'rgb(18, 18, 17)',
+                    light: 'rgb(63, 63, 62)',
+                    main: 'rgb(28, 28, 27)',
+                    dark: 'rgb(18, 18, 17)',
                     contrastText: 'rgb(255, 255, 255)',
                 },
 
@@ -39,6 +40,12 @@ const customTheme = createTheme({
                     main: '#61a655',
                     dark: '#61a655',
                     contrastText: '#000'
+                },
+
+                DataGrid: {
+                    bg: 'var(--table)',
+                    headerBg: 'var(--table-header)',
+                    pinnedBg: 'var(--table-header)'
                 }
             }
         },
@@ -46,30 +53,30 @@ const customTheme = createTheme({
         light: {
             palette: {
                 primary: { // Black
-                    light:'rgb(166, 166, 166)',
-                    main:'rgb(75, 75, 75)',
-                    dark:'rgb(0, 0, 0)',
+                    light: 'rgb(79, 79, 79)',
+                    main: 'rgb(28, 28, 28)',
+                    dark: 'rgb(0, 0, 0)',
                     contrastText: "#ffffff",
                 },
 
                 secondary: { // Purple
-                    light:'rgb(247, 159, 255)',
-                    main: 'rgb(215, 16, 255)',
-                    dark:'rgb(152, 0, 223)',
+                    light: 'rgb(248, 168, 255)',
+                    main: 'rgb(227, 85, 255)',
+                    dark: 'rgb(185, 78, 234)',
                     contrastText: "#000000",
                 },
 
                 info: { // Blue
                     light: 'rgb(145, 233, 255)',
-                    main:'rgb(87, 168, 255)',
-                    dark:'rgb(19, 137, 255)',
+                    main: 'rgb(87, 168, 255)',
+                    dark: 'rgb(41, 111, 181)',
                     contrastText: "#000000",
                 },
 
                 error: { // Red
-                    light:'rgb(255, 139, 139)',
-                    main:'rgb(255, 66, 66)',
-                    dark:'rgb(218, 0, 0)',
+                    light: 'rgb(255, 139, 139)',
+                    main: 'rgb(255, 101, 101)',
+                    dark: 'rgb(203, 46, 46)',
                     contrastText: "#000000"
                 },
 
@@ -78,6 +85,12 @@ const customTheme = createTheme({
                     main: '#61a655',
                     dark: '#61a655',
                     contrastText: '#000'
+                },
+
+                DataGrid: {
+                    bg: 'var(--table)',
+                    headerBg: 'var(--table-header)',
+                    pinnedBg: 'var(--table-header)'
                 }
             }
         },
@@ -120,6 +133,16 @@ const customTheme = createTheme({
                 elevation: 2
             }
         },
+
+        MuiDataGrid: {
+            styleOverrides: {
+                root: {
+                    outline:'1px solid black',
+                    border: 0,
+                    textAlign: 'center',
+                }
+            },
+        }
     }
 
 })

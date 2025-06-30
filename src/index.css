@@ -173,6 +173,10 @@ h1 {
   --sidebar-border: oklch(0.92 0.004 286.32);
 
   --sidebar-ring: oklch(0.705 0.015 286.067);
+
+  --table: oklch(0.21 0.006 285.885);
+
+  --table-header: oklch(45.779% 0.06414 82.665);
 }
 
 @media (prefers-color-scheme: light) {
@@ -211,7 +215,7 @@ h1 {
 
     --destructive: oklch(0.704 0.191 22.216);
 
-    --border: rgb(0,0,0);
+    --border: rgb(0, 0, 0);
 
     --input: oklch(1 0 0 / 15%);
 
@@ -244,6 +248,10 @@ h1 {
     --sidebar-border: oklch(1 0 0 / 10%);
 
     --sidebar-ring: rgb(228, 101, 17);
+
+    --table: rgb(255, 255, 255);
+
+    --table-header: rgb(255, 149, 0);
   }
 
   /* 

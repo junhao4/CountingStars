@@ -224,7 +224,7 @@ export default function OrgUsers() {
     {
       field: "actions",
       headerName: "Actions",
-      width: 70,
+      width: 100,
       align: "left",
       headerAlign: "left",
       type: "actions",
@@ -443,9 +443,10 @@ export default function OrgUsers() {
   return loading ? (
     <Loading></Loading>
   ) : (
-    <Box margin='2rem 4rem' overflow='hidden' bgcolor='primary.main' sx={{outline:'2px solid black'}}>
+    <div style={{width:'70%', maxWidth:'70%', margin: '1rem 0'}}>
       <Box hidden={!(orgProps.role === "owner" || orgProps.role === "admin")}
-        sx={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'right', gap:'4rem', alignItems: 'center', bgcolor:'inherit', p:'1rem' }}>
+        sx={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'right', gap:'4rem', alignItems: 'center', p:'1rem' }}
+        bgcolor='transparent'>
         <div style={{display:'flex', flexWrap:'nowrap', gap:'2rem', alignItems:'center'}}>
           <Typography>Email: </Typography>
           <Input value={email} onChange={(e) => setEmail(e.target.value)}
@@ -468,7 +469,7 @@ export default function OrgUsers() {
             </Select>
           </FormControl>
         </div>
-        <Button variant="contained" onClick={handleSubmit}>
+        <Button variant="contained" color='secondary' onClick={handleSubmit}>
           Add user
         </Button>
       </Box>
@@ -490,6 +491,6 @@ export default function OrgUsers() {
           },
         }}
       ></DataGrid>
-    </Box>
+    </div>
   );
 }

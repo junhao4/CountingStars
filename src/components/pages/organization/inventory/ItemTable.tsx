@@ -43,7 +43,6 @@ export default function ItemTable({ items, rowSelectionModel, setRowSelectionMod
                     setRowSelectionModel(newRowSelectionModel);
                 }}
                 rowSelectionModel={rowSelectionModel}
-                sx={{ border: 0, width: '100% - 4rem', boxShadow: '0 -2px 0 black' }}
                 showToolbar
             />  
         </>
