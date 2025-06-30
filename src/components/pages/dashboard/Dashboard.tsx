@@ -3,7 +3,6 @@ import supabase from '../../../helper/supabaseClient';
 import Button from '@mui/material/Button';
 import { usePageTitleContext } from '../../contexts/PageTitleContext';
 import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
@@ -12,7 +11,7 @@ import { useSessionContext } from '../../contexts/SessionContext';
 import { useNavigate } from 'react-router-dom';
 import { useOrgContext, type UserRoles } from '../../contexts/OrgContext';
 import Loading from '../../general/Loading';
-import { Box, Input } from '@mui/material';
+import { Box, CardContent, Input } from '@mui/material';
 import { useMessageContext } from '../../contexts/MessageContext';
 
 export interface DashboardOrgFetch {
@@ -145,17 +144,15 @@ export default function Dashboard() {
     // Renders loading screen. If no data, display "No organizations found", else display the organizations in Cards.
     return loading
         ? <Loading></Loading>
-        : orgs.length > 0
-            ? (
-                <Box sx={{ overflow: 'auto', outline: '2px solid black', margin: '1rem 4rem',
-                    justifySelf:'center'
+        : <Box sx={{ overflow: 'auto', outline: '1px solid black', margin: '1rem 4rem',
+                    justifySelf:'center', width:'70%'
                  }}>
 
                     <Box display='flex' textAlign='center' alignItems='center' justifyContent='center' 
                         gap='2rem' margin='1rem' flexWrap='wrap'>
-                        <Typography variant='h4'>Your Organizations</Typography>
+                        <Typography variant='h5'>Your Organizations</Typography>
 
-                        <Button onClick={() => navigate('new')}
+                        <Button color='secondary' onClick={() => navigate('new')}
                             variant='outlined' sx={{ flexShrink: 0 }}>
                             Create Organization
                         </Button>
@@ -163,51 +160,33 @@ export default function Dashboard() {
                         <div style={{ display: 'flex', gap: '1rem', outline: '1px solid black' }}>
                             <Input placeholder='Organization ID' disableUnderline sx={{ width: '8rem', marginLeft: '1rem' }}
                                 value={joinId} onChange={(e) => setJoinId(e.target.value)} />
-                            <Button onClick={joinOrg}
+                            <Button color='info' onClick={joinOrg}
                                 variant='outlined' sx={{ flexShrink: 0 }}>
                                 Join Organization
                             </Button>
                         </div>
                     </Box>
 
+                    {orgs.length > 0
+                    ?
                     <Grid container padding='2rem 0' spacing={2} justifyContent='center' overflow='auto' wrap='wrap' 
-                        boxShadow='0 -2px 0 #000'>{
+                        boxShadow='0 -1px 0 #000'>{
                         orgs.map((key, index) => {
                             return (
-                            <Card sx={{ width: 'max(25%,200px)' }} key={index}>
+                            <Card sx={{ width: 'max(10%,200px)' }} key={index}>
                                 {orgs[index].imageUrlBlob
-                                    ? <CardMedia sx={{ height: '200px' }} image={orgs[index].imageUrlBlob} />
+                                    ? <CardMedia sx={{ height: '150px' }} image={orgs[index].imageUrlBlob} />
                                     : <CardMedia />
                                 }
-                                <CardHeader sx={{ textAlign: 'center' }} title={key.name}></CardHeader>
+                                <CardContent sx={{ textAlign: 'center'}}>
+                                    <Typography variant='h6' sx={{overflow:'hidden', textOverflow:'ellipsis'}}>{key.name}</Typography>
+                                </CardContent>
                                 <CardActions style={{ justifyContent: 'space-evenly' }}>
                                     <Button variant='outlined' onClick={() => enterOrg(index)}>Enter</Button>
                                 </CardActions>
                             </Card>)
                         })
                     }</Grid>
-                </Box>)
-            : (<>
-            
-            <Box sx={{ overflow: 'auto', outline: '2px solid black', margin: '2rem' }}>
-
-                    <Box display='flex' textAlign='center' alignItems='center' justifyContent='center' gap='2rem' margin='2rem 0 2rem 0' flexWrap='wrap'>
-                        <Typography variant='h4'>No Organizations</Typography>
-
-                        <Button onClick={() => navigate('new')}
-                            variant='outlined' sx={{ flexShrink: 0 }}>
-                            Create Organization
-                        </Button>
-
-                        <div style={{ display: 'flex', gap: '1rem', outline: '1px solid black' }}>
-                            <Input placeholder='Organization ID' disableUnderline sx={{ width: '8rem', marginLeft: '1rem' }}
-                                value={joinId} onChange={(e) => setJoinId(e.target.value)} />
-                            <Button onClick={joinOrg}
-                                variant='outlined' sx={{ flexShrink: 0 }}>
-                                Join Organization
-                            </Button>
-                        </div>
-                    </Box>
-                    </Box>
-                    </>)
+                    : <></> }
+                </Box>
 }

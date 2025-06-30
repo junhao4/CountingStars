@@ -139,9 +139,7 @@ export default function OrgInventory() {
   }, [refresh]);
 
   return (
-    <Box margin='2rem 4rem' bgcolor='primary.main' sx={{ outline: '2px solid black', borderRadius: '2px',
-      overflow:'hidden'
-     }}>
+    <div style={{maxWidth: '70%', margin:'1rem 0'}}>
       <QueryBar
         id={orgProps.id}
         categoryOptions={categoryOptions}
@@ -158,7 +156,7 @@ export default function OrgInventory() {
         rowSelectionModel={rowSelectionModel}
         setRowSelectionModel={setRowSelectionModel}
       />
-    </Box>
+    </div>
   );
 }
 
