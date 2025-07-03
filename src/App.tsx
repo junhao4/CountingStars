@@ -22,6 +22,7 @@ import CreateOrg from "./components/pages/dashboard/CreateOrg.tsx";
 import OrgAddItem from "./components/pages/organization/inventory/AddItem.tsx";
 import OrgLog from "./components/pages/organization/log/Log.tsx";
 import Sidebar from "./components/overlays/Sidebar.tsx";
+import OrgCategories from "./components/pages/organization/categories/Categories.tsx";
 
 function App() {
   return (
@@ -67,6 +68,7 @@ function App() {
                                         path="/add"
                                         element={<OrgAddItem />}
                                       />
+                                      <Route path="/categories" element={<OrgCategories />} />
                                     </Routes>
                                   }
                                 />

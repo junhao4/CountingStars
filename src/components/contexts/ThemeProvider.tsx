@@ -15,31 +15,31 @@ const customTheme = createTheme({
                 },
 
                 secondary: { // Yellow
-                    light: "#fffdb3",
-                    main: "#fff700",
-                    dark: `#e8b235`,
-                    contrastText: "#000",
+                    light:'rgb(221, 215, 46)',
+                    main:'rgb(182, 145, 32)',
+                    dark:'rgb(188, 109, 19)',
+                    contrastText: 'rgb(255, 255, 255)',
                 },
 
                 info: { // Blue
                     light: "#96eaff",
                     main: "#2990ff",
                     dark: "#0021c7",
-                    contrastText: "#000",
+                    contrastText: 'rgb(255, 255, 255)',
                 },
 
                 error: { // Red
-                    light: "#a00",
-                    main: "#f00",
-                    dark: "#faa",
-                    contrastText: "#000"
+                    light:'rgb(215, 21, 21)',
+                    main:'rgb(185, 8, 8)',
+                    dark:'rgb(88, 0, 0)',
+                    contrastText: 'rgb(255, 255, 255)',
                 },
 
                 success: { // Green
                     light: '#61a655',
                     main: '#61a655',
                     dark: '#61a655',
-                    contrastText: '#000'
+                    contrastText: 'rgb(255, 255, 255)',
                 },
 
                 DataGrid: {
@@ -140,8 +140,12 @@ const customTheme = createTheme({
                     outline:'1px solid black',
                     border: 0,
                     textAlign: 'center',
+                    textWrap: 'wrap'
                 }
             },
+            defaultProps: {
+                
+            }
         }
     }
 
