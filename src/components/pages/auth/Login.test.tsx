@@ -2,7 +2,7 @@ import "@testing-library/jest-dom"
 import { render, fireEvent, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, test, vi } from 'vitest'
-import { MemoryRouter } from "react-router-dom"
+import { MemoryRouter, Route, Routes } from "react-router-dom"
 import App from "../../../App";
 import { SessionContext } from "../../contexts/SessionContext";
 import ContextProvider from "../../contexts/ContextProvider";
@@ -11,14 +11,14 @@ import supabase from "../../../helper/supabaseClient";
 
 const renderLoginWithoutSession = () => {
   return render(
-    <ContextProvider>
-
-        <MemoryRouter initialEntries={['/login']}>
-         <SessionContext.Provider value={{ session: null, loading: false, user: null, setUser: ()=>{} }}>
-          <App />
-          </SessionContext.Provider>
-        </MemoryRouter>
-    </ContextProvider>)
+      <MemoryRouter initialEntries={['/login']}>
+        <ContextProvider>
+          <Routes>
+            <Route index path='/*' element={<App />} />
+          </Routes>
+        </ContextProvider>
+      </MemoryRouter>
+      )
 }
 
 const dummyUser: User = {
@@ -37,8 +37,8 @@ const dummySession: Session = {
   user: dummyUser
 }
 
-vi.spyOn(supabase.auth, "signInWithPassword")
-  .mockResolvedValueOnce({ data: { user: dummyUser, session: dummySession }, error: null })
+// vi.spyOn(supabase.auth, "signInWithPassword")
+//   .mockResolvedValueOnce({ data: { user: dummyUser, session: dummySession }, error: null })
 
 describe("Login page test", () => {
 
@@ -53,6 +53,7 @@ describe("Login page test", () => {
 
     // Register redirect link
     expect(screen.getByTestId(/header-register-link/i)).toBeDefined()
+
   })
 
   it('Login page sidebar components exists', () => {
@@ -74,12 +75,7 @@ describe("Login page test", () => {
   })
 
   it('Login page login via default account', async () => {
-    render(
-      <ContextProvider>
-        <MemoryRouter initialEntries={['/login']}>
-          <App />
-        </MemoryRouter>
-      </ContextProvider>)
+    renderLoginWithoutSession()
 
     await userEvent.type(screen.getByLabelText(/Email:/i), "countingstarsauth@gmail.com")
     expect(screen.getByLabelText(/Email:/i)).toHaveValue("countingstarsauth@gmail.com")

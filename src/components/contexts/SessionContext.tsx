@@ -27,9 +27,6 @@ export const SessionContext = createContext<SessionContextProps>({
 });
 
 export const SessionProvider = ({ children }: { children: React.ReactNode }) => {
-    const { createMessage } = useMessageContext()
-    const navigate = useNavigate()
-
     const [session, setSession] = useState<Session | null>(null);
     const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true);
@@ -54,6 +51,7 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
                 setSession(null)
             }
         })
+
         return () => data.subscription.unsubscribe();
     }, []);
 
@@ -77,11 +75,8 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
 
         if (session) {
             fetchUser()
-            createMessage('success', "Successfully signed in!")
-            navigate('/dashboard')
         } else {
-            createMessage('success', "Successfully signed out!")
-            navigate('/')
+            setUser(null)
         }
 
     }, [session?.access_token])
