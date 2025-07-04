@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import { type GridColDef, type GridRenderCellParams, type GridRowSelectionModel, DataGrid } from "@mui/x-data-grid";
 import {  useMemo, type SetStateAction } from "react";
-import type { CategoryFetch, ItemFetch } from "./Inventory";
+import type { CategoryFetch, ItemFetch } from "./InventoryController";
 
 // Fetches and displays the items in a table
 interface ItemTableProps {

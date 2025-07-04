@@ -10,26 +10,11 @@ import {
   TextField,
   type AutocompleteRenderInputParams,
 } from "@mui/material";
-import supabase from "../../../../helper/supabaseClient";
 import ItemTable from "./ItemTable";
 import type { GridRowSelectionModel } from "@mui/x-data-grid/models";
 import { useMessageContext } from "../../../contexts/MessageContext";
-import { addLog, LogTypes } from "../log/LogController";
 import { useSessionContext } from "../../../contexts/SessionContext";
-
-export interface ItemFetch {
-  id: number;
-  name: string;
-  quantity: number;
-  last_modified: string | null;
-  expiry_date: string | null;
-  categories: CategoryFetch[] | null;
-}
-
-export interface CategoryFetch {
-  id: number;
-  name: string;
-}
+import { fetchCategoryOptions, fetchItems, handleDelete, type CategoryFetch, type ItemFetch } from "./InventoryController";
 
 export default function OrgInventory() {
   const navigate = useNavigate();
@@ -48,83 +33,9 @@ export default function OrgInventory() {
   const [category, setCategory] = useState<CategoryFetch | null>(null);
   const [refresh, setRefresh] = useState<boolean>(true);
 
-  // Fetches data to items
-  const fetchItems = async () => {
-    await supabase
-      .from("Items")
-      .select(
-        `id, name, quantity, last_modified, expiry_date, categories:Categories(id, name)`
-      )
-      .eq("org_id", orgProps.id)
-      .eq('deleted', false)
-      .then((res) => {
-        if (res.error) {
-          createMessage('error', res.error.message);
-          return;
-        }
-
-        if (category) {
-          setItems(
-            res.data.filter(
-              (items) =>
-                items.categories.filter((cat) => cat.id === category.id)
-                  .length > 0
-            )
-          );
-          return;
-        }
-
-        setItems(res.data);
-      });
-  };
-
-  // Fetches the list of all categories for the given organization
-  const fetchCategoryOptions = async () => {
-    await supabase
-      .from("Categories")
-      .select(`id, name`)
-      .eq("org_id", orgProps.id)
-      .then((res) => {
-        if (res.error) {
-          createMessage('error', res.error.message)
-          setCategoryOptions([])
-          return
-        }
-        setCategoryOptions(res.data)
-      });
-  };
-
-  // Handles the deletion of the selected data rows in ItemTable, whhen the delete button in ModifyBar is pressed.
-  const handleDelete = async () => {
-    Promise.all(
-      Array.of(...rowSelectionModel.ids).map(async (id) => {
-        id = id as number
-        const data = await supabase
-          .from("Items")
-          .update({ deleted: true })
-          .eq("id", id)
-          .single()
-          .then((res) => {
-            if (res.error) {
-              createMessage('error', res.error.message)
-              return false
-            }
-            addLog(orgProps.id, LogTypes.DELETE, session!.user.id, id, {})
-              .then(err => { if (err) { createMessage('error', err) } })
-            return true
-          });
-        return data;
-      })
-    ).then((res) => {
-      if (!res.reduce((prev, next) => prev && next, true)) {
-        createMessage('error', "Delete error")
-      } else {
-        createMessage('success', 'Successfully deleted items!')
-      }
-      setRowSelectionModel({ type: "include", ids: new Set() });
-      setRefresh((prev) => !prev);
-    });
-  };
+  const handleDel = () => {
+    return handleDelete(rowSelectionModel, createMessage, orgProps, session!, setRowSelectionModel, setRefresh)
+  }
 
   useEffect(() => {
     if (orgProps === null) navigate("/dashboard");
@@ -133,8 +44,8 @@ export default function OrgInventory() {
 
   // Refresh the data grid items
   useEffect(() => {
-    fetchItems();
-    fetchCategoryOptions();
+    fetchItems(orgProps, createMessage, setItems, category);
+    fetchCategoryOptions(orgProps, createMessage, setCategoryOptions);
   }, [refresh]);
 
   return (
@@ -145,9 +56,9 @@ export default function OrgInventory() {
         setCategoryOptions={setCategoryOptions}
         category={category}
         setCategory={setCategory}
-        fetchItems={fetchItems}
-        fetchCategoryOptions={fetchCategoryOptions}
-        handleDelete={handleDelete}
+        fetchItems={() => fetchItems(orgProps, createMessage, setItems, category)}
+        fetchCategoryOptions={() => fetchCategoryOptions(orgProps, createMessage, setCategoryOptions)}
+        handleDelete={handleDel}
       />
 
       <ItemTable
