@@ -7,7 +7,7 @@ export type UserRoles =
     | "owner"
 
 export interface OrgProps {
-    id: number
+    id: number // org id
     name: string
     role: UserRoles
 }

@@ -7,7 +7,7 @@ import OrgCategories from "../components/pages/organization/categories/Categorie
 import OrgHome from "../components/pages/organization/Home";
 import OrgAddItem from "../components/pages/organization/inventory/AddItem";
 import OrgInventory from "../components/pages/organization/inventory/Inventory";
-import OrgLog from "../components/pages/organization/Log";
+import OrgLog from "../components/pages/organization/log/Log";
 import OrgSettings from "../components/pages/organization/settings/Settings";
 import OrgUsers from "../components/pages/organization/users/Users";
 

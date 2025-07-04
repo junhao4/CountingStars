@@ -38,7 +38,7 @@ import Loading from "../../../general/Loading";
 import { useSessionContext } from "../../../contexts/SessionContext";
 import { useNavigate } from "react-router-dom";
 import { useMessageContext } from "../../../contexts/MessageContext";
-import { addNotification } from "../../account/Notifications";
+import { addNotification } from "../../account/AccountController";
 
 interface UserFetch {
   id: string;

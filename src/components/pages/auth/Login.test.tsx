@@ -1,10 +1,9 @@
 import "@testing-library/jest-dom"
-import { render, fireEvent, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event';
-import { describe, it, expect, test, vi } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { MemoryRouter, Route, Routes } from "react-router-dom"
 import App from "../../../App";
-import { SessionContext } from "../../contexts/SessionContext";
 import ContextProvider from "../../contexts/ContextProvider";
 import type { Session, User } from "@supabase/supabase-js";
 import supabase from "../../../helper/supabaseClient";
@@ -37,12 +36,12 @@ const dummySession: Session = {
   user: dummyUser
 }
 
-// vi.spyOn(supabase.auth, "signInWithPassword")
-//   .mockResolvedValueOnce({ data: { user: dummyUser, session: dummySession }, error: null })
+vi.spyOn(supabase.auth, "signInWithPassword")
+  .mockResolvedValueOnce({ data: { user: dummyUser, session: dummySession }, error: null })
 
 describe("Login page test", () => {
 
-  it('Login page header components exists', () => {
+  it('Header components exists, not logged in', () => {
     renderLoginWithoutSession()
 
     // Page title
@@ -66,7 +65,7 @@ describe("Login page test", () => {
     expect(screen.getByText(/dashboard/i)).toBeDefined()
   })
 
-  it('Login page fields exists', async () => {
+  it('Login fields exists', async () => {
     renderLoginWithoutSession()
 
     expect(screen.getByLabelText(/Email:/i)).toHaveValue("")
@@ -74,7 +73,7 @@ describe("Login page test", () => {
 
   })
 
-  it('Login page login via default account', async () => {
+  it('Login via default account', async () => {
     renderLoginWithoutSession()
 
     await userEvent.type(screen.getByLabelText(/Email:/i), "countingstarsauth@gmail.com")
@@ -87,9 +86,11 @@ describe("Login page test", () => {
 
     await userEvent.click(screen.getByRole('button', { name: /Login/i }), { delay: 1000 })
     screen.logTestingPlaygroundURL()
+
     await waitFor(() => {
       expect(screen.getByText(/loading\.\.\./i)).toBeInTheDocument()
     })
+
   })
 
 })
