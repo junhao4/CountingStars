@@ -4,7 +4,6 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 function Verify() {
-
   const navigate = useNavigate();
 
   const toLogin = () => {
@@ -23,16 +22,16 @@ function Verify() {
     handleRedirect();
   }, []);
 
-  return ( <>
-  <Box component="section" sx={{ p: 2, border: '2px solid black' }}>
-    <Stack spacing={3} alignItems="center">
-            <Typography sx={{ justifySelf: 'center' }} variant="h4" component="h1">
-                Your email was successfully verified! Proceed to login.
-            </Typography>
-            <Button size="large" variant="contained" onClick={() => toLogin()}>
+  return (<>
+    <Box component="section" sx={{ p: 2, border: '2px solid black' }}>
+      <Stack spacing={3} alignItems="center">
+        <Typography sx={{ justifySelf: 'center' }} variant="h4" component="h1">
+          Your email was successfully verified! Proceed to login.
+        </Typography>
+        <Button size="large" variant="contained" onClick={() => toLogin()}>
           Go to Login
         </Button>
-        </Stack>
+      </Stack>
     </Box>
   </>
   );

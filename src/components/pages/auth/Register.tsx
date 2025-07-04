@@ -1,20 +1,23 @@
 import { useEffect } from "react";
 import { usePageTitleContext } from "../../contexts/PageTitleContext";
-import { Box } from "@mui/material";
 import EmailRegisterForm from "./EmailRegisterForm";
+import { useSessionContext } from "../../contexts/SessionContext";
+import { useNavigate } from "react-router-dom";
 
 export function Register() {
   const { setTitle } = usePageTitleContext()
+  const { user } = useSessionContext()
+  const navigate = useNavigate()
 
   useEffect(() => {
     setTitle("Registration");
+
+    if (user) {
+      navigate('/dashboard')
+    }
   }, []);
 
   return (
-    <Box display='flex' flexDirection='column' justifySelf='center' alignItems='center' color='var(--foreground-text)'
-      sx={{ outline: '2px solid black', borderRadius: '2px', margin: '2rem' }}>
-        <EmailRegisterForm />
-
-    </Box>
+      <EmailRegisterForm />
   )
 }
