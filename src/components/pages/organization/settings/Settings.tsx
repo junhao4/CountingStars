@@ -34,7 +34,7 @@ export default function OrgSettings() {
     const navigate = useNavigate();
     const [name, setName] = useState("");
     const [inputName, setInputName] = useState(orgProps.name);
-    const [imgUrl, setImgUrl] = useState("");
+    const [imageFile, setImageFile] = useState("");
     const [img, setImg] = useState<string>();
     const { session } = useSessionContext();
     const { setTitle } = usePageTitleContext();
@@ -75,9 +75,7 @@ export default function OrgSettings() {
             .from("Organizations")
             .select("id")
             .eq("name", inputName);
-        console.log("org", org);
-        console.log("inputName", inputName);
-        console.log("name", name);
+
         if (inputName !== name && org?.length !== 0) {
             alert(
                 "You already have an organization with the same name. Please choose another name."
@@ -85,7 +83,7 @@ export default function OrgSettings() {
             return;
         }
 
-        const { data, error } = await supabase
+        const { data } = await supabase
             .from("Organizations")
             .update({ name: inputName })
             .eq("id", orgProps.id)
@@ -100,7 +98,7 @@ export default function OrgSettings() {
                 role: orgProps.role,
             });
         } else {
-            createMessage("error", error.message);
+            createMessage("error", "could not update name");
         }
     };
 
@@ -129,7 +127,6 @@ export default function OrgSettings() {
         }
         const fileExt = file.name.split(".").pop();
         const fileName = `${crypto.randomUUID()}.${fileExt}`;
-        console.log("File", file.name, file.size, file.type);
         const { error } = await supabase.storage
             .from("organization-images")
             .upload(fileName, file);
@@ -139,10 +136,10 @@ export default function OrgSettings() {
             return;
         } else {
             //remove old image from storage
-            if (imgUrl && imgUrl !== "Stock Background.jpg") {
+            if (imageFile && imageFile !== "Stock Background.jpg") {
                 const { error } = await supabase.storage
                     .from("organization-images")
-                    .remove([imgUrl]);
+                    .remove([imageFile]);
 
                 if (error) {
                     createMessage('error', "Failed to delete old image: " + error.message);
@@ -154,7 +151,7 @@ export default function OrgSettings() {
                 .eq("id", orgProps.id)
                 .then((res) => { if (res.error) createMessage('error', res.error.message) });
 
-            setImgUrl(fileName);
+            setImageFile(fileName);
             createMessage("success", "Organization image updated");
         }
     };
@@ -169,9 +166,9 @@ export default function OrgSettings() {
         if (data) {
             setName(data.name);
             if (data.image_file === null) {
-                setImgUrl("Stock Background.jpg");
+                setImageFile("Stock Background.jpg");
             } else {
-                setImgUrl(data.image_file!);
+                setImageFile(data.image_file!);
             }
         } else {
             createMessage('error', "Error selecting org");
@@ -187,11 +184,11 @@ export default function OrgSettings() {
     })
 
     useEffect(() => {
-        if (imgUrl === "") return
+        if (imageFile === "") return
         const downloadImage = async () => {
             const { data, error } = await supabase.storage
                 .from("organization-images")
-                .download(imgUrl!);
+                .download(imageFile!);
             if (error) {
                 createMessage('error', "Error downloading image: " + error.message);
             } else {
@@ -201,7 +198,7 @@ export default function OrgSettings() {
         };
 
         downloadImage();
-    }, [imgUrl]);
+    }, [imageFile]);
 
     return (
         <>

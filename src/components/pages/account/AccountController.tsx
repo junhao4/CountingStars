@@ -12,7 +12,6 @@ interface UpdateProfileNameProps {
     createMessage: (arg0: VariantType, arg1: string) => void;
 }
 
-//Account functions
 
 //Creates new user for first time users in supabase with default name and pfp
 export const handleFirstTimeUser = async (
@@ -64,8 +63,6 @@ export const updateProfile = async ({
         console.log("error", error.message);
     }
 };
-
-//Notification functions
 
 //Use this function to easier add notifications
 export const addNotification = async (

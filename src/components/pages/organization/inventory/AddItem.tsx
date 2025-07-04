@@ -19,7 +19,7 @@ import type { CategoryFetch } from "./Inventory";
 import { useNavigate } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useMessageContext } from "../../../contexts/MessageContext";
-import { addLog, LogTypes } from "../log/Log";
+import { addLog, LogTypes } from "../log/LogController";
 import { useSessionContext } from "../../../contexts/SessionContext";
 
 export default function OrgAddItem() {

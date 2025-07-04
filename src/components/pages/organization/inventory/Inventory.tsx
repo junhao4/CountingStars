@@ -14,7 +14,7 @@ import supabase from "../../../../helper/supabaseClient";
 import ItemTable from "./ItemTable";
 import type { GridRowSelectionModel } from "@mui/x-data-grid/models";
 import { useMessageContext } from "../../../contexts/MessageContext";
-import { addLog, LogTypes } from "../log/Log";
+import { addLog, LogTypes } from "../log/LogController";
 import { useSessionContext } from "../../../contexts/SessionContext";
 
 export interface ItemFetch {
