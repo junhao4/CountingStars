@@ -18,7 +18,7 @@ import { useMessageContext } from '../contexts/MessageContext';
 
 export default function AccountMenu() {
   const { createMessage } = useMessageContext()
-  const { session, userName } = useSessionContext();
+  const { session, user } = useSessionContext();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [profileUrl, setProfileUrl] = useState("");
@@ -62,7 +62,7 @@ export default function AccountMenu() {
 
       fetchUser();
     }
-  }, [session, userName]);
+  }, [session, user]);
 
   //Downloads user image from storage
   useEffect(() => {
@@ -124,7 +124,7 @@ export default function AccountMenu() {
               opacity: 1
             }
           }}>
-            {userName}
+            {user?.name}
           </Typography>
         </MenuItem>
         <MenuItem disabled sx={{ py: 0 }}>
