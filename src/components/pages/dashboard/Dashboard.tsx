@@ -23,7 +23,7 @@ export interface DashboardOrgFetch {
 }
 
 export default function Dashboard() {
-    const { session, nameRefresh, setNameRefresh } = useSessionContext()!
+    const { session } = useSessionContext()!
     const [loading, setLoading] = useState(true)
     const { setTitle } = usePageTitleContext()
 
@@ -42,7 +42,6 @@ export default function Dashboard() {
 
     useEffect(() => {
         setTitle("Dashboard");
-        setNameRefresh(!nameRefresh)
     }, [])
 
     // Fetch organizational data

@@ -1,25 +1,16 @@
 import { useEffect, useState } from "react";
-import supabase from "../../../helper/supabaseClient";
 import Box from "@mui/material/Box";
 import { usePageTitleContext } from "../../contexts/PageTitleContext";
 import { Button, Input, Typography } from "@mui/material";
 import { useMessageContext } from "../../contexts/MessageContext";
+import { resetPasswordForEmail } from "./AuthController";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("")
   const { setTitle } = usePageTitleContext()
   const { createMessage } = useMessageContext()
 
-  const handleSubmit = async () => {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "https://counting-stars-jade.vercel.app/reset",
-    });
-    if (error) {
-      createMessage('error', error.message)
-      return
-    }  
-    createMessage('success', "A link was sent to your email")
-  }
+  const handleSubmit = () => resetPasswordForEmail({email, createMessage})
 
   useEffect(() => {
     setTitle("Reset Password")

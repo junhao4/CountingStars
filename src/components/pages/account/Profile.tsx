@@ -11,8 +11,8 @@ import {
     Typography,
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import type { User } from "@supabase/supabase-js";
 import { useMessageContext } from "../../contexts/MessageContext";
+import { handleFirstTimeUser, updateProfile } from "./AccountController";
 
 
 const VisuallyHiddenInput = styled("input")({
@@ -28,53 +28,16 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 function Profile() {
-    const { session, nameRefresh, setNameRefresh } = useSessionContext();
+    const { session, user, setUser } = useSessionContext()!
+    if (session === null || user === null) {
+        throw new Error("")
+    }
     const { createMessage } = useMessageContext()
 
-    const [username, setUsername] = useState<string | null>("");
-    const [name, setName] = useState<string | null>("New User");
-    const [profileUrl, setProfileUrl] = useState<string | null>("");
-    const [img, setImg] = useState<string|undefined>();
+    const [newUsername, setNewUsername] = useState<string>("");
+    const [profileUrl, setProfileUrl] = useState<string | null>(null);
+    const [img, setImg] = useState<string | undefined>();
 
-    const handleFirstTimeUser = async (user: User | undefined) => {
-        const { data } = await supabase
-            .from('Users')
-            .select()
-            .eq('user_id', user!.id)
-            .single()
-
-        if (data) {
-            // User exists already
-        } else {
-            const { error } = await supabase
-                .from('Users')
-                .insert({ user_id: user?.id, name: null, image_file: 'Default_pfp.jpg', email: user?.email })
-                .select()
-
-            if (error) {
-                console.log('error', error.message)
-            }
-        }
-
-    }
-
-    //Updates username
-    const updateProfile = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const { data, error } = await supabase
-            .from("Users")
-            .update({ name: username })
-            .eq("user_id", session!.user.id)
-            .select();
-
-        if (data) {
-            setName(username);
-            createMessage('success', "Successfully set new username!")
-            setNameRefresh(!nameRefresh)
-        } else {
-            console.log('error', error.message);
-        }
-    };
 
     //Updates Image
     const updateImage = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -116,7 +79,9 @@ function Profile() {
 
     //Fetches preexisting user info
     useEffect(() => {
-        handleFirstTimeUser(session?.user)
+        // Sets user name to default, profile photo to default
+        handleFirstTimeUser(session.user.id, session.user.email!)
+
         if (session?.user) {
             const fetchUser = async () => {
                 const { data } = await supabase
@@ -125,8 +90,6 @@ function Profile() {
                     .eq("user_id", session!.user.id)
                     .single();
 
-                setName(data!.name ?? "New User");
-                setUsername(data!.name ?? "");
                 setProfileUrl(data!.image_file);
             };
 
@@ -173,40 +136,41 @@ function Profile() {
                             color: "text.primary",
                         }}
                     >
-                        {name}
+                        {user.name}
                     </Typography>
                     <img height={300} width={300} src={img}></img>
-                    <form onSubmit={updateProfile}>
-                        <Stack
-                            spacing={2}
-                            alignItems="center"
-                            sx={{ mx: "auto", width: "300px" }}
-                        >
-                            <TextField
-                                label="Username"
-                                value={username ?? ""}
-                                onChange={(e) => setUsername(e.target.value)}
-                                fullWidth
-                            />
-                            <Button type="submit" variant="contained" fullWidth>
-                                Save
-                            </Button>
+                    <Stack
+                        spacing={2}
+                        alignItems="center"
+                        sx={{ mx: "auto", width: "300px" }}
+                    >
+                        <TextField
+                            label="Username"
+                            value={newUsername}
+                            onChange={(e) => setNewUsername(e.target.value)}
+                            fullWidth
+                        />
+                        <Button onClick={() => updateProfile({
+                            newName: newUsername, user,
+                            setUser, createMessage
+                        })} variant="contained" fullWidth>
+                            Save
+                        </Button>
 
-                            <Button
-                                component="label"
-                                variant="outlined"
-                                color="secondary"
-                                startIcon={<CloudUploadIcon />}
-                                fullWidth
-                            >
-                                Upload Profile Image
-                                <VisuallyHiddenInput
-                                    type="file"
-                                    onChange={updateImage}
-                                />
-                            </Button>
-                        </Stack>
-                    </form>
+                        <Button
+                            component="label"
+                            variant="outlined"
+                            color="secondary"
+                            startIcon={<CloudUploadIcon />}
+                            fullWidth
+                        >
+                            Upload Profile Image
+                            <VisuallyHiddenInput
+                                type="file"
+                                onChange={updateImage}
+                            />
+                        </Button>
+                    </Stack>
                 </Stack>
             </Container>
         </>

@@ -24,7 +24,7 @@ function Header() {
 
     return (
         <div className="header-container">
-            <div style={{ width: '40%', display:'flex', alignItems:'center' }}>
+            <div style={{ width: '40%', display: 'flex', alignItems: 'center' }}>
                 <div className="header-logo" onClick={() => navigate('/')}>
                     <AutoAwesomeIcon sx={{ fontSize: "2rem", margin: '0 0.5rem' }} />
                     <Typography variant='h5'>Counting Stars</Typography>
@@ -39,7 +39,7 @@ function Header() {
                     })}
                 </Breadcrumbs>
             </div>
-            <h2 className="header-title">{usePageTitleContext().title}</h2>
+            <h2 id='header-title' className="header-title">{usePageTitleContext().title}</h2>
             <div className="header-user-details">
                 {session ? (
                     <div
@@ -59,14 +59,8 @@ function Header() {
                                 gap: "1rem",
                             }}
                         >
-                            <Button
-                                size="small"
-                                color="secondary"
-                                variant="text"
-                                onClick={() =>
-                                    navigate("/dashboard/notifications")
-                                }
-                                sx={{ fontSize: 24 }}
+                            <Button size="small" color="secondary" variant="text"
+                                onClick={() => navigate("/dashboard/notifications")} sx={{ fontSize: 24 }}
                             >
                                 <Badge badgeContent={unread} color="error">
                                     <CircleNotificationsIcon fontSize="inherit" />
@@ -76,22 +70,14 @@ function Header() {
                         </div>
                     </div>
                 ) : (
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: 'space-evenly',
-                        }}
-                    >
-                        <Link
-                            to="/login"
-                            style={{ color: "var(--foreground-text)", fontSize: "1rem" }}
-                        >
+                    <div style={{ display: "flex", justifyContent: 'space-evenly', }} >
+                        <Link to="/login" data-testid="header-login-link"
+                            style={{ color: "var(--foreground-text)", fontSize: "1rem" }}>
                             Login
                         </Link>
-                        <Link
-                            to="/register"
-                            style={{ color: "var(--foreground-text)", fontSize: "1rem" }}
-                        >
+
+                        <Link to="/register" data-testid="header-register-link"
+                            style={{ color: "var(--foreground-text)", fontSize: "1rem" }}>
                             Register
                         </Link>
                     </div>

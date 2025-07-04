@@ -1,0 +1,99 @@
+import "@testing-library/jest-dom"
+import { render, fireEvent, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event';
+import { describe, it, expect, test, vi } from 'vitest'
+import { MemoryRouter } from "react-router-dom"
+import App from "../../../App";
+import { SessionContext } from "../../contexts/SessionContext";
+import ContextProvider from "../../contexts/ContextProvider";
+import type { Session, User } from "@supabase/supabase-js";
+import supabase from "../../../helper/supabaseClient";
+
+const renderLoginWithoutSession = () => {
+  return render(
+    <ContextProvider>
+
+        <MemoryRouter initialEntries={['/login']}>
+         <SessionContext.Provider value={{ session: null, loading: false, user: null, setUser: ()=>{} }}>
+          <App />
+          </SessionContext.Provider>
+        </MemoryRouter>
+    </ContextProvider>)
+}
+
+const dummyUser: User = {
+  id: "1",
+  app_metadata: {},
+  user_metadata: {},
+  aud: "",
+  created_at: ""
+}
+
+const dummySession: Session = {
+  access_token: "",
+  refresh_token: "",
+  expires_in: 0,
+  token_type: "",
+  user: dummyUser
+}
+
+vi.spyOn(supabase.auth, "signInWithPassword")
+  .mockResolvedValueOnce({ data: { user: dummyUser, session: dummySession }, error: null })
+
+describe("Login page test", () => {
+
+  it('Login page header components exists', () => {
+    renderLoginWithoutSession()
+
+    // Page title
+    expect(screen.getByRole('heading', { level: 2, name: /Login/i })).toBeDefined()
+
+    // Login redirect link
+    expect(screen.getByTestId(/header-login-link/i)).toBeDefined()
+
+    // Register redirect link
+    expect(screen.getByTestId(/header-register-link/i)).toBeDefined()
+  })
+
+  it('Login page sidebar components exists', () => {
+    renderLoginWithoutSession()
+
+    // Home tab
+    expect(screen.getByText(/home/i)).toBeDefined()
+
+    // Dashboard tab
+    expect(screen.getByText(/dashboard/i)).toBeDefined()
+  })
+
+  it('Login page fields exists', async () => {
+    renderLoginWithoutSession()
+
+    expect(screen.getByLabelText(/Email:/i)).toHaveValue("")
+    expect(screen.getByLabelText(/Password:/i)).toHaveValue("")
+
+  })
+
+  it('Login page login via default account', async () => {
+    render(
+      <ContextProvider>
+        <MemoryRouter initialEntries={['/login']}>
+          <App />
+        </MemoryRouter>
+      </ContextProvider>)
+
+    await userEvent.type(screen.getByLabelText(/Email:/i), "countingstarsauth@gmail.com")
+    expect(screen.getByLabelText(/Email:/i)).toHaveValue("countingstarsauth@gmail.com")
+
+    await userEvent.type(screen.getByLabelText(/Password:/i), "testtest")
+    expect(screen.getByLabelText(/Password:/i)).toHaveValue("testtest")
+
+
+
+    await userEvent.click(screen.getByRole('button', { name: /Login/i }), { delay: 1000 })
+    screen.logTestingPlaygroundURL()
+    await waitFor(() => {
+      expect(screen.getByText(/loading\.\.\./i)).toBeInTheDocument()
+    })
+  })
+
+})

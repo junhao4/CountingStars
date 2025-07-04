@@ -11,18 +11,20 @@ import { NotificationProvider } from "./NotificationContext";
 export default function ContextProvider({ children }: { children: React.ReactNode }) {
     return (
         <ThemeUsage>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <SessionProvider>
-                    <OrgProvider>
-                        <PageTitleProvider>
-                            <MessageProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>\
+                <MessageProvider>
+                    <SessionProvider>
+                        <OrgProvider>
+                            <PageTitleProvider>
+
                                 <NotificationProvider>
-                                {children}
+                                    {children}
                                 </NotificationProvider>
-                            </MessageProvider>
-                        </PageTitleProvider>
-                    </OrgProvider>
-                </SessionProvider>
+
+                            </PageTitleProvider>
+                        </OrgProvider>
+                    </SessionProvider>
+                </MessageProvider>
             </LocalizationProvider>
         </ThemeUsage>
     )

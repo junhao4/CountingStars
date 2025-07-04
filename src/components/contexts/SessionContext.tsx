@@ -1,66 +1,94 @@
 import type { Session } from "@supabase/supabase-js"
 import { createContext, useContext, useEffect, useState } from "react"
 import supabase from "../../helper/supabaseClient";
+import { useMessageContext } from "./MessageContext";
+import { useNavigate } from "react-router-dom";
 
-
+export interface User {
+    user_id: string
+    name: string | null
+    email: string
+    image_file: string | null
+    created_at: string
+}
 
 interface SessionContextProps {
     session: Session | null
     loading: boolean
-    userName: string
-    nameRefresh: boolean
-    setNameRefresh: React.Dispatch<React.SetStateAction<boolean>>
+    user: User | null
+    setUser: React.Dispatch<React.SetStateAction<User | null>>
 }
 
 export const SessionContext = createContext<SessionContextProps>({
     session: null,
     loading: true,
-    userName: "",
-    nameRefresh: true,
-    setNameRefresh: () => {}
+    user: null,
+    setUser: () => null,
 });
 
-export const SessionProvider = ({ children } : { children: React.ReactNode }) => {
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [nameRefresh, setNameRefresh] = useState(true)
-  const [userName, setuserName] = useState("")
+export const SessionProvider = ({ children }: { children: React.ReactNode }) => {
+    const { createMessage } = useMessageContext()
+    const navigate = useNavigate()
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-        setSession(session);
-        setLoading(false);
-    });
+    const [session, setSession] = useState<Session | null>(null);
+    const [user, setUser] = useState<User | null>(null)
+    const [loading, setLoading] = useState(true);
 
-    //checks and dynamically updates session state throughout all components that have access to context
-    const { data } = supabase.auth.onAuthStateChange((event, session) => {
-        if (event)
-        setSession(session);
-    });
+    useEffect(() => {
+        console.log("Session Context useEffect triggerd!")
 
-    return () => data.subscription.unsubscribe();
-  }, []);
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            console.log(999)
+            setSession(session);
+            setLoading(false);
+        });
 
-   useEffect(() => {
-        const getName = async () => {
+        // Checks and dynamically updates session state throughout all components that have access to context
+        const { data } = supabase.auth.onAuthStateChange((event, session) => {
+            console.log('supabase onAuthStateChange function called: ' + session)
+
+            if (event === 'SIGNED_IN') {
+                console.log(session)
+                setSession(session)
+            } else if (event === 'SIGNED_OUT') {
+                setSession(null)
+            }
+        })
+        return () => data.subscription.unsubscribe();
+    }, []);
+
+    // Gets the user
+    useEffect(() => {
+        console.log('session updated')
+
+        const fetchUser = async () => {
             const { data, error } = await supabase
                 .from('Users')
-                .select()
-                .eq('user_id', session?.user.id!)
+                .select('*')
+                .eq('user_id', session!.user.id!)
                 .single()
-            if (data) {
-                setuserName(data.name!)
-            }
+
             if (error) {
-                console.log("Name context not set", error)
+                console.log("User context not set", error.message)
+                return
             }
+            setUser(data)
         }
-        if (session) getName()
-    }, [nameRefresh, session])
+
+        if (session) {
+            fetchUser()
+            createMessage('success', "Successfully signed in!")
+            navigate('/dashboard')
+        } else {
+            createMessage('success', "Successfully signed out!")
+            navigate('/')
+        }
+
+    }, [session?.access_token])
 
 
     return (
-        <SessionContext.Provider value={{ session, loading, userName, nameRefresh, setNameRefresh }}>
+        <SessionContext.Provider value={{ session, loading, user, setUser }}>
             {children}
         </SessionContext.Provider>
     );

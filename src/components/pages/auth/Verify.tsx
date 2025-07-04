@@ -17,7 +17,6 @@ function Verify() {
 
       if (data.session) {
         await supabase.auth.signOut();
-      } else {
       }
     };
 
