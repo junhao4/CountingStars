@@ -23,7 +23,8 @@ export default function ItemTable({ items, rowSelectionModel, setRowSelectionMod
             renderCell: (params: GridRenderCellParams<ItemFetch>) => <CatAction {...{ params }} />,
         },
         { field: 'last_modified', headerName: 'Last Modified', valueGetter: (arg0) => new Date(arg0), type: 'date', width: 140, align: 'left', headerAlign: 'left' },
-        { field: 'expiry_date', headerName: 'Expiry Date', valueGetter: (arg0) => new Date(arg0), type: 'date', width: 140, align: 'left', headerAlign: 'left' },
+        { field: 'expiry_date', headerName: 'Expiry Date', renderCell: (arg0) =>
+    arg0.value !== "-" ? new Date(arg0.value).toLocaleDateString() : "-", width: 140, align: 'left', headerAlign: 'left' },
     ], [items])
 
     const paginationModel = { page: 0, pageSize: 5 };

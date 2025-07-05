@@ -74,9 +74,15 @@ export const fetchItems = async (orgProps : OrgProps,
           return;
         }
 
+        const fixDate = res.data.map((item) => ({
+        ...item,
+        expiry_date: item.expiry_date
+          ? item.expiry_date
+          : "-",
+          }));
         if (category) {
           setItems(
-            res.data.filter(
+            fixDate.filter(
               (items) =>
                 items.categories.filter((cat) => cat.id === category.id)
                   .length > 0
@@ -85,7 +91,7 @@ export const fetchItems = async (orgProps : OrgProps,
           return;
         }
 
-        setItems(res.data);
+        setItems(fixDate);
       });
   };
 
