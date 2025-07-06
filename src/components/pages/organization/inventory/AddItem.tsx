@@ -9,18 +9,17 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
-  Typography,
-  type SelectChangeEvent,
+  Typography
 } from "@mui/material";
 import supabase from "../../../../helper/supabaseClient";
 import { useOrgContext } from "../../../contexts/OrgContext";
 import type { Dayjs } from "dayjs";
-import type { CategoryFetch } from "./Inventory";
 import { useNavigate } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useMessageContext } from "../../../contexts/MessageContext";
 import { addLog, LogTypes } from "../log/LogController";
 import { useSessionContext } from "../../../contexts/SessionContext";
+import { fetchCategoryOptions, handleCategoryChange, type CategoryFetch } from "./InventoryController";
 
 export default function OrgAddItem() {
   const { getOrgContext } = useOrgContext();
@@ -37,33 +36,7 @@ export default function OrgAddItem() {
 
   const [categoryOptions, setCategoryOptions] = useState<CategoryFetch[]>([]);
 
-  // Fetches the list of all categories for the given organization
-  const fetchCategoryOptions = async () => {
-    await supabase
-      .from("Categories")
-      .select(`id, name`)
-      .eq("org_id", orgProps.id)
-      .then((res) => {
-        if (res.error) {
-          createMessage("error", res.error.message);
-          setCategoryOptions([]);
-          return;
-        }
-        setCategoryOptions(res.data);
-      });
-  };
-
-  const handleCategoryChange = (event: SelectChangeEvent<string[]>) => {
-    const {
-      target: { value },
-    } = event;
-    setItemCategory(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? [] : value
-    );
-  };
-
-  const handleAddItem = async () => {
+   const handleAddItem = async () => {
     await supabase
       .from("Items")
       .insert({
@@ -111,8 +84,9 @@ export default function OrgAddItem() {
       });
   };
 
+
   useEffect(() => {
-    fetchCategoryOptions();
+    fetchCategoryOptions(orgProps, createMessage, setCategoryOptions);
   }, []);
 
   return (
@@ -198,7 +172,7 @@ export default function OrgAddItem() {
           id="item-category-chip"
           multiple
           value={itemCategory}
-          onChange={handleCategoryChange}
+          onChange={(e) => handleCategoryChange(e, setItemCategory)}
           input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
           renderValue={(selected) => (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>

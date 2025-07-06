@@ -3,7 +3,7 @@ import Notifications from "../components/pages/account/Notifications";
 import Profile from "../components/pages/account/Profile";
 import CreateOrg from "../components/pages/dashboard/CreateOrg";
 import Dashboard from "../components/pages/dashboard/Dashboard";
-import OrgCategories from "../components/pages/organization/categories/Categories";
+import OrgCategories from "../components/pages/organization/inventory/Categories";
 import OrgHome from "../components/pages/organization/Home";
 import OrgAddItem from "../components/pages/organization/inventory/AddItem";
 import OrgInventory from "../components/pages/organization/inventory/Inventory";
