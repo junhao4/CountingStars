@@ -3,21 +3,22 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest'
 import { MemoryRouter, Route, Routes } from "react-router-dom"
-import App from "../../../App";
-import ContextProvider from "../../contexts/ContextProvider";
+import App from "../../App";
+import ContextProvider from "../contexts/ContextProvider";
 import type { Session, User } from "@supabase/supabase-js";
-import supabase from "../../../helper/supabaseClient";
+import supabase from "../../helper/supabaseClient";
+import { useSessionContext, SessionProvider } from "../contexts/SessionContext";
 
 const renderLoginWithoutSession = () => {
   return render(
-      <MemoryRouter initialEntries={['/login']}>
-        <ContextProvider>
-          <Routes>
-            <Route index path='/*' element={<App />} />
-          </Routes>
-        </ContextProvider>
-      </MemoryRouter>
-      )
+    <MemoryRouter initialEntries={['/login']}>
+      <ContextProvider>
+        <Routes>
+          <Route index path='/*' element={<App />} />
+        </Routes>
+      </ContextProvider>
+    </MemoryRouter>
+  )
 }
 
 const dummyUser: User = {
@@ -36,8 +37,19 @@ const dummySession: Session = {
   user: dummyUser
 }
 
-vi.spyOn(supabase.auth, "signInWithPassword")
-  .mockResolvedValueOnce({ data: { user: dummyUser, session: dummySession }, error: null })
+// vi.spyOn(supabase.auth, "signInWithPassword")
+//   .mockResolvedValueOnce({ data: { user: dummyUser, session: dummySession }, error: null })
+
+// vi.spyOn(supabase.auth, "onAuthStateChange")
+//   .mockResolvedValue({
+//     data: {
+//       subscription: {
+//         id: '',
+//         callback: (event, session) => null,
+//         unsubscribe: () => null
+//       }
+//     }
+//   })
 
 describe("Login page test", () => {
 
@@ -74,7 +86,15 @@ describe("Login page test", () => {
   })
 
   it('Login via default account', async () => {
-    renderLoginWithoutSession()
+    render(
+      <MemoryRouter initialEntries={['/login']}>
+        <ContextProvider>
+            <Routes>
+              <Route index path='/*' element={<App />} />
+            </Routes>
+        </ContextProvider>
+      </MemoryRouter>
+    )
 
     await userEvent.type(screen.getByLabelText(/Email:/i), "countingstarsauth@gmail.com")
     expect(screen.getByLabelText(/Email:/i)).toHaveValue("countingstarsauth@gmail.com")

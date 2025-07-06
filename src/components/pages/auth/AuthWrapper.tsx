@@ -23,7 +23,6 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
       console.log("Authwrapper navigating to /")
       navigate('/')
     } else if (!loading && session) {
-
       new Promise(async () => {
         if (await isFirstTimeUser(session.user.id)) {
           createMessage("info", "Please enter in a username");

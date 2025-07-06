@@ -1,37 +1,39 @@
 import supabase from "../../../helper/supabaseClient"
-import type { UserRoles } from "../../contexts/OrgContext"
-import type { User } from "../../contexts/SessionContext"
+import type { Organization, OrganizationRolesType } from "../../../helper/types"
 import type { VariantType } from "../../contexts/MessageContext"
-import { fetchOrganization, fetchOrgImage, fetchUserRole, type Organization } from "../organization/OrgController"
+import { fetchOrganization, fetchOrgImage, fetchUserRole } from "../organization/OrgController"
 
 export interface DashboardOrganizationFetch {
     id: number
     name: string
-    role: UserRoles
+    role: OrganizationRolesType
     imageFile: string | null
     imageUrlBlob: string | null
 }
 
 // Fetches an array of Dashboard Organization cards
-export const fetchDashboard = async (user: User) => {
+export const fetchDashboard = async (user_id: string) => {
+
+    console.log("supabase: " + supabase)
+
     const { data, error } = await supabase.from('users_organizations')
         .select(`organization_id, role`)
-        .eq('user_id', user.user_id)
+        .eq('user_id', user_id)
 
+    console.log(data)
     if (error) {
         console.log(error.message)
-        return null
+        return []
     }
 
     const roles = await Promise.all(data.map(async d => {
         const res = await fetchOrganization(d.organization_id)
         if (res) {
-            return { ...res, role: d.role as UserRoles }
+            return { ...res, role: d.role as OrganizationRolesType }
         } else {
             return null
         }
     }))
-
     const filteredRoles = roles.filter(d => !!d)
 
     const images = await Promise.all(filteredRoles.map(async d => {
@@ -52,12 +54,13 @@ export const fetchDashboard = async (user: User) => {
 export const transformOrgDataToDashboardCard = async (user_id: string, org: Organization) => {
     const role = await fetchUserRole(user_id, org.id)
     if (!role) {
+        console.log("Error: User not in organization")
         return null
     }
 
     const image = await fetchOrgImage(org.imageFile)
 
-    return { ...org, imageUrlBlob: image, role: role as UserRoles }
+    return { ...org, imageUrlBlob: image, role: role as OrganizationRolesType }
 }
 
 // When the enter organization button is clicked, check for role access
@@ -70,7 +73,8 @@ export const enterOrg = (org: DashboardOrganizationFetch, createMessage: (arg0: 
 }
 
 // When the join organization button is clicked, add new 'pending' role
-export const joinOrg = async (joinId: string, user_id: string,  createMessage: (arg0: VariantType, arg1: string) => void) => {
+export const joinOrg = async (joinId: string, user_id: string, createMessage: (arg0: VariantType, arg1: string) => void) => {
+
     var isNumber = true
     for (var i = 0; i < joinId.length; i++) {
         if (!(joinId.charAt(i) >= '0' && joinId.charAt(i) <= '9')) {
@@ -84,7 +88,7 @@ export const joinOrg = async (joinId: string, user_id: string,  createMessage: (
     const organization_id = Number.parseInt(joinId)
 
     const data = await supabase.from("users_organizations")
-        .select("")
+        .select()
         .eq("user_id", user_id)
         .eq("organization_id", organization_id)
         .then(async res => {
@@ -93,16 +97,15 @@ export const joinOrg = async (joinId: string, user_id: string,  createMessage: (
             } else if (res.data.length === 1) {
                 createMessage('error', "Error: Already in organization or still pending approval!")
             } else {
-
                 // Add the new organization to orgs.
                 const { error } = await supabase.from("users_organizations")
                     .insert({ user_id, organization_id, role: "pending" })
                 if (error) {
                     console.log(error.message)
                 } else {
-                    const d = await fetchOrganization(organization_id)
-                    if (d) {
-                        const res = await transformOrgDataToDashboardCard(user_id, d)
+                    const org = await fetchOrganization(organization_id)
+                    if (org) {
+                        const res = await transformOrgDataToDashboardCard(user_id, org)
                         return res
                     }
                     return null

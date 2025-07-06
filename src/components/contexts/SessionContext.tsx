@@ -1,8 +1,6 @@
 import type { Session } from "@supabase/supabase-js"
 import { createContext, useContext, useEffect, useState } from "react"
 import supabase from "../../helper/supabaseClient";
-import { useMessageContext } from "./MessageContext";
-import { useNavigate } from "react-router-dom";
 
 export interface User {
     user_id: string
@@ -19,7 +17,7 @@ interface SessionContextProps {
     setUser: React.Dispatch<React.SetStateAction<User | null>>
 }
 
-export const SessionContext = createContext<SessionContextProps>({
+const SessionContext = createContext<SessionContextProps>({
     session: null,
     loading: true,
     user: null,
@@ -57,7 +55,7 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
 
     // Gets the user
     useEffect(() => {
-        console.log('session updated')
+        console.log('session updated' + session?.access_token)
 
         const fetchUser = async () => {
             const { data, error } = await supabase

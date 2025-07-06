@@ -1,15 +1,10 @@
 import { createContext, useContext, useState } from "react"
-
-export type UserRoles = 
-    | "pending"
-    | "member"
-    | "admin"
-    | "owner"
+import type { OrganizationRolesType } from "../../helper/types"
 
 export interface OrgProps {
     id: number // org id
     name: string
-    role: UserRoles
+    role: OrganizationRolesType
 }
 
 interface OrgContextProps {

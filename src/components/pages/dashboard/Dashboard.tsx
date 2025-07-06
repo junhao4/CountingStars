@@ -10,7 +10,7 @@ import Loading from '../../general/Loading';
 import { Box, Input } from '@mui/material';
 import { useMessageContext } from '../../contexts/MessageContext';
 import { enterOrg, fetchDashboard, joinOrg, type DashboardOrganizationFetch } from './DashboardController';
-import OrgCard from './OrgCard';
+import DashboardCard from './DashboardCard';
 
 export default function Dashboard() {
     const { user } = useSessionContext()!
@@ -25,18 +25,21 @@ export default function Dashboard() {
 
     // On render, fetch all the organizations on the dashboard, and their images
     useEffect(() => {
+        console.log("Dashboard Loading set to true")
+        console.log(user)
         setLoading(true)
 
         if (user) {
             new Promise(async () => {
-            const data = await fetchDashboard(user)
-            if (data) {
-                setOrgs(data)
-            } else {
-                setOrgs([])
-            }
-            setLoading(false)
-        })
+                const data = await fetchDashboard(user.user_id)
+                if (data) {
+                    setOrgs(data)
+                } else {
+                    setOrgs([])
+                }
+                setLoading(false)
+                console.log("Dashboard Loading set to false")
+            })
         }
     }, [user])
 
@@ -54,9 +57,9 @@ export default function Dashboard() {
         }
     }
 
-    const onJoinOrgClick = async () => { 
+    const onJoinOrgClick = async () => {
         // If successfully joined, add new organization card to dashboard
-        const res = await joinOrg(joinId, user!.user_id, createMessage) 
+        const res = await joinOrg(joinId, user!.user_id, createMessage)
         if (res) {
             setOrgs([...orgs, res])
         }
@@ -95,7 +98,7 @@ export default function Dashboard() {
                     boxShadow='0 -1px 0 #000'>{
                         orgs.map((key, index) => {
                             return (
-                                <OrgCard key={index} org={key} index={index} onEnterOrgClick={onEnterOrgClick} />
+                                <DashboardCard key={index} org={key} index={index} onEnterOrgClick={onEnterOrgClick} />
                             )
                         })
                     }</Grid>

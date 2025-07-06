@@ -1,23 +1,18 @@
 import supabase from "../../../helper/supabaseClient"
-
-export type Organization = {
-    id: number
-    name: string
-    imageFile: string | null
-}
+import { OrganizationRoles, type OrganizationRolesType } from "../../../helper/types"
 
 export const fetchOrganization = async (org: number) => {
     const { data, error } = await supabase.from("Organizations")
-            .select("id, name, imageFile:image_file")
-            .eq("id", org)
-            .single()
+        .select("id, name, imageFile:image_file")
+        .eq("id", org)
+        .single()
 
-        if (error) {
-            console.log(error.message)
-            return null
-        }
+    if (error) {
+        console.log(error.message)
+        return null
+    }
 
-        return data
+    return data
 }
 
 export const fetchUserRole = async (user_id: string, org_id: number) => {
@@ -30,8 +25,11 @@ export const fetchUserRole = async (user_id: string, org_id: number) => {
     if (error) {
         console.log(error.message)
         return null
+    } else if (!OrganizationRoles.includes(data.role as OrganizationRolesType)) {
+        throw new Error("Invalid role")
     }
-    return data.role
+
+    return data.role as OrganizationRolesType
 }
 
 // After retrieving organization data, this function is called to retrieve the image blob and returns an URL to it.
@@ -39,10 +37,11 @@ export const fetchOrgImage = async (fileName: string | null) => {
     if (fileName === null) {
         fileName = 'Stock Background.jpg'
     }
+    console.log(1)
     const { data, error } = await supabase.storage.from('organization-images')
         .download(fileName)
     if (error) {
-        console.log(error.message)
+        console.log(error)
         return null
     }
     return URL.createObjectURL(data)

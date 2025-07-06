@@ -7,7 +7,7 @@ interface OrgCardProps {
     onEnterOrgClick: (arg0: number) => void
 }
 
-export default function OrgCard({org, index, onEnterOrgClick}: OrgCardProps) {
+export default function DashboardCard({org, index, onEnterOrgClick}: OrgCardProps) {
     return (
         <Card sx={{ width: 'max(10%,200px)' }} key={index}>
             {org.imageUrlBlob
