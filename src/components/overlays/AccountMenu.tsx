@@ -50,6 +50,7 @@ export default function AccountMenu() {
   useEffect(() => {
     if (session?.user) {
       const fetchUser = async () => {
+        console.log("Fetching user profile URL")
         const { data, error } = await supabase
           .from("Users")
           .select()

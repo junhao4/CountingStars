@@ -23,39 +23,6 @@ export const dummySession: Session = {
     }
 }
 
-// Shortcut to mock supabase database calls, to mock the return data and error.
-export const spyonSupabaseMockDataOnce = ({ data, error }:
-    Omit<PostgrestResponseSuccess<any> | PostgrestResponseFailure, "count" | "status" | "statusText">) => {
-    return vi.spyOn(supabase, "from").mockImplementationOnce(() => {
-        return {
-            select: vi.fn().mockImplementation(() => ({
-                eq: vi.fn().mockReturnThis(),
-                maybeSingle: vi.fn().mockReturnThis(),
-                single: vi.fn().mockReturnThis(),
-                data: data,
-                error: error
-            }))
-        }
-    })
-}
-
-// Shortcut to mock storage calls, to mock the return data and error.
-// export const spyonSupabaseStorageOnce = ({ data, error }:
-//     { data: Blob, error: null } | { data: null, error: any }) => {
-
-//         vi.spyOn(supabase.storage, "from").mockReturnValue({
-//                 ...supabase.storage.from(""),
-//                 download: vi.fn().mockResolvedValue({data: data, error: error}), 
-//                 url: "null",
-//                 headers: {},
-//                 fetch: global.fetch,
-//                 uploadOrUpdate: null, upload: null, uploadToSignedUrl: null, createSignedUploadUrl: null, 
-//                 update: "" => new Promise(""), move: null, copy: null, createSignedUrl: null,
-//                 createSignedUrls: null, info: null, exists: null, getPublicUrl: null,
-//                 remove: null, list: null, encodeMetadata: null, toBase64: null,
-//                 _getFinalPath: null, _removeEmptyFolders: null, transformOptsToQueryString: null,
-//         })
-// }
 
 export const simulateNoSession = () => {
     vi.spyOn(SessionContext, "useSessionContext").mockImplementation(() => {

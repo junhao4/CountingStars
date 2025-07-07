@@ -3,10 +3,46 @@ import * as SessionContext from "../contexts/SessionContext"
 import * as OrgController from "../pages/organization/OrgController"
 import * as DashboardController from "../pages/dashboard/DashboardController"
 import * as AuthController from "../pages/auth/AuthController"
-import { dummyUUID, spyonSupabaseMockDataOnce } from "./testController";
+import { dummyUUID } from "./testController";
 import type { PostgrestError } from "@supabase/supabase-js";
 import type { PostgrestResponseFailure } from "@supabase/postgrest-js";
 import supabase from "../../helper/supabaseClient";
+
+// Change the mock return values in the individual tests to change the mock supabase results
+const mocks = vi.hoisted(() => {
+    return {
+        data: vi.fn(),
+        error: vi.fn()
+    }
+})
+
+// Mocks the supabase client. Add on more functions if needed
+vi.mock("@supabase/supabase-js", () => {
+    const createClient = {
+        createClient: vi.fn(() => ({
+            auth: {
+                signInWithPassword: vi.fn().mockResolvedValue({ data: { session: {} }, error: null }),
+                onAuthStateChange: vi.fn()
+            },
+            from: vi.fn(() => ({
+                select: vi.fn(() => ({
+                    eq: vi.fn().mockReturnThis(),
+                    maybeSingle: vi.fn().mockReturnThis(),
+                    single: vi.fn().mockReturnThis(),
+                    data: mocks.data(),
+                    error: mocks.error()
+                })
+                ),
+            })),
+            storage: {
+                from: vi.fn(() => ({
+                    download: vi.fn().mockResolvedValue({ data: mocks.data(), error: mocks.error() })
+                }))
+            }
+        }))
+    }
+    return createClient
+});
 
 describe("fetchOrganization unit tests", () => {
     afterEach(() => {
@@ -14,18 +50,20 @@ describe("fetchOrganization unit tests", () => {
     })
 
     it("should return organization when fetch resolves", async () => {
-        const dummyOrganizationId = 1
+        const dummyOrganizationId = 1;
         const mockSupabaseData = {
             data: {
-                id: dummyOrganizationId,
+                id: 1,
                 name: "Test",
                 imageFile: null
             },
             error: null
         }
-        const expectedResult = mockSupabaseData.data
 
-        spyonSupabaseMockDataOnce(mockSupabaseData)
+        mocks.data.mockReturnValue(mockSupabaseData.data)
+        mocks.error.mockReturnValue(mockSupabaseData.error)
+
+        const expectedResult = mockSupabaseData.data
 
         await expect(OrgController.fetchOrganization(dummyOrganizationId)).resolves.toEqual(expectedResult)
     })
@@ -37,7 +75,8 @@ describe("fetchOrganization unit tests", () => {
             error: { name: "Test Error", message: "Test Error", code: "", details: "", hint: "" }
         }
 
-        spyonSupabaseMockDataOnce(mockSupabaseData)
+        mocks.data.mockReturnValue(mockSupabaseData.data)
+        mocks.error.mockReturnValue(mockSupabaseData.error)
 
         await expect(OrgController.fetchOrganization(dummyOrganizationId)).resolves.toEqual(null)
     })
@@ -57,7 +96,8 @@ describe("fetchUserRole unit tests", () => {
             error: null
         }
 
-        spyonSupabaseMockDataOnce(mockSupabaseData)
+        mocks.data.mockReturnValue(mockSupabaseData.data)
+        mocks.error.mockReturnValue(mockSupabaseData.error)
 
         await expect(OrgController.fetchUserRole(dummyUUID, dummyOrganization.id)).resolves.toEqual("owner")
     })
@@ -71,7 +111,8 @@ describe("fetchUserRole unit tests", () => {
             error: null
         }
 
-        spyonSupabaseMockDataOnce(mockSupabaseData)
+        mocks.data.mockReturnValue(mockSupabaseData.data)
+        mocks.error.mockReturnValue(mockSupabaseData.error)
 
         await expect(OrgController.fetchUserRole(dummyUUID, dummyOrganization.id)).rejects.toThrowError("Invalid role")
     })
@@ -83,7 +124,8 @@ describe("fetchUserRole unit tests", () => {
             error: { name: "Test Error", message: "Test Error", code: "", details: "", hint: "" },
         }
 
-        spyonSupabaseMockDataOnce(mockSupabaseData)
+        mocks.data.mockReturnValue(mockSupabaseData.data)
+        mocks.error.mockReturnValue(mockSupabaseData.error)
 
         await expect(OrgController.fetchUserRole(dummyUUID, dummyOrganization.id)).resolves.toEqual(null)
     })
@@ -97,18 +139,19 @@ describe("fetchOrgImage unit tests", () => {
 
     // STUCK HERE: UNABLE TO MOCK STORAGE
 
-    // it("should download and return object URL for default image when input null", async () => {
-    //     const mockSupabaseData = {
-    //         data: new Blob(),
-    //         error: null
-    //     }
+    it("should download and return object URL for default image when input null", async () => {
+        const mockSupabaseData = {
+            data: new Blob(),
+            error: null
+        }
 
-    //     spyonSupabaseStorageOnce(mockSupabaseData)
+        mocks.data.mockReturnValue(mockSupabaseData.data)
+        mocks.error.mockReturnValue(mockSupabaseData.error)
 
-    //     global.URL.createObjectURL = vi.fn()
-    //     vi.spyOn(global.URL, "createObjectURL").mockReturnValue("URL")
+        global.URL.createObjectURL = vi.fn()
+        vi.spyOn(global.URL, "createObjectURL").mockReturnValue("URL")
 
 
-    //     await expect(OrgController.fetchOrgImage(null)).resolves.toEqual("URL")
-    // })
+        await expect(OrgController.fetchOrgImage(null)).resolves.toEqual("URL")
+    })
 })

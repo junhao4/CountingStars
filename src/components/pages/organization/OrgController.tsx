@@ -7,6 +7,8 @@ export const fetchOrganization = async (org: number) => {
         .eq("id", org)
         .single()
 
+    console.log(supabase)
+
     if (error) {
         console.log(error.message)
         return null
