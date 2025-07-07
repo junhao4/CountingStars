@@ -1,6 +1,6 @@
 import "./Sidebar.css";
 import React, { useState } from "react";
-import { Typography } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import GroupIcon from "@mui/icons-material/Group";
@@ -47,6 +47,21 @@ export default function Sidebar() {
       >
         {location.pathname.startsWith("/dashboard/organization") ? (
           <>
+          <NavBarItem
+              open={open}
+              selected={location.pathname === "/dashboard"}
+              onClick={() => navigate("/dashboard")}
+            >
+              <ViewListIcon fontSize="large" />
+              <Typography>Dashboard</Typography>
+            </NavBarItem>
+            <div style={{
+                height: "2px",
+                width: "100%",
+                backgroundColor: "var(--border)",
+                alignSelf: "center",
+                margin: "6px"
+              }} />
             <NavBarItem
               open={open}
               selected={location.pathname === "/dashboard/organization"}
