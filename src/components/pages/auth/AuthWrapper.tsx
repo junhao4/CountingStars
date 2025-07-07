@@ -21,6 +21,7 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
 
     if (!loading && !session) {
       console.log("Authwrapper navigating to /")
+      createMessage("info","Your session has expired. Please log in to continue.")
       navigate('/')
     } else if (!loading && session) {
       new Promise(async () => {
