@@ -30,7 +30,7 @@ export type Inventory = {
     name: string,
     quantity: number,
     description: string,
-    expiryDate: string
+    expiryDate: string | null
 }
 
 export type Notification = {

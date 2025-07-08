@@ -1,32 +1,12 @@
 import {
-  DataGrid,
-  GridActionsCellItem,
-  GridRowEditStopReasons,
-  GridRowModes,
-  type GridColDef,
-  type GridEventListener,
-  type GridRenderCellParams,
-  type GridRowModel,
-  type GridRowModesModel,
-  type GridRowParams,
-  type GridRowsProp,
+  DataGrid, GridActionsCellItem, GridRowEditStopReasons, GridRowModes,
+  type GridColDef, type GridEventListener, type GridRenderCellParams, type GridRowModel, type GridRowModesModel,
+  type GridRowParams, type GridRowsProp,
 } from "@mui/x-data-grid";
-import {
-  useOrgContext,
-} from "../../../common/contexts/OrgContext";
+import { useOrgContext } from "../../../common/contexts/OrgContext";
 import { useEffect, useState } from "react";
 import supabase from "../../../helper/supabaseClient";
-import {
-  Avatar,
-  Box,
-  Button,
-  FormControl,
-  Input,
-  InputLabel,
-  MenuItem,
-  Select,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Button, FormControl, Input, InputLabel, MenuItem, Select, Typography } from "@mui/material";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import EditIcon from "@mui/icons-material/Edit";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -443,16 +423,16 @@ export default function OrgUsers() {
   return loading ? (
     <Loading></Loading>
   ) : (
-    <div style={{width:'70%', maxWidth:'70%', margin: '1rem 0'}}>
+    <div style={{ width: '70%', maxWidth: '70%', margin: '1rem 0' }}>
       <Box hidden={!(orgProps.role === "owner" || orgProps.role === "admin")}
-        sx={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'right', gap:'4rem', alignItems: 'center', p:'1rem' }}
+        sx={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'right', gap: '4rem', alignItems: 'center', p: '1rem' }}
         bgcolor='transparent'>
-        <div style={{display:'flex', flexWrap:'nowrap', gap:'2rem', alignItems:'center'}}>
+        <div style={{ display: 'flex', flexWrap: 'nowrap', gap: '2rem', alignItems: 'center' }}>
           <Typography>Email: </Typography>
           <Input value={email} onChange={(e) => setEmail(e.target.value)}
             placeholder='Email' />
         </div>
-        <div style={{display:'flex', flexWrap:'nowrap', gap:'2rem', alignItems:'center'}}>
+        <div style={{ display: 'flex', flexWrap: 'nowrap', gap: '2rem', alignItems: 'center' }}>
           <Typography>Role: </Typography>
           <FormControl size="small">
             <InputLabel id="role-select-label">Role</InputLabel>

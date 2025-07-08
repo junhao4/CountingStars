@@ -1,6 +1,6 @@
-import Home from "../pages/Home"
+import Home from "../pages/HomePage"
 import { Route, Routes } from "react-router-dom";
-import NotFound from "../pages/NotFound";
+import NotFound from "../pages/NotFoundPage";
 import ProtectedRoutes from "./ProtectedRoutes";
 import ForgotPasswordPage from "../pages/auth/ForgetPasswordPage";
 import LoginPage from "../pages/auth/LoginPage";

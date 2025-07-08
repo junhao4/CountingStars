@@ -3,7 +3,7 @@ import Container from "@mui/material/Container";
 import { useEffect, useState, type ChangeEvent } from "react";
 import { useAlertContext } from "../../../common/contexts/AlertContext";
 import { useSessionContext, type ValidSession } from "../../../common/contexts/SessionContext";
-import { updateProfileName, updateProfileImage, fetchImageFile, downloadProfileImage } from "../api/ProfileApi";
+import { updateProfileName, updateProfileImage, fetchProfileImage, downloadProfileImage } from "../api/ProfileApi";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload"
 
 
@@ -44,7 +44,7 @@ export default function Profile() {
     //Fetches user image file
     useEffect(() => {
         if (user) {
-            fetchImageFile(user.id).then(data => {
+            fetchProfileImage(user.id).then(data => {
                 data && (setProfileUrl(data.image_file || "Default_pfp.jpg"))
             })}
     }, [user]);

@@ -3,9 +3,9 @@ import { MemoryRouter } from "react-router-dom"
 import { expect, it } from "vitest"
 import '@testing-library/jest-dom';
 import { describe } from "node:test";
-import Sidebar from "../../common/components/sidebar/Sidebar";
-import ContextProvider from "../../common/contexts/ContextProvider";
 import userEvent from "@testing-library/user-event";
+import Sidebar from "../common/components/sidebar/Sidebar";
+import ContextProvider from "../common/contexts/ContextProvider";
 
 
 const renderSidebar = (path : string) =>

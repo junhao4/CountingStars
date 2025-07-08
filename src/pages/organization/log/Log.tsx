@@ -1,6 +1,5 @@
 import './Log.css'
 import { useOrgContext } from "../../../common/contexts/OrgContext.tsx"
-import { useAlertContext } from '../../../common/contexts/AlertContext.tsx'
 import { useEffect, useState } from 'react'
 import { fetchLogs, generateLogMessage, type LogFetch } from './LogController.tsx'
 
@@ -9,14 +8,13 @@ import { fetchLogs, generateLogMessage, type LogFetch } from './LogController.ts
 export default function OrgLog() {
     const { getOrgContext } = useOrgContext()
     const orgProps = getOrgContext()!
-    const { createAlert } = useAlertContext()
 
     const [logs, setLogs] = useState<LogFetch[]>([])
 
 
 
     useEffect(() => {
-        fetchLogs(orgProps, createAlert, setLogs)
+        fetchLogs(orgProps, setLogs)
     }, [])
 
     return (

@@ -1,17 +1,18 @@
 import { vi, it, expect, describe, afterEach } from "vitest";
 import { act, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { fetchDashboard, transformOrgDataToDashboardCard } from "../pages/dashboard/DashboardController";
-import App from "../../App";
-import ContextProvider from "../../common/contexts/ContextProvider";
-import { fetchOrganization, fetchOrgImage } from "../pages/organization/OrgController";
-import { dummyUUID, simulateMockSession, simulateNoSession } from "./testController";
-import * as SessionContext from "../../common/contexts/SessionContext"
-import * as OrgController from "../pages/organization/OrgController"
-import * as DashboardController from "../pages/dashboard/DashboardController"
+import App from "../App";
+import ContextProvider from "../common/contexts/ContextProvider";
+import { fetchOrganization, fetchOrgImage } from "../features/organization/home/api/HomeApi";
+import { dummyUUID, simulateMockSession, simulateNoSession } from "./testApi";
+import * as SessionContext from "../common/contexts/SessionContext"
+import * as OrgController from "../features/organization/home/api/HomeApi"
+import * as DashboardController from "../features/dashboard/api/DashboardApi"
 import * as AuthController from "../features/authentication/api/AuthApi"
-import * as AccountMenuController from "../overlays/header/AccountMenuController"
+import * as AccountMenuController from "../common/api/UserApi"
 import userEvent from "@testing-library/user-event";
+import { fetchDashboard, transformOrgDataToDashboardCard } from "../features/dashboard/api/DashboardApi";
+import type { Organization } from "../helper/types";
 
 URL.createObjectURL = vi.fn()
 vi.mocked(URL.createObjectURL).mockReturnValue("Url")
@@ -122,7 +123,7 @@ describe("TransformOrgDataToDashboardCard unit test", () => {
     })
 
     it("should return data when input valid user and organization data", async () => {
-        const dummyOrganization = { id: 1, name: "Test Organization", imageFile: null }
+        const dummyOrganization: Organization = { id: 1, name: "Test Organization", imageFile: "TEST", role: 'member' }
         const expectedOutputData = { ...dummyOrganization, role: 'member', imageUrlBlob: "ImageUrl" }
 
         vi.spyOn(OrgController, "fetchUserRole").mockResolvedValue("member")
@@ -138,7 +139,7 @@ describe("TransformOrgDataToDashboardCard unit test", () => {
     })
 
     it("should return null when invalid input", async () => {
-        const dummyOrganization = { id: 1, name: "Test Organization", imageFile: null }
+        const dummyOrganization: Organization = { id: 1, name: "Test Organization", imageFile: "Default_photo.jpg", role: 'member' }
         const expectedOutputData = null
 
         vi.spyOn(OrgController, "fetchUserRole").mockResolvedValue(null)
@@ -161,11 +162,10 @@ describe("Dashboard page rendering", () => {
     it("should render dashboard when session exists", async () => {
         simulateMockSession()
 
-        vi.spyOn(AccountMenuController, "fetchProfileImage").mockResolvedValue(
-            { data: { image_file: null }, error: null, count: 1, status: 100, statusText: "" })
+        vi.spyOn(AccountMenuController, "fetchProfileImage").mockResolvedValue(null)
 
         vi.spyOn(DashboardController, "fetchDashboard").mockResolvedValue(
-            [{ id: 1, name: "Test Org", role: "pending", imageFile: null, imageUrlBlob: null }])
+            [{ id: 1, name: "Test Org", role: "pending", imageFile: "TEST", imageUrlBlob: null }])
 
         await act(async () => {
             render(
@@ -200,11 +200,10 @@ describe("Dashboard page rendering", () => {
     it("should show alert when entering organization button is clicked with pending role", async () => {
         simulateMockSession()
 
-        vi.spyOn(AccountMenuController, "fetchProfileImage").mockResolvedValue(
-            { data: { image_file: null }, error: null, count: 1, status: 100, statusText: "" })
+        vi.spyOn(AccountMenuController, "fetchProfileImage").mockResolvedValue(null)
 
         vi.spyOn(DashboardController, "fetchDashboard").mockResolvedValue(
-            [{ id: 1, name: "Test Org", role: "pending", imageFile: null, imageUrlBlob: null }])
+            [{ id: 1, name: "Test Org", role: "pending", imageFile: "TEST", imageUrlBlob: null }])
 
         await act(async () => {
             render(

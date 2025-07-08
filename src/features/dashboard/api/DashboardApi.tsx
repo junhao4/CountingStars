@@ -1,7 +1,7 @@
 import type { AlertType } from "../../../common/contexts/AlertContext"
 import supabase from "../../../helper/supabaseClient"
 import type { OrganizationRolesType, Organization } from "../../../helper/types"
-import { fetchOrganization, fetchOrgImage, fetchUserRole } from "../../../pages/organization/OrgController"
+import { fetchOrganization, fetchOrgImage, fetchUserRole } from "../../organization/home/api/HomeApi"
 
 export interface DashboardOrganizationFetch {
     id: number

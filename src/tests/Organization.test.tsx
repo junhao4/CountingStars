@@ -1,12 +1,12 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import * as SessionContext from "../../common/contexts/SessionContext"
-import * as OrgController from "../pages/organization/OrgController"
-import * as DashboardController from "../pages/dashboard/DashboardController"
+import * as SessionContext from "../common/contexts/SessionContext"
+import * as OrgController from "../features/organization/home/api/HomeApi"
+import * as DashboardController from "../features/dashboard/api/DashboardApi"
 import * as AuthController from "../features/authentication/api/AuthApi"
-import { dummyUUID } from "./testController";
+import { dummyUUID } from "./testApi";
 import type { PostgrestError } from "@supabase/supabase-js";
 import type { PostgrestResponseFailure } from "@supabase/postgrest-js";
-import supabase from "../../helper/supabaseClient";
+import supabase from "../helper/supabaseClient";
 
 // Change the mock return values in the individual tests to change the mock supabase results
 const mocks = vi.hoisted(() => {

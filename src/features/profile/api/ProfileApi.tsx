@@ -2,7 +2,8 @@ import type { ChangeEvent } from "react";
 import type { AlertType } from "../../../common/contexts/AlertContext";
 import supabase from "../../../helper/supabaseClient";
 
-export const fetchImageFile = async (userId: string) => {
+// Fetches the profile image name of user
+export const fetchProfileImage = async (userId: string) => {
     const { data, error } = await supabase
         .from("Users")
         .select("image_file")

@@ -32,8 +32,11 @@ export const addLog = async (
         .from("Logs")
         .insert({ type, performer_id, item_id, metadata, organization_id })
         .then((res) => {
-            if (res.error) return res.error.message;
-            else return null;
+            if (res.error) { 
+                console.log(res.error.message)
+                return null
+            }
+            else return true;
         });
 };
 
@@ -82,7 +85,6 @@ export const generateLogMessage = (
 //Gets the logs from supabase
 export const fetchLogs = async (
     orgProps: OrgProps,
-    createAlert: (arg0: AlertType, arg1: string) => void,
     setLogs: React.Dispatch<React.SetStateAction<LogFetch[]>>
 ) => {
     await supabase
@@ -93,7 +95,7 @@ export const fetchLogs = async (
         .eq("organization_id", orgProps.id)
         .order("id", { ascending: false })
         .then((res) => {
-            if (res.error) createAlert("error", res.error.message);
+            if (res.error) console.log(res.error.message);
             else
                 setLogs(
                     res.data.map((log) => {

@@ -11,79 +11,38 @@ import {
   Select,
   Typography
 } from "@mui/material";
-import supabase from "../../../helper/supabaseClient";
 import { useOrgContext } from "../../../common/contexts/OrgContext";
 import type { Dayjs } from "dayjs";
 import { useNavigate } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useAlertContext } from "../../../common/contexts/AlertContext";
-import { addLog, LogTypes } from "../log/LogController";
-import { useSessionContext } from "../../../common/contexts/SessionContext";
-import { fetchCategoryOptions, handleCategoryChange, type CategoryFetch } from "./InventoryController";
+import { useSessionContext, type ValidSession } from "../../../common/contexts/SessionContext";
+import { fetchCategoryOptions, handleAddItem, handleCategoryChange, type CategoryFetch } from "../../../features/organization/inventory/api/InventoryApi";
+import type { Inventory } from "../../../helper/types";
 
-export default function OrgAddItem() {
+export default function InventoryAddItemPage() {
   const { getOrgContext } = useOrgContext();
   const orgProps = getOrgContext()!;
   const navigate = useNavigate();
   const { createAlert } = useAlertContext();
-  const { session } = useSessionContext();
+  const { user } = useSessionContext() as ValidSession
 
   const [itemName, setItemName] = useState<string>("");
   const [itemQuantity, setItemQuantity] = useState<number>(1);
   const [itemDescription, setItemDescription] = useState<string>("");
   const [itemCategory, setItemCategory] = useState<string[]>([]);
   const [itemExpiry, setItemExpiry] = useState<Dayjs | null>(null); // In the format YYYY-MM-DD
-
   const [categoryOptions, setCategoryOptions] = useState<CategoryFetch[]>([]);
 
-   const handleAddItem = async () => {
-    await supabase
-      .from("Items")
-      .insert({
-        name: itemName,
-        org_id: orgProps.id,
-        quantity: itemQuantity,
-        description: itemDescription,
-        expiry_date: itemExpiry?.toDate().toDateString(),
-      })
-      .select()
-      .single()
-      .then((res) => {
-        if (res.error) {
-          createAlert('error', res.error.message);
-          return Promise.reject(false);
-        }
+  const item: Omit<Inventory, "id"> & { categories: string[] } = {
+    name: itemName, quantity: itemQuantity, description: itemDescription,
+    expiryDate: itemExpiry?.toDate().toDateString() || null,
+    categories: itemCategory
+  }
 
-        Promise.all(
-          itemCategory.map(async (value) => {
-            const row = categoryOptions.find((cat) => cat.name === value);
-            return row
-              ? supabase
-                .from("items_categories")
-                .insert({ item_id: res.data.id, category_id: row.id })
-                .then((res) => {
-                  if (res.error) {
-                    createAlert('error', res.error.message);
-                    return false
-                  }
-                  return true
-                })
-              : Promise.resolve(true);
-          })
-        ).then((b: boolean[]) => {
-          if (b.reduce((prev, next) => prev && next, true)) {
-            addLog(orgProps.id, LogTypes.INSERT_NEW, session?.user.id!, res.data.id, {})
-              .then(err => {
-                if (err) { createAlert('error', "Error adding insert item to logs") }
-                else { createAlert('success', "Successfully added item!") }
-              })
-          }
-          navigate("/dashboard/organization/inventory")
-        });
-
-      });
-  };
-
+  const onHandleAddItem = async () => {
+    await handleAddItem(user.id, item, categoryOptions, orgProps.id, createAlert)
+  }
 
   useEffect(() => {
     fetchCategoryOptions(orgProps, createAlert, setCategoryOptions);
@@ -221,7 +180,7 @@ export default function OrgAddItem() {
           sx={{ m: "1rem 2rem" }}
           variant="contained"
           color='secondary'
-          onClick={handleAddItem}
+          onClick={onHandleAddItem}
           children="Add"
         />
       </Box>

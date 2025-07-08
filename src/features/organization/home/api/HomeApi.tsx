@@ -1,5 +1,5 @@
-import supabase from "../../helper/supabaseClient"
-import { OrganizationRoles, type OrganizationRolesType } from "../../helper/types"
+import supabase from "../../../../helper/supabaseClient"
+import { OrganizationRoles, type OrganizationRolesType } from "../../../../helper/types"
 
 export const fetchOrganization = async (organizationId: number) => {
     const { data, error } = await supabase.from("Organizations")

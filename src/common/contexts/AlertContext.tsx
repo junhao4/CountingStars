@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, type SetStateAction } from "react"
 
 export type AlertType = "success"|"info"|"warning"|"error"
+export type CreateAlertType = (arg0: AlertType, arg1: string) => void
 
 interface AlertProps {
     variant: AlertType,

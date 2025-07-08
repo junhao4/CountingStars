@@ -7,6 +7,7 @@ import { downloadProfileImage, fetchProfileImage } from '../../../api/UserApi'
 import AccountMenuDropdown from './AccountMenuDropdown';
 import AccountMenuIcon from './AccountMenuIcon';
 import AccountBell from './AccountMenuBell';
+
 export default function AccountMenu() {
   const { createAlert } = useAlertContext()
   const { user } = useSessionContext()
@@ -50,11 +51,9 @@ export default function AccountMenu() {
   //Downloads user image from storage
   useEffect(() => {
     new Promise(async () => {
-      const { data, error } = await downloadProfileImage(profileUrl)
-      if (error) {
-        createAlert('error', "Error downloading image: " + error.message);
-      } else if (data) {
-        const url = URL.createObjectURL(data);
+      const blob = await downloadProfileImage(profileUrl || "Default_pfp.jpg")
+      if (blob) {
+        const url = URL.createObjectURL(blob);
         setImg(url);
       }
     })
@@ -63,8 +62,8 @@ export default function AccountMenu() {
   return (
     <>
       <AccountBell />
-      <AccountMenuIcon open={open} img={img} handleClick={handleClick}/>
-      <AccountMenuDropdown anchorEl={anchorEl} handleClose={handleClose} 
+      <AccountMenuIcon open={open} img={img} handleClick={handleClick} />
+      <AccountMenuDropdown anchorEl={anchorEl} handleClose={handleClose}
         handleLogout={handleLogout} handleProfile={handleProfile} open={open} user={user!} />
     </>
   );

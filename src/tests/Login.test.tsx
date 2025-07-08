@@ -3,11 +3,11 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest'
 import { MemoryRouter, Route, Routes } from "react-router-dom"
-import App from "../../App";
-import ContextProvider from "../../common/contexts/ContextProvider";
+import App from "../App";
+import ContextProvider from "../common/contexts/ContextProvider";
 import type { Session, User } from "@supabase/supabase-js";
-import supabase from "../../helper/supabaseClient";
-import { useSessionContext, SessionProvider } from "../../common/contexts/SessionContext";
+import supabase from "../helper/supabaseClient";
+import { useSessionContext, SessionProvider } from "../common/contexts/SessionContext";
 
 const renderLoginWithoutSession = () => {
   return render(

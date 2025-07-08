@@ -5,7 +5,7 @@ import supabase from '../helper/supabaseClient';
 import { useAlertContext } from '../common/contexts/AlertContext';
 
 
-function Home() {
+export default function HomePage() {
     const { setTitle } = usePageTitleContext()
     const { createAlert } = useAlertContext()
     const [logo, setLogo] = useState<string>()
@@ -85,5 +85,3 @@ function Home() {
         </Box>
     )
 }
-
-export default Home;

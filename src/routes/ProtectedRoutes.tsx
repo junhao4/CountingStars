@@ -2,9 +2,9 @@ import { Routes, Route } from "react-router-dom";
 import ProfilePage from "../pages/account/ProfilePage";
 import AuthWrapper from "../pages/auth/AuthWrapper";
 import CreateOrg from "../pages/dashboard/DashboardCreateOrgPage";
-import Dashboard from "../features/dashboard/components/Dashboard";
+import DashboardPage from "../pages/dashboard/DashboardPage";
 import OrgHome from "../pages/organization/Home";
-import OrgAddItem from "../pages/organization/inventory/AddItem";
+import OrgAddItem from "../pages/organization/inventory/InventoryAddItemPage";
 import OrgCategories from "../pages/organization/inventory/Categories";
 import OrgInventory from "../features/organization/inventory/components/Inventory";
 import OrgLog from "../pages/organization/log/Log";
@@ -17,7 +17,7 @@ export default function ProtectedRoutes() {
     return (
         <AuthWrapper>
             <Routes>
-                <Route index element={<Dashboard />} />
+                <Route index element={<DashboardPage />} />
                 <Route path="/new" element={<CreateOrg />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/notifications" element={<NotificationsPage />} />

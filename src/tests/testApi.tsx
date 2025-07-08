@@ -3,7 +3,7 @@ import supabase from "../../helper/supabaseClient"
 import type { PostgrestResponseFailure, PostgrestResponseSuccess } from "@supabase/postgrest-js"
 import type { Session } from "@supabase/supabase-js"
 import * as SessionContext from "../../common/contexts/SessionContext"
-import * as OrgController from "../pages/organization/OrgController"
+import * as OrgController from "../features/organization/home/api/HomeApi"
 import * as DashboardController from "../pages/dashboard/DashboardController"
 import * as AuthController from "../features/authentication/api/AuthApi"
 

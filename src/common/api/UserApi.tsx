@@ -33,6 +33,19 @@ export const fetchProfileImage = async (userId: string, createAlert: (arg0: Aler
     }
 };
 
+// Download profile image of user
+export const downloadProfileImage = async (profileUrl: string) => {
+    const { data, error } = await supabase.storage
+        .from("profile-images")
+        .download(profileUrl);
+    if (error) {
+        console.error("Error downloading image:", error.message)
+        return null
+    } else {
+        return data
+    }
+}
+
 //Creates new user for first time users in supabase with default name and pfp
 export const handleFirstTimeUser = async (
     userId: string,
