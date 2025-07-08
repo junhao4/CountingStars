@@ -8,7 +8,7 @@ import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import ContextProvider from './components/contexts/ContextProvider.js'
+import ContextProvider from './common/contexts/ContextProvider.js'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

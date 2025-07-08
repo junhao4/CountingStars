@@ -1,14 +1,14 @@
 import "./App.css";
-import Header from "./components/overlays/Header.tsx";
-import Message from "./components/overlays/Message.tsx";
-import Sidebar from "./components/overlays/Sidebar.tsx";
+import AlertPopup from "./common/components/AlertPopup.tsx";
+import Header from "./common/components/header/Header.tsx";
+import Sidebar from "./common/components/sidebar/Sidebar.tsx";
 import MainRoutes from "./routes/MainRoutes.tsx";
 
 function App() {
   return (
     <main>
       <Header />
-      <Message />
+      <AlertPopup />
       <div className="app-div">
         <Sidebar />
         <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginRight: '4rem' }}>
