@@ -1,3 +1,4 @@
+import type { OrgProps } from "../../../../common/contexts/OrgContext"
 import supabase from "../../../../helper/supabaseClient"
 import { OrganizationRoles, type OrganizationRolesType } from "../../../../helper/types"
 
@@ -45,4 +46,26 @@ export const fetchOrgImage = async (fileName: string | null) => {
         return null
     }
     return URL.createObjectURL(data)
+}
+
+export const fetchUsersNumber = async (orgProps : OrgProps, setUsers : React.Dispatch<React.SetStateAction<number>>) => {
+    const { data } = await supabase
+      .from("users_organizations")
+      .select("user_id")
+      .eq("organization_id", orgProps.id)
+       console.log(data)
+    setUsers(data?.length!)
+}
+
+export const fetchItemsNumber = async (orgProps : OrgProps, setItems : React.Dispatch<React.SetStateAction<number>>) => {
+    const { data } = await supabase
+      .from("Items")
+      .select("quantity")
+      .eq("org_id", orgProps.id)
+      .eq("deleted", false)
+    
+    if (data) {
+    console.log(data)
+    setItems(data!.map(x => x.quantity).reduce((x, y) => x + y))
+    }
 }
