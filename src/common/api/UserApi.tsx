@@ -1,6 +1,6 @@
 import supabase from "../../helper/supabaseClient"
 import type { AlertType } from "../contexts/AlertContext"
-
+    
 
 export const fetchUser = async (userId: string) => {
     const { data, error } = await supabase
