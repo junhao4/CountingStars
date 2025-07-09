@@ -7,9 +7,8 @@ export const fetchOrganizationImage = async (organizationId: number) => {
         .eq('id', organizationId)
         .single()
 
-    if (error) {
-        console.log(error.message)
-        return null
+    if (data?.image_file == null) {
+        return "Stock Background.jpg"
     } else {
         return data.image_file
     }

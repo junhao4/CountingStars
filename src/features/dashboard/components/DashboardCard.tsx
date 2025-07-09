@@ -1,5 +1,6 @@
 import { Card, CardMedia, CardContent, Typography, CardActions, Button } from "@mui/material";
-import type { DashboardOrganizationFetch } from "./DashboardController";
+import type { DashboardOrganizationFetch } from "../api/DashboardApi";
+
 
 interface OrgCardProps {
     org: DashboardOrganizationFetch

@@ -59,6 +59,7 @@ export default function SettingsPage() {
     useEffect(() => {
         fetchOrganizationImage(orgProps.id)
             .then(data => data && setImageFile(data))
+        console.log("fetcting", imageFile)
     }, [])
 
     useEffect(() => {
