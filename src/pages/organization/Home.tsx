@@ -14,6 +14,13 @@ import {
 import { usePageTitleContext } from "../../common/contexts/PageTitleContext";
 import { useOrgContext } from "../../common/contexts/OrgContext";
 import { fetchItemsNumber, fetchUsersNumber } from "../../features/organization/home/api/HomeApi";
+import HomeNavigateCard from "../../features/organization/home/components/HomeNavigateCard";
+import HomeIcon from "@mui/icons-material/Home";
+import ViewListIcon from "@mui/icons-material/ViewList";
+import GroupIcon from "@mui/icons-material/Group";
+import SettingsIcon from "@mui/icons-material/Settings";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import HistoryIcon from '@mui/icons-material/History';
 
 
 export default function OrgHome() {
@@ -45,7 +52,7 @@ export default function OrgHome() {
                         flexWrap: "wrap",
                         px: 1,
                         pt: 4,
-                        gap: 10,
+                        gap: 1,
                         bgcolor: "transparent",
                     }}
                 >
@@ -92,11 +99,29 @@ export default function OrgHome() {
                 
               }} />
               {/*Not done*/}
-              <Grid container spacing={4}  sx={{ mt: 4, px: 2 }}>
-                <Card>Users</Card>
-                <Card>Inventory</Card>
-                <Card>Logs</Card>
-                <Card>Settings</Card>
+              <Grid container spacing={0}  sx={{ mt: 4, px: 2, justifyContent: "space-around"}}>
+                <HomeNavigateCard  route="/dashboard/organization/users">
+                <Stack sx={{alignItems : "center"}}>
+                    <GroupIcon sx={{ fontSize: "108px" }} />
+                    Users
+                    </Stack>
+                </HomeNavigateCard>
+                <HomeNavigateCard  route="/dashboard/organization/inventory">
+                <Stack sx={{alignItems : "center"}}>
+                    <InventoryIcon sx={{ fontSize: "108px" }} />
+                    Inventory
+                    </Stack>
+                </HomeNavigateCard><HomeNavigateCard  route="/dashboard/organization/log">
+                <Stack sx={{alignItems : "center"}}>
+                    <HistoryIcon sx={{ fontSize: "108px" }} />
+                    Logs
+                    </Stack>
+                </HomeNavigateCard><HomeNavigateCard  route="/dashboard/organization/settings">
+                <Stack sx={{alignItems : "center"}}>
+                    <SettingsIcon sx={{ fontSize: "108px" }} />
+                    Settings
+                    </Stack>
+                </HomeNavigateCard>
               </Grid>
                {/*Not done*/}
             </Container>

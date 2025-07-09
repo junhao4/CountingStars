@@ -1,14 +1,14 @@
 import { vi, type Mock } from "vitest"
-import supabase from "../../helper/supabaseClient"
+import supabase from "../helper/supabaseClient"
 import type { PostgrestResponseFailure, PostgrestResponseSuccess } from "@supabase/postgrest-js"
 import type { Session } from "@supabase/supabase-js"
-import * as SessionContext from "../../common/contexts/SessionContext"
-import * as OrgController from "../features/organization/home/api/HomeApi"
-import * as DashboardController from "../pages/dashboard/DashboardController"
+import * as SessionContext from "../common/contexts/SessionContext"
+
 import * as AuthController from "../features/authentication/api/AuthApi"
+import type { User } from "../helper/types"
 
 export const dummyUUID = "7a4af5c3-6640-45c3-94a7-d34bd6fbde02"
-export const dummyUser = { userId: dummyUUID, name: "Test", image_file: "", email: "", created_at: "" }
+export const dummyUser = { id: dummyUUID, name: "Test", imageFile: "", email: "", createdAt: "" }
 export const dummySession: Session = {
     access_token: "",
     refresh_token: "",
