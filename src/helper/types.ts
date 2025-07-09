@@ -14,6 +14,12 @@ export type FirstTimeUser = {
     createdAt: string
 }
 
+export type UserOrganization = {
+    userId: string,
+    organizationId: number,
+    role: OrganizationRolesType
+}
+
 export type Organization = {
     id: number
     name: string
@@ -31,6 +37,21 @@ export type Inventory = {
     quantity: number,
     description: string,
     expiryDate: string | null
+}
+
+export type Category = {
+    id: number,
+    name: string,
+    createdAt: string,
+}
+
+export type Log = {
+    id: number,
+    performerId: string,
+    itemId: number,
+    type: number,
+    metadata: JSON,
+    createdAt: string,
 }
 
 export type Notification = {

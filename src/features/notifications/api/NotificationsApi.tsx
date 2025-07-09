@@ -21,8 +21,7 @@ export const addNotification = async (
         status: true,
     });
     if (error) {
-        console.log("Notification could not be added");
-        return error.message;
+        console.log(error.message);
     } else {
         return null;
     }
