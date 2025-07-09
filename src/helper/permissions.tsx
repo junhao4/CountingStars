@@ -1,4 +1,4 @@
-import type { Inventory, Organization, User } from "../../helper/types";
+import type { Inventory, Organization, User } from "./types";
 
 type Role = "owner" | "admin" | "member" | "pending"
 
@@ -58,11 +58,12 @@ const ROLES = {
 
 export function hasPermission<Resource extends keyof Permissions>(
     user: User,
+    organization: Organization,
     resource: Resource,
     action: Permissions[Resource]["action"],
     data?: Permissions[Resource]["dataType"]
 ) {
-    const role = "member"
+    const role = organization.role
     const permission = (ROLES as RolesWithPermissions)[role][resource]?.[action]
     if (permission == null) return false
 
