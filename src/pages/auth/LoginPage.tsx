@@ -16,7 +16,7 @@ export default function LoginPage() {
         if (user) {
             navigate('/dashboard')
         }
-    }, [])
+    }, [user])
 
     return (
         <EmailLoginForm />

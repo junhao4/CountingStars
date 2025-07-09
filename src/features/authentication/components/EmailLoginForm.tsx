@@ -14,9 +14,6 @@ export default function EmailLoginForm() {
 
     const onHandleLogin = async () => {
         const data = await loginWithEmail({ email, password, createAlert })
-        if (data) {
-            navigate('/dashboard')
-        }
     }
 
     return (

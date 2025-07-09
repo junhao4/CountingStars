@@ -14,11 +14,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <ContextProvider>
-
-        <Routes>
-          <Route index path='/*' element={<App />} />
-        </Routes>
-
+        <App />
       </ContextProvider>
     </BrowserRouter>
 

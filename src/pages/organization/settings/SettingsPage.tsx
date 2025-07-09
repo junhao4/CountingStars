@@ -6,6 +6,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { usePageTitleContext } from "../../../common/contexts/PageTitleContext";
 import { deleteOrganization, fetchOrganizationImage, updateOrganizationImage, updateOrganizationName } from "../../../features/organization/settings/api/SettingsApi";
+import { useNavigate } from "react-router-dom";
 
 const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -23,20 +24,26 @@ export default function SettingsPage() {
     const { getOrgContext, setOrgContext } = useOrgContext();
     const orgProps = getOrgContext()!;
     const { createAlert } = useAlertContext();
+    const navigate = useNavigate()
+
     const [inputName, setInputName] = useState(orgProps.name);
     const [imageFile, setImageFile] = useState("");
     const [img, setImg] = useState<string>();
     const { setTitle } = usePageTitleContext();
 
     const onDeleteOrganization = async () => {
-        await deleteOrganization(orgProps.id, createAlert)
+        const success = await deleteOrganization(orgProps.id)
+        if (success) {
+            createAlert("success", "Successfully deleted organization!");
+            navigate('/dashboard')
+        }
     }
 
     const onUpdateOrganizationName = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const success = await updateOrganizationName(inputName, orgProps.id, createAlert)
         if (success) {
-            setOrgContext({...orgProps, name: inputName})
+            setOrgContext({ ...orgProps, name: inputName })
         }
     }
 
@@ -60,7 +67,7 @@ export default function SettingsPage() {
             const { data, error } = await supabase.storage
                 .from("organization-images")
                 .download(imageFile);
-                
+
             if (error) {
                 createAlert('error', "Error downloading image: " + error.message);
             } else {

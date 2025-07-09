@@ -1,11 +1,11 @@
-import './Log.css'
+import './LogPage.css'
 import { useOrgContext } from "../../../common/contexts/OrgContext.tsx"
 import { useEffect, useState } from 'react'
-import { fetchLogs, generateLogMessage, type LogFetch } from './LogController.tsx'
+import { fetchLogs, generateLogMessage, type LogFetch } from '../../../features/organization/log/api/LogApi.tsx'
 
 
 
-export default function OrgLog() {
+export default function LogPage() {
     const { getOrgContext } = useOrgContext()
     const orgProps = getOrgContext()!
 

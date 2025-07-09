@@ -14,11 +14,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { usePageTitleContext } from "../../../common/contexts/PageTitleContext";
 import Loading from "../../../common/components/Loading";
-import { useSessionContext } from "../../../common/contexts/SessionContext";
+import { useSessionContext, type ValidSession } from "../../../common/contexts/SessionContext";
 import { useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../common/contexts/AlertContext";
 import type { OrganizationRolesType } from "../../../helper/types";
 import { addNotification } from "../../../features/notifications/api/NotificationsApi";
+import { addOrganizationUser, fetchOrganizationUsers } from "../../../features/organization/users/api/UsersApi";
 
 interface UserFetch {
   id: string;
@@ -28,8 +29,8 @@ interface UserFetch {
   email: string | null;
 }
 
-export default function OrgUsers() {
-  const { session } = useSessionContext();
+export default function UsersPage() {
+  const { user } = useSessionContext() as ValidSession
   const { getOrgContext } = useOrgContext();
   const orgProps = getOrgContext()!;
   const { setTitle } = usePageTitleContext();
@@ -39,29 +40,13 @@ export default function OrgUsers() {
 
   const [email, setEmail] = useState<string>('')
   const [role, setRole] = useState<string>('member')
-  const handleSubmit = async () => {
-    const { data, error } = await supabase.from('Users')
-      .select('userId:user_id')
-      .eq('email', email)
-      .maybeSingle()
 
-    if (error) {
-      console.log(error.message)
-      return
-    }
 
-    if (data) {
-      const { error } = await supabase.from('users_organizations')
-        .insert({ user_id: data.userId, organization_id: orgProps!.id, role })
 
-      if (error) {
-        console.log(error)
-      }
-      //notify user of addition to org
-      addNotification(session!.user.id, data.userId, orgProps!.id, 1)
+  const onAddOrganizationUser = async () => {
+    const res = await addOrganizationUser(user.id, orgProps.id, email, role, createAlert)
+    if (res) {
       setRefresh(prev => !prev)
-    } else {
-      console.log('Email not found - Please ensure they have signed up')
     }
   }
 
@@ -112,7 +97,7 @@ export default function OrgUsers() {
         })
     );
 
-    if (newRow.id === session?.user.id) {
+    if (newRow.id === user.id) {
       setOrgContext({
         id: orgProps.id,
         name: orgProps.name,
@@ -121,7 +106,7 @@ export default function OrgUsers() {
     }
 
     //notify user of role change
-    addNotification(session!.user.id, newRow.id, orgProps.id, 4);
+    addNotification(user.id, newRow.id, orgProps.id, 4);
     return newRow;
   };
 
@@ -234,11 +219,11 @@ export default function OrgUsers() {
               else {
                 setRows(rows.filter((row) => row.id !== id));
                 //notify user of deletion
-                addNotification(session!.user.id, row.id, orgProps.id, 2);
+                addNotification(user.id, row.id, orgProps.id, 2);
               }
             });
 
-          if (row.id == session?.user.id) {
+          if (row.id == user.id) {
             navigate("/dashboard");
           }
         };
@@ -278,7 +263,7 @@ export default function OrgUsers() {
               }
             });
 
-          addNotification(session?.user.id!, row.id, orgProps.id, 5)
+          addNotification(user.id, row.id, orgProps.id, 5)
         };
 
         const rejectPendingUser = async () => {
@@ -294,7 +279,7 @@ export default function OrgUsers() {
                 console.log(res.error.message);
               }
             });
-          addNotification(session?.user.id!, row.id, orgProps.id, 6)
+          addNotification(user.id, row.id, orgProps.id, 6)
         };
 
         if (row.role === "pending") {
@@ -358,62 +343,12 @@ export default function OrgUsers() {
     },
   ];
 
-  const fetchUsers = async () => {
-    await supabase
-      .from("users_organizations")
-      .select("userId:user_id, role")
-      .eq("organization_id", orgProps.id)
-      .then((res) => {
-        if (res.error) {
-          console.log(res.error.message);
-          return null;
-        }
-        const promises = res.data.map(async (user) => {
-          const { data, error } = await supabase
-            .from("Users")
-            .select("userId:user_id, name, image_file, email")
-            .eq("user_id", user.userId)
-            .single();
-
-          if (error) {
-            console.log(error.message);
-            return null;
-          }
-
-          var imageURL = "";
-          if (data.image_file) {
-            const { data: img, error: e } = await supabase.storage
-              .from("profile-images")
-              .download(data.image_file);
-
-            if (e) {
-              console.log(e.message);
-            } else {
-              imageURL = URL.createObjectURL(img);
-            }
-          }
-          const result = {
-            id: user.userId,
-            name: data.name,
-            role: user.role as OrganizationRolesType,
-            image_file: imageURL,
-            email: data.email,
-          };
-          return result;
-        });
-
-        Promise.all(promises).then((data) => {
-          if (data) {
-            setRows(data.filter((d) => !!d));
-            setLoading(false);
-          }
-        });
-      });
-  };
-
   const [refresh, setRefresh] = useState<boolean>(true);
   useEffect(() => {
-    fetchUsers();
+    fetchOrganizationUsers(orgProps.id).then(res => {
+      if (res) setRows(res)
+      setLoading(false)
+    })
   }, [refresh]);
 
   useEffect(() => {
@@ -449,7 +384,7 @@ export default function OrgUsers() {
             </Select>
           </FormControl>
         </div>
-        <Button variant="contained" color='secondary' onClick={handleSubmit}>
+        <Button variant="contained" color='secondary' onClick={onAddOrganizationUser}>
           Add user
         </Button>
       </Box>
