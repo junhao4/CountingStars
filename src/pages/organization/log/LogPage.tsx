@@ -1,29 +1,26 @@
-import './LogPage.css'
-import { useOrgContext } from "../../../common/contexts/OrgContext.tsx"
-import { useEffect, useState } from 'react'
-import { fetchLogs, generateLogMessage, type LogFetch } from '../../../features/organization/log/api/LogApi.tsx'
-<<<<<<< HEAD:src/pages/organization/log/Log.tsx
-import LogRow from '../../../features/organization/log/componentss/LogRow.tsx'
-import { Container, Paper, Typography } from '@mui/material'
-import LogHeader from '../../../features/organization/log/componentss/LogHeader.tsx'
-=======
->>>>>>> cc14f6b3cb5e4a0b63f7722fc6c3bcd74d089609:src/pages/organization/log/LogPage.tsx
-
-
+import "./LogPage.css";
+import { useOrgContext } from "../../../common/contexts/OrgContext.tsx";
+import { useEffect, useState } from "react";
+import {
+    fetchLogs,
+    generateLogMessage,
+    type LogFetch,
+} from "../../../features/organization/log/api/LogApi.tsx";
+import LogRow from "../../../features/organization/log/componentss/LogRow.tsx";
+import { Container, Paper, Typography } from "@mui/material";
+import LogHeader from "../../../features/organization/log/componentss/LogHeader.tsx";
 
 export default function LogPage() {
-    const { getOrgContext } = useOrgContext()
-    const orgProps = getOrgContext()!
+    const { getOrgContext } = useOrgContext();
+    const orgProps = getOrgContext()!;
 
-    const [logs, setLogs] = useState<LogFetch[]>([])
-
-
+    const [logs, setLogs] = useState<LogFetch[]>([]);
 
     useEffect(() => {
-        fetchLogs(orgProps, setLogs)
-    }, [])
+        fetchLogs(orgProps, setLogs);
+    }, []);
 
-   /* return (
+    /* return (
         <>
             <table className='log-table'>
                 <thead className='log-table-header log-table-row'>
@@ -47,24 +44,31 @@ export default function LogPage() {
             </table>
         </>
     ) */
-   return ( <>
-         <Container>
-            <Typography variant='h2' sx={{my : 2}}>
-                Inventory Logs
-            </Typography>
-            <Typography variant='h6' sx={{my : 2, color : "grey", fontWeight : 400}}>
-                View all recorded actions in your organization
-            </Typography>
-            <Paper>
-                <LogHeader></LogHeader>
-                {logs.map((log, index) => {
-                        return (
-                             <LogRow log={log} index={index + 1}></LogRow>
-                        )
-                    }
-                )}
-           
-            </Paper>
+    return (
+        <>
+            <Container>
+                <Typography variant="h2" sx={{ my: 2 }}>
+                    Inventory Logs
+                </Typography>
+                <Typography
+                    variant="h6"
+                    sx={{ my: 2, color: "grey", fontWeight: 400 }}
+                >
+                    View all recorded actions in your organization
+                </Typography>
+                <Paper>
+                    <LogHeader></LogHeader>
+                    {logs.length === 0 ? (
+                        <Typography variant="h3" sx={{ px: 2, py: 2, textAlign: "center"}}>
+                            No logs available
+                        </Typography>
+                    ) : (
+                        logs.map((log, index) => (
+                            <LogRow key={index} log={log} index={index + 1} />
+                        ))
+                    )}
+                </Paper>
             </Container>
-        </>)
+        </>
+    );
 }
