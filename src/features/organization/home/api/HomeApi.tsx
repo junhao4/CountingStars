@@ -53,6 +53,7 @@ export const fetchUsersNumber = async (orgProps : OrgProps, setUsers : React.Dis
       .from("users_organizations")
       .select("user_id")
       .eq("organization_id", orgProps.id)
+      .neq("role", "pending")
        console.log(data)
     setUsers(data?.length!)
 }

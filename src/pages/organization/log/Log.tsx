@@ -1,7 +1,10 @@
 import './Log.css'
 import { useOrgContext } from "../../../common/contexts/OrgContext.tsx"
 import { useEffect, useState } from 'react'
-import { fetchLogs, generateLogMessage, type LogFetch } from './LogController.tsx'
+import { fetchLogs, generateLogMessage, type LogFetch } from '../../../features/organization/log/api/LogApi.tsx'
+import LogRow from '../../../features/organization/log/componentss/LogRow.tsx'
+import { Container, Paper, Typography } from '@mui/material'
+import LogHeader from '../../../features/organization/log/componentss/LogHeader.tsx'
 
 
 
@@ -17,7 +20,7 @@ export default function OrgLog() {
         fetchLogs(orgProps, setLogs)
     }, [])
 
-    return (
+   /* return (
         <>
             <table className='log-table'>
                 <thead className='log-table-header log-table-row'>
@@ -40,5 +43,25 @@ export default function OrgLog() {
                 </tbody>
             </table>
         </>
-    )
+    ) */
+   return ( <>
+         <Container>
+            <Typography variant='h2' sx={{my : 2}}>
+                Inventory Logs
+            </Typography>
+            <Typography variant='h6' sx={{my : 2, color : "grey", fontWeight : 400}}>
+                View all recorded actions in your organization
+            </Typography>
+            <Paper>
+                <LogHeader></LogHeader>
+                {logs.map((log, index) => {
+                        return (
+                             <LogRow log={log} index={index + 1}></LogRow>
+                        )
+                    }
+                )}
+           
+            </Paper>
+            </Container>
+        </>)
 }
