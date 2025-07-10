@@ -84,16 +84,23 @@ export const generateLogMessage = (
 //Gets the logs from supabase
 export const fetchLogs = async (
     org: Organization,
-    setLogs: React.Dispatch<React.SetStateAction<LogFetch[]>>
+    setLogs: React.Dispatch<React.SetStateAction<LogFetch[]>>,
+    filter: string[]
 ) => {
-    await supabase
+    let query = supabase
         .from("Logs")
         .select(
             "id, Users!performer_id(name), Items!item_id(name), type, created_at, metadata"
         )
         .eq("organization_id", org.id)
         .order("id", { ascending: false })
-        .then((res) => {
+
+        const types = filter.map(x => typeToInt(x) as number)
+        if (filter.length > 0) {
+            query = query.in("type", types)
+        }
+        
+        const res = await query
             if (res.error) console.log(res.error.message);
             else
                 setLogs(
@@ -105,5 +112,13 @@ export const fetchLogs = async (
                         };
                     })
                 );
-        });
+        
 };
+
+export const typeToInt = (type : string) => {
+    switch (type) {
+        case "Created" : return 1
+        case "Updated" : return 2
+        case "Deleted" : return 4
+    }
+}
