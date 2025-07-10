@@ -1,22 +1,24 @@
-import './LogPage.css'
-import { useOrgContext, type ValidOrg } from "../../../common/contexts/OrgContext.tsx"
-import { useEffect, useState } from 'react'
-import { fetchLogs, generateLogMessage, type LogFetch } from '../../../features/organization/log/api/LogApi.tsx'
-
-
+import "./LogPage.css";
+import { useOrgContext, type ValidOrg } from "../../../common/contexts/OrgContext.tsx";
+import { useEffect, useState } from "react";
+import {
+    fetchLogs,
+    type LogFetch,
+} from "../../../features/organization/log/api/LogApi.tsx";
+import LogRow from "../../../features/organization/log/components/LogRow.tsx";
+import { Container, Paper, Typography } from "@mui/material";
+import LogHeader from "../../../features/organization/log/components/LogHeader.tsx";
 
 export default function LogPage() {
     const { org } = useOrgContext() as ValidOrg
 
-    const [logs, setLogs] = useState<LogFetch[]>([])
-
-
+    const [logs, setLogs] = useState<LogFetch[]>([]);
 
     useEffect(() => {
         fetchLogs(org, setLogs)
     }, [])
 
-    return (
+    /* return (
         <>
             <table className='log-table'>
                 <thead className='log-table-header log-table-row'>
@@ -39,5 +41,32 @@ export default function LogPage() {
                 </tbody>
             </table>
         </>
-    )
+    ) */
+    return (
+        <>
+            <Container>
+                <Typography variant="h2" sx={{ my: 2 }}>
+                    Inventory Logs
+                </Typography>
+                <Typography
+                    variant="h6"
+                    sx={{ my: 2, color: "grey", fontWeight: 400 }}
+                >
+                    View all recorded actions in your organization
+                </Typography>
+                <Paper>
+                    <LogHeader></LogHeader>
+                    {logs.length === 0 ? (
+                        <Typography variant="h3" sx={{ px: 2, py: 2, textAlign: "center"}}>
+                            No logs available
+                        </Typography>
+                    ) : (
+                        logs.map((log, index) => (
+                            <LogRow key={index} log={log} index={index + 1} />
+                        ))
+                    )}
+                </Paper>
+            </Container>
+        </>
+    );
 }
