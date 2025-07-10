@@ -15,7 +15,7 @@ export const fetchOrganizationImage = async (organizationId: number) => {
 }
 
 //Delete Org
-export const deleteOrganization = async (organizationId: number, createAlert: CreateAlertType) => {
+export const deleteOrganization = async (organizationId: number) => {
     const confirm = window.confirm(
         "Are you sure you want to delete? This action is permanent!"
     );
@@ -23,23 +23,17 @@ export const deleteOrganization = async (organizationId: number, createAlert: Cr
         return false;
     }
 
-    await supabase
+    const { data, error } = await supabase
         .from("Organizations")
         .delete()
         .eq("id", organizationId)
-        .then((res) => {
-            if (res.error) {
-                createAlert("error", "Failed to delete organization.")
-                console.log(res.error.message)
-                return false
-            } else {
-                createAlert(
-                    "success",
-                    "Successfully deleted organization!"
-                );
-                return true
-            }
-        });
+
+    if (error) {
+        console.log(error.message)
+        return false
+    } else {
+        return true
+    }
 };
 
 //Update org name
@@ -74,7 +68,7 @@ export const updateOrganizationName = async (newName: string, organizationId: nu
 //Update org image
 export const updateOrganizationImage = async (organizationId: number, files: FileList | null,
     oldFileName: string, createAlert: CreateAlertType) => {
-        
+
     if (!files || files.length === 0) {
         createAlert("error", "You must select an image to upload.");
         return;

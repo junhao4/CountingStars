@@ -1,7 +1,6 @@
+import type { OrgProps } from "../../../../common/contexts/OrgContext";
 import type { Json } from "../../../../helper/supabase";
 import supabase from "../../../../helper/supabaseClient";
-import type { AlertType } from "../../../../common/contexts/AlertContext";
-import type { OrgProps } from "../../../../common/contexts/OrgContext";
 
 export interface LogFetch {
     id: number;

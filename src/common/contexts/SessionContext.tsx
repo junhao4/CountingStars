@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState, type SetStateAction } f
 import supabase from "../../helper/supabaseClient";
 import type { FirstTimeUser, User } from "../../helper/types";
 import { fetchUser, handleFirstTimeUser } from "../api/UserApi";
+import useLocalStorageSingle from "../hooks/useLocalStorageSingle";
 
 export type ValidSession = {
     session: Session,
@@ -32,21 +33,9 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
     const [user, setUser] = useState<User | FirstTimeUser | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
 
-    // Checks and dynamically updates session state throughout all components that have access to context
-    supabase.auth.onAuthStateChange((event, session) => {
-        console.log('supabase onAuthStateChange function called: ' + session)
-
-        if (event === 'SIGNED_IN') {
-            console.log("Signing in!")
-            setSession(session!)
-        } else if (event === 'SIGNED_OUT') {
-            setSession(null)
-        }
-    })
+    // const { value: user, setValue: setUser } = useLocalStorageSingle<User | FirstTimeUser | null>("user", null)
 
     useEffect(() => {
-        console.log("Session Context useEffect triggerd!")
-
         supabase.auth.getSession().then(async ({ data: { session } }) => {
             if (session) {
                 console.log("Signing in!")
@@ -57,23 +46,49 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
                 setLoading(false)
             }
         });
+
+        // Removes previous onAuthStateChange events
+        supabase.removeAllChannels()
+
+        // Checks and dynamically updates session state throughout all components that have access to context
+        const { data } = supabase.auth.onAuthStateChange((event, session) => {
+            console.log('supabase onAuthStateChange function called')
+
+            if (event === 'SIGNED_IN') {
+                console.log("Signing in!")
+                setSession(session!)
+            } else if (event === 'SIGNED_OUT') {
+                setSession(null)
+            }
+        })
     }, []);
 
     useEffect(() => {
         if (session) {
             new Promise(async () => {
                 const data = await fetchUser(session?.user.id)
+
                 if (data) {
-                    setUser({
-                        ...data, id: data.user_id, createdAt: data.created_at, name: data.name || "NO NAME",
-                        imageFile: data.image_file || "Default_pfp.jpg"
+                    setUser(prev => {
+                        if (prev?.id === data.user_id) {
+                            return prev
+                        }
+                        return {
+                            ...data, id: data.user_id, createdAt: data.created_at, name: data.name || "NO NAME",
+                            imageFile: data.image_file || "Default_pfp.jpg"
+                        }
                     })
                     setLoading(false)
                 } else {
                     const data = await handleFirstTimeUser(session.user.id, session.user.email!)
-                    if (data) setUser({
-                        ...data, id: data.user_id, createdAt: data.created_at, name: data.name || "NO NAME",
-                        imageFile: data.image_file || "Default_pfp.jpg"
+                    if (data) setUser(prev => {
+                        if (prev?.id === data.user_id) {
+                            return prev
+                        }
+                        return {
+                            ...data, id: data.user_id, createdAt: data.created_at, name: data.name || "NO NAME",
+                            imageFile: data.image_file || "Default_pfp.jpg"
+                        }
                     })
                 }
             })

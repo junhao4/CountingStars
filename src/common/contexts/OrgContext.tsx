@@ -25,15 +25,15 @@ export const OrgProvider = ({ children } : { children: React.ReactNode }) => {
 
     const getOrgContext = () => {
         if (orgContext !== null) return orgContext
-        const Json = localStorage.getItem('orgContext')
+        const Json = sessionStorage.getItem('orgContext')
         if (Json) return JSON.parse(Json)
         return null
     }
 
     const setOrgContext = (arg0: OrgProps | null) => {
         set(arg0)
-        if (!!!arg0) localStorage.removeItem('orgContext')
-        else localStorage.setItem('orgContext', JSON.stringify(arg0))
+        if (!!!arg0) sessionStorage.removeItem('orgContext')
+        else sessionStorage.setItem('orgContext', JSON.stringify(arg0))
     }
 
     return (

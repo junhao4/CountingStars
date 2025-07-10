@@ -3,7 +3,6 @@ import type { GridRowSelectionModel } from "@mui/x-data-grid";
 import type { AlertType } from "../../../../common/contexts/AlertContext";
 import type { OrgProps } from "../../../../common/contexts/OrgContext";
 import supabase from "../../../../helper/supabaseClient";
-
 import type { Session } from "@supabase/supabase-js";
 import type { Inventory } from "../../../../helper/types";
 import { addLog, LogTypes } from "../../log/api/LogApi";

@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import Input from "@mui/material/Input";
 import { Typography } from "@mui/material";
 import { usePageTitleContext } from "../../../common/contexts/PageTitleContext";
+import { fetchItemCategories, addItemCategory } from "../../../features/organization/categories/api/CategoriesApi";
 
 interface CategoryFetch {
     id: number,
@@ -15,7 +16,7 @@ interface CategoryFetch {
     quantity: number,
 }
 
-export default function OrgCategories() {
+export default function CategoriesPage() {
     const { setTitle } = usePageTitleContext()
     const { getOrgContext } = useOrgContext()!
     const orgProps = getOrgContext()!
@@ -60,49 +61,20 @@ export default function OrgCategories() {
         }
     ], [categories])
 
-    const fetchCategories = async () => {
-        await supabase.from('Categories')
-            .select('id, name')
-            .eq('org_id', orgProps.id)
-            .then(res => {
-                if (res.error) {createAlert('error', res.error.message)}
-                else {
-                    Promise.all(res.data.map(async cat => {
-                        const { count, error } = await supabase.from('items_categories')
-                            .select('*', { count:'exact' })
-                            .eq('category_id', cat.id)
-
-                        if (error) { createAlert('error', error.message); return {...cat, quantity: 0} }
-                        else {
-                            return {...cat, quantity: count || 0}
-                        }
-                    }))
-                    .then(res => {
-                        setCategories(res)
-                    })
-                }
-            })
-    }
-
     const [addCategoryName, setAddCategoryName] = useState<string>('')
-    const handleAddCategory = async () => {
-        if (addCategoryName === '') {
-            createAlert('error', "Name cannot be empty!")
-            return
-        }
-        const { data, error } = await supabase.from('Categories')
-            .insert({ org_id: orgProps.id, name: addCategoryName })
-            .select()
 
-        if (error) { createAlert('error', error.message) }
-        else {
-            setCategories([...categories, ...data.map(d => {return {...d, quantity: 0}})])
-            createAlert('success', "Successfully added category!")
+    const onAddItemCategory = async () => {
+        const res = await addItemCategory(orgProps.id, addCategoryName, createAlert)
+        if (res) {
+            setCategories({...categories, ...res})
+            createAlert("success", "Successfully added category!")
         }
     }
 
     useEffect(() => {
-        fetchCategories()
+        fetchItemCategories(orgProps.id).then(data => {
+            setCategories(data)
+        })
         setTitle(orgProps.name)
     }, [])
 
@@ -111,7 +83,7 @@ export default function OrgCategories() {
             <div style={{ display: 'flex', justifyContent: 'right', alignItems: 'center', margin: '2rem 0', gap: '1rem' }}>
                 <Typography variant="body1">Name: </Typography>
                 <Input value={addCategoryName} placeholder='Name' onChange={(e) => setAddCategoryName(e.target.value)} />
-                <Button color='success' variant='contained' onClick={handleAddCategory}>Add Category</Button>
+                <Button color='success' variant='contained' onClick={onAddItemCategory}>Add Category</Button>
             </div>
             <DataGrid
                 columns={columns}

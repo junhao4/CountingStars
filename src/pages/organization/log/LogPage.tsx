@@ -1,14 +1,17 @@
-import './Log.css'
+import './LogPage.css'
 import { useOrgContext } from "../../../common/contexts/OrgContext.tsx"
 import { useEffect, useState } from 'react'
 import { fetchLogs, generateLogMessage, type LogFetch } from '../../../features/organization/log/api/LogApi.tsx'
+<<<<<<< HEAD:src/pages/organization/log/Log.tsx
 import LogRow from '../../../features/organization/log/componentss/LogRow.tsx'
 import { Container, Paper, Typography } from '@mui/material'
 import LogHeader from '../../../features/organization/log/componentss/LogHeader.tsx'
+=======
+>>>>>>> cc14f6b3cb5e4a0b63f7722fc6c3bcd74d089609:src/pages/organization/log/LogPage.tsx
 
 
 
-export default function OrgLog() {
+export default function LogPage() {
     const { getOrgContext } = useOrgContext()
     const orgProps = getOrgContext()!
 

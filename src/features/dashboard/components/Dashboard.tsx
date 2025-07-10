@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import { useSessionContext } from '../../../common/contexts/SessionContext';
+import { useSessionContext, type ValidSession } from '../../../common/contexts/SessionContext';
 import { useNavigate } from 'react-router-dom';
 import { useOrgContext } from '../../../common/contexts/OrgContext';
 import Loading from '../../../common/components/Loading';
@@ -12,7 +12,7 @@ import { type DashboardOrganizationFetch, fetchDashboard, enterOrg, joinOrg } fr
 import DashboardCard from './DashboardCard';
 
 export default function Dashboard() {
-    const { user } = useSessionContext()
+    const { user } = useSessionContext() as ValidSession
     const [loading, setLoading] = useState(true)
     const { setOrgContext } = useOrgContext()
     const { createAlert } = useAlertContext()
@@ -23,6 +23,7 @@ export default function Dashboard() {
 
 
     useEffect(() => {
+        setLoading(true)
         new Promise(async () => {
             const data = await fetchDashboard(user!.id)
             if (data) {
@@ -33,7 +34,7 @@ export default function Dashboard() {
             setLoading(false)
             console.log("Dashboard Loading set to false")
         })
-    }, [])
+    }, [user])
 
 
 

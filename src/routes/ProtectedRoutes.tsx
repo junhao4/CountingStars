@@ -5,12 +5,12 @@ import CreateOrg from "../pages/dashboard/DashboardCreateOrgPage";
 import DashboardPage from "../pages/dashboard/DashboardPage";
 import OrgHome from "../pages/organization/Home";
 import OrgAddItem from "../pages/organization/inventory/InventoryAddItemPage";
-import OrgCategories from "../pages/organization/inventory/Categories";
-import OrgInventory from "../features/organization/inventory/components/Inventory";
-import OrgLog from "../pages/organization/log/Log";
-import OrgSettings from "../pages/organization/settings/Settings";
-import OrgUsers from "../pages/organization/users/Users";
+import CategoriesPage from "../pages/organization/inventory/CategoriesPage";
+import SettingsPage from "../pages/organization/settings/SettingsPage";
 import NotificationsPage from "../pages/account/NotificationsPage";
+import LogPage from "../pages/organization/log/LogPage";
+import InventoryPage from "../pages/organization/inventory/InventoryPage";
+import UsersPage from "../pages/organization/users/UsersPage";
 
 
 export default function ProtectedRoutes() {
@@ -25,24 +25,24 @@ export default function ProtectedRoutes() {
                     element={
                         <Routes>
                             <Route index element={<OrgHome />} />
-                            <Route path="/users" element={<OrgUsers />} />
+                            <Route path="/users" element={<UsersPage />} />
                             <Route
                                 path="/inventory/*"
                                 element={
                                     <Routes>
-                                        <Route index element={<OrgInventory />} />
+                                        <Route index element={<InventoryPage />} />
                                         <Route
                                             path="/add"
                                             element={<OrgAddItem />}
                                         />
-                                        <Route path="/categories" element={<OrgCategories />} />
+                                        <Route path="/categories" element={<CategoriesPage />} />
                                     </Routes>
                                 }
                             />
-                            <Route path="/log" element={<OrgLog />} />
+                            <Route path="/log" element={<LogPage />} />
                             <Route
                                 path="/settings"
-                                element={<OrgSettings />}
+                                element={<SettingsPage />}
                             />
                         </Routes>
                     }
