@@ -1,6 +1,5 @@
-import type { OrgProps } from "../../../../common/contexts/OrgContext"
 import supabase from "../../../../helper/supabaseClient"
-import { OrganizationRoles, type OrganizationRolesType } from "../../../../helper/types"
+import { OrganizationRoles, type Organization, type OrganizationRolesType } from "../../../../helper/types"
 
 export const fetchOrganization = async (organizationId: number) => {
     const { data, error } = await supabase.from("Organizations")
@@ -48,20 +47,20 @@ export const fetchOrgImage = async (fileName: string | null) => {
     return URL.createObjectURL(data)
 }
 
-export const fetchUsersNumber = async (orgProps : OrgProps, setUsers : React.Dispatch<React.SetStateAction<number>>) => {
+export const fetchUsersNumber = async (org : Organization, setUsers : React.Dispatch<React.SetStateAction<number>>) => {
     const { data } = await supabase
       .from("users_organizations")
       .select("user_id")
-      .eq("organization_id", orgProps.id)
+      .eq("organization_id", org.id)
        console.log(data)
     setUsers(data?.length!)
 }
 
-export const fetchItemsNumber = async (orgProps : OrgProps, setItems : React.Dispatch<React.SetStateAction<number>>) => {
+export const fetchItemsNumber = async (org : Organization, setItems : React.Dispatch<React.SetStateAction<number>>) => {
     const { data } = await supabase
       .from("Items")
       .select("quantity")
-      .eq("org_id", orgProps.id)
+      .eq("org_id", org.id)
       .eq("deleted", false)
     
     if (data) {

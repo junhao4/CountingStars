@@ -1,6 +1,6 @@
 import { Button, styled, Container, Stack, TextField, Typography } from "@mui/material";
 import supabase from "../../../helper/supabaseClient";
-import { useOrgContext } from "../../../common/contexts/OrgContext";
+import { useOrgContext, type ValidOrg } from "../../../common/contexts/OrgContext";
 import { useAlertContext } from "../../../common/contexts/AlertContext";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
@@ -21,18 +21,17 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 export default function SettingsPage() {
-    const { getOrgContext, setOrgContext } = useOrgContext();
-    const orgProps = getOrgContext()!;
+    const { org, setOrg } = useOrgContext() as ValidOrg
     const { createAlert } = useAlertContext();
     const navigate = useNavigate()
 
-    const [inputName, setInputName] = useState(orgProps.name);
+    const [inputName, setInputName] = useState(org.name);
     const [imageFile, setImageFile] = useState("");
     const [img, setImg] = useState<string>();
     const { setTitle } = usePageTitleContext();
 
     const onDeleteOrganization = async () => {
-        const success = await deleteOrganization(orgProps.id)
+        const success = await deleteOrganization(org.id)
         if (success) {
             createAlert("success", "Successfully deleted organization!");
             navigate('/dashboard')
@@ -41,14 +40,14 @@ export default function SettingsPage() {
 
     const onUpdateOrganizationName = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const success = await updateOrganizationName(inputName, orgProps.id, createAlert)
+        const success = await updateOrganizationName(inputName, org.id, createAlert)
         if (success) {
-            setOrgContext({ ...orgProps, name: inputName })
+            setOrg({ ...org, name: inputName })
         }
     }
 
     const onUpdateOrganizationImage = async (e: ChangeEvent<HTMLInputElement>) => {
-        const data = await updateOrganizationImage(orgProps.id, e.target.files, imageFile, createAlert)
+        const data = await updateOrganizationImage(org.id, e.target.files, imageFile, createAlert)
         if (data) setImageFile(data)
     }
 
@@ -57,7 +56,7 @@ export default function SettingsPage() {
     })
 
     useEffect(() => {
-        fetchOrganizationImage(orgProps.id)
+        fetchOrganizationImage(org.id)
             .then(data => data && setImageFile(data))
         console.log("fetcting", imageFile)
     }, [])
@@ -93,7 +92,7 @@ export default function SettingsPage() {
                             color: "text.primary",
                         }}
                     >
-                        {orgProps.name}
+                        {org.name}
                     </Typography>
                     <img src={img} width={400} height={400}></img>
                     <form onSubmit={onUpdateOrganizationName}>

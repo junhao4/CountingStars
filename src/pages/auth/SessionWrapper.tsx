@@ -4,25 +4,25 @@ import Loading from "../../common/components/Loading";
 import { useAlertContext } from "../../common/contexts/AlertContext";
 import { useEffect } from "react";
 
-interface AuthWrapperProps {
+interface SessionWrapperProps {
   children: React.ReactNode;
 }
 
-export default function AuthWrapper({ children }: AuthWrapperProps) {
-  const navigate = useNavigate();
-  const { user, loading } = useSessionContext();
-  const { createAlert } = useAlertContext();
+export default function SessionWrapper({ children }: SessionWrapperProps) {
+  const navigate = useNavigate()
+  const { user } = useSessionContext()
+  const { createAlert } = useAlertContext()
 
-  // Protected route: Checks for session, if it does not exist, navigate away.
+  // Protected route: Waits for session to load, then checks for session, if it does not exist, navigate away.
   // First-time users are routed to profile and forced to input username.
   useEffect(() => {
-    console.log("Authwrapper useEffect triggered!")
+    console.log("SessionWrapper useEffect triggered!")
 
-    if (!loading && !user) {
-      console.log("Authwrapper navigating to /")
+    if (!user) {
+      console.log("SessionWrapper navigating to /")
       createAlert("info","Your session has expired. Please log in to continue.")
       navigate('/')
-    } else if (!loading && user) {
+    } else if (user) {
       new Promise(async () => {
         if (user.name === null) {
           createAlert("info", "Please enter in a username");
@@ -30,10 +30,10 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
         }
       })
     }
-  }, [loading, navigate]);
+  }, [navigate]);
 
   // Ensures users are logged in before rendering the page
-  if (loading || !user) {
+  if (!user) {
     return <Loading />;
   } else {
     return <>{children}</>;

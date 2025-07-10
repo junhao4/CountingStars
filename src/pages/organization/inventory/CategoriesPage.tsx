@@ -1,6 +1,6 @@
 import { DataGrid, GridActionsCellItem, type GridColDef, type GridRowParams } from "@mui/x-data-grid";
 import { useEffect, useMemo, useState } from "react";
-import { useOrgContext } from "../../../common/contexts/OrgContext";
+import { useOrgContext, type ValidOrg } from "../../../common/contexts/OrgContext";
 import supabase from "../../../helper/supabaseClient";
 import { useAlertContext } from "../../../common/contexts/AlertContext";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -18,8 +18,7 @@ interface CategoryFetch {
 
 export default function CategoriesPage() {
     const { setTitle } = usePageTitleContext()
-    const { getOrgContext } = useOrgContext()!
-    const orgProps = getOrgContext()!
+    const { org } = useOrgContext() as ValidOrg
     const { createAlert } = useAlertContext()
 
     const [categories, setCategories] = useState<CategoryFetch[]>([])
@@ -64,7 +63,7 @@ export default function CategoriesPage() {
     const [addCategoryName, setAddCategoryName] = useState<string>('')
 
     const onAddItemCategory = async () => {
-        const res = await addItemCategory(orgProps.id, addCategoryName, createAlert)
+        const res = await addItemCategory(org.id, addCategoryName, createAlert)
         if (res) {
             setCategories({...categories, ...res})
             createAlert("success", "Successfully added category!")
@@ -72,10 +71,10 @@ export default function CategoriesPage() {
     }
 
     useEffect(() => {
-        fetchItemCategories(orgProps.id).then(data => {
+        fetchItemCategories(org.id).then(data => {
             setCategories(data)
         })
-        setTitle(orgProps.name)
+        setTitle(org.name)
     }, [])
 
     return (

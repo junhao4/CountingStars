@@ -2,7 +2,7 @@ import { type GridRowsProp, type GridRowModesModel, type GridEventListener, Grid
 import { useEffect, useState } from "react";
 import { OrganizationRoles, type OrganizationRolesType, type User, type UserOrganization } from "../../../../helper/types";
 import { useNavigate } from "react-router-dom";
-import { useOrgContext } from "../../../../common/contexts/OrgContext";
+import { useOrgContext, type ValidOrg } from "../../../../common/contexts/OrgContext";
 import { useSessionContext, type ValidSession } from "../../../../common/contexts/SessionContext";
 import { updateUserRole, deleteUser, acceptPendingUser, rejectPendingUser, fetchOrganizationUsers } from "../api/UserGridApi";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
@@ -22,11 +22,9 @@ interface UserGridProps {
 
 export default function UserGrid({refresh}: UserGridProps) {
     const { user } = useSessionContext() as ValidSession
-    const { getOrgContext } = useOrgContext();
-    const orgProps = getOrgContext()!;
-    const userWithOrganization = { userId: user.id, role: orgProps.role, organizationId: orgProps.id } as UserOrganization
+    const { org, setOrg } = useOrgContext() as ValidOrg
+    const userWithOrganization = { userId: user.id, role: org.role, organizationId: org.id } as UserOrganization
     const navigate = useNavigate();
-    const { setOrgContext } = useOrgContext();
 
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -43,9 +41,9 @@ export default function UserGrid({refresh}: UserGridProps) {
 
     // When row is updated, update the target user's role. Does not fire if no changes are made.
     const onProcessRowUpdate = async (newRow: GridRowModel<UserGridData>) => {
-        await updateUserRole(user.id, newRow.id, orgProps.id, newRow.role)
+        await updateUserRole(user.id, newRow.id, org.id, newRow.role)
         if (newRow.id === user.id) {
-            setOrgContext({ ...orgProps, role: newRow.role });
+            setOrg({ ...org, role: newRow.role });
         }
         setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)))
         return newRow
@@ -93,7 +91,7 @@ export default function UserGrid({refresh}: UserGridProps) {
                     }}
                     getOptionDisabled={(option) => !hasPermission(userWithOrganization, "users", option === "owner" ? "changeToOwner"
                         : option === "admin" ? "changeToAdmin" : "changeToMember",
-                        { userId: param.row.id, organizationId: orgProps.id, role: param.row.role, countOfOwners }
+                        { userId: param.row.id, organizationId: org.id, role: param.row.role, countOfOwners }
                     )}
                     renderInput={(params) => (
                         <TextField {...params} variant="standard" />
@@ -122,7 +120,7 @@ export default function UserGrid({refresh}: UserGridProps) {
                 };
 
                 const handleDeleteUser = async () => {
-                    await deleteUser(user.id, row.id, orgProps.id)
+                    await deleteUser(user.id, row.id, org.id)
                     setRows(rows.filter((row) => row.id !== id));
                     if (row.id == user.id) {
                         navigate("/dashboard");
@@ -137,7 +135,7 @@ export default function UserGrid({refresh}: UserGridProps) {
                 };
 
                 const handleAcceptPendingUser = async () => {
-                    await acceptPendingUser(user.id, row.id, orgProps.id)
+                    await acceptPendingUser(user.id, row.id, org.id)
 
                     const newUser = rows.find((row) => row.id === id)!;
                     setRows([
@@ -147,7 +145,7 @@ export default function UserGrid({refresh}: UserGridProps) {
                 }
 
                 const handleRejectPendingUser = async () => {
-                    await rejectPendingUser(user.id, row.id, orgProps.id)
+                    await rejectPendingUser(user.id, row.id, org.id)
                     setRows(rows.filter((row) => row.id !== id));
                 }
 
@@ -205,7 +203,7 @@ export default function UserGrid({refresh}: UserGridProps) {
                         color="info"
                         onClick={handleDeleteUser}
                         disabled={hasPermission<"users">(userWithOrganization,
-                            "users", "remove", { userId: row.id, organizationId: orgProps.id, role: row.role, countOfOwners: 0 })}
+                            "users", "remove", { userId: row.id, organizationId: org.id, role: row.role, countOfOwners: 0 })}
                     />,
                 ];
             },
@@ -213,7 +211,7 @@ export default function UserGrid({refresh}: UserGridProps) {
     ];
 
     useEffect(() => {
-        fetchOrganizationUsers(orgProps.id).then(data => {
+        fetchOrganizationUsers(org.id).then(data => {
             if (data) setRows(data)
             setLoading(false)
         })

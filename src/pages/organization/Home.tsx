@@ -1,22 +1,11 @@
 import { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import {
-    Box,
-    Typography,
-    Grid,
-    Card,
-    CardContent,
-    Paper,
-    Container,
-    Stack,
-} from "@mui/material";
+import { Box, Typography, Grid, Container, Stack } from "@mui/material";
 import { usePageTitleContext } from "../../common/contexts/PageTitleContext";
-import { useOrgContext } from "../../common/contexts/OrgContext";
+import { useOrgContext, type ValidOrg } from "../../common/contexts/OrgContext";
 import { fetchItemsNumber, fetchUsersNumber } from "../../features/organization/home/api/HomeApi";
 import HomeNavigateCard from "../../features/organization/home/components/HomeNavigateCard";
-import HomeIcon from "@mui/icons-material/Home";
-import ViewListIcon from "@mui/icons-material/ViewList";
 import GroupIcon from "@mui/icons-material/Group";
 import SettingsIcon from "@mui/icons-material/Settings";
 import InventoryIcon from "@mui/icons-material/Inventory";
@@ -25,21 +14,21 @@ import HistoryIcon from '@mui/icons-material/History';
 
 export default function OrgHome() {
     const navigate = useNavigate();
-    const { setTitle } = usePageTitleContext();
-    const { getOrgContext } = useOrgContext();
-    const orgProps = getOrgContext();
+    const { setTitle } = usePageTitleContext()
+    const { org } = useOrgContext() as ValidOrg
     const [ users, setUsers ] = useState(0)
     const [ items, setItems ] = useState(0)
 
     useEffect(() => {
-        if (orgProps === null) navigate("/dashboard");
-        setTitle(orgProps!.name);
-    }, []);
+        console.log("Organization home page useEffect")
+        if (org === null) navigate("/dashboard");
+        setTitle(org!.name);
+    }, [org]);
 
      useEffect(() => {
-        fetchUsersNumber(orgProps!, setUsers)
-        fetchItemsNumber(orgProps!, setItems)
-    });
+        fetchUsersNumber(org!, setUsers)
+        fetchItemsNumber(org!, setItems)
+    }, []);
 
     return (
         <>
@@ -57,7 +46,7 @@ export default function OrgHome() {
                     }}
                 >
                     <Typography variant="h4" sx={{ pt: 2 }}>
-                        {orgProps?.name}
+                        {org?.name}
                     </Typography>
 
                     <Box
@@ -84,7 +73,7 @@ export default function OrgHome() {
                         <Stack>
                             <Typography variant="body1" align="center" sx={{color : 'var(--muted-foreground)'}}>ID</Typography>
                             <Typography variant="h5" align="center">
-                                {orgProps?.id}
+                                {org?.id}
                             </Typography>
                         </Stack>
                         </Grid>

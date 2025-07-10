@@ -1,10 +1,9 @@
 import type { SelectChangeEvent } from "@mui/material";
 import type { GridRowSelectionModel } from "@mui/x-data-grid";
 import type { AlertType } from "../../../../common/contexts/AlertContext";
-import type { OrgProps } from "../../../../common/contexts/OrgContext";
 import supabase from "../../../../helper/supabaseClient";
 import type { Session } from "@supabase/supabase-js";
-import type { Inventory } from "../../../../helper/types";
+import type { Inventory, Organization } from "../../../../helper/types";
 import { addLog, LogTypes } from "../../log/api/LogApi";
 
 
@@ -24,14 +23,14 @@ export interface CategoryFetch {
 
 
 // Fetches the list of all categories for the given organization
-export const fetchCategoryOptions = async (orgProps: OrgProps,
+export const fetchCategoryOptions = async (org: Organization,
   createAlert: (arg0: AlertType, arg1: string) => void,
   setCategoryOptions: React.Dispatch<React.SetStateAction<CategoryFetch[]>>
 ) => {
   await supabase
     .from("Categories")
     .select(`id, name`)
-    .eq("org_id", orgProps.id)
+    .eq("org_id", org.id)
     .then((res) => {
       if (res.error) {
         createAlert("error", res.error.message);
@@ -57,7 +56,7 @@ export const handleCategoryChange = (event: SelectChangeEvent<string[]>,
 };
 
 //Fetches item data from supabase
-export const fetchItems = async (orgProps: OrgProps,
+export const fetchItems = async (org: Organization,
   createAlert: (arg0: AlertType, arg1: string) => void,
   setItems: React.Dispatch<React.SetStateAction<ItemFetch[]>>,
   category: CategoryFetch | null
@@ -67,7 +66,7 @@ export const fetchItems = async (orgProps: OrgProps,
     .select(
       `id, name, quantity, last_modified, expiry_date, categories:Categories(id, name)`
     )
-    .eq("org_id", orgProps.id)
+    .eq("org_id", org.id)
     .eq('deleted', false)
     .then((res) => {
       if (res.error) {
@@ -100,7 +99,7 @@ export const fetchItems = async (orgProps: OrgProps,
 export const handleDelete = async (
   rowSelectionModel: GridRowSelectionModel,
   createAlert: (arg0: AlertType, arg1: string) => void,
-  orgProps: OrgProps,
+  org: Organization,
   session: Session,
   setRowSelectionModel: React.Dispatch<React.SetStateAction<GridRowSelectionModel>>,
   setRefresh: React.Dispatch<React.SetStateAction<boolean>>
@@ -118,7 +117,7 @@ export const handleDelete = async (
             console.log(res.error.message)
             return false
           }
-          const data = await addLog(orgProps.id, LogTypes.DELETE, session!.user.id, id, {})
+          const data = await addLog(org.id, LogTypes.DELETE, session!.user.id, id, {})
           if (!data) {
             return false
           }

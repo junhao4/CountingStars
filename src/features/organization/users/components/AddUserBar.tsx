@@ -1,5 +1,5 @@
 import { Box, Typography, Input, FormControl, InputLabel, Select, MenuItem, Button } from "@mui/material";
-import { useOrgContext } from "../../../../common/contexts/OrgContext";
+import { useOrgContext, type ValidOrg } from "../../../../common/contexts/OrgContext";
 import { useState, type SetStateAction } from "react";
 import { addOrganizationUser } from "../api/UserGridApi";
 import { useSessionContext, type ValidSession } from "../../../../common/contexts/SessionContext";
@@ -11,19 +11,19 @@ interface AddUserBarProps {
 
 export default function AddUserBar({setRefresh}: AddUserBarProps) {
     const { user } = useSessionContext() as ValidSession
-    const orgProps = useOrgContext().getOrgContext()!
+    const { org } = useOrgContext() as ValidOrg
     const { createAlert} = useAlertContext()
 
     const [email, setEmail] = useState<string>('')
     const [role, setRole] = useState<string>('member')
 
     const onAddOrganizationUser = async () => {
-        const success = await addOrganizationUser(user.id, orgProps.id, email, role, createAlert)
+        const success = await addOrganizationUser(user.id, org.id, email, role, createAlert)
         if (success) { setRefresh(prev => !prev) }
     }
 
     return (
-        <Box hidden={!(orgProps.role === "owner" || orgProps.role === "admin")}
+        <Box hidden={!(org.role === "owner" || org.role === "admin")}
             sx={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'right', gap: '4rem', alignItems: 'center', p: '1rem' }}
             bgcolor='transparent'>
             <div style={{ display: 'flex', flexWrap: 'nowrap', gap: '2rem', alignItems: 'center' }}>

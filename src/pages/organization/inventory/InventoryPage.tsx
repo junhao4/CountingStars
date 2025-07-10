@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useOrgContext } from "../../../common/contexts/OrgContext";
+import { useOrgContext, type ValidOrg } from "../../../common/contexts/OrgContext";
 import Inventory from "../../../features/organization/inventory/components/Inventory";
 import { useEffect } from "react";
 import { usePageTitleContext } from "../../../common/contexts/PageTitleContext";
@@ -7,12 +7,12 @@ import { usePageTitleContext } from "../../../common/contexts/PageTitleContext";
 
 export default function InventoryPage() {
     const { setTitle } = usePageTitleContext()
-    const orgProps = useOrgContext().getOrgContext()
+    const { org } = useOrgContext() as ValidOrg
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (orgProps === null) navigate("/dashboard");
-        setTitle(orgProps!.name);
+        if (org === null) navigate("/dashboard");
+        setTitle(org.name);
     }, []);
 
     return (

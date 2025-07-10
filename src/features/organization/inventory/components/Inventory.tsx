@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useOrgContext } from "../../../../common/contexts/OrgContext";
+import { useOrgContext, type ValidOrg } from "../../../../common/contexts/OrgContext";
 import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Item from "@mui/material/Grid";
@@ -16,8 +16,7 @@ import { useSessionContext, type ValidSession } from "../../../../common/context
 import { fetchCategoryOptions, fetchItems, handleDelete, type CategoryFetch, type ItemFetch } from "../api/InventoryApi";
 
 export default function Inventory() {
-  const { getOrgContext } = useOrgContext();
-  const orgProps = getOrgContext()!;
+  const { org } = useOrgContext() as ValidOrg
   const { session } = useSessionContext() as ValidSession
   const { createAlert } = useAlertContext()
 
@@ -31,25 +30,25 @@ export default function Inventory() {
   const [refresh, setRefresh] = useState<boolean>(true);
 
   const handleDel = () => {
-    return handleDelete(rowSelectionModel, createAlert, orgProps, session!, setRowSelectionModel, setRefresh)
+    return handleDelete(rowSelectionModel, createAlert, org, session!, setRowSelectionModel, setRefresh)
   }
 
   // Refresh the data grid items
   useEffect(() => {
-    fetchItems(orgProps, createAlert, setItems, category);
-    fetchCategoryOptions(orgProps, createAlert, setCategoryOptions);
+    fetchItems(org, createAlert, setItems, category);
+    fetchCategoryOptions(org, createAlert, setCategoryOptions);
   }, [refresh]);
 
   return (
     <div style={{ maxWidth: '70%', margin: '1rem 0' }}>
       <QueryBar
-        id={orgProps.id}
+        id={org.id}
         categoryOptions={categoryOptions}
         setCategoryOptions={setCategoryOptions}
         category={category}
         setCategory={setCategory}
-        fetchItems={() => fetchItems(orgProps, createAlert, setItems, category)}
-        fetchCategoryOptions={() => fetchCategoryOptions(orgProps, createAlert, setCategoryOptions)}
+        fetchItems={() => fetchItems(org, createAlert, setItems, category)}
+        fetchCategoryOptions={() => fetchCategoryOptions(org, createAlert, setCategoryOptions)}
         handleDelete={handleDel}
       />
 

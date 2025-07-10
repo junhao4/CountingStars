@@ -3,13 +3,7 @@ import supabase from "../../../helper/supabaseClient"
 import type { OrganizationRolesType, Organization } from "../../../helper/types"
 import { fetchOrganization, fetchOrgImage, fetchUserRole } from "../../organization/home/api/HomeApi"
 
-export interface DashboardOrganizationFetch {
-    id: number
-    name: string
-    role: OrganizationRolesType
-    imageFile: string | null
-    imageUrlBlob: string | null
-}
+export type DashboardOrganizationFetch = Organization & { imageUrlBlob: string | null }
 
 // Fetches an array of Dashboard Organization cards
 export const fetchDashboard = async (userId: string) => {

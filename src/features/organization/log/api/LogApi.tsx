@@ -1,6 +1,6 @@
-import type { OrgProps } from "../../../../common/contexts/OrgContext";
 import type { Json } from "../../../../helper/supabase";
 import supabase from "../../../../helper/supabaseClient";
+import type { Organization } from "../../../../helper/types";
 
 export interface LogFetch {
     id: number;
@@ -83,7 +83,7 @@ export const generateLogMessage = (
 
 //Gets the logs from supabase
 export const fetchLogs = async (
-    orgProps: OrgProps,
+    org: Organization,
     setLogs: React.Dispatch<React.SetStateAction<LogFetch[]>>
 ) => {
     await supabase
@@ -91,7 +91,7 @@ export const fetchLogs = async (
         .select(
             "id, Users!performer_id(name), Items!item_id(name), type, created_at, metadata"
         )
-        .eq("organization_id", orgProps.id)
+        .eq("organization_id", org.id)
         .order("id", { ascending: false })
         .then((res) => {
             if (res.error) console.log(res.error.message);

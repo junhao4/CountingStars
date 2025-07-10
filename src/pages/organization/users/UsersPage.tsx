@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import UserGrid from "../../../features/organization/users/components/UserGrid";
-import { useOrgContext } from "../../../common/contexts/OrgContext";
+import { useOrgContext, type ValidOrg } from "../../../common/contexts/OrgContext";
 import { usePageTitleContext } from "../../../common/contexts/PageTitleContext";
 import AddUserBar from "../../../features/organization/users/components/AddUserBar";
+import { useNavigate } from "react-router-dom";
 
 export default function UsersPage() {
-  const orgProps = useOrgContext().getOrgContext()!
+  const { org } = useOrgContext() as ValidOrg
   const { setTitle } = usePageTitleContext()
 
   const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
-    setTitle(orgProps.name + " Users");
+    setTitle(org.name + " Users");
   }, []);
 
   return (

@@ -11,7 +11,7 @@ import {
   Select,
   Typography
 } from "@mui/material";
-import { useOrgContext } from "../../../common/contexts/OrgContext";
+import { useOrgContext, type ValidOrg } from "../../../common/contexts/OrgContext";
 import type { Dayjs } from "dayjs";
 import { useNavigate } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -21,9 +21,8 @@ import { fetchCategoryOptions, handleAddItem, handleCategoryChange, type Categor
 import type { Inventory } from "../../../helper/types";
 
 export default function InventoryAddItemPage() {
-  const { getOrgContext } = useOrgContext();
-  const orgProps = getOrgContext()!;
-  const navigate = useNavigate();
+  const { org } = useOrgContext() as ValidOrg
+  const navigate = useNavigate()
   const { createAlert } = useAlertContext();
   const { user } = useSessionContext() as ValidSession
 
@@ -41,11 +40,11 @@ export default function InventoryAddItemPage() {
   }
 
   const onHandleAddItem = async () => {
-    await handleAddItem(user.id, item, categoryOptions, orgProps.id, createAlert)
+    await handleAddItem(user.id, item, categoryOptions, org.id, createAlert)
   }
 
   useEffect(() => {
-    fetchCategoryOptions(orgProps, createAlert, setCategoryOptions);
+    fetchCategoryOptions(org, createAlert, setCategoryOptions);
   }, []);
 
   return (

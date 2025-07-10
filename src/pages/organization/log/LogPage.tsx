@@ -1,20 +1,19 @@
 import './LogPage.css'
-import { useOrgContext } from "../../../common/contexts/OrgContext.tsx"
+import { useOrgContext, type ValidOrg } from "../../../common/contexts/OrgContext.tsx"
 import { useEffect, useState } from 'react'
 import { fetchLogs, generateLogMessage, type LogFetch } from '../../../features/organization/log/api/LogApi.tsx'
 
 
 
 export default function LogPage() {
-    const { getOrgContext } = useOrgContext()
-    const orgProps = getOrgContext()!
+    const { org } = useOrgContext() as ValidOrg
 
     const [logs, setLogs] = useState<LogFetch[]>([])
 
 
 
     useEffect(() => {
-        fetchLogs(orgProps, setLogs)
+        fetchLogs(org, setLogs)
     }, [])
 
     return (

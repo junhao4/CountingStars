@@ -4,6 +4,7 @@ import supabase from "../../helper/supabaseClient";
 import type { FirstTimeUser, User } from "../../helper/types";
 import { fetchUser, handleFirstTimeUser } from "../api/UserApi";
 import useLocalStorageSingle from "../hooks/useLocalStorageSingle";
+import Loading from "../components/Loading";
 
 export type ValidSession = {
     session: Session,
@@ -65,6 +66,8 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
 
     useEffect(() => {
         if (session) {
+            console.log("Setting session!")
+            
             new Promise(async () => {
                 const data = await fetchUser(session?.user.id)
 
@@ -94,6 +97,8 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
             })
         }
     }, [session])
+
+    if (loading) return <Loading />
 
     if (session && user) {
         return (
