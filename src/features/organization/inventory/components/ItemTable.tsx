@@ -1,11 +1,11 @@
 import { type GridColDef, type GridRenderCellParams, type GridRowSelectionModel, DataGrid } from "@mui/x-data-grid";
 import { useMemo, type SetStateAction } from "react";
-import type { ItemFetch } from "../api/InventoryApi";
 import CategoryChip from "./CategoryChip";
+import type { Item } from "../../../../helper/types";
 
 // Fetches and displays the items in a table
 interface ItemTableProps {
-    items: ItemFetch[],
+    items: Item[],
     rowSelectionModel: GridRowSelectionModel,
     setRowSelectionModel: React.Dispatch<SetStateAction<GridRowSelectionModel>>,
 }
@@ -20,7 +20,7 @@ export default function ItemTable({ items, rowSelectionModel, setRowSelectionMod
         {
             field: 'categories', headerName: 'Categories', type: 'actions',
             width: 280, align: 'left', headerAlign: 'left',
-            renderCell: (params: GridRenderCellParams<ItemFetch>) => <CategoryChip {...{ params }} />,
+            renderCell: (params: GridRenderCellParams<Item>) => <CategoryChip {...{ params }} />,
         },
         { field: 'last_modified', headerName: 'Last Modified', valueGetter: (arg0) => new Date(arg0), type: 'date', width: 140, align: 'left', headerAlign: 'left' },
         {

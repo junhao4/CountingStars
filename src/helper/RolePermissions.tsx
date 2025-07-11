@@ -1,4 +1,4 @@
-import type { Category, Inventory, Log, Organization, OrganizationRolesType, UserOrganization } from "./types";
+import type { Category, Item, Log, Organization, OrganizationRolesType, UserOrganization } from "./types";
 
 const roleToValue = (v: OrganizationRolesType) => {
     switch (v) {
@@ -47,7 +47,7 @@ type Permissions = {
         action: "view" | "changeToOwner" | "changeToAdmin" | "changeToMember" | "remove"
     }
     inventory: {
-        dataType: Inventory
+        dataType: Item
         action: "view" | "update" | "delete"
     },
     categories: {

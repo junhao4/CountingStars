@@ -21,7 +21,7 @@ export type UserOrganization = {
 }
 
 export const transformUserOrganizaationType = (user: User, organization: Organization) => {
-    return 
+    return { userId: user.id, organizationId: organization.id, role: organization.role } as UserOrganization
 }
 
 export type Organization = {
@@ -35,13 +35,16 @@ export const OrganizationRoles = ["owner", "admin", "member", "pending"] as cons
 
 export type OrganizationRolesType = typeof OrganizationRoles[number]
 
-export type Inventory = {
+export type Item = {
     id: number,
     name: string,
     quantity: number,
     description: string,
+    lastModified: string | null
     expiryDate: string | null
 }
+
+export type ItemWithCategories = Item & { categories: Category[] }
 
 export type Category = {
     id: number,

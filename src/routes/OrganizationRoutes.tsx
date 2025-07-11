@@ -20,9 +20,9 @@ export default function OrganizationRoutes() {
                     element={
                         <Routes>
                             <Route index element={<InventoryPage />} />
-                            <Route path='/:itemId' element={<ItemPage />} />
                             <Route path="/add" element={<InventoryAddItemPage />} />
                             <Route path="/categories" element={<CategoriesPage />} />
+                            <Route path='/:itemId' element={<ItemPage />} />
                         </Routes>
                     }
                 />

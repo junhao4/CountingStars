@@ -49,6 +49,6 @@ export const fetchItemsNumber = async (org : Organization, setItems : React.Disp
     
     if (data) {
     console.log(data)
-    setItems(data!.map(x => x.quantity).reduce((x, y) => x + y))
+    setItems(data!.map(x => x.quantity).reduce((x, y) => x + y, 0))
     }
 }

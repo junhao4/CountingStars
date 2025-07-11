@@ -72,7 +72,7 @@ export type Database = {
         Row: {
           created_at: string
           deleted: boolean
-          description: string | null
+          description: string
           expiry_date: string | null
           id: number
           last_modified: string | null
@@ -83,7 +83,7 @@ export type Database = {
         Insert: {
           created_at?: string
           deleted?: boolean
-          description?: string | null
+          description: string
           expiry_date?: string | null
           id?: number
           last_modified?: string | null
@@ -94,7 +94,7 @@ export type Database = {
         Update: {
           created_at?: string
           deleted?: boolean
-          description?: string | null
+          description?: string
           expiry_date?: string | null
           id?: number
           last_modified?: string | null

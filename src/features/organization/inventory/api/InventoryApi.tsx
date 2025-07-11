@@ -2,30 +2,15 @@ import type { SelectChangeEvent } from "@mui/material";
 import type { GridRowSelectionModel } from "@mui/x-data-grid";
 import type { AlertType, CreateAlertType } from "../../../../common/contexts/AlertContext";
 import supabase from "../../../../helper/supabaseClient";
-import type { Session } from "@supabase/supabase-js";
-import type { Inventory, Organization } from "../../../../helper/types";
+import type { Category, Item, Organization } from "../../../../helper/types";
 import { addLog, LogTypes } from "../../log/api/LogApi";
 
-
-export interface ItemFetch {
-  id: number;
-  name: string;
-  quantity: number;
-  last_modified: string | null;
-  expiry_date: string | null;
-  categories: CategoryFetch[] | null;
-}
-
-export interface CategoryFetch {
-  id: number;
-  name: string;
-}
-
+export type DisplayCategory = Omit<Category, "createdAt">
 
 // Fetches the list of all categories for the given organization
 export const fetchCategoryOptions = async (org: Organization,
   createAlert: (arg0: AlertType, arg1: string) => void,
-  setCategoryOptions: React.Dispatch<React.SetStateAction<CategoryFetch[]>>
+  setCategoryOptions: React.Dispatch<React.SetStateAction<DisplayCategory[]>>
 ) => {
   await supabase
     .from("Categories")
@@ -58,13 +43,13 @@ export const handleCategoryChange = (event: SelectChangeEvent<string[]>,
 //Fetches item data from supabase
 export const fetchItems = async (org: Organization,
   createAlert: (arg0: AlertType, arg1: string) => void,
-  setItems: React.Dispatch<React.SetStateAction<ItemFetch[]>>,
-  category: CategoryFetch | null
+  setItems: React.Dispatch<React.SetStateAction<Item[]>>,
+  category: DisplayCategory | null
 ) => {
   await supabase
     .from("Items")
     .select(
-      `id, name, quantity, last_modified, expiry_date, categories:Categories(id, name)`
+      `id, name, quantity, description, lastModified:last_modified, expiryDate:expiry_date, categories:Categories(id, name, createdAt:created_at)`
     )
     .eq("org_id", org.id)
     .eq('deleted', false)
@@ -76,8 +61,9 @@ export const fetchItems = async (org: Organization,
 
       const fixDate = res.data.map((item) => ({
         ...item,
-        expiry_date: item.expiry_date
-          ? item.expiry_date
+        description: item.description || "",
+        expiryDate: item.expiryDate
+          ? item.expiryDate
           : "-",
       }));
       if (category) {
@@ -132,8 +118,8 @@ export const handleDelete = async (
   });
 }
 
-export const handleAddItem = async (userId: string, item: Omit<Inventory, "id"> & { categories: string[] },
-  categoryOptions: CategoryFetch[], organizationId: number, createAlert: (arg0: AlertType, arg1: string) => void,
+export const handleAddItem = async (userId: string, item: Omit<Item, "id"> & { categories: string[] },
+  categoryOptions: DisplayCategory[], organizationId: number, createAlert: (arg0: AlertType, arg1: string) => void,
 ) => {
   await supabase
     .from("Items")
@@ -148,7 +134,7 @@ export const handleAddItem = async (userId: string, item: Omit<Inventory, "id"> 
     .single()
     .then((res) => {
       if (res.error) {
-        createAlert('error', res.error.message);
+        console.log(res.error.message);
         return Promise.reject(false);
       }
 

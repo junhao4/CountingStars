@@ -18,7 +18,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useAlertContext } from "../../../common/contexts/AlertContext";
 import { useSessionContext, type ValidSession } from "../../../common/contexts/SessionContext";
 import { fetchCategoryOptions, handleAddItem, handleCategoryChange, type CategoryFetch } from "../../../features/organization/inventory/api/InventoryApi";
-import type { Inventory } from "../../../helper/types";
+import type { Item } from "../../../helper/types";
 
 export default function InventoryAddItemPage() {
   const { org } = useOrgContext() as ValidOrg
@@ -33,7 +33,7 @@ export default function InventoryAddItemPage() {
   const [itemExpiry, setItemExpiry] = useState<Dayjs | null>(null); // In the format YYYY-MM-DD
   const [categoryOptions, setCategoryOptions] = useState<CategoryFetch[]>([]);
 
-  const item: Omit<Inventory, "id"> & { categories: string[] } = {
+  const item: Omit<Item, "id"> & { categories: string[] } = {
     name: itemName, quantity: itemQuantity, description: itemDescription,
     expiryDate: itemExpiry?.toDate().toDateString() || null,
     categories: itemCategory

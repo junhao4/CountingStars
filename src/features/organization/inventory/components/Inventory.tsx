@@ -13,7 +13,8 @@ import ItemTable from "./ItemTable";
 import type { GridRowSelectionModel } from "@mui/x-data-grid/models";
 import { useAlertContext } from "../../../../common/contexts/AlertContext";
 import { useSessionContext, type ValidSession } from "../../../../common/contexts/SessionContext";
-import { fetchCategoryOptions, fetchItems, handleDelete, type CategoryFetch, type ItemFetch } from "../api/InventoryApi";
+import { fetchCategoryOptions, fetchItems, handleDelete, type DisplayCategory } from "../api/InventoryApi";
+import type { Item as ItemType } from "../../../../helper/types";
 
 export default function Inventory() {
   const { org } = useOrgContext() as ValidOrg
@@ -24,9 +25,9 @@ export default function Inventory() {
   const [rowSelectionModel, setRowSelectionModel] =
     useState<GridRowSelectionModel>({ type: "include", ids: new Set() });
 
-  const [items, setItems] = useState<ItemFetch[]>([]);
-  const [categoryOptions, setCategoryOptions] = useState<CategoryFetch[]>([]);
-  const [category, setCategory] = useState<CategoryFetch | null>(null);
+  const [items, setItems] = useState<ItemType[]>([]);
+  const [categoryOptions, setCategoryOptions] = useState<DisplayCategory[]>([]);
+  const [category, setCategory] = useState<DisplayCategory | null>(null);
   const [refresh, setRefresh] = useState<boolean>(true);
 
   const onHandleDelete = async () => {
@@ -66,10 +67,10 @@ export default function Inventory() {
 // Query bar for the user to set search queries
 interface QueryBarProps {
   id: number;
-  categoryOptions: CategoryFetch[];
-  setCategoryOptions: (arg0: CategoryFetch[]) => void;
-  category: CategoryFetch | null;
-  setCategory: (arg0: CategoryFetch | null) => void;
+  categoryOptions: DisplayCategory[];
+  setCategoryOptions: (arg0: DisplayCategory[]) => void;
+  category: DisplayCategory | null;
+  setCategory: (arg0: DisplayCategory | null) => void;
   fetchItems: () => void;
   fetchCategoryOptions: () => void;
   handleDelete: () => void;
