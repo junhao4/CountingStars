@@ -1,6 +1,6 @@
 import type { SelectChangeEvent } from "@mui/material";
 import type { GridRowSelectionModel } from "@mui/x-data-grid";
-import type { AlertType } from "../../../../common/contexts/AlertContext";
+import type { AlertType, CreateAlertType } from "../../../../common/contexts/AlertContext";
 import supabase from "../../../../helper/supabaseClient";
 import type { Session } from "@supabase/supabase-js";
 import type { Inventory, Organization } from "../../../../helper/types";
@@ -97,12 +97,10 @@ export const fetchItems = async (org: Organization,
 
 // Handles the deletion of the selected data rows in ItemTable, whhen the delete button in ModifyBar is pressed.
 export const handleDelete = async (
+  userId: string,
+  organizationId: number,
   rowSelectionModel: GridRowSelectionModel,
-  createAlert: (arg0: AlertType, arg1: string) => void,
-  org: Organization,
-  session: Session,
-  setRowSelectionModel: React.Dispatch<React.SetStateAction<GridRowSelectionModel>>,
-  setRefresh: React.Dispatch<React.SetStateAction<boolean>>
+  createAlert: CreateAlertType,
 ) => {
   Promise.all(
     Array.of(...rowSelectionModel.ids).map(async (id) => {
@@ -117,7 +115,7 @@ export const handleDelete = async (
             console.log(res.error.message)
             return false
           }
-          const data = await addLog(org.id, LogTypes.DELETE, session!.user.id, id, {})
+          const data = await addLog(organizationId, LogTypes.DELETE, userId, id, {})
           if (!data) {
             return false
           }
@@ -131,8 +129,6 @@ export const handleDelete = async (
     } else {
       createAlert('success', 'Successfully deleted items!')
     }
-    setRowSelectionModel({ type: "include", ids: new Set() });
-    setRefresh((prev) => !prev);
   });
 }
 

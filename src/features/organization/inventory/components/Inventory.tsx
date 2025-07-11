@@ -17,7 +17,7 @@ import { fetchCategoryOptions, fetchItems, handleDelete, type CategoryFetch, typ
 
 export default function Inventory() {
   const { org } = useOrgContext() as ValidOrg
-  const { session } = useSessionContext() as ValidSession
+  const { user } = useSessionContext() as ValidSession
   const { createAlert } = useAlertContext()
 
   // rowSelectionModel.ids contains the rows that are selected in ItemTable, used in handleDelete function.
@@ -29,8 +29,10 @@ export default function Inventory() {
   const [category, setCategory] = useState<CategoryFetch | null>(null);
   const [refresh, setRefresh] = useState<boolean>(true);
 
-  const handleDel = () => {
-    return handleDelete(rowSelectionModel, createAlert, org, session!, setRowSelectionModel, setRefresh)
+  const onHandleDelete = async () => {
+    await handleDelete(user.id, org.id, rowSelectionModel, createAlert)
+    setRowSelectionModel({ type: "include", ids: new Set() });
+    setRefresh((prev) => !prev);
   }
 
   // Refresh the data grid items
@@ -49,7 +51,7 @@ export default function Inventory() {
         setCategory={setCategory}
         fetchItems={() => fetchItems(org, createAlert, setItems, category)}
         fetchCategoryOptions={() => fetchCategoryOptions(org, createAlert, setCategoryOptions)}
-        handleDelete={handleDel}
+        handleDelete={onHandleDelete}
       />
 
       <ItemTable
