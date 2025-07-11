@@ -8,8 +8,10 @@ import { useOrgContext, type ValidOrg } from '../../../common/contexts/OrgContex
 import Loading from '../../../common/components/Loading';
 import { Box, Input } from '@mui/material';
 import { useAlertContext } from '../../../common/contexts/AlertContext';
-import { type DashboardOrganizationFetch, fetchDashboard, enterOrg, joinOrg } from '../api/DashboardApi';
+import { type DashboardOrganizationFetch, fetchDashboard, joinOrg } from '../api/DashboardApi';
 import DashboardCard from './DashboardCard';
+import { hasPermission } from '../../../helper/RolePermissions';
+import type { UserOrganization } from '../../../helper/types';
 
 export default function Dashboard() {
     const { user } = useSessionContext() as ValidSession
@@ -40,17 +42,23 @@ export default function Dashboard() {
 
     const onEnterOrgClick = (index: number) => {
         // If successfully entered organization, set its context.
-        if (enterOrg(orgs[index], createAlert)) {
+        const userWithOrganization = { ...user, userId: user.id, organizationId: orgs[index].id, role: orgs[index].role } as UserOrganization
+        if (hasPermission(userWithOrganization, "organization", "view", orgs[index])) {
             setOrg(orgs[index])
             navigate('organization')
+        } else {
+            createAlert('warning', 'Your request to join this organization is still pending approval')
         }
     }
 
     const onJoinOrgClick = async () => {
         // If successfully joined, add new organization card to dashboard
-        const res = await joinOrg(joinId, user!.id, createAlert)
+        const res = await joinOrg(joinId, user!.id)
         if (res) {
+            createAlert('success', "Successfully requested to join! Please wait for the organization's approval")
             setOrgs([...orgs, res])
+        } else {
+            createAlert('warning', "Already in organization, or it does not exist")
         }
     }
 

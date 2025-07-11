@@ -52,7 +52,7 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
         supabase.removeAllChannels()
 
         // Checks and dynamically updates session state throughout all components that have access to context
-        const { data } = supabase.auth.onAuthStateChange((event, session) => {
+        supabase.auth.onAuthStateChange((event, session) => {
             console.log('supabase onAuthStateChange function called')
 
             if (event === 'SIGNED_IN') {

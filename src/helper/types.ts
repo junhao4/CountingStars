@@ -20,6 +20,10 @@ export type UserOrganization = {
     role: OrganizationRolesType
 }
 
+export const transformUserOrganizaationType = (user: User, organization: Organization) => {
+    return 
+}
+
 export type Organization = {
     id: number
     name: string

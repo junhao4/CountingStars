@@ -28,7 +28,7 @@ export const OrgProvider = ({ children }: { children: React.ReactNode }) => {
         const org = localStorage.getItem("orgContext")
         if (org) { setOrg(JSON.parse(org))}
         setLoading(false)
-    }, [])
+    }, [])  
 
     if (loading) {return <Loading />}
 

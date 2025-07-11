@@ -1,7 +1,7 @@
 import type { AlertType } from "../../../common/contexts/AlertContext"
 import supabase from "../../../helper/supabaseClient"
-import type { OrganizationRolesType, Organization } from "../../../helper/types"
-import { fetchOrganization, fetchOrgImage, fetchUserRole } from "../../organization/home/api/HomeApi"
+import { type OrganizationRolesType, type Organization, OrganizationRoles } from "../../../helper/types"
+import { fetchOrganization, fetchOrgImage } from "../../organization/home/api/HomeApi"
 
 export type DashboardOrganizationFetch = Organization & { imageUrlBlob: string | null }
 
@@ -43,6 +43,23 @@ export const fetchDashboard = async (userId: string) => {
     return images
 }
 
+const fetchUserRole = async (userId: string, org_id: number) => {
+    const { data, error } = await supabase.from("users_organizations")
+        .select("role")
+        .eq("user_id", userId)
+        .eq('organization_id', org_id)
+        .single()
+
+    if (error) {
+        console.log(error.message)
+        return null
+    } else if (!OrganizationRoles.includes(data.role as OrganizationRolesType)) {
+        throw new Error("Invalid role")
+    }
+
+    return data.role as OrganizationRolesType
+}
+
 // Transform organization data to include user role and imageUrlBlob
 export const transformOrgDataToDashboardCard = async (userId: string, org: Organization) => {
     const role = await fetchUserRole(userId, org.id)
@@ -56,17 +73,8 @@ export const transformOrgDataToDashboardCard = async (userId: string, org: Organ
     return { ...org, imageUrlBlob: image, role: role as OrganizationRolesType }
 }
 
-// When the enter organization button is clicked, check for role access
-export const enterOrg = (org: DashboardOrganizationFetch, createAlert: (arg0: AlertType, arg1: string) => void) => {
-    if (org.role === 'pending') {
-        createAlert('error', 'Your request to join this organization is still pending approval')
-        return null
-    }
-    return org
-}
-
 // When the join organization button is clicked, add new 'pending' role
-export const joinOrg = async (joinId: string, userId: string, createAlert: (arg0: AlertType, arg1: string) => void) => {
+export const joinOrg = async (joinId: string, userId: string) => {
 
     var isNumber = true
     for (var i = 0; i < joinId.length; i++) {
@@ -75,7 +83,6 @@ export const joinOrg = async (joinId: string, userId: string, createAlert: (arg0
         }
     }
     if (!isNumber || joinId === '') {
-        createAlert("warning", "Not a valid organization id number!")
         return null
     }
     const organization_id = Number.parseInt(joinId)
@@ -84,11 +91,12 @@ export const joinOrg = async (joinId: string, userId: string, createAlert: (arg0
         .select("*")
         .eq("user_id", userId)
         .eq("organization_id", organization_id)
+        .maybeSingle()
         .then(async res => {
             if (res.error) {
                 console.log(res.error.message)
-            } else if (res.data.length === 1) {
-                createAlert('error', "Error: Already in organization or still pending approval!")
+            } else if (res.data) {
+                // Already in organization
             } else {
                 // Add the new organization to orgs.
                 const { error } = await supabase.from("users_organizations")
@@ -160,8 +168,9 @@ export const handleAddOrganization = async (userId: string, name: string, image:
             createAlert("error", error2.message)
             return null
         }
-        else { createAlert('success', "Successfully created organization!")
-            return {success: true}
-         }
+        else {
+            createAlert('success', "Successfully created organization!")
+            return { success: true }
+        }
     }
 }

@@ -13,6 +13,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Avatar, Typography, Autocomplete, TextField } from "@mui/material";
 import { compareRolesTo, hasPermission } from "../../../../helper/RolePermissions";
 import Loading from "../../../../common/components/Loading";
+import { useAlertContext } from "../../../../common/contexts/AlertContext";
 
 type UserGridData = Omit<User, "createdAt"> & { role: OrganizationRolesType }
 
@@ -23,6 +24,7 @@ interface UserGridProps {
 export default function UserGrid({refresh}: UserGridProps) {
     const { user } = useSessionContext() as ValidSession
     const { org, setOrg } = useOrgContext() as ValidOrg
+    const { createAlert } = useAlertContext()
     const userWithOrganization = { userId: user.id, role: org.role, organizationId: org.id } as UserOrganization
     const navigate = useNavigate();
 
@@ -41,7 +43,8 @@ export default function UserGrid({refresh}: UserGridProps) {
 
     // When row is updated, update the target user's role. Does not fire if no changes are made.
     const onProcessRowUpdate = async (newRow: GridRowModel<UserGridData>) => {
-        await updateUserRole(user.id, newRow.id, org.id, newRow.role)
+        const success = await updateUserRole(user.id, newRow.id, org.id, newRow.role)
+        if (success) { createAlert('success', "Successfully updated user role!")}
         if (newRow.id === user.id) {
             setOrg({ ...org, role: newRow.role });
         }

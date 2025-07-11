@@ -1,7 +1,6 @@
-import type { GridRowModel, GridRowsProp } from "@mui/x-data-grid/models";
 import type { CreateAlertType } from "../../../../common/contexts/AlertContext"
 import supabase from "../../../../helper/supabaseClient"
-import type { OrganizationRolesType, User } from "../../../../helper/types";
+import type { OrganizationRolesType } from "../../../../helper/types";
 import { addNotification } from "../../../notifications/api/NotificationsApi"
 
 export const fetchOrganizationUsers = async (organizationId: number) => {
@@ -74,13 +73,13 @@ export const addOrganizationUser = async (currentUserId: string, organizationId:
         return null
     }
     // Notify user of addition to org
-    addNotification(currentUserId, data.userId, organizationId, 1)
+    await addNotification(currentUserId, data.userId, organizationId, 1)
     return true
 }
 
 // Commits any changes to supabase + update table view
 export const updateUserRole = async (userId: string, targetId: string, organizationId: number, role: OrganizationRolesType) => {
-    const { data, error } = await supabase
+    const { error } = await supabase
         .from("users_organizations")
         .update({ role: role })
         .eq("user_id", targetId)
@@ -98,7 +97,7 @@ export const updateUserRole = async (userId: string, targetId: string, organizat
 };
 
 export const deleteUser = async (userId: string, targetId: string, organizationId: number) => {
-    const { data, error } = await supabase
+    const { error } = await supabase
         .from("users_organizations")
         .delete()
         .eq("user_id", userId)

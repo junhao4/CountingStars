@@ -19,7 +19,10 @@ export default function AddUserBar({setRefresh}: AddUserBarProps) {
 
     const onAddOrganizationUser = async () => {
         const success = await addOrganizationUser(user.id, org.id, email, role, createAlert)
-        if (success) { setRefresh(prev => !prev) }
+        if (success) { 
+            setRefresh(prev => !prev) 
+            createAlert('success', "Successfully added user to organization!")
+        }
     }
 
     return (
