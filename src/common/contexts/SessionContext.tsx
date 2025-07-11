@@ -48,9 +48,6 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
             }
         });
 
-        // Removes previous onAuthStateChange events
-        supabase.removeAllChannels()
-
         // Checks and dynamically updates session state throughout all components that have access to context
         supabase.auth.onAuthStateChange((event, session) => {
             console.log('supabase onAuthStateChange function called')
