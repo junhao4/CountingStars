@@ -1,10 +1,10 @@
 import type { GridRenderCellParams } from "@mui/x-data-grid/models/params"
-import type { CategoryFetch, ItemFetch } from "../api/InventoryApi"
 import Button from "@mui/material/Button"
+import type { Category, ItemWithCategories } from "../../../../helper/types"
 
 // Manages the action buttons for the 'categories' column
 interface CategoryChipProps {
-    params: GridRenderCellParams<ItemFetch>,
+    params: GridRenderCellParams<ItemWithCategories>,
 }
 
 export default function CategoryChip({ params }: CategoryChipProps) {
@@ -13,7 +13,7 @@ export default function CategoryChip({ params }: CategoryChipProps) {
     return (
         <div style={{ display: 'flex', alignItems: 'center', textAlign: 'center', flexWrap: 'wrap' }}>
             {
-                (params.row.categories || []).map((cat: CategoryFetch) => {
+                (params.row.categories || []).map((cat: Category) => {
                     return (
                         <Button key={cat.id} sx={{ ...buttonStyle }}>
                             {cat.name}

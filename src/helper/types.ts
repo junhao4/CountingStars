@@ -40,11 +40,17 @@ export type Item = {
     name: string,
     quantity: number,
     description: string,
-    lastModified: string | null
+    lastModified: string
     expiryDate: string | null
 }
 
 export type ItemWithCategories = Item & { categories: Category[] }
+
+export type ItemImage = {
+    id: number
+    imageFile: string
+    imageBlobUrl: string | undefined
+}
 
 export type Category = {
     id: number,

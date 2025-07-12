@@ -24,6 +24,11 @@ h1 {
   line-height: 1.1;
 }
 
+p {
+  font-size: 1em;
+  margin: 0;
+}
+
 .MuiBox-root {
   background-color: var(--foreground);
 }

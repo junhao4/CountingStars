@@ -1,29 +1,23 @@
 import type { SelectChangeEvent } from "@mui/material";
 import type { GridRowSelectionModel } from "@mui/x-data-grid";
-import type { AlertType, CreateAlertType } from "../../../../common/contexts/AlertContext";
+import type { AlertType } from "../../../../common/contexts/AlertContext";
 import supabase from "../../../../helper/supabaseClient";
-import type { Category, Item, Organization } from "../../../../helper/types";
+import type { Category, Item, ItemWithCategories, Organization } from "../../../../helper/types";
 import { addLog, LogTypes } from "../../log/api/LogApi";
 
 export type DisplayCategory = Omit<Category, "createdAt">
 
 // Fetches the list of all categories for the given organization
-export const fetchCategoryOptions = async (org: Organization,
-  createAlert: (arg0: AlertType, arg1: string) => void,
-  setCategoryOptions: React.Dispatch<React.SetStateAction<DisplayCategory[]>>
-) => {
-  await supabase
+export const fetchCategoryOptions = async (organizationId: number) => {
+  const { data, error } = await supabase
     .from("Categories")
     .select(`id, name`)
-    .eq("org_id", org.id)
-    .then((res) => {
-      if (res.error) {
-        createAlert("error", res.error.message);
-        setCategoryOptions([]);
-        return;
-      }
-      setCategoryOptions(res.data);
-    });
+    .eq("org_id", organizationId)
+  if (error) {
+    console.log("error", error.message);
+    return []
+  }
+  return data
 };
 
 
@@ -43,7 +37,7 @@ export const handleCategoryChange = (event: SelectChangeEvent<string[]>,
 //Fetches item data from supabase
 export const fetchItems = async (org: Organization,
   createAlert: (arg0: AlertType, arg1: string) => void,
-  setItems: React.Dispatch<React.SetStateAction<Item[]>>,
+  setItems: React.Dispatch<React.SetStateAction<ItemWithCategories[]>>,
   category: DisplayCategory | null
 ) => {
   await supabase
@@ -86,9 +80,8 @@ export const handleDelete = async (
   userId: string,
   organizationId: number,
   rowSelectionModel: GridRowSelectionModel,
-  createAlert: CreateAlertType,
 ) => {
-  Promise.all(
+  const res = await Promise.all(
     Array.of(...rowSelectionModel.ids).map(async (id) => {
       id = id as number
       const data = await supabase
@@ -109,19 +102,14 @@ export const handleDelete = async (
         });
       return data;
     })
-  ).then((res) => {
-    if (!res.reduce((prev, next) => prev && next, true)) {
-      createAlert('error', "Delete error")
-    } else {
-      createAlert('success', 'Successfully deleted items!')
-    }
-  });
+  )
+  return res.reduce((prev, next) => prev && next, true)
 }
 
-export const handleAddItem = async (userId: string, item: Omit<Item, "id"> & { categories: string[] },
-  categoryOptions: DisplayCategory[], organizationId: number, createAlert: (arg0: AlertType, arg1: string) => void,
+export const handleAddItem = async (userId: string, item: Omit<Item, "id" | "lastModified"> & { categories: string[] },
+  categoryOptions: DisplayCategory[], organizationId: number,
 ) => {
-  await supabase
+  const { data, error } = await supabase
     .from("Items")
     .insert({
       name: item.name,
@@ -132,42 +120,34 @@ export const handleAddItem = async (userId: string, item: Omit<Item, "id"> & { c
     })
     .select()
     .single()
-    .then((res) => {
-      if (res.error) {
-        console.log(res.error.message);
-        return Promise.reject(false);
-      }
+  if (error) {
+    console.log(error.message);
+    return Promise.reject(false);
+  }
 
-      Promise.all(
-        item.categories.map(async (value) => {
-          const row = categoryOptions.find((cat) => cat.name === value);
-          return row
-            ? supabase
-              .from("items_categories")
-              .insert({ item_id: res.data.id, category_id: row.id })
-              .then((res) => {
-                if (res.error) {
-                  createAlert('error', res.error.message);
-                  return false
-                }
-                return true
-              })
-            : Promise.resolve(true);
-        })
-      ).then(async (b: boolean[]) => {
-        if (b.reduce((prev, next) => prev && next, true)) {
-          const data = await addLog(organizationId, LogTypes.INSERT_NEW, userId, res.data.id, {})
-          if (!data) {
-            createAlert('error', "Error adding insert item to logs")
-            return null
-          }
-          else {
-            createAlert('success', "Successfully added item!")
+  const res = await Promise.all(
+    item.categories.map(async (value) => {
+      const row = categoryOptions.find((cat) => cat.name === value);
+      return row
+        ? supabase
+          .from("items_categories")
+          .insert({ item_id: data.id, category_id: row.id })
+          .then((res) => {
+            if (res.error) {
+              console.log(res.error.message);
+              return false
+            }
             return true
-          }
-        }
-      });
-
-    });
+          })
+        : Promise.resolve(true);
+    })
+  ).then(async (b: boolean[]) => {
+    if (b.reduce((prev, next) => prev && next, true)) {
+      await addLog(organizationId, LogTypes.INSERT_NEW, userId, data.id, {})
+      return true
+    }
+    return false
+  })
+  return res
 };
 

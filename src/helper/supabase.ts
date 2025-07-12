@@ -75,7 +75,8 @@ export type Database = {
           description: string
           expiry_date: string | null
           id: number
-          last_modified: string | null
+          image_file: string
+          last_modified: string
           name: string
           org_id: number
           quantity: number
@@ -86,7 +87,8 @@ export type Database = {
           description: string
           expiry_date?: string | null
           id?: number
-          last_modified?: string | null
+          image_file?: string
+          last_modified?: string
           name: string
           org_id: number
           quantity: number
@@ -97,7 +99,8 @@ export type Database = {
           description?: string
           expiry_date?: string | null
           id?: number
-          last_modified?: string | null
+          image_file?: string
+          last_modified?: string
           name?: string
           org_id?: number
           quantity?: number

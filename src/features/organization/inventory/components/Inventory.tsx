@@ -14,44 +14,49 @@ import type { GridRowSelectionModel } from "@mui/x-data-grid/models";
 import { useAlertContext } from "../../../../common/contexts/AlertContext";
 import { useSessionContext, type ValidSession } from "../../../../common/contexts/SessionContext";
 import { fetchCategoryOptions, fetchItems, handleDelete, type DisplayCategory } from "../api/InventoryApi";
-import type { Item as ItemType } from "../../../../helper/types";
+import type { ItemWithCategories } from "../../../../helper/types";
+import useGetCategoryList from "../hooks/useGetCategoryList";
 
 export default function Inventory() {
   const { org } = useOrgContext() as ValidOrg
   const { user } = useSessionContext() as ValidSession
+  const { categoryList, setCategoryList } = useGetCategoryList()
   const { createAlert } = useAlertContext()
 
   // rowSelectionModel.ids contains the rows that are selected in ItemTable, used in handleDelete function.
   const [rowSelectionModel, setRowSelectionModel] =
     useState<GridRowSelectionModel>({ type: "include", ids: new Set() });
 
-  const [items, setItems] = useState<ItemType[]>([]);
-  const [categoryOptions, setCategoryOptions] = useState<DisplayCategory[]>([]);
+  const [items, setItems] = useState<ItemWithCategories[]>([]);
   const [category, setCategory] = useState<DisplayCategory | null>(null);
   const [refresh, setRefresh] = useState<boolean>(true);
 
   const onHandleDelete = async () => {
-    await handleDelete(user.id, org.id, rowSelectionModel, createAlert)
+    const res = await handleDelete(user.id, org.id, rowSelectionModel)
+    if (res) {
+      createAlert("success", "Successfully deleted item!")
+    } else {
+      createAlert("error", "Failed to delete item!")
+    }
     setRowSelectionModel({ type: "include", ids: new Set() });
     setRefresh((prev) => !prev);
   }
 
   // Refresh the data grid items
   useEffect(() => {
-    fetchItems(org, createAlert, setItems, category);
-    fetchCategoryOptions(org, createAlert, setCategoryOptions);
+    fetchItems(org, createAlert, setItems, category)
   }, [refresh]);
 
   return (
     <div style={{ maxWidth: '70%', margin: '1rem 0' }}>
       <QueryBar
         id={org.id}
-        categoryOptions={categoryOptions}
-        setCategoryOptions={setCategoryOptions}
+        categoryOptions={categoryList}
+        setCategoryOptions={setCategoryList}
         category={category}
         setCategory={setCategory}
         fetchItems={() => fetchItems(org, createAlert, setItems, category)}
-        fetchCategoryOptions={() => fetchCategoryOptions(org, createAlert, setCategoryOptions)}
+        fetchCategoryOptions={() => fetchCategoryOptions(org.id).then(data => setCategoryList(data))}
         handleDelete={onHandleDelete}
       />
 

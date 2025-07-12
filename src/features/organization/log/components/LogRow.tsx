@@ -1,4 +1,4 @@
-import { Chip, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import LogTypeChip from "./LogTypeChip";
 import { generateLogMessage, type LogFetch } from "../api/LogApi";
 

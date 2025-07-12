@@ -17,6 +17,7 @@ export const LogTypes = {
     UPDATE_QUANTITY: 2,
     UPDATE_EXPIRATION: 3,
     DELETE: 4,
+    UPDATE_CATEGORY: 5,
 };
 
 //Add log to supabase
@@ -75,6 +76,9 @@ export const generateLogMessage = (
         // Deleted item
         case 4:
             return performer_name + " has deleted the item " + item_name;
+
+        case 5: 
+            return performer_name + " has updated the category of " + item_name
 
         default:
             return "Unknown log type";

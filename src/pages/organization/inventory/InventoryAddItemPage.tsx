@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Button,
   Chip,
@@ -17,35 +17,38 @@ import { useNavigate } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useAlertContext } from "../../../common/contexts/AlertContext";
 import { useSessionContext, type ValidSession } from "../../../common/contexts/SessionContext";
-import { fetchCategoryOptions, handleAddItem, handleCategoryChange, type CategoryFetch } from "../../../features/organization/inventory/api/InventoryApi";
+import { handleAddItem, handleCategoryChange } from "../../../features/organization/inventory/api/InventoryApi";
 import type { Item } from "../../../helper/types";
+import useGetCategoryList from "../../../features/organization/inventory/hooks/useGetCategoryList";
 
 export default function InventoryAddItemPage() {
   const { org } = useOrgContext() as ValidOrg
   const navigate = useNavigate()
   const { createAlert } = useAlertContext();
   const { user } = useSessionContext() as ValidSession
+  const { categoryList } = useGetCategoryList()
 
   const [itemName, setItemName] = useState<string>("");
   const [itemQuantity, setItemQuantity] = useState<number>(1);
   const [itemDescription, setItemDescription] = useState<string>("");
   const [itemCategory, setItemCategory] = useState<string[]>([]);
   const [itemExpiry, setItemExpiry] = useState<Dayjs | null>(null); // In the format YYYY-MM-DD
-  const [categoryOptions, setCategoryOptions] = useState<CategoryFetch[]>([]);
 
-  const item: Omit<Item, "id"> & { categories: string[] } = {
+  const item: Omit<Item, "id" | "lastModified"> & { categories: string[] } = {
     name: itemName, quantity: itemQuantity, description: itemDescription,
     expiryDate: itemExpiry?.toDate().toDateString() || null,
     categories: itemCategory
   }
 
   const onHandleAddItem = async () => {
-    await handleAddItem(user.id, item, categoryOptions, org.id, createAlert)
+    const res = await handleAddItem(user.id, item, categoryList, org.id)
+    if (res) {
+      createAlert("success", "Successfully added item!")
+    } else {
+      createAlert("error", "Failed to add item")
+    }
+    navigate(-1)
   }
-
-  useEffect(() => {
-    fetchCategoryOptions(org, createAlert, setCategoryOptions);
-  }, []);
 
   return (
     <Box
@@ -148,7 +151,7 @@ export default function InventoryAddItemPage() {
             },
           }}
         >
-          {categoryOptions.map((cat) => (
+          {categoryList.map((cat) => (
             <MenuItem
               key={cat.id}
               value={cat.name}
