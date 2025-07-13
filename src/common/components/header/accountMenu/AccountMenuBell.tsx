@@ -9,8 +9,8 @@ export default function AccountBell() {
     const { unread } = useGetNotifications()
 
     return (
-        <Button size="small" color="secondary" variant="text"
-            onClick={() => navigate("/dashboard/notifications")} sx={{ fontSize: 24 }}
+        <Button size="small" variant="text"
+            onClick={() => navigate("/dashboard/notifications")} sx={{ fontSize: 24, color : "var(--secondary)" }}
         >
             <Badge badgeContent={unread} color="error">
                 <CircleNotificationsIcon fontSize="inherit" />

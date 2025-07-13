@@ -1,7 +1,7 @@
 import { useMediaQuery } from "@mui/material";
 import { createContext, useContext, useEffect, useState } from "react";
 
-type ThemeMode = "light" | "dark" | "system";
+export type ThemeMode = "light" | "dark" | "system";
 type Theme = "light" | "dark";
 
 interface ThemeProps {
@@ -10,12 +10,12 @@ interface ThemeProps {
 }
 
 const ThemeContext = createContext<ThemeProps>({
-    themeMode : "dark",
+    themeMode : "system",
     setThemeMode : () => {}
 })
 
 export const ThemeModeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [themeMode, setThemeMode] = useState<ThemeMode>("dark")
+  const [themeMode, setThemeMode] = useState<ThemeMode>("system")
   const [theme, setTheme] = useState<Theme>("dark")
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
