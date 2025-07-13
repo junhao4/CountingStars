@@ -6,11 +6,11 @@ import useGetCategoryList from "../../inventory/hooks/useGetCategoryList";
 interface CategoryChipsProps {
     categories: Category[]
     editMode: boolean
-    handleDelete: (categoryId: number) => () => void
+    handleRemove: (categoryId: number) => () => void
     handleAdd: (categoryId: number, categoryName: string) => () => void
 }
 
-export default function CategoryChips({ categories, editMode, handleDelete, handleAdd }: CategoryChipsProps) {
+export default function CategoryChips({ categories, editMode, handleRemove, handleAdd }: CategoryChipsProps) {
     const { categoryList } = useGetCategoryList()
     const [categoryMenuOpen, setCategoryMenuOpen] = useState(false)
 
@@ -30,8 +30,8 @@ export default function CategoryChips({ categories, editMode, handleDelete, hand
     return (
         <div style={{display:'flex', gap:'0.5rem', flexWrap:'wrap', maxWidth:'17vw'}}>
             {categories.map(cat => {
-                return <Chip key={cat.id} label={cat.name}
-                    {...editMode ? { onDelete: handleDelete(cat.id) } : {}}></Chip>
+                return <Chip key={cat.id} label={cat.name} onClick={() => {}}
+                    {...editMode ? { onDelete: handleRemove(cat.id) } : {}}></Chip>
             })}
 
             <Chip key={categories.length} label={"+"} ref={anchorRef} disabled={!editMode}

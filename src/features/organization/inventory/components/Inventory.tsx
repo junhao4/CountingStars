@@ -16,11 +16,12 @@ import { useSessionContext, type ValidSession } from "../../../../common/context
 import { fetchCategoryOptions, fetchItems, handleDelete, type DisplayCategory } from "../api/InventoryApi";
 import type { ItemWithCategories } from "../../../../helper/types";
 import useGetCategoryList from "../hooks/useGetCategoryList";
+import Loading from "../../../../common/components/Loading";
 
 export default function Inventory() {
   const { org } = useOrgContext() as ValidOrg
   const { user } = useSessionContext() as ValidSession
-  const { categoryList, setCategoryList } = useGetCategoryList()
+  const { loading, categoryList, setCategoryList } = useGetCategoryList()
   const { createAlert } = useAlertContext()
 
   // rowSelectionModel.ids contains the rows that are selected in ItemTable, used in handleDelete function.
@@ -44,8 +45,11 @@ export default function Inventory() {
 
   // Refresh the data grid items
   useEffect(() => {
-    fetchItems(org, createAlert, setItems, category)
+    fetchItems(org.id)
+    .then(data => setItems(data))
   }, [refresh]);
+
+  if (loading) {return <Loading />}
 
   return (
     <div style={{ maxWidth: '70%', margin: '1rem 0' }}>
@@ -55,7 +59,7 @@ export default function Inventory() {
         setCategoryOptions={setCategoryList}
         category={category}
         setCategory={setCategory}
-        fetchItems={() => fetchItems(org, createAlert, setItems, category)}
+        fetchItems={() => fetchItems(org.id)}
         fetchCategoryOptions={() => fetchCategoryOptions(org.id).then(data => setCategoryList(data))}
         handleDelete={onHandleDelete}
       />

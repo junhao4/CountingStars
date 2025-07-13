@@ -2,6 +2,7 @@ import { type GridColDef, type GridRenderCellParams, type GridRowSelectionModel,
 import { useMemo, type SetStateAction } from "react";
 import CategoryChip from "./CategoryChip";
 import type { ItemWithCategories } from "../../../../helper/types";
+import { Link, useNavigate } from "react-router-dom";
 
 // Fetches and displays the items in a table
 interface ItemTableProps {
@@ -11,18 +12,19 @@ interface ItemTableProps {
 }
 
 export default function ItemTable({ items, rowSelectionModel, setRowSelectionModel }: ItemTableProps) {
-
+    const navigate = useNavigate()
     // Defines the column data for MUI Data Grid
     const columns: GridColDef[] = useMemo(() => [
         { field: 'id', headerName: 'ID', width: 70, align: 'left', headerAlign: 'left' },
-        { field: 'name', headerName: 'Name', type: 'string', width: 280, align: 'left', headerAlign: 'left' },
+        { field: 'name', headerName: 'Name', type: 'string', width: 280, align: 'left', headerAlign: 'left', 
+            renderCell: e => {return <Link style={{ color:'var(--foreground-text)', fontSize:'1.25rem'}} to={'' + e.row.id} children={e.value}/>} },
         { field: 'quantity', headerName: 'Quantity', type: 'number', width: 140, align: 'left', headerAlign: 'left' },
         {
             field: 'categories', headerName: 'Categories', type: 'actions',
             width: 280, align: 'left', headerAlign: 'left',
             renderCell: (params: GridRenderCellParams<ItemWithCategories>) => <CategoryChip {...{ params }} />,
         },
-        { field: 'lastModified', headerName: 'Last Modified', valueGetter: (arg0) => new Date(arg0), type: 'date', width: 140, align: 'left', headerAlign: 'left' },
+        // { field: 'lastModified', headerName: 'Last Modified', valueGetter: (arg0) => new Date(arg0), type: 'date', width: 140, align: 'left', headerAlign: 'left' },
         {
             field: 'expiryDate', headerName: 'Expiry Date', renderCell: (arg0) =>
                 arg0.value !== "-" ? new Date(arg0.value).toLocaleDateString() : "-", width: 140, align: 'left', headerAlign: 'left'

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { fetchCategoryOptions, type DisplayCategory } from "../api/InventoryApi";
 import { useOrgContext, type ValidOrg } from "../../../../common/contexts/OrgContext";
 
@@ -6,11 +6,12 @@ import { useOrgContext, type ValidOrg } from "../../../../common/contexts/OrgCon
 export default function useGetCategoryList() {
     const { org } = useOrgContext() as ValidOrg
     const [categoryList, setCategoryList] = useState<DisplayCategory[]>([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         console.log("useGetCategoryList Running for the first time!")
-        fetchCategoryOptions(org.id).then(data => setCategoryList(data))
+        fetchCategoryOptions(org.id).then(data => setCategoryList(data)).then(() => setLoading(false))
     }, [])
 
-    return { categoryList, setCategoryList }
+    return { categoryList, setCategoryList, loading }
 }

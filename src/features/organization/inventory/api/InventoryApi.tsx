@@ -35,45 +35,32 @@ export const handleCategoryChange = (event: SelectChangeEvent<string[]>,
 };
 
 //Fetches item data from supabase
-export const fetchItems = async (org: Organization,
-  createAlert: (arg0: AlertType, arg1: string) => void,
-  setItems: React.Dispatch<React.SetStateAction<ItemWithCategories[]>>,
-  category: DisplayCategory | null
-) => {
-  await supabase
+export const fetchItems = async (organizationId: number) => {
+  const { data, error } = await supabase
     .from("Items")
     .select(
-      `id, name, quantity, description, lastModified:last_modified, expiryDate:expiry_date, categories:Categories(id, name, createdAt:created_at)`
+      `id, name, quantity, description, lastModified:last_modified, expiryDate:expiry_date, 
+            categories:Categories(id, name, createdAt:created_at)`
     )
-    .eq("org_id", org.id)
+    .eq("org_id", organizationId)
     .eq('deleted', false)
-    .then((res) => {
-      if (res.error) {
-        createAlert('error', res.error.message);
-        return;
-      }
 
-      const fixDate = res.data.map((item) => ({
-        ...item,
-        description: item.description || "",
-        expiryDate: item.expiryDate
-          ? item.expiryDate
-          : "-",
-      }));
-      if (category) {
-        setItems(
-          fixDate.filter(
-            (items) =>
-              items.categories.filter((cat) => cat.id === category.id)
-                .length > 0
-          )
-        );
-        return;
-      }
+  if (error) {
+    console.log(error.message);
+    return [];
+  } else if (!data) {
+    return [];
+  }
 
-      setItems(fixDate);
-    });
-};
+  const fixDate = data.map(item => {
+    return {
+      ...item, lastModified: item.lastModified!,
+      expiryDate: item.expiryDate ? item.expiryDate : "-"
+    }
+  })
+
+  return fixDate as ItemWithCategories[]
+}
 
 // Handles the deletion of the selected data rows in ItemTable, whhen the delete button in ModifyBar is pressed.
 export const handleDelete = async (

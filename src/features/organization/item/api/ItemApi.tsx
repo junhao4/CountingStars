@@ -1,16 +1,17 @@
 import supabase from "../../../../helper/supabaseClient";
-import type { ItemWithCategories } from "../../../../helper/types";
+import type { Item, ItemWithCategories } from "../../../../helper/types";
 import { addLog, LogTypes } from "../../log/api/LogApi";
 
 
-export const fetchItem = async (organizationId: number, itemId: number) => {
+// ITEM INFO
+
+export const fetchItem = async (itemId: number) => {
     const { data, error } = await supabase
         .from("Items")
         .select(
             `id, name, quantity, description, lastModified:last_modified, expiryDate:expiry_date, 
             categories:Categories(id, name, createdAt:created_at)`
         )
-        .eq("org_id", organizationId)
         .eq("id", itemId)
         .eq('deleted', false)
         .maybeSingle()
@@ -29,6 +30,22 @@ export const fetchItem = async (organizationId: number, itemId: number) => {
 
     return fixDate as ItemWithCategories
 }
+
+export const updateItem = async (newItem: Item) => {
+    const { error } = await supabase
+        .from("Items")
+        .update({name: newItem.name, description: newItem.description, quantity: newItem.quantity,
+            expiry_date: newItem.expiryDate, last_modified: new Date(Date.now()).toISOString()})
+        .eq('id', newItem.id)
+    if (error) {
+        console.log(error.message);
+        return null;
+    }
+
+    return newItem
+}
+
+
 
 export const fetchItemLogs = async (itemId: number) => {
     const { data, error } = await supabase.from('Logs')
