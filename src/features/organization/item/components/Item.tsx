@@ -64,9 +64,9 @@ export default function Item({ itemId }: { itemId: number }) {
         if (item) setEditItem(item)
     }, [item])
 
-    if (loadingItem || loadingImage || !editItem ) return (<Loading />)
+    if (loadingItem || loadingImage ) return (<Loading />)
 
-    if (!item) return (<Box>NO ITEM FOUND!</Box>)
+    if (!item || !editItem) return (<Box>NO ITEM FOUND!</Box>)
 
     return (
         <Box sx={{
@@ -86,7 +86,7 @@ export default function Item({ itemId }: { itemId: number }) {
 
 
 
-                <div style={{ display: 'flex', width: '90%', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center', margin: '0 0 2rem 0' }}>
+                <div style={{ display: 'flex', width: '100%', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center', margin: '0 0 2rem 0' }}>
                     {/** Section for displaying image, and buttons */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
                         <img width='200px' height='200px' src={image?.imageBlobUrl} style={{ outline: '1px solid black' }}></img>
@@ -101,7 +101,7 @@ export default function Item({ itemId }: { itemId: number }) {
                     </div>
 
                     {/** Section for displaying quantity, description, categories */}
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'end', gap: '2rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'end', gap: '2rem', width:'50%' }}>
                         <div style={{ width: '100%', gap: '1rem', display: 'flex', justifyContent: 'left', flexWrap: 'wrap' }}>
                             <p style={{ margin: '0' }}>Quantity:&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <TextField size='small' slotProps={{ input: { readOnly: !editMode } }} variant="standard"

@@ -11,7 +11,7 @@ export default function ItemPage() {
 
     useEffect(() => {
         setTitle("Item")
-    })
+    }, [])
 
     if(!itemId || isNaN(parseInt(itemId))) {
         return <div>INVALID ITEM ID</div>
