@@ -1,5 +1,7 @@
-import { Button, Stack } from "@mui/material"
+import { Box, Button, Grid, Radio, Stack, Typography } from "@mui/material"
 import { useThemeContext } from "../common/contexts/ThemeContext"
+import { useState } from "react"
+import ThemeRadio from "../features/theme/components/ThemeRadio"
 
 
 
@@ -8,17 +10,25 @@ import { useThemeContext } from "../common/contexts/ThemeContext"
 
 function ThemePage() {
     const { setThemeMode } = useThemeContext()
+    const [ selected, setSelected ] = useState(3)
 
   return (
     <>
-    <div style={{display : 'block'}}>
-    <div style={{display : 'block'}}>ThemePage</div>
-    <div>
-    <Button onClick={() => setThemeMode("light")}>Light</Button>
-    <Button onClick={() => setThemeMode("dark")}>Dark</Button>
-    <Button onClick={() => setThemeMode("system")}>System</Button>
-    </div>
-    </div>
+    <Grid container justifyContent={"center"} spacing={4}>
+      <Grid>
+     <ThemeRadio text="Light" img="src\assets\CountingStarsLight.png"
+      id={1} selected={selected} setSelected={setSelected} func={() => setThemeMode("light")}></ThemeRadio>
+      </Grid>
+      <Grid>
+    <ThemeRadio text="Dark" img="src\assets\CountingStarsDark.png"
+      id={2} selected={selected} setSelected={setSelected} func={() => setThemeMode("dark")}></ThemeRadio>
+      </Grid>
+      <Grid>
+      <ThemeRadio text="System" img="src\assets\CountingStarsSystem.png"
+      id={3} selected={selected} setSelected={setSelected} func={() => setThemeMode("system")}></ThemeRadio>
+      </Grid>
+      
+    </Grid>
     </>
   )
 }
