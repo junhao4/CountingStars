@@ -22,6 +22,11 @@ export default function useGetItem(itemId: number) {
     }, [])
 
     const handleSetItem = async (newItem: ItemWithCategories) => {
+        // Shallow comparison of item equality
+        if (item === newItem) {
+            return
+        }
+
         const newCats = newItem.categories.filter(cat => !item?.categories.map(cat => cat.id).includes(cat.id))
         const oldCats = item!.categories.filter(cat => !newItem.categories.map(cat => cat.id).includes(cat.id))
 

@@ -2,7 +2,7 @@ import { type GridColDef, type GridRenderCellParams, type GridRowSelectionModel,
 import { useMemo, type SetStateAction } from "react";
 import CategoryChip from "./CategoryChip";
 import type { ItemWithCategories } from "../../../../helper/types";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // Fetches and displays the items in a table
 interface ItemTableProps {
@@ -12,7 +12,6 @@ interface ItemTableProps {
 }
 
 export default function ItemTable({ items, rowSelectionModel, setRowSelectionModel }: ItemTableProps) {
-    const navigate = useNavigate()
     // Defines the column data for MUI Data Grid
     const columns: GridColDef[] = useMemo(() => [
         { field: 'id', headerName: 'ID', width: 70, align: 'left', headerAlign: 'left' },

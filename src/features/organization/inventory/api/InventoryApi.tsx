@@ -1,8 +1,6 @@
 import type { SelectChangeEvent } from "@mui/material";
-import type { GridRowSelectionModel } from "@mui/x-data-grid";
-import type { AlertType } from "../../../../common/contexts/AlertContext";
 import supabase from "../../../../helper/supabaseClient";
-import type { Category, Item, ItemWithCategories, Organization } from "../../../../helper/types";
+import type { Category, Item, ItemWithCategories } from "../../../../helper/types";
 import { addLog, LogTypes } from "../../log/api/LogApi";
 
 export type DisplayCategory = Omit<Category, "createdAt">
@@ -63,14 +61,13 @@ export const fetchItems = async (organizationId: number) => {
 }
 
 // Handles the deletion of the selected data rows in ItemTable, whhen the delete button in ModifyBar is pressed.
-export const handleDelete = async (
+export const deleteItems = async (
   userId: string,
   organizationId: number,
-  rowSelectionModel: GridRowSelectionModel,
+  itemIds: number[]
 ) => {
   const res = await Promise.all(
-    Array.of(...rowSelectionModel.ids).map(async (id) => {
-      id = id as number
+    itemIds.map(async id => {
       const data = await supabase
         .from("Items")
         .update({ deleted: true })
