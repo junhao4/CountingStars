@@ -1,4 +1,4 @@
-import { Stack, Typography, TextField, Button, styled } from "@mui/material";
+import { Stack, Typography, TextField, Button, styled, Box } from "@mui/material";
 import Container from "@mui/material/Container";
 import { useEffect, useState, type ChangeEvent } from "react";
 import { useAlertContext } from "../../../common/contexts/AlertContext";
@@ -70,7 +70,7 @@ export default function Profile() {
 
 
             <ThemeSettingsBox />
-
+            <Box sx={{mb : 3}}></Box>
         
             </Container>
         </>

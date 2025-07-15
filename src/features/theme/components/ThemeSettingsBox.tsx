@@ -22,7 +22,7 @@ export function ThemeSettingsBox() {
                   
                     border: "1px solid var(--ring)",
                     borderRadius: 2,
-        
+                    mb : 4,
                     m : "auto"
                 }}
             >
@@ -36,7 +36,7 @@ export function ThemeSettingsBox() {
                     container
                     justifyContent={"center"}
                     spacing={4}
-                    sx={{ m: 2 }}
+                    sx={{ m: 3 }}
                 >
                     <Grid>
                         <ThemeRadio

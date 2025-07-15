@@ -43,7 +43,7 @@ function ProfileInformationBox({ img, user, onUpdateImage} : ProfileInfoProps) {
                     alt="Profile"
                     sx={{
                         width: 200,
-                        height: 150,
+                        height: 175,
                         borderRadius : 2,
                         ml : 2,
                         mr : 2,
