@@ -25,7 +25,7 @@ interface AccountMenuDropdownProps {
     user: User | FirstTimeUser;
     open: boolean;
     themeMode: ThemeMode;
-    setThemeMode: React.Dispatch<React.SetStateAction<ThemeMode>>;
+    setAndSaveThemeMode: (themeMode: string) => void;
 }
 
 export default function AccountMenuDropdown({
@@ -36,7 +36,7 @@ export default function AccountMenuDropdown({
     open,
     user,
     themeMode,
-    setThemeMode,
+    setAndSaveThemeMode,
 }: AccountMenuDropdownProps) {
 
     const [ closebutton, setCloseButton ] = useState(true)
@@ -95,7 +95,7 @@ export default function AccountMenuDropdown({
                         value={themeMode}
                         onChange={(e) => {
                             setCloseButton(false)
-                            setThemeMode(e.target.value as ThemeMode)
+                            setAndSaveThemeMode(e.target.value as ThemeMode)
                         }
                         }
                         name="theme"

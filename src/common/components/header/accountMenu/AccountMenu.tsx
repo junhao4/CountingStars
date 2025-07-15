@@ -18,7 +18,7 @@ export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [profileUrl, setProfileUrl] = useState<string | null>(null);
   const [img, setImg] = useState<string | undefined>()
-  const { themeMode, setThemeMode } = useThemeContext()
+  const { themeMode, setAndSaveThemeMode } = useThemeContext()
 
   const open = Boolean(anchorEl);
 
@@ -71,7 +71,7 @@ export default function AccountMenu() {
       <AccountMenuIcon open={open} img={img} handleClick={handleClick} />
       <AccountMenuDropdown anchorEl={anchorEl} handleClose={handleClose}
         handleLogout={handleLogout} handleProfile={handleProfile} open={open} user={user!} 
-        themeMode={themeMode} setThemeMode={setThemeMode}/>
+        themeMode={themeMode} setAndSaveThemeMode={setAndSaveThemeMode}/>
     </>
   );
 }

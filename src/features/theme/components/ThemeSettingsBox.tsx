@@ -1,6 +1,6 @@
 import { Box, Grid, Typography } from "@mui/material";
 import ThemeRadio from "./ThemeRadio";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useThemeContext } from "../../../common/contexts/ThemeContext";
 import LightImg from "../../../assets/CountingStarsLight.png";
 import DarkImg from "../../../assets/CountingStarsDark.png";
@@ -9,12 +9,12 @@ import SystemImg from "../../../assets/CountingStarsSystem.png";
 
 export function ThemeSettingsBox() {
 
-
-    const DARK = 1;
-    const LIGHT = 2;
-    const SYSTEM = 3;
-     const { setThemeMode } = useThemeContext();
-    const [selected, setSelected] = useState(SYSTEM);
+    
+    const { themeMode, setAndSaveThemeMode } = useThemeContext();
+    const [selected, setSelected] = useState(themeMode);
+     useEffect(() => {
+        setSelected(themeMode);
+    }, [themeMode])
   return (
     <>
      <Box
@@ -42,30 +42,30 @@ export function ThemeSettingsBox() {
                         <ThemeRadio
                             text="Light"
                             img={LightImg}
-                            id={LIGHT}
+                            id={'light'}
                             selected={selected}
                             setSelected={setSelected}
-                            func={() => setThemeMode("light")}
+                            func={() => setAndSaveThemeMode("light")}
                         ></ThemeRadio>
                     </Grid>
                     <Grid>
                         <ThemeRadio
                             text="Dark"
                             img={DarkImg}
-                            id={DARK}
+                            id={'dark'}
                             selected={selected}
                             setSelected={setSelected}
-                            func={() => setThemeMode("dark")}
+                            func={() => setAndSaveThemeMode("dark")}
                         ></ThemeRadio>
                     </Grid>
                     <Grid>
                         <ThemeRadio
                             text="System"
                             img={SystemImg}
-                            id={SYSTEM}
+                            id={'system'}
                             selected={selected}
                             setSelected={setSelected}
-                            func={() => setThemeMode("system")}
+                            func={() => setAndSaveThemeMode("system")}
                         ></ThemeRadio>
                     </Grid>
                 </Grid>

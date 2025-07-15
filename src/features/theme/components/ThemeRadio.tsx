@@ -4,9 +4,9 @@ import { Box } from "@mui/system";
 interface RadioProps {
     text: string;
     img: string;
-    id: number;
-    selected: number;
-    setSelected: React.Dispatch<React.SetStateAction<number>>;
+    id:  "system" | "light" | "dark";
+    selected: string;
+    setSelected: React.Dispatch<React.SetStateAction<"system" | "light" | "dark">>;
     func? : () => void
 }
 
