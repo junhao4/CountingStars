@@ -34,7 +34,7 @@ function ThemeRadio({ text, img, id, selected, setSelected, func }: RadioProps) 
                     component="img"
                     src={img}
                     alt={text}
-                    sx={{ width: 180, height: 110, borderRadius: 2 }}
+                    sx={{ width: 180, height: 110, borderRadius: 2, border: '1px solid grey'}}
                 />
 
                 <Box sx={{ bgcolor: "transparent", display: "flex" }}>

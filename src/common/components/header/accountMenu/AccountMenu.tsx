@@ -9,8 +9,9 @@ import AccountMenuIcon from './AccountMenuIcon';
 import AccountBell from './AccountMenuBell';
 import { useThemeContext } from '../../../contexts/ThemeContext';
 
+
 export default function AccountMenu() {
-  const { createAlert } = useAlertContext()
+  const { createAlert, mRef } = useAlertContext()
   const { user } = useSessionContext()
   const navigate = useNavigate()
 
@@ -59,9 +60,10 @@ export default function AccountMenu() {
       if (blob) {
         const url = URL.createObjectURL(blob);
         setImg(url);
+        console.log("CHANGING IMG IN HEADER")
       }
     })
-  }, [profileUrl]);
+  }, [profileUrl, mRef]);
 
   return (
     <>

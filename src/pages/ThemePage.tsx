@@ -1,36 +1,31 @@
-import { Box, Button, Grid, Radio, Stack, Typography } from "@mui/material"
-import { useThemeContext } from "../common/contexts/ThemeContext"
-import { useState } from "react"
-import ThemeRadio from "../features/theme/components/ThemeRadio"
+import {
+   
+    Container
+  
 
+} from "@mui/material";
 
-
+import { ThemeSettingsBox } from "../features/theme/components/ThemeSettingsBox";
 
 
 
 function ThemePage() {
-    const { setThemeMode } = useThemeContext()
-    const [ selected, setSelected ] = useState(3)
+    const testimg =
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Test.svg/2560px-Test.svg.png";
 
-  return (
-    <>
-    <Grid container justifyContent={"center"} spacing={4}>
-      <Grid>
-     <ThemeRadio text="Light" img="src\assets\CountingStarsLight.png"
-      id={1} selected={selected} setSelected={setSelected} func={() => setThemeMode("light")}></ThemeRadio>
-      </Grid>
-      <Grid>
-    <ThemeRadio text="Dark" img="src\assets\CountingStarsDark.png"
-      id={2} selected={selected} setSelected={setSelected} func={() => setThemeMode("dark")}></ThemeRadio>
-      </Grid>
-      <Grid>
-      <ThemeRadio text="System" img="src\assets\CountingStarsSystem.png"
-      id={3} selected={selected} setSelected={setSelected} func={() => setThemeMode("system")}></ThemeRadio>
-      </Grid>
-      
-    </Grid>
-    </>
-  )
+   
+    return (
+        
+        <>
+       
+            <Container sx={{mt : 4}}>
+            <ThemeSettingsBox></ThemeSettingsBox>
+            </Container>
+
+        
+           
+        </>
+    );
 }
 
-export default ThemePage
+export default ThemePage;
