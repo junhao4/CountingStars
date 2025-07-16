@@ -100,15 +100,16 @@ export default function AccountMenuDropdown({
                         }
                         name="theme"
                     >
-                        <FormControlLabel
-                            value="dark"
-                            control={<Radio size="small" />}
-                            label="Dark"
-                        />
+                       
                         <FormControlLabel
                             value="light"
                             control={<Radio size="small" />}
                             label="Light"
+                        />
+                         <FormControlLabel
+                            value="dark"
+                            control={<Radio size="small" />}
+                            label="Dark"
                         />
                         <FormControlLabel
                             value="system"
