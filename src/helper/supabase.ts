@@ -215,6 +215,7 @@ export type Database = {
           organization_id: number
           performer_id: string
           type: number
+          typeString: string
         }
         Insert: {
           created_at?: string

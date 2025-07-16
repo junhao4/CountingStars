@@ -1,4 +1,5 @@
 import type { CreateAlertType } from "../../../../common/contexts/AlertContext";
+import { hasPermission } from "../../../../helper/RolePermissions";
 import supabase from "../../../../helper/supabaseClient";
 
 export const fetchOrganizationImage = async (organizationId: number) => {
@@ -16,6 +17,7 @@ export const fetchOrganizationImage = async (organizationId: number) => {
 
 //Delete Org
 export const deleteOrganization = async (organizationId: number) => {
+   
     const confirm = window.confirm(
         "Are you sure you want to delete? This action is permanent!"
     );
@@ -34,6 +36,7 @@ export const deleteOrganization = async (organizationId: number) => {
     } else {
         return true
     }
+
 };
 
 //Update org name

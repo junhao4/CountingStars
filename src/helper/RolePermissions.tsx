@@ -28,6 +28,8 @@ type PermissionCheck<Key extends keyof Permissions> =
     | boolean
     | ((user: UserOrganization, data: Permissions[Key]["dataType"]) => boolean)
 
+
+
 // For each role, define the features, and their corresponding permission value or functions
 type RolesWithPermissions = {
     [R in Role]: Partial<{
@@ -92,7 +94,7 @@ const ROLES = {
     },
     admin: {
         organization: {
-            view: true, update: true, delete: true
+            view: true, update: true, delete: false
         },
         users: {
             view: true, changeToOwner: false, 

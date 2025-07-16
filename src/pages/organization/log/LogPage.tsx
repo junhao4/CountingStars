@@ -1,4 +1,4 @@
-import "./LogPage.css";
+
 import { useOrgContext, type ValidOrg } from "../../../common/contexts/OrgContext.tsx";
 import { useEffect, useState } from "react";
 import {

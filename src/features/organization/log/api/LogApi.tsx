@@ -11,6 +11,64 @@ export interface LogFetch {
     metadata: Json;
 }
 
+export interface LogFetchS {
+    id: number;
+    user_name: string;
+    item_name: string;
+    typeString: number;
+    created_at: string;
+    metadata: Json;
+}
+
+
+type LOGSTYPE = {
+    organization: {
+        dataType: Organization
+        action: "view" | "update" | "delete"
+    },
+    users: {
+        dataType: UserOrganization & { countOfOwners: number }
+        action: "view" | "changeToOwner" | "changeToAdmin" | "changeToMember" | "remove"
+    }
+    inventory: {
+        dataType: Item
+        action: "view" | "update" | "delete"
+    },
+    categories: {
+        dataType: Category
+        action: "view" | "addToOrRemoveFromItem" | "delete"
+    }
+    log: {
+        dataType: Log
+        action: "view"
+    }
+}
+
+const LOGS = {
+        addItem: {
+            generateMessage : () => {
+                return 
+            }
+        },
+        removeItem: {
+            view: true, changeToOwner: true, 
+            changeToAdmin: (user, resource) => {
+                // If user is owner, and trying to demote oneself to admin but only one owner present, return no permissions.
+                return !(user.role === "owner" && user.userId === resource.userId && resource.countOfOwners === 1)
+            }
+        },
+        moveItem: {
+            view: true, update: true, delete: true
+        },
+        updateQuantity: {
+            view: true, addToOrRemoveFromItem: true, delete: true
+        },
+        updateExpiry: {
+            view: true
+        }
+    
+} as const satisfies RolesWithPermissions
+
 //Possible types of logs
 export const LogTypes = {
     INSERT_NEW: 1,
