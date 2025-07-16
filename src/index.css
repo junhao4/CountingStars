@@ -115,13 +115,13 @@ p {
 html[data-theme='dark'] {
    --radius: 0.625rem;
 
-  --background: oklch(29.613% 0.00152 16.294);
+  --background: oklch(12.613% 0.00152 16.294);
 
-  --foreground: oklch(38.018% 0.00508 286.037);
+  --foreground: oklch(30.018% 0.00108 286.037);
 
   --foreground-text: oklch(100% 0.00011 271.152);
 
-  --card: oklch(49.97% 0.01097 243.144);
+  --card: oklch(49.97% 0.00197 243.144);
 
   --card-foreground: oklch(100% 0.00011 271.152);
 

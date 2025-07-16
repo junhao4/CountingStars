@@ -1,4 +1,4 @@
-import { useMediaQuery } from "@mui/material";
+import { useColorScheme, useMediaQuery } from "@mui/material";
 import { createContext, useContext, useEffect, useState } from "react";
 import { fetchUser } from "../api/UserApi";
 import { useSessionContext } from "./SessionContext";
@@ -24,6 +24,8 @@ export const ThemeModeProvider = ({ children }: { children: React.ReactNode }) =
   const [theme, setTheme] = useState<Theme>("dark")
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const { session } = useSessionContext()
+  //MUI theme
+  const { mode, setMode } = useColorScheme()
   const setAndSaveThemeMode = (themeMode : string) => {
       setThemeMode(themeMode as ThemeMode)
       changeTheme(session?.user.id!, themeMode)
@@ -42,8 +44,10 @@ export const ThemeModeProvider = ({ children }: { children: React.ReactNode }) =
     useEffect(() => {
         if (themeMode == 'system') {
             setTheme(prefersDarkMode ? "dark" : "light")
+            setMode(prefersDarkMode ? "dark" : "light")
         } else {
             setTheme(themeMode)
+            setMode(themeMode)
         }
     
     }, [themeMode, prefersDarkMode]);
