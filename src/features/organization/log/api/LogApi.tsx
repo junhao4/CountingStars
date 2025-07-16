@@ -1,6 +1,7 @@
+import type { Key } from "react";
 import type { Json } from "../../../../helper/supabase";
 import supabase from "../../../../helper/supabaseClient";
-import type { Organization } from "../../../../helper/types";
+import type { Organization, UserOrganization } from "../../../../helper/types";
 
 export interface LogFetch {
     id: number;
@@ -21,53 +22,92 @@ export interface LogFetchS {
 }
 
 
-type LOGSTYPE = {
-    organization: {
-        dataType: Organization
-        action: "view" | "update" | "delete"
+export type LOGSTYPE = 
+    | "addItem"
+    | "removeItem"
+    | "moveItem"
+    | "updateQuantity"
+    | "updateExpiry"
+
+export type metadataType = {
+    "addItem" :{
+            metadata : {
+                quantity : number
+            }
     },
-    users: {
-        dataType: UserOrganization & { countOfOwners: number }
-        action: "view" | "changeToOwner" | "changeToAdmin" | "changeToMember" | "remove"
-    }
-    inventory: {
-        dataType: Item
-        action: "view" | "update" | "delete"
+    "removeItem" :{
+            metadata : {
+                quantity : number
+            }
     },
-    categories: {
-        dataType: Category
-        action: "view" | "addToOrRemoveFromItem" | "delete"
+    "moveItem" :{
+            metadata : {
+                quantity : number
+            }
+    },
+    "updateQuantity" :{
+            metadata : {
+                newQuantity : number, oldQuantity : number
+            }
     }
-    log: {
-        dataType: Log
-        action: "view"
-    }
+    "updateExpiry" :{
+            metadata : {
+                quantity : number
+            }
+    },
+} 
+
+type MessageCheck<Key extends LOGSTYPE> =
+     (metadata : metadataType[Key]["metadata"]) => string 
+
+type LogsWithMetadata = {
+    [L in LOGSTYPE]: Partial<{
+        generateMessage: MessageCheck<L>
+    }>
 }
 
-const LOGS = {
+
+export const LOGS = {
         addItem: {
-            generateMessage : () => {
-                return 
+            generateMessage : (metadata) => {
+                return ""
             }
         },
         removeItem: {
-            view: true, changeToOwner: true, 
-            changeToAdmin: (user, resource) => {
-                // If user is owner, and trying to demote oneself to admin but only one owner present, return no permissions.
-                return !(user.role === "owner" && user.userId === resource.userId && resource.countOfOwners === 1)
+            generateMessage : () => {
+                return ""
             }
         },
         moveItem: {
-            view: true, update: true, delete: true
+            generateMessage : () => {
+                return ""
+            }
         },
         updateQuantity: {
-            view: true, addToOrRemoveFromItem: true, delete: true
+            generateMessage : () => {
+                return ""
+            }
         },
         updateExpiry: {
-            view: true
+            generateMessage : () => {
+                return ""
+            }
         }
     
-} as const satisfies RolesWithPermissions
+} as const satisfies LogsWithMetadata
+
+export function generateLogMessageNew <Type extends LOGSTYPE
+>(
+    type: Type,
+    userId: string,
+    item: string,
+    metadata: metadataType[Type]["metadata"]
+
+
+) {
+
+
+}
 
 //Possible types of logs
 export const LogTypes = {
