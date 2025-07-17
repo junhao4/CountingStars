@@ -7,7 +7,7 @@ export interface LogFetch {
     id: number;
     user_name: string;
     item_name: string;
-    type: number;
+    type: number | null;
     created_at: string;
     metadata: Json;
 }
@@ -16,7 +16,7 @@ export interface LogFetchS {
     id: number;
     user_name: string;
     item_name: string;
-    typeString: string;
+    typeString: string | null;
     created_at: string;
     metadata: Json;
 }
@@ -132,14 +132,14 @@ export const LogTypes = {
 //Add log to supabase
 export const addLog = async (
     organization_id: number,
-    type: number,
+    typeString: string | null,
     performer_id: string,
     item_id: number,
     metadata: Json
 ) => {
     return await supabase
         .from("Logs")
-        .insert({ type, performer_id, item_id, metadata, organization_id })
+        .insert({ typeString, performer_id, item_id, metadata, organization_id })
         .then((res) => {
             if (res.error) { 
                 console.log(res.error.message)
@@ -194,20 +194,19 @@ export const generateLogMessage = (
 //Gets the logs from supabase
 export const fetchLogs = async (
     org: Organization,
-    setLogs: React.Dispatch<React.SetStateAction<LogFetch[]>>,
+    setLogs: React.Dispatch<React.SetStateAction<LogFetchS[]>>,
     filter: string[]
 ) => {
     let query = supabase
         .from("Logs")
         .select(
-            "id, Users!performer_id(name), Items!item_id(name), type, created_at, metadata"
+            "id, Users!performer_id(name), Items!item_id(name), typeString, created_at, metadata"
         )
         .eq("organization_id", org.id)
         .order("id", { ascending: false })
 
-        const types = filter.map(x => typeToInt(x) as number)
         if (filter.length > 0) {
-            query = query.in("type", types)
+            query = query.in("typeString", filter)
         }
         
         const res = await query
@@ -222,13 +221,6 @@ export const fetchLogs = async (
                         };
                     })
                 );
-        
+         
 };
 
-export const typeToInt = (type : string) => {
-    switch (type) {
-        case "Created" : return 1
-        case "Updated" : return 2
-        case "Deleted" : return 4
-    }
-}
