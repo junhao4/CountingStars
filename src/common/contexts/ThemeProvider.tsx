@@ -102,7 +102,6 @@ const customTheme = createTheme({
         ].join(','),
     },
 
-    defaultColorScheme: 'light',
 
     components: {
         MuiButton: {

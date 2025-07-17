@@ -68,12 +68,61 @@ export type Database = {
           },
         ]
       }
+      Folders: {
+        Row: {
+          created_at: string
+          deleted: boolean
+          description: string
+          id: number
+          last_modified: string
+          name: string
+          organization_id: number
+          parent_id: number | null
+        }
+        Insert: {
+          created_at?: string
+          deleted?: boolean
+          description?: string
+          id?: number
+          last_modified?: string
+          name?: string
+          organization_id: number
+          parent_id?: number | null
+        }
+        Update: {
+          created_at?: string
+          deleted?: boolean
+          description?: string
+          id?: number
+          last_modified?: string
+          name?: string
+          organization_id?: number
+          parent_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Folders_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "Organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Folders_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "Folders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       Items: {
         Row: {
           created_at: string
           deleted: boolean
           description: string
           expiry_date: string | null
+          folder_id: number | null
           id: number
           image_file: string
           last_modified: string
@@ -86,6 +135,7 @@ export type Database = {
           deleted?: boolean
           description: string
           expiry_date?: string | null
+          folder_id?: number | null
           id?: number
           image_file?: string
           last_modified?: string
@@ -98,6 +148,7 @@ export type Database = {
           deleted?: boolean
           description?: string
           expiry_date?: string | null
+          folder_id?: number | null
           id?: number
           image_file?: string
           last_modified?: string
@@ -106,6 +157,13 @@ export type Database = {
           quantity?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "Items_folder_id_fkey"
+            columns: ["folder_id"]
+            isOneToOne: false
+            referencedRelation: "Folders"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "Items_org_id_fkey"
             columns: ["org_id"]

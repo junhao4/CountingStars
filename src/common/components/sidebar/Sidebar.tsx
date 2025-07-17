@@ -83,9 +83,9 @@ export default function Sidebar() {
             <NavBarItem
               open={open}
               selected={
-                location.pathname === "/dashboard/organization/inventory"
+                location.pathname.startsWith("/dashboard/organization/inventory")
               }
-              onClick={() => navigate("/dashboard/organization/inventory")}
+              onClick={() => navigate("/dashboard/organization/inventory/root")}
             >
               <InventoryIcon fontSize="large" />
               <Typography>Inventory</Typography>

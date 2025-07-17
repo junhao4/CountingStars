@@ -47,24 +47,25 @@ export default function Item({ itemId }: { itemId: number }) {
     const [editItem, setEditItem] = useState<ItemWithCategories>(item!)
     const [editMode, setEditMode] = useState(false)
 
-    
+
 
     const handleAddCategory = (categoryId: number, categoryName: string) => () => {
         setEditItem({
-                ...editItem, categories: editItem.categories
-                    .concat([{ id: categoryId, name: categoryName, createdAt: Date.now().toLocaleString() }])
-            })
+            ...editItem, categories: editItem.categories
+                .concat([{ id: categoryId, name: categoryName, createdAt: Date.now().toLocaleString() }])
+        })
     }
 
     const handleRemoveCategory = (categoryId: number) => () => {
         setEditItem({ ...editItem, categories: editItem.categories.filter(cat => cat.id !== categoryId) || [] })
     }
 
+    
     useEffect(() => {
         if (item) setEditItem(item)
     }, [item])
 
-    if (loadingItem || loadingImage ) return (<Loading />)
+    if (loadingItem || loadingImage) return (<Loading />)
 
     if (!item || !editItem) return (<Box>NO ITEM FOUND!</Box>)
 
@@ -101,7 +102,7 @@ export default function Item({ itemId }: { itemId: number }) {
                     </div>
 
                     {/** Section for displaying quantity, description, categories */}
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'end', gap: '2rem', width:'50%' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'end', gap: '2rem', width: '50%' }}>
                         <div style={{ width: '100%', gap: '1rem', display: 'flex', justifyContent: 'left', flexWrap: 'wrap' }}>
                             <p style={{ margin: '0' }}>Quantity:&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <TextField size='small' slotProps={{ input: { readOnly: !editMode } }} variant="standard"
@@ -119,7 +120,8 @@ export default function Item({ itemId }: { itemId: number }) {
 
                         <div style={{ width: '100%', display: 'flex', justifyContent: 'left', flexWrap: 'wrap' }}>
                             <p>Categories:&emsp;&emsp;&emsp;</p>
-                            <CategoryChips categories={editItem.categories} editMode={editMode}
+                            <CategoryChips categories={editItem.categories} editMode={editMode} 
+                                selected={editItem.categories.map(cat => cat.id)}
                                 handleRemove={handleRemoveCategory} handleAdd={handleAddCategory} />
                         </div>
                     </div>
@@ -134,17 +136,21 @@ export default function Item({ itemId }: { itemId: number }) {
 
                 <div style={{ display: 'flex', flexWrap: 'wrap', margin: '0 0 1rem 2rem' }}>
                     <p style={{ display: 'flex', alignItems: 'center' }}>Expiry Date:&emsp;&emsp;</p>
-                    <DatePicker value={dayjs(editItem.lastModified)} slotProps={{ textField: { size: 'small' } }} onChange={(e) => {
-                        setEditItem({ ...editItem, lastModified: e?.toISOString() || editItem.lastModified })
-                    }} readOnly={!editMode}></DatePicker>
+                    <DatePicker value={editItem.expiryDate ? dayjs(editItem.expiryDate) : null}
+                        slotProps={{
+                            textField: { size: 'small' }, field: { clearable: true }
+                        }} onChange={(e) => {
+                            setEditItem({ ...editItem, expiryDate: e?.toDate().toDateString() || null })
+                        }} readOnly={!editMode} minDate={dayjs(Date.now())}>
+                    </DatePicker>
                 </div>
 
                 {/** Section for displaying edit and save button */}
                 <div style={{ display: 'flex', margin: '0 0 1rem 0', gap: '2rem' }}>
                     {editMode
                         ? <>
-                            <Button onClick={() => {handleSetItem(editItem);setEditMode(false)}} color="success" variant="contained" startIcon={<SaveIcon />} children={"Save"} />
-                            <Button onClick={() => {setEditMode(false);setEditItem(item)}} color="error" variant="contained" startIcon={<CancelIcon />} children={"Cancel"} />
+                            <Button onClick={() => { handleSetItem(editItem); setEditMode(false) }} color="success" variant="contained" startIcon={<SaveIcon />} children={"Save"} />
+                            <Button onClick={() => { setEditMode(false); setEditItem(item) }} color="error" variant="contained" startIcon={<CancelIcon />} children={"Cancel"} />
                         </>
                         : <IconButton onClick={() => setEditMode(true)}><Tooltip title="Edit item"><EditIcon /></Tooltip></IconButton>
                     }

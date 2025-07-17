@@ -25,7 +25,7 @@ export const fetchItem = async (itemId: number) => {
 
     const fixDate = {
         ...data, lastModified: data.lastModified!,
-        expiryDate: data.expiryDate ? data.expiryDate : "-",
+        expiryDate: data.expiryDate,
     }
 
     return fixDate as ItemWithCategories
