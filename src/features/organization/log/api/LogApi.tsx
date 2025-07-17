@@ -16,7 +16,7 @@ export interface LogFetchS {
     id: number;
     user_name: string;
     item_name: string;
-    typeString: number;
+    typeString: string;
     created_at: string;
     metadata: Json;
 }
@@ -32,17 +32,17 @@ export type LOGSTYPE =
 export type metadataType = {
     "addItem" :{
             metadata : {
-                quantity : number
+                
             }
     },
     "removeItem" :{
             metadata : {
-                quantity : number
+                
             }
     },
     "moveItem" :{
             metadata : {
-                quantity : number
+                newLocation : string, oldLocation : string
             }
     },
     "updateQuantity" :{
@@ -52,63 +52,81 @@ export type metadataType = {
     }
     "updateExpiry" :{
             metadata : {
-                quantity : number
+                newExpiry : string, oldExpiry : string
             }
     },
 } 
 
 type MessageCheck<Key extends LOGSTYPE> =
-     (metadata : metadataType[Key]["metadata"]) => string 
+     (performerName : string, item : string, metadata : metadataType[Key]["metadata"]) => string 
 
 type LogsWithMetadata = {
-    [L in LOGSTYPE]: Partial<{
+    [L in LOGSTYPE]: {
         generateMessage: MessageCheck<L>
-    }>
+    }
 }
 
+type LogEntry = {
+    [K in LOGSTYPE]: {
+        type: K
+        performerName: string
+        item: string
+        metadata: metadataType[K]["metadata"]
+    }
+}[LOGSTYPE]
 
-export const LOGS = {
+
+export const LOGS : LogsWithMetadata = {
         addItem: {
-            generateMessage : (metadata) => {
-                return ""
+            generateMessage : (performerName, item, _metadata) => {
+                return performerName + " has added a new item " + item;
             }
         },
         removeItem: {
-            generateMessage : () => {
-                return ""
+            generateMessage : (performerName, item, _metadata) => {
+             return performerName + " has deleted the item " + item;
             }
+            
         },
         moveItem: {
-            generateMessage : () => {
+            generateMessage : (performerName, item, metadata) => {
                 return ""
             }
         },
         updateQuantity: {
-            generateMessage : () => {
-                return ""
+            generateMessage :  (performerName, item, metadata) => {
+                return (
+                performerName +
+                " has updated the quantity of " +
+                item +
+                " from " +
+                metadata.oldQuantity +
+                " to " +
+                metadata.newQuantity
+                )
             }
         },
         updateExpiry: {
-            generateMessage : () => {
-                return ""
+            generateMessage :  (performerName, item, metadata) => {
+                return (
+                    performerName +
+                    " has updated the expiration date of " +
+                    item +
+                    " from " +
+                    metadata.oldExpiry +
+                    " to " +
+                    metadata.newExpiry
+                )
             }
         }
     
 } as const satisfies LogsWithMetadata
 
-export function generateLogMessageNew <Type extends LOGSTYPE
->(
-    type: Type,
-    userId: string,
-    item: string,
-    metadata: metadataType[Type]["metadata"]
-
-
+export function generateLogMessageNew <T extends LOGSTYPE>(
+  entry: Extract<LogEntry, { type: T }>
 ) {
-
-
+  return LOGS[entry.type].generateMessage(entry.performerName, entry.item, entry.metadata);
 }
-
 //Possible types of logs
 export const LogTypes = {
     INSERT_NEW: 1,
