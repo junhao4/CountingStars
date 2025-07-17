@@ -1,4 +1,4 @@
-import type { Key } from "react";
+
 import type { Json } from "../../../../helper/supabase";
 import supabase from "../../../../helper/supabaseClient";
 import type { Organization, UserOrganization } from "../../../../helper/types";
@@ -66,16 +66,6 @@ type LogsWithMetadata = {
     }
 }
 
-type LogEntry = {
-    [K in LOGSTYPE]: {
-        type: K
-        performerName: string
-        item: string
-        metadata: metadataType[K]["metadata"]
-    }
-}[LOGSTYPE]
-
-
 export const LOGS : LogsWithMetadata = {
         addItem: {
             generateMessage : (performerName, item, _metadata) => {
@@ -122,10 +112,14 @@ export const LOGS : LogsWithMetadata = {
     
 } as const satisfies LogsWithMetadata
 
-export function generateLogMessageNew <T extends LOGSTYPE>(
-  entry: Extract<LogEntry, { type: T }>
+export function generateLogMessageNew<Type extends LOGSTYPE>(
+  type: Type,
+  performerName: string,
+  item: string,
+  metadata: metadataType[Type]["metadata"]
 ) {
-  return LOGS[entry.type].generateMessage(entry.performerName, entry.item, entry.metadata);
+  const generator = LOGS[type].generateMessage;
+  return generator(performerName, item, metadata);
 }
 //Possible types of logs
 export const LogTypes = {
