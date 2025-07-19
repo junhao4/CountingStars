@@ -3,7 +3,8 @@ import type { Action, UploadItem } from "./AddItem";
 import useGetCategoryList from "../../item/hooks/useGetCategoryList";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload"
 import { DatePicker } from "@mui/x-date-pickers";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
+import { validateImageFile } from "../../../../common/functions/File";
 
 
 interface FieldProps {
@@ -44,7 +45,14 @@ export function ImageNameQuantityDescriptionField({ state, dispatch }: FieldProp
             <Stack sx={{ gap: '0.5rem' }}>
                 <img width='200px' height='200px' src={state.imageBlobUrl}></img>
                 <Button sx={{ width: 'fit-content', alignSelf: 'center' }} component='label' variant='contained' startIcon={<CloudUploadIcon />}>
-                    Upload File<VisuallyHiddenInput type='file' onChange={(e) => dispatch({ type: "SET_IMAGE", value: e.target.files?.[0] })} />
+                    Upload File<VisuallyHiddenInput type='file'
+                        onChange={(e) => {
+                            if (e.target.files && validateImageFile(e.target.files[0])) {
+                                dispatch({ type: "SET_IMAGE", value: e.target.files[0] })
+                            } else {
+                                dispatch({ type: "SET_IMAGE", value: undefined })
+                            }
+                        }} />
                 </Button>
             </Stack>
 
