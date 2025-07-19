@@ -5,18 +5,26 @@ import { addNewFolder } from "../api/FolderApi";
 import { useOrgContext, type ValidOrg } from "../../../../../common/contexts/OrgContext";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import type { InventoryRow } from "./InventoryFolder";
+import { useAlertContext } from "../../../../../common/contexts/AlertContext";
+import { validateAddFolderName } from "../functions/Folder";
 
 export default function AddFolderRow({folderId, setData, setAddFolderRow}: 
-    {folderId: number, setData: React.Dispatch<SetStateAction<InventoryRow[]>>, setAddFolderRow: React.Dispatch<SetStateAction<boolean>>}) {
+    {folderId: number | 'root', setData: React.Dispatch<SetStateAction<InventoryRow[]>>, setAddFolderRow: React.Dispatch<SetStateAction<boolean>>}) {
     const { org } = useOrgContext() as ValidOrg
+    const { createAlert } = useAlertContext()
 
     const [folderName, setFolderName] = useState("")
     const handleAddFolder = async () => {
-        if (folderName === "") {
+        const res = validateAddFolderName(folderName)
+        if (res.error) {
+            if (res.error === 'Empty Folder Name') {
+                createAlert('warning', "Folder name cannot be empty!")
+            }
             return
         }
+
         const newFolder = await addNewFolder(org.id, folderId, folderName)
-        if (newFolder) setData(data => [{ ...newFolder, type: 'folder' }, ...data])
+        if (newFolder) setData(data => [{ ...newFolder, type: 'folder', lastModified: new Date(Date.now()).toDateString() }, ...data])
         setAddFolderRow(false)
     }
 

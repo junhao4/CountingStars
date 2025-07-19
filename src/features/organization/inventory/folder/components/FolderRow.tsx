@@ -7,23 +7,32 @@ import { useRef, useState, type SetStateAction } from "react";
 import { MenuItem, MenuList, Popover, Tooltip } from "@mui/material";
 import { deleteFolder } from "../api/FolderApi";
 import type { InventoryRow } from "./InventoryFolder";
+import { useAlertContext } from "../../../../../common/contexts/AlertContext";
 
 
 export default function FolderRow({ setData, folder, moveIntoFolder }:
     { folder: ItemFolder, setData: React.Dispatch<SetStateAction<InventoryRow[]>>, moveIntoFolder: (moveItem: string, folderId: number) => void }) {
     const navigate = useNavigate()
+    const { createAlert } = useAlertContext()
 
+    const [over, setOver] = useState(false)
     const [menuOpen, setMenuOpen] = useState(false)
     const ref = useRef(null)
 
     const handleDelete = async () => {
         const res = await deleteFolder(folder.id)
-        if (res) setData(data => data.filter(row => row.id !== folder.id))
+        if (res) {
+            setData(data => data.filter(row => row.id !== folder.id))
+            createAlert("success", "Successfully deleted folder!")
+        } else {
+            createAlert("error", "Failed to delete folder")
+        }
         setMenuOpen(false)
     }
 
     return (
-        <tr draggable
+        <tr draggable className={`${over && "over"}`}
+            onDragEnter={() => setOver(true)} onDragLeave={() => setOver(false)}
             onDragStart={e => e.dataTransfer.setData('id', 'folder,' + folder.id)}
             onDragOver={e => e.preventDefault()}
             onDrop={e => moveIntoFolder(e.dataTransfer.getData('id'), folder.id)}

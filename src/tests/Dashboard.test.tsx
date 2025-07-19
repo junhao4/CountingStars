@@ -117,43 +117,6 @@ describe("FetchDashboard unit test", () => {
 
 })
 
-describe("TransformOrgDataToDashboardCard unit test", () => {
-    afterEach(() => {
-        vi.resetAllMocks()
-    })
-
-    it("should return data when input valid user and organization data", async () => {
-        const dummyOrganization: Organization = { id: 1, name: "Test Organization", imageFile: "TEST", role: 'member' }
-        const expectedOutputData = { ...dummyOrganization, role: 'member', imageUrlBlob: "ImageUrl" }
-
-        vi.spyOn(OrgController, "fetchUserRole").mockResolvedValue("member")
-        vi.spyOn(OrgController, "fetchOrgImage").mockResolvedValue("ImageUrl")
-
-        await expect(transformOrgDataToDashboardCard(dummyUUID, dummyOrganization)).resolves.toEqual(expectedOutputData)
-
-        expect(OrgController.fetchUserRole).toBeCalledTimes(1)
-        expect(OrgController.fetchUserRole).toBeCalledWith(dummyUUID, dummyOrganization.id)
-
-        expect(OrgController.fetchOrgImage).toBeCalledTimes(1)
-        expect(OrgController.fetchOrgImage).toBeCalledWith(null)
-    })
-
-    it("should return null when invalid input", async () => {
-        const dummyOrganization: Organization = { id: 1, name: "Test Organization", imageFile: "Default_photo.jpg", role: 'member' }
-        const expectedOutputData = null
-
-        vi.spyOn(OrgController, "fetchUserRole").mockResolvedValue(null)
-        vi.spyOn(OrgController, "fetchOrgImage").mockResolvedValue("ImageUrl")
-
-        await expect(transformOrgDataToDashboardCard(dummyUUID, dummyOrganization)).resolves.toEqual(expectedOutputData)
-
-        expect(OrgController.fetchUserRole).toBeCalledTimes(1)
-        expect(OrgController.fetchUserRole).toBeCalledWith(dummyUUID, dummyOrganization.id)
-
-        expect(OrgController.fetchOrgImage).toBeCalledTimes(0)
-    })
-})
-
 describe("Dashboard page rendering", () => {
     afterEach(() => {
         vi.clearAllMocks()

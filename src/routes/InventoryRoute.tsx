@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import CategoriesPage from "../pages/organization/inventory/CategoriesPage";
-import InventoryFolderPage from "../pages/organization/inventory/folder/InventoryFolderPage";
+import InventoryFolderPage from "../pages/organization/inventory/InventoryFolderPage";
 import InventoryAddItemPage from "../pages/organization/inventory/InventoryAddItemPage";
 import ItemPage from "../pages/organization/inventory/ItemPage";
 

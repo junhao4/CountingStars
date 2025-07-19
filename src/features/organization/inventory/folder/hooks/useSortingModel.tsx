@@ -5,6 +5,57 @@ import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 
 export type InventorySort = 'name' | 'quantity' | 'lastModified' | 'foldersOnTop' | 'foldersMix'
 
+export const sortByName = (ascending: boolean, foldersOnTop: boolean) => (row1: InventoryRow, row2: InventoryRow) => {
+    const asc = ascending ? 1 : -1;
+    return foldersOnTop
+        ? row1.type === 'folder' && row2.type === 'folder'
+            ? asc * row1.name.localeCompare(row2.name)
+            : row1.type === 'folder'
+                ? -1
+                : row2.type === 'folder'
+                    ? 1
+                    : asc * row1.name.localeCompare(row2.name)
+        : asc * row1.name.localeCompare(row2.name)
+}
+
+export const sortByQuantity = (ascending: boolean, foldersOnTop: boolean) => (row1: InventoryRow, row2: InventoryRow) => {
+    const asc = ascending ? -1 : 1
+    return foldersOnTop
+        ? row1.type === 'folder' && row2.type === 'folder'
+            ? asc * row1.name.localeCompare(row2.name)
+            : row1.type === 'folder'
+                ? -1
+                : row2.type === 'folder'
+                    ? 1
+                    : asc * (row1.quantity - row2.quantity)
+        : row1.type === 'folder' && row2.type === 'folder'
+            ? asc * row1.name.localeCompare(row2.name)
+            : row1.type === 'folder'
+                ? 1
+                : row2.type === 'folder'
+                    ? -1
+                    : asc * (row1.quantity - row2.quantity)
+}
+
+export const sortByLastModified = (ascending: boolean, foldersOnTop: boolean) => (row1: InventoryRow, row2: InventoryRow) => {
+    const asc = ascending ? 1 : -1
+    const val = new Date(row1.lastModified) > new Date(row2.lastModified)
+        ? -1
+        : new Date(row1.lastModified) < new Date(row2.lastModified)
+            ? 1
+            : 0
+
+    return foldersOnTop 
+        ? row1.type === 'folder' && row2.type === 'folder'
+            ? asc * val
+            : row1.type === 'folder'
+                ? -1
+                : row2.type === 'folder'
+                    ? 1
+                    : asc * val
+        : asc * val
+}
+
 export default function useSortingModel() {
 
     const [ascending, setAscending] = useState(true)
@@ -24,23 +75,20 @@ export default function useSortingModel() {
 
         switch (type) {
             case "name":
-                setData(data => [...data.sort((row1, row2) => (asc ? 1 : -1) * row1.name.localeCompare(row2.name))])
+                setData(data => [...data.sort(sortByName(asc, foldersTop))])
                 break
             case "quantity":
-                setData(data => [...data.sort((row1, row2) => (row1.type === 'folder' || row2.type === 'folder')
-                    ? row2.type === row1.type ? 0 : row1.type === 'folder' ? 1 : -1
-                    : (asc ? -1 : 1) * (row1.quantity - row2.quantity))])
+                setData(data => [...data.sort(sortByQuantity(asc, foldersTop))])
                 break
             case "lastModified":
-                setData(data => [...data.sort((row1, row2) => (asc ? 1 : -1) *
-                    (new Date(row1.lastModified) < new Date(row2.lastModified) ? 1
-                        : new Date(row1.lastModified) > new Date(row2.lastModified) ? -1 : 0))])
+                setData(data => [...data.sort(sortByLastModified(asc, foldersTop))])
                 break
             case "foldersOnTop":
                 setFoldersOnTop(true)
                 break
             case "foldersMix":
                 // Shouldn't reach here
+                break
         }
 
         // Do not switch the ascending order
@@ -48,12 +96,6 @@ export default function useSortingModel() {
             return
         }
 
-        if (foldersTop) {
-            setData(data => [...data.sort((row1, row2) =>
-                row1.type === row2.type
-                    ? 0
-                    : row1.type === 'folder' ? -1 : 1)])
-        }
         if (sortType === type) { setAscending(prev => !prev) }
         else if (type !== 'foldersOnTop' && type !== 'foldersMix') {
             setAscending(true)

@@ -45,9 +45,9 @@ const fetchCategories = async (item: Item) => {
     return { ...item, categories: data.map(cat => { return { ...cat, name: cat.Categories.name } }) } as ItemWithCategories
 }
 
-export const addNewFolder = async (organizationId: number, parentFolder: number, folderName: string) => {
+export const addNewFolder = async (organizationId: number, parentFolder: number | 'root', folderName: string) => {
     const { data, error } = await supabase.from("Folders")
-        .insert({...{ organization_id: organizationId, name: folderName }, ...(parentFolder === 0 ? {} : {parent_id: parentFolder})})
+        .insert({...{ organization_id: organizationId, name: folderName }, ...(parentFolder === 'root' ? {} : {parent_id: parentFolder})})
         .select("*")
         .single()
 
@@ -103,11 +103,11 @@ export const deleteFolder = async (folderId: number) => {
 
 
 // Used for Inventory Breadcrumbs
-export const fetchParentFolders = async (folderId: number) => {
+export const fetchParentFolders = async (folderId: number | 'root') => {
     var currentId = folderId
     const folderIdArr: { id: number | string, name: string }[] = []
 
-    while (currentId !== 0) {
+    while (currentId !== 'root') {
         const { data, error } = await supabase.from('Folders')
             .select('parent_id, name')
             .match({ id: currentId })
@@ -123,7 +123,7 @@ export const fetchParentFolders = async (folderId: number) => {
         if (data.parent_id) {
             currentId = data.parent_id
         } else {
-            currentId = 0
+            currentId = 'root'
         }
     }
 

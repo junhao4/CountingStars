@@ -4,8 +4,6 @@ import useGetFolderContent from "../hooks/useGetFolderContent"
 import Loading from "../../../../../common/components/Loading"
 import { useEffect, useState, type SetStateAction } from "react"
 import useSortingModel from "../hooks/useSortingModel"
-
-import './InventoryFolder.css'
 import { moveItemIntoFolder } from "../api/FolderApi"
 import { useAlertContext } from "../../../../../common/contexts/AlertContext"
 import ItemRow from "./ItemRow"
@@ -14,16 +12,20 @@ import AddFolderRow from "./AddFolderRow"
 import { useNavigate } from "react-router-dom"
 import InventoryHead from "./InventoryHead"
 import useFilterModel from "../hooks/useFilterModel"
+import './InventoryFolder.css'
+import { validateMoveIntoFolder } from "../functions/Folder"
 
+export type InventoryRow = 
+    | ItemWithCategories & { type: 'item' }
+    | ItemFolder & { type: 'folder' }
 
-export type InventoryRow = (ItemWithCategories & { type: 'item' }) | (ItemFolder & { type: 'folder' })
 
 export default function InventoryFolder({ data, setData, folderId }:
-    { data: InventoryRow[], setData: React.Dispatch<SetStateAction<InventoryRow[]>>, folderId: number }) {
+    { data: InventoryRow[], setData: React.Dispatch<SetStateAction<InventoryRow[]>>, folderId: number | 'root' }) {
     const navigate = useNavigate()
     const { createAlert } = useAlertContext()
 
-    const { loading, items, folders } = useGetFolderContent({ folderId: folderId === 0 ? null : folderId })
+    const { loading, items, folders } = useGetFolderContent({ folderId: folderId === 'root' ? null : folderId })
 
     const { foldersOnTop, getSortTitle, getSortIcon, handleSort } = useSortingModel()
     const { selectedCategories, handleFilterCategory, filteredData } = useFilterModel(data)
@@ -35,16 +37,18 @@ export default function InventoryFolder({ data, setData, folderId }:
     }, [folders, items])
 
     const moveIntoFolder = async (moveItem: string, folderId: number) => {
-        const item = moveItem.split(',')
-        if (item[0] === 'folder' && parseInt(item[1]) === folderId) {
+        if (!validateMoveIntoFolder(moveItem, folderId)) {
             return
         }
+
+        const item = moveItem.split(',')
+
         const res = await moveItemIntoFolder(item[0] as 'folder' | 'item', parseInt(item[1]), folderId)
         if (res) {
             setData(data.filter(row => !(row.type === item[0] && row.id === parseInt(item[1]))))
             createAlert('success', "Successfully moved folder!")
         } else {
-            createAlert('error', "FAILURE!")
+            createAlert('error', "Failed to move folder")
         }
     }
 
@@ -55,9 +59,9 @@ export default function InventoryFolder({ data, setData, folderId }:
     return (
         <Box>
             <table className="inventory-table" width={'100%'}>
-                <InventoryHead foldersOnTop={foldersOnTop} setData={setData} handleSort={handleSort} 
-                    getSortTitle={getSortTitle} getSortIcon={getSortIcon} 
-                    selectedCategories={selectedCategories} handleFilterCategory={handleFilterCategory}/>
+                <InventoryHead foldersOnTop={foldersOnTop} setData={setData} handleSort={handleSort}
+                    getSortTitle={getSortTitle} getSortIcon={getSortIcon}
+                    selectedCategories={selectedCategories} handleFilterCategory={handleFilterCategory} />
 
                 <tbody>
                     {addFolderRow && <AddFolderRow folderId={folderId} setData={setData} setAddFolderRow={setAddFolderRow} />}
