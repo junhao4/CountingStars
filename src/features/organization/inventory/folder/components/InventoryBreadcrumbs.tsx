@@ -6,6 +6,7 @@ import { IconButton } from "@mui/material";
 import { useAlertContext } from "../../../../../common/contexts/AlertContext";
 import { type InventoryRow } from "./InventoryFolder";
 import { validateMoveIntoFolder } from "../functions/Folder";
+import InfoTip from "../../../../../common/components/InfoTip";
 
 
 export default function InventoryBreadcrumbs({ data, setData, folderId }:
@@ -36,24 +37,34 @@ export default function InventoryBreadcrumbs({ data, setData, folderId }:
     }, [folderId])
 
     return (
-        <Breadcrumbs separator={'>'} sx={{ width: 'fit-content', boxShadow: '0 1px var(--secondary-alternative)' }}>
-            {parentFolderIds.map((folder, index) => {
-                // If last breadcrumb, prevent dragging item into current folder
-                if (index === parentFolderIds.length - 1) {
-                    return (<IconButton color="secondary">
-                        {folder.name}
-                    </IconButton>)
-                }
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Breadcrumbs separator={'>'} sx={{ width: 'fit-content', boxShadow: '0 1px var(--secondary-alternative)' }}>
+                {parentFolderIds.map((folder, index) => {
+                    // If last breadcrumb, prevent dragging item into current folder
+                    if (index === parentFolderIds.length - 1) {
+                        return (<IconButton color="secondary">
+                            {folder.name}
+                        </IconButton>)
+                    }
 
-                return (
-                    <IconButton color="secondary" onClick={() => navigate('/dashboard/organization/inventory/' + folder.id)}
-                        onDragOver={e => e.preventDefault()}
-                        onDrop={e => moveIntoFolder(e.dataTransfer.getData('id'),
-                            folder.id === 'root' ? null : folder.id as number)}>
-                        {folder.name}
-                    </IconButton>
-                )
-            })}
-        </Breadcrumbs>
+                    return (
+                        <IconButton color="secondary" onClick={() => navigate('/dashboard/organization/inventory/' + folder.id)}
+                            onDragOver={e => e.preventDefault()}
+                            onDrop={e => moveIntoFolder(e.dataTransfer.getData('id'),
+                                folder.id === 'root' ? null : folder.id as number)}>
+                            {folder.name}
+                        </IconButton>
+                    )
+                })}
+            </Breadcrumbs>
+
+            <InfoTip 
+                header={["Navigation", "Moving items", "Sorting", "Filtering", "Folder view"]}
+                body={["Double-click to view an item or enter a folder.",
+                    "Drag any row into another folder or the yellow directory name above to move them.",
+                    "Click on 'Name', 'Quantity', 'Last Modified' to sort. Click again to sort in reverse order.",
+                    "Click on 'Categories' to select and apply your filters",
+                    "Click on 'Sort' to choose whether to display folders on top or mixed."]} />
+        </div>
     )
 }
