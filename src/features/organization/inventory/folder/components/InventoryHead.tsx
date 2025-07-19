@@ -4,7 +4,7 @@ import type { InventoryRow } from "./InventoryFolder";
 import type { InventorySort } from "../hooks/useSortingModel";
 import SwapVertIcon from "@mui/icons-material/SwapVert"
 import CheckIcon from '@mui/icons-material/Check';
-import useGetCategoryList from "../../table/hooks/useGetCategoryList";
+import useGetCategoryList from "../../../item/hooks/useGetCategoryList";
 
 interface InventoryHeadProps {
     foldersOnTop: boolean,

@@ -1,7 +1,7 @@
 import { Chip, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper, Select } from "@mui/material";
 import type { Category } from "../../../../helper/types";
 import { useEffect, useRef, useState } from "react";
-import useGetCategoryList from "../../inventory/table/hooks/useGetCategoryList";
+import useGetCategoryList from "../hooks/useGetCategoryList";
 
 interface CategoryChipsProps {
     categories: Category[]

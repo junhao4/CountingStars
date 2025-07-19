@@ -1,8 +1,8 @@
-import { Box, Button, Divider, MenuItem, MenuList, Popover, Tooltip } from "@mui/material"
+import { Box, Button, Divider } from "@mui/material"
 import type { ItemFolder, ItemWithCategories } from "../../../../../helper/types"
 import useGetFolderContent from "../hooks/useGetFolderContent"
 import Loading from "../../../../../common/components/Loading"
-import { useEffect, useRef, useState, type SetStateAction } from "react"
+import { useEffect, useState, type SetStateAction } from "react"
 import useSortingModel from "../hooks/useSortingModel"
 
 import './InventoryFolder.css'

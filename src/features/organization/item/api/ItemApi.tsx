@@ -31,11 +31,26 @@ export const fetchItem = async (itemId: number) => {
     return fixDate as ItemWithCategories
 }
 
+// Fetches the list of all categories for the given organization
+export const fetchCategoryOptions = async (organizationId: number) => {
+    const { data, error } = await supabase
+        .from("Categories")
+        .select(`id, name`)
+        .eq("org_id", organizationId)
+    if (error) {
+        console.log("error", error.message);
+        return []
+    }
+    return data
+};
+
 export const updateItem = async (newItem: Item) => {
     const { error } = await supabase
         .from("Items")
-        .update({name: newItem.name, description: newItem.description, quantity: newItem.quantity,
-            expiry_date: newItem.expiryDate, last_modified: new Date(Date.now()).toISOString()})
+        .update({
+            name: newItem.name, description: newItem.description, quantity: newItem.quantity,
+            expiry_date: newItem.expiryDate, last_modified: new Date(Date.now()).toISOString()
+        })
         .eq('id', newItem.id)
     if (error) {
         console.log(error.message);
@@ -116,7 +131,7 @@ export const updateItemImage = async (itemId: number, oldImageName: string, imag
 
 // Removes old image, sets to default item image, and returns that blob
 export const setDefaultItemImage = async (itemId: number, oldImageName: string) => {
-    const { error:storageError } = await supabase.storage
+    const { error: storageError } = await supabase.storage
         .from('item-images')
         .remove([oldImageName])
 
@@ -135,10 +150,10 @@ export const setDefaultItemImage = async (itemId: number, oldImageName: string) 
         return null
     }
 
-    const { data, error:downloadError } = await supabase.storage
+    const { data, error: downloadError } = await supabase.storage
         .from('item-images')
         .download("default_item.jpg")
-    
+
     if (downloadError) {
         console.log(downloadError.message)
         return null

@@ -1,37 +1,75 @@
-import { Box, Typography, Input, FormControl, InputLabel, Select, OutlinedInput, Chip, MenuItem, Button, Stack } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
+import { Box, Typography, Button, Stack } from "@mui/material";
 import type { Dayjs } from "dayjs";
-import { useState } from "react";
+import { useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../../common/contexts/AlertContext";
 import { useOrgContext, type ValidOrg } from "../../../../common/contexts/OrgContext";
 import { useSessionContext, type ValidSession } from "../../../../common/contexts/SessionContext";
-import type { Item } from "../../../../helper/types";
-import { handleAddItem, handleCategoryChange } from "../../inventory/table/api/InventoryApi";
-import useGetCategoryList from "../../inventory/table/hooks/useGetCategoryList"
+import { addItem } from "../api/AddItemApi";
+import { CategoryField, ExpiryDateField, ImageNameQuantityDescriptionField } from "./ComponentFields";
 
+export type UploadItem = {
+    name: string;
+    quantity: number;
+    description: string;
+    expiryDate: Dayjs | null;
+    categories: number[];
+    image: File | undefined;
+    imageBlobUrl: string | undefined;
+}
+
+export type Action =
+    | { type: 'SET_NAME', value: string }
+    | { type: 'SET_QUANTITY', value: number }
+    | { type: 'SET_DESCRIPTION', value: string }
+    | { type: 'SET_EXPIRY_DATE', value: Dayjs | null }
+    | { type: 'SET_CATEGORIES', value: number[] }
+    | { type: 'SET_IMAGE', value: File | undefined }
+
+const itemReducer = (state: UploadItem, action: Action) => {
+    switch (action.type) {
+        case 'SET_NAME':
+            return { ...state, name: action.value }
+        case 'SET_QUANTITY':
+            return { ...state, quantity: action.value }
+        case 'SET_DESCRIPTION':
+            return { ...state, description: action.value }
+        case 'SET_EXPIRY_DATE':
+            return { ...state, expiryDate: action.value }
+        case 'SET_CATEGORIES':
+            return { ...state, categories: action.value }
+        case 'SET_IMAGE':
+            return action.value 
+                ? { ...state, image: action.value, imageBlobUrl: URL.createObjectURL(action.value)}
+                : { ...state, image: undefined, imageBlobUrl: undefined }
+        default:
+            return state
+    }
+}
+
+const initialState = {
+    name: "",
+    quantity: 0,
+    description: "",
+    expiryDate: null,
+    categories: [],
+    image: undefined,
+    imageBlobUrl: undefined
+}
 
 export default function AddItem() {
-    const { org } = useOrgContext() as ValidOrg
     const navigate = useNavigate()
+
+    const { org } = useOrgContext() as ValidOrg
     const { createAlert } = useAlertContext();
     const { user } = useSessionContext() as ValidSession
-    const { categoryList } = useGetCategoryList()
 
-    const [itemName, setItemName] = useState<string>("");
-    const [itemQuantity, setItemQuantity] = useState<number>(1);
-    const [itemDescription, setItemDescription] = useState<string>("");
-    const [itemCategory, setItemCategory] = useState<string[]>([]);
-    const [itemExpiry, setItemExpiry] = useState<Dayjs | null>(null); // In the format YYYY-MM-DD
+    const [state, dispatch] = useReducer(itemReducer, initialState)
 
-    const item: Omit<Item, "id" | "lastModified"> & { categories: string[] } = {
-        name: itemName, quantity: itemQuantity, description: itemDescription,
-        expiryDate: itemExpiry?.toDate().toDateString() || null,
-        categories: itemCategory
-    }
+    const item = {...state, expiryDate: state.expiryDate?.toDate().toDateString() || null}
 
-    const onHandleAddItem = async () => {
-        const res = await handleAddItem(user.id, item, categoryList, org.id)
+    const handleAddItem = async () => {
+        const res = await addItem(user.id, item, org.id)
         if (res) {
             createAlert("success", "Successfully added item!")
         } else {
@@ -41,77 +79,22 @@ export default function AddItem() {
     }
 
     return (
-        <Box width="40%" sx={{ outline: "2px solid black", borderRadius: "2px", margin: "2rem" }}>
-            <Stack sx={{ display:'flex', alignItems:'end', gap:'2rem' }}>
+        <Box width="60%" sx={{ outline: "2px solid black", borderRadius: "2px", margin: "2rem" }}>
+            <Stack sx={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
 
-                <Typography variant="h6" sx={{ p:'1rem 0', width: "100%", textAlign: "center", boxShadow: "0 1px 0 black" }}>
+                <Typography variant="h6" sx={{ p: '1rem 0', width: "100%", textAlign: "center", boxShadow: "0 1px 0 black" }}>
                     Add Item
                 </Typography>
 
-                <Box display="flex" gap="2rem" alignItems="center" margin="0 auto 0 auto" flexWrap='wrap' width='80%'>
-                    <Typography>Name:&emsp;&emsp;</Typography>
-                    <Input value={itemName} onChange={(e) => setItemName(e.target.value)} placeholder="Name" sx={{ flexGrow: 1 }} />
-                </Box>
+                <ImageNameQuantityDescriptionField state={state} dispatch={dispatch} />
 
-                <Box display="flex" gap="2rem" alignItems="center" margin="0 auto 0 auto" flexWrap='wrap' width='80%'>
-                    <Typography>Quantity:&emsp;</Typography>
-                    <Input value={itemQuantity} onChange={(e) => setItemQuantity(parseInt(e.target.value))} placeholder="Quantity"
-                        type="number" sx={{ flexGrow: 1 }} />
-                </Box>
+                <CategoryField state={state} dispatch={dispatch} />
 
-                <Box display="flex" gap="2rem" alignItems="center" margin="0 auto 0 auto" flexWrap='wrap' width='80%'>
-                    <Typography>Description: </Typography>
-                    <Input value={itemDescription} onChange={(e) => setItemDescription(e.target.value)} placeholder="Description"
-                        multiline rows={3} sx={{ flexGrow: 1 }} />
-                </Box>
-
-                <FormControl
-                    size="small"
-                    sx={{ m: "0 2rem 0 2rem", width: "80%", alignSelf: "center" }}
-                >
-                    <InputLabel id="item-category-chip-label">Categories</InputLabel>
-                    <Select
-                        labelId="item-category-chip-label"
-                        id="item-category-chip"
-                        multiple
-                        value={itemCategory}
-                        onChange={(e) => handleCategoryChange(e, setItemCategory)}
-                        input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-                        renderValue={(selected) => (
-                            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                                {selected.map((value) => {
-                                    return <Chip key={value} label={value} />;
-                                })}
-                            </Box>
-                        )}
-                        MenuProps={{
-                            PaperProps: {
-                                style: {
-                                    maxHeight: 48 * 4.5 + 8,
-                                    width: 250,
-                                },
-                            },
-                        }}
-                    >
-                        {categoryList.map((cat) => (
-                            <MenuItem key={cat.id} value={cat.name}>
-                                {cat.name}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-
-                <DatePicker
-                    value={itemExpiry}
-                    onChange={(e) => setItemExpiry(e)}
-                    label="Expiry Date of Item"
-                    slotProps={{ textField: { size: "small" } }}
-                    sx={{ m: "1rem 2rem 0 2rem", alignSelf: "center", width: "80%" }}
-                />
+                <ExpiryDateField state={state} dispatch={dispatch} />
 
                 <Box>
                     <Button variant="contained" color="info" onClick={() => navigate(-1)} children="Back" />
-                    <Button sx={{ m: "1rem 2rem" }} variant="contained" color='secondary' onClick={onHandleAddItem} children="Add" />
+                    <Button sx={{ m: "1rem 2rem" }} variant="contained" color='secondary' onClick={handleAddItem} children="Add" />
                 </Box>
             </Stack>
         </Box>
