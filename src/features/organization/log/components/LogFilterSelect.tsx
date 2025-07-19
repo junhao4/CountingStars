@@ -5,9 +5,10 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import Chip from '@mui/material/Chip';
+
 import LogTypeChip from './LogTypeChip';
-import { typeToInt } from '../api/LogApi';
+import type { LOGSTYPE } from '../api/LogApi';
+
 
 interface LogFilterProps {
     filter : string[],
@@ -49,7 +50,7 @@ export default function LogFilterSelect({ filter, setFilter} : LogFilterProps) {
           renderValue={(selected) => (
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, bgcolor : 'transparent'}}>
               {selected.map((value) => (
-                <LogTypeChip type={typeToInt(value)!} />
+                <LogTypeChip type={value! as LOGSTYPE} />
               ))}
             </Box>
           )}

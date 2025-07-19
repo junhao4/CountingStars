@@ -101,7 +101,7 @@ export const handleDelete = async (
             console.log(res.error.message)
             return false
           }
-          const data = await addLog(organizationId, LogTypes.DELETE, userId, id, {})
+          const data = await addLog(organizationId, "removeItem", userId, id, {})
           if (!data) {
             return false
           }
@@ -156,7 +156,7 @@ export const handleAddItem = async (userId: string, item: Omit<Item, "id"> & { c
         })
       ).then(async (b: boolean[]) => {
         if (b.reduce((prev, next) => prev && next, true)) {
-          const data = await addLog(organizationId, LogTypes.INSERT_NEW, userId, res.data.id, {})
+          const data = await addLog(organizationId, "addItem", userId, res.data.id, {})
           if (!data) {
             createAlert('error', "Error adding insert item to logs")
             return null

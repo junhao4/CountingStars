@@ -1,4 +1,5 @@
 
+import type { T } from "vitest/dist/chunks/environment.d.cL3nLXbE.js";
 import type { Json } from "../../../../helper/supabase";
 import supabase from "../../../../helper/supabaseClient";
 import type { Organization, UserOrganization } from "../../../../helper/types";
@@ -118,6 +119,9 @@ export function generateLogMessageNew<Type extends LOGSTYPE>(
   item: string,
   metadata: metadataType[Type]["metadata"]
 ) {
+  if (!(type in LOGS)) {
+    console.warn("Unknown log type:", type, item);
+  }
   const generator = LOGS[type].generateMessage;
   return generator(performerName, item, metadata);
 }
@@ -130,13 +134,13 @@ export const LogTypes = {
 };
 
 //Add log to supabase
-export const addLog = async (
+export async function addLog<Type extends LOGSTYPE> (
     organization_id: number,
-    typeString: string | null,
+    typeString: Type,
     performer_id: string,
     item_id: number,
-    metadata: Json
-) => {
+    metadata: metadataType[Type]["metadata"]
+) {
     return await supabase
         .from("Logs")
         .insert({ typeString, performer_id, item_id, metadata, organization_id })
@@ -149,47 +153,7 @@ export const addLog = async (
         });
 };
 
-//Creates the actual message to be displayed using ids
-export const generateLogMessage = (
-    type: number,
-    performer_name: string,
-    item_name: string,
-    metadata: Json
-) => {
-    switch (type) {
-        // Insert new item
-        case 1:
-            return performer_name + " has added a new item " + item_name;
 
-        // Updated item quantity
-        case 2:
-            metadata = metadata as { old_value: string; new_value: string };
-            return (
-                performer_name +
-                " has updated the quantity of " +
-                item_name +
-                " from " +
-                metadata.old_value +
-                " to " +
-                metadata.new_value
-            );
-
-        // Updated item expiration date
-        case 3:
-            return (
-                performer_name +
-                " has updated the expiration date of " +
-                item_name
-            );
-
-        // Deleted item
-        case 4:
-            return performer_name + " has deleted the item " + item_name;
-
-        default:
-            return "Unknown log type";
-    }
-};
 
 //Gets the logs from supabase
 export const fetchLogs = async (
