@@ -34,7 +34,7 @@ export default function FolderRow({ setData, folder, moveIntoFolder }:
         <tr draggable className={`${over && "over"}`}
             onDragEnter={() => setOver(true)} onDragLeave={() => setOver(false)}
             onDragStart={e => e.dataTransfer.setData('id', 'folder,' + folder.id)}
-            onDragOver={e => e.preventDefault()}
+            onDragOver={e => (e.preventDefault(),setOver(true))}
             onDrop={e => moveIntoFolder(e.dataTransfer.getData('id'), folder.id)}
             onDoubleClick={() => navigate('../' + folder.id, { relative: 'path' })}>
             <td><FolderIcon />&ensp;{folder.name}</td>

@@ -105,7 +105,7 @@ export const deleteFolder = async (folderId: number) => {
 // Used for Inventory Breadcrumbs
 export const fetchParentFolders = async (folderId: number | 'root') => {
     var currentId = folderId
-    const folderIdArr: { id: number | string, name: string }[] = []
+    const folderIdArr: { id: number | 'root', name: string }[] = []
 
     while (currentId !== 'root') {
         const { data, error } = await supabase.from('Folders')

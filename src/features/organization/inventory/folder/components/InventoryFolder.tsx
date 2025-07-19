@@ -37,7 +37,7 @@ export default function InventoryFolder({ data, setData, folderId }:
     }, [folders, items])
 
     const moveIntoFolder = async (moveItem: string, folderId: number) => {
-        if (!validateMoveIntoFolder(moveItem, folderId)) {
+        if (!validateMoveIntoFolder(moveItem, folderId).data) {
             return
         }
 

@@ -12,7 +12,7 @@ function Header() {
     const location = useLocation()
     const navigate = useNavigate()
 
-    const breadcrumbPathnames: string[] = location.pathname.split('/')
+    const breadcrumbPathnames: string[] = location.pathname.split('/').filter(path => path !== 'root' && isNaN(parseInt(path)))
     const breadcrumbRoutenames: string[] = [(breadcrumbPathnames.length > 0 ? breadcrumbPathnames[0] : "")]
 
     for (var i = 1; i < breadcrumbPathnames.length; i++) {
@@ -27,6 +27,7 @@ function Header() {
                     <Typography variant='h5'>Counting Stars</Typography>
 
                 </div>
+
                 <Breadcrumbs sx={{ fontSize: '0.5rem' }}>
                     {breadcrumbPathnames.map((path, index) => {
                         return (
@@ -36,7 +37,9 @@ function Header() {
                     })}
                 </Breadcrumbs>
             </div>
+
             <h2 id='header-title' className="header-title">{usePageTitleContext().title}</h2>
+
             <div className="header-user-details">
                 {session ? (
                     <div style={{
