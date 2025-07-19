@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useOrgContext, type ValidOrg } from "../../../common/contexts/OrgContext";
-import Inventory from "../../../features/organization/inventory/components/Inventory";
+import Inventory from "../../../features/organization/inventory/table/components/Inventory";
 import { useEffect } from "react";
 import { usePageTitleContext } from "../../../common/contexts/PageTitleContext";
 

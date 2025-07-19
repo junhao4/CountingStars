@@ -30,13 +30,14 @@ export const OrgProvider = ({ children }: { children: React.ReactNode }) => {
         if (!user) {
             localStorage.removeItem("orgContext")
             setOrg(null)
+            setLoading(false)
         } else {
             const org = localStorage.getItem("orgContext")
             if (org) { setOrg(JSON.parse(org)) }
             setLoading(false)
         }
     }, [user])
-
+    
     const handleSetOrg = (org: Organization | null) => {
         localStorage.setItem("orgContext", JSON.stringify(org))
         setOrg(org)

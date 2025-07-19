@@ -40,11 +40,26 @@ export type Item = {
     name: string,
     quantity: number,
     description: string,
-    lastModified: string | null
+    lastModified: string
     expiryDate: string | null
 }
 
+export type ItemFolder = {
+    id: number,
+    parentId: number,
+    name: string,
+    description: string,
+    lastModified: string,
+    createdAt: string,
+}
+
 export type ItemWithCategories = Item & { categories: Category[] }
+
+export type ItemImage = {
+    id: number
+    imageFile: string
+    imageBlobUrl: string | undefined
+}
 
 export type Category = {
     id: number,
