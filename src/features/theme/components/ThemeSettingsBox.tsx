@@ -8,8 +8,6 @@ import SystemImg from "../../../assets/CountingStarsSystem.png";
 
 
 export function ThemeSettingsBox() {
-
-    
     const { themeMode, setAndSaveThemeMode } = useThemeContext();
     const [selected, setSelected] = useState(themeMode);
      useEffect(() => {

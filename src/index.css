@@ -33,15 +33,6 @@ p {
   background-color: var(--foreground);
 }
 
-.MuiBreadcrumbs-li>a {
-  color: var(--secondary);
-  text-decoration: none;
-}
-
-.MuiBreadcrumbs-li>a:hover {
-  color: var(--secondary-alternative)
-}
-
 /* @theme inline {
 
   --radius-sm: calc(var(--radius) - 4px);

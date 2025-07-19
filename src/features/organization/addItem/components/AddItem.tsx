@@ -66,10 +66,8 @@ export default function AddItem() {
 
     const [state, dispatch] = useReducer(itemReducer, initialState)
 
-    const item = {...state, expiryDate: state.expiryDate?.toDate().toDateString() || null}
-
     const handleAddItem = async () => {
-        const res = await addItem(user.id, item, org.id)
+        const res = await addItem(user.id, state, org.id)
         if (res) {
             createAlert("success", "Successfully added item!")
         } else {
