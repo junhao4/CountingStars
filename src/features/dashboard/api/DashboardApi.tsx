@@ -12,7 +12,6 @@ export const fetchDashboard = async (userId: string) => {
         .select(`organizationId:organization_id, role`)
         .eq('user_id', userId)
 
-    console.log(data)
     if (error) {
         console.log(error.message)
         return []

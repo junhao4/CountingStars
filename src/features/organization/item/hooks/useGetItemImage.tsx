@@ -14,8 +14,6 @@ export default function useGetItemImage(itemId: number) {
         fetchItemImage(itemId).then(data => {
             if (data) {
                 setImage({id: itemId, imageFile: data.imageFile, imageBlobUrl: URL.createObjectURL(data.imageBlob)})
-            } else {
-                createAlert("error", "ERROR: NO IMAGE FETCHED, please report")
             }
             setLoading(false)
         })

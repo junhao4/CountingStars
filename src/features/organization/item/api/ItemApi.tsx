@@ -1,16 +1,17 @@
 import supabase from "../../../../helper/supabaseClient";
-import type { ItemWithCategories } from "../../../../helper/types";
+import type { Item, ItemWithCategories } from "../../../../helper/types";
 import { addLog, LogTypes } from "../../log/api/LogApi";
 
 
-export const fetchItem = async (organizationId: number, itemId: number) => {
+// ITEM INFO
+
+export const fetchItem = async (itemId: number) => {
     const { data, error } = await supabase
         .from("Items")
         .select(
             `id, name, quantity, description, lastModified:last_modified, expiryDate:expiry_date, 
             categories:Categories(id, name, createdAt:created_at)`
         )
-        .eq("org_id", organizationId)
         .eq("id", itemId)
         .eq('deleted', false)
         .maybeSingle()
@@ -24,11 +25,42 @@ export const fetchItem = async (organizationId: number, itemId: number) => {
 
     const fixDate = {
         ...data, lastModified: data.lastModified!,
-        expiryDate: data.expiryDate ? data.expiryDate : "-",
+        expiryDate: data.expiryDate,
     }
 
     return fixDate as ItemWithCategories
 }
+
+// Fetches the list of all categories for the given organization
+export const fetchCategoryOptions = async (organizationId: number) => {
+    const { data, error } = await supabase
+        .from("Categories")
+        .select(`id, name`)
+        .eq("org_id", organizationId)
+    if (error) {
+        console.log("error", error.message);
+        return []
+    }
+    return data
+};
+
+export const updateItem = async (newItem: Item) => {
+    const { error } = await supabase
+        .from("Items")
+        .update({
+            name: newItem.name, description: newItem.description, quantity: newItem.quantity,
+            expiry_date: newItem.expiryDate, last_modified: new Date(Date.now()).toISOString()
+        })
+        .eq('id', newItem.id)
+    if (error) {
+        console.log(error.message);
+        return null;
+    }
+
+    return newItem
+}
+
+
 
 export const fetchItemLogs = async (itemId: number) => {
     const { data, error } = await supabase.from('Logs')
@@ -99,7 +131,7 @@ export const updateItemImage = async (itemId: number, oldImageName: string, imag
 
 // Removes old image, sets to default item image, and returns that blob
 export const setDefaultItemImage = async (itemId: number, oldImageName: string) => {
-    const { error:storageError } = await supabase.storage
+    const { error: storageError } = await supabase.storage
         .from('item-images')
         .remove([oldImageName])
 
@@ -118,10 +150,10 @@ export const setDefaultItemImage = async (itemId: number, oldImageName: string) 
         return null
     }
 
-    const { data, error:downloadError } = await supabase.storage
+    const { data, error: downloadError } = await supabase.storage
         .from('item-images')
         .download("default_item.jpg")
-    
+
     if (downloadError) {
         console.log(downloadError.message)
         return null

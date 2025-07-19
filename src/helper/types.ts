@@ -44,6 +44,15 @@ export type Item = {
     expiryDate: string | null
 }
 
+export type ItemFolder = {
+    id: number,
+    parentId: number,
+    name: string,
+    description: string,
+    lastModified: string,
+    createdAt: string,
+}
+
 export type ItemWithCategories = Item & { categories: Category[] }
 
 export type ItemImage = {

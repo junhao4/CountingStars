@@ -1,16 +1,17 @@
-import { Chip, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper } from "@mui/material";
+import { Chip, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper, Select } from "@mui/material";
 import type { Category } from "../../../../helper/types";
 import { useEffect, useRef, useState } from "react";
-import useGetCategoryList from "../../inventory/hooks/useGetCategoryList";
+import useGetCategoryList from "../hooks/useGetCategoryList";
 
 interface CategoryChipsProps {
     categories: Category[]
+    selected: number[]
     editMode: boolean
-    handleDelete: (categoryId: number) => () => void
+    handleRemove: (categoryId: number) => () => void
     handleAdd: (categoryId: number, categoryName: string) => () => void
 }
 
-export default function CategoryChips({ categories, editMode, handleDelete, handleAdd }: CategoryChipsProps) {
+export default function CategoryChips({ categories, selected, editMode, handleRemove, handleAdd }: CategoryChipsProps) {
     const { categoryList } = useGetCategoryList()
     const [categoryMenuOpen, setCategoryMenuOpen] = useState(false)
 
@@ -22,19 +23,14 @@ export default function CategoryChips({ categories, editMode, handleDelete, hand
         setCategoryMenuOpen(false);
     };
 
-    // useEffect to re-render (close) the anchorEl as otherwise the menu teleports to top-left of screen.
-    useEffect(() => {
-        setCategoryMenuOpen(prev => prev ? false : false)
-    }, [categories.length])
-
     return (
         <div style={{display:'flex', gap:'0.5rem', flexWrap:'wrap', maxWidth:'17vw'}}>
             {categories.map(cat => {
-                return <Chip key={cat.id} label={cat.name}
-                    {...editMode ? { onDelete: handleDelete(cat.id) } : {}}></Chip>
+                return <Chip key={cat.id} label={cat.name} onClick={() => {}}
+                    {...editMode ? { onDelete: handleRemove(cat.id) } : {}}></Chip>
             })}
 
-            <Chip key={categories.length} label={"+"} ref={anchorRef} disabled={!editMode}
+            <Chip key={0} label={"+"} ref={anchorRef} disabled={!editMode}
                 onClick={() => setCategoryMenuOpen(prev => !prev)} />
 
             <Popper
@@ -54,8 +50,10 @@ export default function CategoryChips({ categories, editMode, handleDelete, hand
                                 <MenuList
                                     autoFocusItem={categoryMenuOpen}>
                                     {categoryList.map((cat, index) => {
-                                        return (<MenuItem key={index}
-                                            onClick={handleAdd(cat.id, cat.name)}>{cat.name}</MenuItem>)
+                                        const isSelected = selected.includes(cat.id)
+                                        return (<MenuItem key={index} selected={isSelected}
+                                            onClick={isSelected ? handleRemove(cat.id) : handleAdd(cat.id, cat.name)}
+                                            >{cat.name}</MenuItem>)
                                     })}
                                 </MenuList>
                             </ClickAwayListener>

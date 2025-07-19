@@ -104,7 +104,6 @@ const customTheme = createTheme({
         ].join(','),
     },
 
-    defaultColorScheme: 'light',
 
     components: {
         MuiButton: {
@@ -142,11 +141,10 @@ const customTheme = createTheme({
                     outline:'1px solid black',
                     border: 0,
                     textAlign: 'center',
-                    textWrap: 'wrap'
-                }
+                    textWrap: 'wrap',
+                },
             },
             defaultProps: {
-                
             }
         }
     }

@@ -1,12 +1,8 @@
 import {
-   
     Container
-  
-
 } from "@mui/material";
 
 import { ThemeSettingsBox } from "../features/theme/components/ThemeSettingsBox";
-
 
 
 function ThemePage() {
@@ -27,5 +23,3 @@ function ThemePage() {
         </>
     );
 }
-
-export default ThemePage;

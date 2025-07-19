@@ -5,6 +5,7 @@ import { useSessionContext } from "./SessionContext";
 import { changeTheme } from "../../features/theme/api/ThemeApi";
 
 export type ThemeMode = "light" | "dark" | "system";
+
 type Theme = "light" | "dark";
 
 interface ThemeProps {
@@ -40,6 +41,7 @@ export const ThemeModeProvider = ({ children }: { children: React.ReactNode }) =
         }
         getTheme()
     }, [session])
+
 
     useEffect(() => {
         if (themeMode == 'system') {
