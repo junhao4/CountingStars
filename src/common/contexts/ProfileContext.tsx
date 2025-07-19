@@ -29,7 +29,6 @@ export const ProfileProvider = ({ children }: { children: React.ReactNode }) => 
     }, [user])
 
     useEffect(() => {
-        console.log(fileName)
         fileName
             ? downloadProfileImage(fileName)
                 .then(data => data && setBlobUrl(URL.createObjectURL(data)))
