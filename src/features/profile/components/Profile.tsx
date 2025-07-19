@@ -1,13 +1,16 @@
-import { Stack, Typography, TextField, Button, styled } from "@mui/material";
+import { Stack, Typography, TextField, Button, styled, Box } from "@mui/material";
 import Container from "@mui/material/Container";
 import { useEffect, useState, type ChangeEvent } from "react";
 import { useAlertContext } from "../../../common/contexts/AlertContext";
 import { useSessionContext, type ValidSession } from "../../../common/contexts/SessionContext";
 import { updateProfileName, updateProfileImage, fetchProfileImage, downloadProfileImage } from "../api/ProfileApi";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload"
+import ProfileInformationBox from "./ProfileInformationBox";
+import ProfileUsernameBox from "./ProfileUsernameBox";
+import { ThemeSettingsBox } from "../../theme/components/ThemeSettingsBox";
 
 
-const VisuallyHiddenInput = styled("input")({
+export const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
     clipPath: "inset(50%)",
     height: 1,
@@ -32,6 +35,7 @@ export default function Profile() {
     const onUpdateImage = async (e: ChangeEvent<HTMLInputElement>) => {
         const fileName = await updateProfileImage(e, user.id, profileUrl!, createAlert)
         setProfileUrl(fileName);
+        createAlert("success", "Successfully set image")
     }
 
     const handleUpdateProfileName = async () => {
@@ -59,50 +63,16 @@ export default function Profile() {
     }, [profileUrl]);
 
     return (
-        <Container maxWidth="xl" sx={{ mt: 4 }}>
-                <Stack spacing={3} alignItems="center">
-                    <Typography
-                        variant="h3"
-                        sx={{
-                            fontWeight: 600,
-                            mt: 2,
-                            mb: 1,
-                            color: "text.primary",
-                        }}
-                    >
-                        {user.name}
-                    </Typography>
-                    <img height={300} width={300} src={img}></img>
-                    <Stack
-                        spacing={2}
-                        alignItems="center"
-                        sx={{ mx: "auto", width: "300px" }}
-                    >
-                        <TextField
-                            label="Username"
-                            value={newUsername}
-                            onChange={(e) => setNewUsername(e.target.value)}
-                            fullWidth
-                        />
-                        <Button onClick={handleUpdateProfileName} variant="contained" fullWidth>
-                        Save
-                    </Button>
+         <>
+        <Container sx={{ width : "60%"}}>
+            <ProfileInformationBox img={img!} user={user} onUpdateImage={onUpdateImage} />
+            <ProfileUsernameBox newUsername={newUsername} setNewUsername={setNewUsername} handleUpdateProfileName={handleUpdateProfileName}/>
 
-                    <Button
-                        component="label"
-                        variant="outlined"
-                        color="secondary"
-                        startIcon={<CloudUploadIcon />}
-                        fullWidth
-                    >
-                        Upload Profile Image
-                        <VisuallyHiddenInput
-                            type="file"
-                            onChange={onUpdateImage}
-                        />
-                    </Button>
-                </Stack>
-            </Stack>
-        </Container >
+
+            <ThemeSettingsBox />
+            <Box sx={{mb : 3}}></Box>
+        
+            </Container>
+        </>
     )
 }

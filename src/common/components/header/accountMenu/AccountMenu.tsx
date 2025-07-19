@@ -7,15 +7,18 @@ import { downloadProfileImage, fetchProfileImage } from '../../../api/UserApi'
 import AccountMenuDropdown from './AccountMenuDropdown';
 import AccountMenuIcon from './AccountMenuIcon';
 import AccountBell from './AccountMenuBell';
+import { useThemeContext } from '../../../contexts/ThemeContext';
+
 
 export default function AccountMenu() {
-  const { createAlert } = useAlertContext()
+  const { createAlert, mRef } = useAlertContext()
   const { user } = useSessionContext()
   const navigate = useNavigate()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [profileUrl, setProfileUrl] = useState<string | null>(null);
   const [img, setImg] = useState<string | undefined>()
+  const { themeMode, setAndSaveThemeMode } = useThemeContext()
 
   const open = Boolean(anchorEl);
 
@@ -23,8 +26,10 @@ export default function AccountMenu() {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (bool : boolean) => {
+    if (bool) {
     setAnchorEl(null);
+    }
   };
 
   const handleProfile = () => {
@@ -55,16 +60,18 @@ export default function AccountMenu() {
       if (blob) {
         const url = URL.createObjectURL(blob);
         setImg(url);
+        console.log("CHANGING IMG IN HEADER")
       }
     })
-  }, [profileUrl]);
+  }, [profileUrl, mRef]);
 
   return (
     <>
       <AccountBell />
       <AccountMenuIcon open={open} img={img} handleClick={handleClick} />
       <AccountMenuDropdown anchorEl={anchorEl} handleClose={handleClose}
-        handleLogout={handleLogout} handleProfile={handleProfile} open={open} user={user!} />
+        handleLogout={handleLogout} handleProfile={handleProfile} open={open} user={user!} 
+        themeMode={themeMode} setAndSaveThemeMode={setAndSaveThemeMode}/>
     </>
   );
 }
