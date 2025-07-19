@@ -3,7 +3,6 @@ import { createContext, useContext, useEffect, useState, type SetStateAction } f
 import supabase from "../../helper/supabaseClient";
 import type { FirstTimeUser, User } from "../../helper/types";
 import { fetchUser, handleFirstTimeUser } from "../api/UserApi";
-import useLocalStorageSingle from "../hooks/useLocalStorageSingle";
 import Loading from "../components/Loading";
 
 export type ValidSession = {
@@ -33,8 +32,6 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
     const [session, setSession] = useState<Session | null>(null)
     const [user, setUser] = useState<User | FirstTimeUser | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
-
-    // const { value: user, setValue: setUser } = useLocalStorageSingle<User | FirstTimeUser | null>("user", null)
 
     useEffect(() => {
         supabase.auth.getSession().then(async ({ data: { session } }) => {

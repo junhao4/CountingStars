@@ -1,13 +1,14 @@
-import { Stack, Typography, TextField, Button, styled, Box } from "@mui/material";
+import { styled, Box } from "@mui/material";
 import Container from "@mui/material/Container";
-import { useEffect, useState, type ChangeEvent } from "react";
+import { useEffect, type ChangeEvent } from "react";
 import { useAlertContext } from "../../../common/contexts/AlertContext";
 import { useSessionContext, type ValidSession } from "../../../common/contexts/SessionContext";
-import { updateProfileName, updateProfileImage, fetchProfileImage, downloadProfileImage } from "../api/ProfileApi";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload"
+import { updateProfileImage, fetchProfileImage } from "../api/ProfileApi";
 import ProfileInformationBox from "./ProfileInformationBox";
 import ProfileUsernameBox from "./ProfileUsernameBox";
 import { ThemeSettingsBox } from "../../theme/components/ThemeSettingsBox";
+import { validateImageFile } from "../../../common/functions/File";
+import { useProfileContext } from "../../../common/contexts/ProfileContext";
 
 
 export const VisuallyHiddenInput = styled("input")({
@@ -24,55 +25,39 @@ export const VisuallyHiddenInput = styled("input")({
 
 
 export default function Profile() {
-    const { user, setUser } = useSessionContext() as ValidSession
+    const { user } = useSessionContext() as ValidSession
     const { createAlert } = useAlertContext()
-
-    const [newUsername, setNewUsername] = useState<string>("");
-    const [profileUrl, setProfileUrl] = useState<string | null>(null);
-    const [img, setImg] = useState<string | undefined>();
-
+    const { fileName, blobUrl, setFileName } = useProfileContext()
 
     const onUpdateImage = async (e: ChangeEvent<HTMLInputElement>) => {
-        const fileName = await updateProfileImage(e, user.id, profileUrl!, createAlert)
-        setProfileUrl(fileName);
-        createAlert("success", "Successfully set image")
-    }
+        const file = e.target.files?.[0]
+        if (file) {
+            if (!validateImageFile(file)) {
 
-    const handleUpdateProfileName = async () => {
-        await updateProfileName(user.id, newUsername)
-        createAlert("success", "Successfully set new username!");
-        setUser({...user, name: newUsername})
-        
-    }
+                return
+            }
+            const newFileName = await updateProfileImage(file, user.id, fileName!)
+            setFileName(newFileName);
 
-    //Fetches user image file
-    useEffect(() => {
-        if (user) {
-            fetchProfileImage(user.id).then(data => {
-                data && (setProfileUrl(data.image_file || "Default_pfp.jpg"))
-            })}
-    }, [user]);
-
-    //Downloads user image from storage
-    useEffect(() => {
-        if (profileUrl) {
-            downloadProfileImage(profileUrl).then(data => {
-                data && setImg(URL.createObjectURL(data))
-            })
+            createAlert("success", "Successfully set image")
         }
-    }, [profileUrl]);
+    }
 
-    return (
-         <>
-        <Container sx={{ width : "60%"}}>
-            <ProfileInformationBox img={img!} user={user} onUpdateImage={onUpdateImage} />
-            <ProfileUsernameBox newUsername={newUsername} setNewUsername={setNewUsername} handleUpdateProfileName={handleUpdateProfileName}/>
+    useEffect(() => {
+        fetchProfileImage(user.id).then(data => (setFileName(data || "Default_pfp.jpg")))
+    }, [])
+
+return (
+    <>
+        <Container sx={{ width: "60%" }}>
+            <ProfileInformationBox img={blobUrl!} user={user} onUpdateImage={onUpdateImage} />
+            <ProfileUsernameBox />
 
 
             <ThemeSettingsBox />
-            <Box sx={{mb : 3}}></Box>
-        
-            </Container>
-        </>
-    )
+            <Box sx={{ mb: 3 }}></Box>
+
+        </Container>
+    </>
+)
 }

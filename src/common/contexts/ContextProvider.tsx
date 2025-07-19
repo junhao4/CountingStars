@@ -6,6 +6,7 @@ import { PageTitleProvider } from "./PageTitleContext";
 import { MessageProvider } from "./AlertContext";
 import ThemeUsage from "./ThemeProvider";
 import { ThemeModeProvider } from "./ThemeContext";
+import { ProfileProvider } from "./ProfileContext";
 
 export default function ContextProvider({
     children,
@@ -17,13 +18,15 @@ export default function ContextProvider({
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <MessageProvider>
                     <SessionProvider>
-                        <ThemeModeProvider>
-                            <OrgProvider>
-                                <PageTitleProvider>
-                                    {children}
-                                </PageTitleProvider>
-                            </OrgProvider>
-                        </ThemeModeProvider>
+                        <ProfileProvider>
+                            <ThemeModeProvider>
+                                <OrgProvider>
+                                    <PageTitleProvider>
+                                        {children}
+                                    </PageTitleProvider>
+                                </OrgProvider>
+                            </ThemeModeProvider>
+                        </ProfileProvider>
                     </SessionProvider>
                 </MessageProvider>
             </LocalizationProvider>

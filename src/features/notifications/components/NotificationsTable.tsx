@@ -4,8 +4,7 @@ import { IconButton } from "@mui/material";
 import { createNotificationMessage, deleteNotification } from "../api/NotificationsApi";
 import { useAlertContext } from "../../../common/contexts/AlertContext";
 import DeleteIcon from "@mui/icons-material/Delete"
-import useLocalStorage from "../../../common/hooks/useLocalStorage";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { Notification } from "../../../helper/types";
 
 const fetchNotificationMessages = (notifications: Notification[]) => {
@@ -21,8 +20,7 @@ export default function NotificationTable() {
     const { notifications, setNotifications } = useGetNotifications()
     const { createAlert } = useAlertContext()
 
-    const { value: notifs, setValue: setNotifs } = useLocalStorage("notification_table",
-        () => fetchNotificationMessages(notifications))
+    const [notifs, setNotifs] = useState<{id: number, msg: string, time: string}[]>([])
 
     useEffect(() => {
         fetchNotificationMessages(notifications).then(data => setNotifs(data))
