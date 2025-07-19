@@ -29,7 +29,7 @@ export default function InfoTip({ header, body }: InfoTipProps) {
                 disableRestoreFocus>
                 <Stack width={"16rem"}>
                     <div style={{display:'flex', justifyContent:'space-between', boxShadow:'0 1px black'}}>
-                        <h2 style={{ margin: 0 }}>{header[page]}</h2>
+                        <h2 style={{ margin: '0 0 0.25rem 0' }}>{header[page]}</h2>
                         <IconButton size="small" onClick={() => setOpen(false)}><CloseIcon /></IconButton>
                     </div>
 
