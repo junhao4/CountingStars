@@ -15,7 +15,7 @@ import useFilterModel from "../hooks/useFilterModel"
 import './InventoryFolder.css'
 import { validateMoveIntoFolder } from "../functions/Folder"
 
-export type InventoryRow = 
+export type InventoryRow =
     | ItemWithCategories & { type: 'item' }
     | ItemFolder & { type: 'folder' }
 
@@ -32,8 +32,11 @@ export default function InventoryFolder({ data, setData, folderId }:
 
 
     useEffect(() => {
-        setData([...folders.map(folder => { return { ...folder, type: 'folder' } }) as InventoryRow[],
-        ...items.map(item => { return { ...item, type: 'item' } }) as InventoryRow[]])
+        if (loading) return
+        
+        setData([
+            ...folders.map(folder => ({ ...folder, type: 'folder' })) as InventoryRow[],
+            ...items.map(item => ({ ...item, type: 'item' })) as InventoryRow[]])
     }, [folders, items])
 
     const moveIntoFolder = async (moveItem: string, folderId: number) => {

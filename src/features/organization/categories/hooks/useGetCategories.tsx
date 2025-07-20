@@ -52,5 +52,5 @@ export default function useGetCategories() {
             .then(() => setLoading(false))
     }, [])
 
-    return { loading, categories, handleAddCategory, handleDeleteCategory}
+    return { loading, categories, setCategories, handleAddCategory, handleDeleteCategory}
 }

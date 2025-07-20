@@ -44,6 +44,19 @@ export const addCategory = async (organizationId: number, categoryName: string) 
     }
 }
 
+export const updateCategoryName = async (categoryId: number, categoryName: string) => {
+    const { error } = await supabase.from('Categories')
+        .update({name: categoryName})
+        .eq('id', categoryId)
+        .single()
+
+    if (error) {
+        console.log(error.message)
+        return false
+    }
+    return true
+}
+
 export const deleteCategory = async (categoryId: number) => {
     const { error } = await supabase.from('Categories')
         .delete()

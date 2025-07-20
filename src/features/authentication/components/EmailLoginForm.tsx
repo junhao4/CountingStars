@@ -2,18 +2,17 @@ import { Box, Input, Button, Stack } from "@mui/material";
 import { loginWithEmail } from "../api/AuthApi";
 import { useAlertContext } from "../../../common/contexts/AlertContext";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
 export default function EmailLoginForm() {
     const { createAlert } = useAlertContext()
-    const navigate = useNavigate()
     
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    const onHandleLogin = async () => {
-        const data = await loginWithEmail({ email, password, createAlert })
+    const handleLogin = async () => {
+        await loginWithEmail({ email, password, createAlert })
     }
 
     return (
@@ -32,7 +31,7 @@ export default function EmailLoginForm() {
                     placeholder='Password' autoComplete="new-password" sx={{ marginRight: '1.75rem' }} />
             </Box>
 
-            <Button onClick={onHandleLogin} sx={{ justifySelf: 'center' }}>Login</Button>
+            <Button onClick={handleLogin} sx={{ justifySelf: 'center' }}>Login</Button>
 
             <Link to='/forgot' style={{
                 color: 'grey', justifySelf: 'right', textAlign: 'right',

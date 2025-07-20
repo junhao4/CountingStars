@@ -12,8 +12,11 @@ export default function useGetFolderContent({folderId}: {folderId: number | null
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        const promiseFiles = fetchItems(org.id, folderId).then(data => setItems(data))
-        const promiseFolders = fetchFolders(org.id, folderId).then(data => setFolders(data))
+        setLoading(true)
+        const promiseFiles = fetchItems(org.id, folderId)
+            .then(data => setItems(data))
+        const promiseFolders = fetchFolders(org.id, folderId)
+            .then(data => setFolders(data))
         Promise.all([promiseFiles, promiseFolders]).then(() => setLoading(false))
     }, [folderId])
 
