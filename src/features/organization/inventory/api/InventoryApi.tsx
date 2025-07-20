@@ -3,7 +3,7 @@ import type { GridRowSelectionModel } from "@mui/x-data-grid";
 import type { AlertType, CreateAlertType } from "../../../../common/contexts/AlertContext";
 import supabase from "../../../../helper/supabaseClient";
 import type { Category, Item, Organization } from "../../../../helper/types";
-import { addLog, LogTypes } from "../../log/api/LogApi";
+import { addLog } from "../../log/api/LogApi";
 
 export type DisplayCategory = Omit<Category, "createdAt">
 

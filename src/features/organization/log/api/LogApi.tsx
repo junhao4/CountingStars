@@ -79,7 +79,15 @@ export const LOGS : LogsWithMetadata = {
         },
         moveItem: {
             generateMessage : (performerName, item, metadata) => {
-                return ""
+                return (
+                performerName +
+                " has moved item " +
+                item +
+                " from " +
+                metadata.oldLocation +
+                " to " +
+                metadata.newLocation
+                )
             }
         },
         updateQuantity: {
