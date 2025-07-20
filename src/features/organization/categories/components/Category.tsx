@@ -9,6 +9,9 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import SaveAltIcon from '@mui/icons-material/SaveAlt'
 import { updateCategoryName } from "../api/CategoriesApi"
 import { useAlertContext } from "../../../../common/contexts/AlertContext"
+import { hasPermission } from "../../../../helper/RolePermissions"
+import { useSessionContext, type ValidSession } from "../../../../common/contexts/SessionContext"
+import { useOrgContext, type ValidOrg } from "../../../../common/contexts/OrgContext"
 
 interface CategoryFetch {
     id: number,
@@ -17,6 +20,9 @@ interface CategoryFetch {
 }
 
 export default function Category() {
+    const { user } = useSessionContext() as ValidSession
+    const { org } = useOrgContext() as ValidOrg
+    const userWithOrg = {userId: user.id, organizationId: org.id, role: org.role}
     const { createAlert } = useAlertContext()
     const { loading, categories, setCategories, handleAddCategory, handleDeleteCategory } = useGetCategories()
 
@@ -60,6 +66,7 @@ export default function Category() {
             headerAlign: "left",
             type: "actions",
             getActions: ({ id, row }: GridRowParams<CategoryFetch>) => {
+                const hasPermissionToUpdate = hasPermission(userWithOrg, "categories", "editName", row)
                 const handleEditClick = () => {
                     setRowModesModel({
                         ...rowModesModel,
@@ -71,13 +78,16 @@ export default function Category() {
                         ...rowModesModel,
                         [id]: { mode: GridRowModes.View },
                     });
-                };
+                }
+
+                const hasPermissionToDelete = hasPermission(userWithOrg, "categories", "delete", row)
                 const handleCancelClick = () => {
                     setRowModesModel({
                         ...rowModesModel,
                         [id]: { mode: GridRowModes.View, ignoreModifications: true },
                     });
                 };
+
                 const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
                 if (isInEditMode) {
@@ -104,6 +114,7 @@ export default function Category() {
                         label="edit"
                         // @ts-expect-error
                         color="info"
+                        disabled={!hasPermissionToUpdate}
                         onClick={handleEditClick}
                     />
                     ,
@@ -112,6 +123,7 @@ export default function Category() {
                         label="delete"
                         // @ts-expect-error
                         color="error"
+                        disabled={!hasPermissionToDelete}
                         onClick={() => confirm("Are you sure you want to delete the category?") && handleDeleteCategory(row.id)()}
                     />]
             }

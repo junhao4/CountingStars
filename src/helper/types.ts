@@ -64,7 +64,6 @@ export type ItemImage = {
 export type Category = {
     id: number,
     name: string,
-    createdAt: string,
 }
 
 export type Log = {

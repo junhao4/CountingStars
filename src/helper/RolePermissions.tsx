@@ -52,7 +52,7 @@ type Permissions = {
     },
     categories: {
         dataType: Category
-        action: "view" | "addToOrRemoveFromItem" | "delete"
+        action: "view" | "editName" | "delete"
     }
     log: {
         dataType: Log
@@ -84,7 +84,7 @@ const ROLES = {
             view: true, update: true, delete: true
         },
         categories: {
-            view: true, addToOrRemoveFromItem: true, delete: true
+            view: true, editName: true ,delete: true
         },
         log: {
             view: true
@@ -111,7 +111,7 @@ const ROLES = {
             view: true, update: true, delete: true
         },
         categories: {
-            view: true, addToOrRemoveFromItem: true, delete: true
+            view: true, editName: true, delete: true
         },
         log: {
             view: true
@@ -128,7 +128,7 @@ const ROLES = {
             view: true, update: false, delete: false
         },
         categories: {
-            view: true, addToOrRemoveFromItem: false, delete: false
+            view: true, editName: false, delete: false
         },
         log: {
             view: true
