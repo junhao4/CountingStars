@@ -33,6 +33,8 @@ const types = [
 
 
 
+
+
 export default function LogFilterSelect({ filter, setFilter} : LogFilterProps) {
 
 
@@ -50,7 +52,7 @@ export default function LogFilterSelect({ filter, setFilter} : LogFilterProps) {
           renderValue={(selected) => (
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, bgcolor : 'transparent'}}>
               {selected.map((value) => (
-                <LogTypeChip type={value! as LOGSTYPE} />
+                <LogTypeChip type={value!} />
               ))}
             </Box>
           )}

@@ -1,5 +1,3 @@
-
-import type { T } from "vitest/dist/chunks/environment.d.cL3nLXbE.js";
 import type { Json } from "../../../../helper/supabase";
 import supabase from "../../../../helper/supabaseClient";
 import type { Organization, UserOrganization } from "../../../../helper/types";
@@ -125,12 +123,11 @@ export function generateLogMessageNew<Type extends LOGSTYPE>(
   const generator = LOGS[type].generateMessage;
   return generator(performerName, item, metadata);
 }
-//Possible types of logs
-export const LogTypes = {
-    INSERT_NEW: 1,
-    UPDATE_QUANTITY: 2,
-    UPDATE_EXPIRATION: 3,
-    DELETE: 4,
+//Convert user choice to database stored types
+export const filterToType = {
+  Created: ["addItem"],
+  Updated: ["updateQuantity", "updateExpiry", "moveItem"],
+  Deleted: ["removeItem"],
 };
 
 //Add log to supabase
@@ -168,6 +165,7 @@ export const fetchLogs = async (
         )
         .eq("organization_id", org.id)
         .order("id", { ascending: false })
+        
 
         if (filter.length > 0) {
             query = query.in("typeString", filter)

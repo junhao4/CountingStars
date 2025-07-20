@@ -5,7 +5,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import type { LOGSTYPE } from '../api/LogApi';
 
 
-function LogTypeChip( {type} : {type  : LOGSTYPE}) {
+function LogTypeChip( {type} : {type  : string}) {
   switch (type) {
     case 'addItem': return (
       <Chip icon= {<AddIcon />} label="CREATED" color="success" sx={{color : "white"}} />
