@@ -125,10 +125,12 @@ export function generateLogMessageNew<Type extends LOGSTYPE>(
 }
 //Convert user choice to database stored types
 export const filterToType = {
-  Created: ["addItem"],
-  Updated: ["updateQuantity", "updateExpiry", "moveItem"],
-  Deleted: ["removeItem"],
+  "Created" : ["addItem"],
+  "Updated" : ["updateQuantity", "updateExpiry", "moveItem"],
+  "Deleted" : ["removeItem"],
 };
+
+type filterType = "Created" | "Updated" | "Deleted";
 
 //Add log to supabase
 export async function addLog<Type extends LOGSTYPE> (
@@ -156,7 +158,7 @@ export async function addLog<Type extends LOGSTYPE> (
 export const fetchLogs = async (
     org: Organization,
     setLogs: React.Dispatch<React.SetStateAction<LogFetchS[]>>,
-    filter: string[]
+    filter: filterType[]
 ) => {
     let query = supabase
         .from("Logs")
@@ -166,9 +168,10 @@ export const fetchLogs = async (
         .eq("organization_id", org.id)
         .order("id", { ascending: false })
         
+        const typeStrings = filter.flatMap(label => filterToType[label] || []);
 
         if (filter.length > 0) {
-            query = query.in("typeString", filter)
+            query = query.in("typeString", typeStrings)
         }
         
         const res = await query
