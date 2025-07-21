@@ -10,7 +10,7 @@ export default function AccountBell() {
 
     return (
         <Button size="small" variant="text"
-            onClick={() => navigate("/dashboard/notifications")} sx={{ fontSize: 24, color : "var(--secondary)" }}
+            onClick={() => navigate("/dashboard/notifications")} sx={{ fontSize: 24, color : "var(--primary)" }}
         >
             <Badge badgeContent={unread} color="error">
                 <CircleNotificationsIcon fontSize="inherit" />

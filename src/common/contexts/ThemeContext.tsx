@@ -6,7 +6,7 @@ import { changeTheme } from "../../features/theme/api/ThemeApi";
 
 export type ThemeMode = "light" | "dark" | "system";
 
-type Theme = "light" | "dark";
+type Theme = "light" | "dark" | "custom-dark" | "custom-light";
 
 interface ThemeProps {
     themeMode : ThemeMode,
@@ -46,6 +46,7 @@ export const ThemeModeProvider = ({ children }: { children: React.ReactNode }) =
     useEffect(() => {
         if (themeMode == 'system') {
             setTheme(prefersDarkMode ? "dark" : "light")
+            setTheme("custom-light")
             setMode(prefersDarkMode ? "dark" : "light")
         } else {
             setTheme(themeMode)
