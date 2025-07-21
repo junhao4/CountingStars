@@ -9,7 +9,8 @@ function ThemePage() {
         "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Test.svg/2560px-Test.svg.png";
 
     const [selectedBase, setSelectedBase] = useState("");
-    const { setCustomBase } = useThemeContext();
+    const [selectedAccent, setSelectedAccent] = useState("");
+    const { setCustomBase, setCustomAccent } = useThemeContext();
 
     return (
         <>
@@ -29,6 +30,20 @@ function ThemePage() {
                     }}
                 >
                     Confirm Color
+                </Button>
+                 <input
+                    type="color"
+                    value={selectedBase}
+                    onChange={(e) => setSelectedAccent(e.target.value)}
+                />
+                <Button
+                    variant="contained"
+                    sx={{ ml: 2 }}
+                    onClick={() => {
+                        setCustomAccent(selectedAccent);
+                    }}
+                >
+                    Confirm Accent
                 </Button>
             </Container>
         </>

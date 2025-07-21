@@ -62,6 +62,7 @@ export const ThemeModeProvider = ({ children }: { children: React.ReactNode }) =
           setTheme("custom-dark")
           }
           document.documentElement.style.setProperty('--base-color', customBase);
+           document.documentElement.style.setProperty('--accent', customAccent);
         } else {
             setTheme(themeMode)
             setMode(themeMode)
