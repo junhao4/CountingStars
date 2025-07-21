@@ -33,7 +33,7 @@ function ThemePage() {
                 </Button>
                  <input
                     type="color"
-                    value={selectedBase}
+                    value={selectedAccent}
                     onChange={(e) => setSelectedAccent(e.target.value)}
                 />
                 <Button
