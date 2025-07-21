@@ -8,8 +8,8 @@ function ThemePage() {
     const testimg =
         "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Test.svg/2560px-Test.svg.png";
 
-    const [selectedBase, setSelectedBase] = useState("");
-    const [selectedAccent, setSelectedAccent] = useState("");
+    const [selectedBase, setSelectedBase] = useState("#ffffff");
+    const [selectedAccent, setSelectedAccent] = useState("#ffffff");
     const { setCustomBase, setCustomAccent } = useThemeContext();
 
     return (
