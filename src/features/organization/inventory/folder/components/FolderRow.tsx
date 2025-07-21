@@ -6,8 +6,8 @@ import IconButton from "@mui/material/IconButton";
 import { useRef, useState, type SetStateAction } from "react";
 import { MenuItem, MenuList, Popover, Tooltip } from "@mui/material";
 import { deleteFolder } from "../api/FolderApi";
-import type { InventoryRow } from "./InventoryFolder";
 import { useAlertContext } from "../../../../../common/contexts/AlertContext";
+import type { InventoryRow } from "../hooks/useGetFolderContent";
 
 
 export default function FolderRow({ setData, folder, moveIntoFolder }:

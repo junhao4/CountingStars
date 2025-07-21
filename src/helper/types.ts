@@ -46,7 +46,7 @@ export type Item = {
 
 export type ItemFolder = {
     id: number,
-    parentId: number,
+    parentId: number | null,
     name: string,
     description: string,
     lastModified: string,

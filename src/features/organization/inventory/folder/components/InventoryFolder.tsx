@@ -1,8 +1,5 @@
 import { Box, Button, Divider } from "@mui/material"
-import type { ItemFolder, ItemWithCategories } from "../../../../../helper/types"
-import useGetFolderContent from "../hooks/useGetFolderContent"
-import Loading from "../../../../../common/components/Loading"
-import { useEffect, useState, type SetStateAction } from "react"
+import { useState, type SetStateAction } from "react"
 import useSortingModel from "../hooks/useSortingModel"
 import { moveItemIntoFolder } from "../api/FolderApi"
 import { useAlertContext } from "../../../../../common/contexts/AlertContext"
@@ -14,10 +11,7 @@ import InventoryHead from "./InventoryHead"
 import useFilterModel from "../hooks/useFilterModel"
 import './InventoryFolder.css'
 import { validateMoveIntoFolder } from "../functions/Folder"
-
-export type InventoryRow =
-    | ItemWithCategories & { type: 'item' }
-    | ItemFolder & { type: 'folder' }
+import type { InventoryRow } from "../hooks/useGetFolderContent"
 
 
 export default function InventoryFolder({ data, setData, folderId }:
@@ -25,19 +19,10 @@ export default function InventoryFolder({ data, setData, folderId }:
     const navigate = useNavigate()
     const { createAlert } = useAlertContext()
 
-    const { loading, items, folders } = useGetFolderContent({ folderId: folderId === 'root' ? null : folderId })
 
-    const { foldersOnTop, getSortTitle, getSortIcon, handleSort } = useSortingModel()
     const { selectedCategories, handleFilterCategory, filteredData } = useFilterModel(data)
+    const { sortedData, foldersOnTop, getSortTitle, getSortIcon, handleSort } = useSortingModel(filteredData)
 
-
-    useEffect(() => {
-        if (loading) return
-        
-        setData([
-            ...folders.map(folder => ({ ...folder, type: 'folder' })) as InventoryRow[],
-            ...items.map(item => ({ ...item, type: 'item' })) as InventoryRow[]])
-    }, [folders, items])
 
     const moveIntoFolder = async (moveItem: string, folderId: number) => {
         if (!validateMoveIntoFolder(moveItem, folderId).data) {
@@ -57,18 +42,16 @@ export default function InventoryFolder({ data, setData, folderId }:
 
     const [addFolderRow, setAddFolderRow] = useState(false)
 
-    if (loading) { return <Loading /> }
-
     return (
         <Box>
             <table className="inventory-table" width={'100%'}>
-                <InventoryHead foldersOnTop={foldersOnTop} setData={setData} handleSort={handleSort}
+                <InventoryHead foldersOnTop={foldersOnTop} handleSort={handleSort}
                     getSortTitle={getSortTitle} getSortIcon={getSortIcon}
                     selectedCategories={selectedCategories} handleFilterCategory={handleFilterCategory} />
 
                 <tbody>
                     {addFolderRow && <AddFolderRow folderId={folderId} setData={setData} setAddFolderRow={setAddFolderRow} />}
-                    {filteredData.map((row, index) => row.type === 'folder'
+                    {sortedData.map((row, index) => row.type === 'folder'
                         ? <FolderRow key={index} folder={row} setData={setData} moveIntoFolder={moveIntoFolder} />
                         : <ItemRow key={index} item={row} />)}
                 </tbody>

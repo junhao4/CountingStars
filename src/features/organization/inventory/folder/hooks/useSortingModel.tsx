@@ -1,7 +1,7 @@
-import { useState, type SetStateAction } from "react"
-import type { InventoryRow } from "../components/InventoryFolder"
+import { useEffect, useState } from "react"
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
+import type { InventoryRow } from "./useGetFolderContent";
 
 export type InventorySort = 'name' | 'quantity' | 'lastModified' | 'foldersOnTop' | 'foldersMix'
 
@@ -45,7 +45,7 @@ export const sortByLastModified = (ascending: boolean, foldersOnTop: boolean) =>
             ? 1
             : 0
 
-    return foldersOnTop 
+    return foldersOnTop
         ? row1.type === 'folder' && row2.type === 'folder'
             ? asc * val
             : row1.type === 'folder'
@@ -56,50 +56,53 @@ export const sortByLastModified = (ascending: boolean, foldersOnTop: boolean) =>
         : asc * val
 }
 
-export default function useSortingModel() {
+export default function useSortingModel(filteredData: InventoryRow[]) {
 
-    const [ascending, setAscending] = useState(true)
+    const [sortedData, setSortedData] = useState<InventoryRow[]>(filteredData)
+
+    const [ascending, setAscending] = useState(false)
     const [foldersOnTop, setFoldersOnTop] = useState(true)
     const [sortType, setSortType] = useState<InventorySort>('name')
 
-    const handleSort = (setData: React.Dispatch<SetStateAction<InventoryRow[]>>, type: InventorySort) => {
-        const asc = sortType === type ? !ascending : true
-        const foldersTop = (foldersOnTop && type !== 'foldersMix') || (type === 'foldersOnTop')
-        const isFoldersMix = type === 'foldersMix'
-
-        // Sort once based on current sorting type, then return early
-        if (isFoldersMix) {
-            setFoldersOnTop(false)
-            type = sortType
-        }
-
+    const sort = (type: InventorySort, asc: boolean, foldersOnTop: boolean) => {
         switch (type) {
             case "name":
-                setData(data => [...data.sort(sortByName(asc, foldersTop))])
+                setSortedData([...filteredData.sort(sortByName(asc, foldersOnTop))])
                 break
             case "quantity":
-                setData(data => [...data.sort(sortByQuantity(asc, foldersTop))])
+                setSortedData([...filteredData.sort(sortByQuantity(asc, foldersOnTop))])
                 break
             case "lastModified":
-                setData(data => [...data.sort(sortByLastModified(asc, foldersTop))])
+                setSortedData([...filteredData.sort(sortByLastModified(asc, foldersOnTop))])
                 break
             case "foldersOnTop":
-                setFoldersOnTop(true)
+                // Shouldn't reach here
                 break
             case "foldersMix":
                 // Shouldn't reach here
                 break
         }
+    }
 
-        // Do not switch the ascending order
-        if (isFoldersMix) {
-            return
-        }
+    const handleSort = (type: InventorySort) => {
+        const asc = sortType === type ? !ascending : true
 
-        if (sortType === type) { setAscending(prev => !prev) }
-        else if (type !== 'foldersOnTop' && type !== 'foldersMix') {
-            setAscending(true)
-            setSortType(type)
+        switch (type) {
+            case "name":
+            case "quantity":
+            case "lastModified":
+                sort(type, asc, foldersOnTop)
+                type === sortType ? setAscending(prev => !prev) : setAscending(true)
+                setSortType(type)
+                break
+            case "foldersOnTop":
+                sort(sortType, ascending, true)
+                setFoldersOnTop(true)
+                break
+            case "foldersMix":
+                sort(sortType, ascending, false)
+                setFoldersOnTop(false)
+                break
         }
     }
 
@@ -124,5 +127,10 @@ export default function useSortingModel() {
         return ascending ? <ArrowCircleUpIcon /> : <ArrowCircleDownIcon />
     }
 
-    return { ascending, foldersOnTop, getSortTitle, getSortIcon, handleSort }
+    useEffect(() => {
+        // Do not change the current sort order
+        handleSort(foldersOnTop ? 'foldersOnTop' : 'foldersMix')
+    }, [filteredData])
+
+    return { sortedData, ascending, foldersOnTop, getSortTitle, getSortIcon, handleSort }
 }

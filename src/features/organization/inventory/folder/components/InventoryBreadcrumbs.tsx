@@ -2,8 +2,8 @@ import Breadcrumbs from "@mui/material/Breadcrumbs";
 import { fetchParentFolders } from "../api/FolderApi";
 import { useEffect, useState, type SetStateAction } from "react";
 import { IconButton } from "@mui/material";
-import { type InventoryRow } from "./InventoryFolder";
 import FolderBreadcrumb from "./FolderBreadcrumb";
+import type { InventoryRow } from "../hooks/useGetFolderContent";
 
 
 export default function InventoryBreadcrumbs({ setData, folderId }:

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { validateMoveIntoFolder } from "../functions/Folder";
 import { moveItemIntoFolder } from "../api/FolderApi";
 import { useAlertContext } from "../../../../../common/contexts/AlertContext";
-import type { InventoryRow } from "./InventoryFolder";
+import type { InventoryRow } from "../hooks/useGetFolderContent";
 
 interface FolderBreadcrumbProps {
     folder: {

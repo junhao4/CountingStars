@@ -1,9 +1,11 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom"
-import InventoryFolder, { type InventoryRow } from "../../../features/organization/inventory/folder/components/InventoryFolder"
-import { useEffect, useState } from "react"
+import InventoryFolder from "../../../features/organization/inventory/folder/components/InventoryFolder"
+import { useEffect } from "react"
 import { usePageTitleContext } from "../../../common/contexts/PageTitleContext"
 import InventoryBreadcrumbs from "../../../features/organization/inventory/folder/components/InventoryBreadcrumbs"
 import { Box } from "@mui/material"
+import useGetFolderContent from "../../../features/organization/inventory/folder/hooks/useGetFolderContent"
+import Loading from "../../../common/components/Loading"
 
 const FOLDER_ROOT_PATH = 'root' // id === 0
 
@@ -29,7 +31,7 @@ export default function InventoryPage() {
         folderId = validateFolderId(params.folderId)
     }
 
-    const [data, setData] = useState<InventoryRow[]>([])
+    const { loading, data, setData } = useGetFolderContent({ folderId })
 
     useEffect(() => {
         setTitle('Inventory')
@@ -38,14 +40,17 @@ export default function InventoryPage() {
         }
     }, [navigate])
 
-    if (folderId === null) {
+    if (loading) {
+        return (<Loading />)
+    } else if (folderId === null) {
         return (<p>INVALID FOLDER ID</p>)
     }
 
     return (
-        <Box sx={{ outline: '1px solid black', margin: '2rem', padding:'1rem',
-            display:'flex', width: '60vw', flexDirection:'column', gap:'0.5rem'
-         }}>
+        <Box sx={{
+            outline: '1px solid black', margin: '2rem', padding: '1rem',
+            display: 'flex', width: '60vw', flexDirection: 'column', gap: '0.5rem'
+        }}>
             <InventoryBreadcrumbs data={data} setData={setData} folderId={folderId} />
             <InventoryFolder data={data} setData={setData} folderId={folderId} />
         </Box>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { InventoryRow } from "../components/InventoryFolder";
+import type { InventoryRow } from "./useGetFolderContent";
 
 
 export default function useFilterModel(data: InventoryRow[]) {
