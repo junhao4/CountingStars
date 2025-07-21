@@ -21,6 +21,7 @@ export function ThemeSettingsBox() {
                     border: "1px solid var(--ring)",
                     borderRadius: 2,
                     mb : 4,
+                    p : 2,
                     m : "auto"
                 }}
             >
@@ -64,6 +65,15 @@ export function ThemeSettingsBox() {
                             selected={selected}
                             setSelected={setSelected}
                             func={() => setAndSaveThemeMode("system")}
+                        ></ThemeRadio>
+
+                         <ThemeRadio
+                            text="CUSTOM TESTING"
+                            img={SystemImg}
+                            id={'custom'}
+                            selected={selected}
+                            setSelected={setSelected}
+                            func={() => setAndSaveThemeMode("custom")}
                         ></ThemeRadio>
                     </Grid>
                 </Grid>

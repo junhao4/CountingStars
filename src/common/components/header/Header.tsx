@@ -27,8 +27,7 @@ function Header() {
                     <Typography variant='h5'>Counting Stars</Typography>
 
                 </div>
-
-                <Breadcrumbs sx={{ fontSize: '0.5rem' }}>
+                <Breadcrumbs sx={{ fontSize: '0.5rem'}}>
                     {breadcrumbPathnames.map((path, index) => {
                         return (
                             <Link to={breadcrumbRoutenames[index]}
@@ -54,12 +53,12 @@ function Header() {
                 ) : (
                     <div style={{ display: "flex", justifyContent: 'space-evenly', height: '3.5rem', alignItems:'center' }} >
                         <Link to="/login" data-testid="header-login-link"
-                            style={{ color: "var(--foreground-text)", fontSize: "1rem" }}>
+                            style={{ color: "var(---text)", fontSize: "1rem" }}>
                             Login
                         </Link>
 
                         <Link to="/register" data-testid="header-register-link"
-                            style={{ color: "var(--foreground-text)", fontSize: "1rem" }}>
+                            style={{ color: "var(---text)", fontSize: "1rem" }}>
                             Register
                         </Link>
                     </div>
