@@ -6,7 +6,7 @@ interface RadioProps {
     img: string;
     id:  "system" | "light" | "dark";
     selected: string;
-    setSelected: React.Dispatch<React.SetStateAction<"system" | "light" | "dark">>;
+    setSelected: React.Dispatch<React.SetStateAction<"system" | "light" | "dark" | "custom">>;
     func? : () => void
 }
 

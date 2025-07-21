@@ -23,6 +23,7 @@ export function ThemeSettingsBox() {
                     border: "1px solid var(--ring)",
                     borderRadius: 2,
                     mb : 4,
+                    p : 2,
                     m : "auto"
                 }}
             >

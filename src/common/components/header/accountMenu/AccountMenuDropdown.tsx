@@ -142,6 +142,20 @@ export default function AccountMenuDropdown({
                             }
                             label="System"
                         />
+                        <FormControlLabel
+                            value="custom"
+                            control={
+                                <Radio
+                                    size="small"
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "var(--text-muted)",
+                                        },
+                                    }}
+                                />
+                            }
+                            label="Custom"
+                        />
                     </RadioGroup>
                 </Box>
 

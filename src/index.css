@@ -181,11 +181,11 @@ html[data-theme='custom-dark'] {
 
   --base-color: oklch(58.9% 0.23813 28.893);
   
-  --background:  var(--base-color);
+  --background:  oklch(from var(--base-color) calc(l - 0.05) c h);
 
-  --foreground: oklch(from var(--base-color) calc(l * 1.1 + 0.1) c h);
+  --foreground: oklch(from var(--background) calc(l * 1.05 + 0.05) c h);
 
-  --card:  oklch(from var(--base-color) calc(l * 1.2 + 0.2) c h);
+  --card:  oklch(from var(--background) calc(l * 1.1 + 0.1) c h);
 
   --card-muted : oklch(from var(--card) calc(l - 0.1) c h);
 
@@ -211,15 +211,15 @@ html[data-theme='custom-light'] {
 
   --base-color: oklch(99.405% 0.00011 271.152);
   
-  --background:  var(--base-color);
+  --background: oklch(from var(--base-color) calc(l + 0.05) c h);
 
-  --foreground: oklch(from var(--base-color) calc(l * 0.98 - 0.1) calc(c + 0.02) h);
+  --foreground: oklch(from var(--background) calc(l - 0.04) calc(c + 0.01) h);
 
-  --card:  oklch(from var(--base-color) calc(l * 0.97 - 0.2) calc(c + 0.05) h);
+  --card:  oklch(from var(--background) calc(l - 0.10) calc(c + 0.02) h);
 
   --card-muted : oklch(from var(--card) calc(l - 0.1) c h);
 
-  --accent: oklch(62.852% 0.25707 29.148);
+  --accent: oklch(62.852% 0.25707 99.148);
 
   --primary: var(--accent);
 
