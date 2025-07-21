@@ -68,6 +68,15 @@ export function ThemeSettingsBox() {
                             setSelected={setSelected}
                             func={() => setAndSaveThemeMode("system")}
                         ></ThemeRadio>
+
+                         <ThemeRadio
+                            text="CUSTOM TESTING"
+                            img={SystemImg}
+                            id={'custom'}
+                            selected={selected}
+                            setSelected={setSelected}
+                            func={() => setAndSaveThemeMode("custom")}
+                        ></ThemeRadio>
                     </Grid>
                 </Grid>
             </Box>

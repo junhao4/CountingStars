@@ -52,7 +52,6 @@ export const ThemeModeProvider = ({ children }: { children: React.ReactNode }) =
     useEffect(() => {
         if (themeMode == 'system') {
             setTheme(prefersDarkMode ? "dark" : "light")
-            setTheme("custom-light")
             setMode(prefersDarkMode ? "dark" : "light")
         } else if (themeMode == 'custom') {
           
