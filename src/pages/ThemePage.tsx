@@ -1,7 +1,7 @@
 import { Button, Container } from "@mui/material";
 
 import { ThemeSettingsBox } from "../features/theme/components/ThemeSettingsBox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useThemeContext } from "../common/contexts/ThemeContext";
 
 export default function ThemePage() {
@@ -10,7 +10,15 @@ export default function ThemePage() {
 
     const [selectedBase, setSelectedBase] = useState("#ffffff");
     const [selectedAccent, setSelectedAccent] = useState("#ffffff");
-    const { setCustomBase, setCustomAccent } = useThemeContext();
+    const { setAndSaveAccent, setAndSaveBase, customAccent, customBase } = useThemeContext();
+    const [refresh, setRefresh] = useState(true)
+
+    useEffect(() => {
+        setSelectedBase(customBase)
+        setSelectedAccent(customAccent)
+    }, [customAccent, customBase])
+
+
 
     return (
         <>
@@ -26,7 +34,7 @@ export default function ThemePage() {
                     variant="contained"
                     sx={{ ml: 2 }}
                     onClick={() => {
-                        setCustomBase(selectedBase);
+                        setAndSaveBase(selectedBase);
                     }}
                 >
                     Confirm Color
@@ -40,7 +48,7 @@ export default function ThemePage() {
                     variant="contained"
                     sx={{ ml: 2 }}
                     onClick={() => {
-                        setCustomAccent(selectedAccent);
+                        setAndSaveAccent(selectedAccent);
                     }}
                 >
                     Confirm Accent

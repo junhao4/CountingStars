@@ -2,7 +2,7 @@ import { useColorScheme, useMediaQuery } from "@mui/material";
 import { createContext, useContext, useEffect, useState } from "react";
 import { fetchUser } from "../api/UserApi";
 import { useSessionContext } from "./SessionContext";
-import { calculateLightness, changeTheme } from "../../features/theme/api/ThemeApi";
+import { calculateLightness, changeAccent, changeBase, changeTheme } from "../../features/theme/api/ThemeApi";
 
 export type ThemeMode = "light" | "dark" | "system" | "custom";
 
@@ -11,16 +11,20 @@ type Theme = "light" | "dark" | "custom-dark" | "custom-light";
 interface ThemeProps {
     themeMode : ThemeMode,
     setAndSaveThemeMode : (themeMode: string) => void,
-    setCustomBase : React.Dispatch<React.SetStateAction<string>>,
-    setCustomAccent : React.Dispatch<React.SetStateAction<string>>
+    setAndSaveBase : (base: string) => void,
+    setAndSaveAccent : (accent: string) => void,
+    customBase : string,
+    customAccent : string
    
 }
 
 const ThemeContext = createContext<ThemeProps>({
     themeMode : "system",
     setAndSaveThemeMode : () => {},
-    setCustomBase : () => {},
-    setCustomAccent : () => {}
+    setAndSaveBase : () => {},
+    setAndSaveAccent : () => {},
+    customBase : "",
+    customAccent : ""
 })
 
 
@@ -37,13 +41,25 @@ export const ThemeModeProvider = ({ children }: { children: React.ReactNode }) =
       setThemeMode(themeMode as ThemeMode)
       changeTheme(session?.user.id!, themeMode)
   }
+  const setAndSaveBase = (base : string) => {
+      setCustomBase(base)
+      changeBase(session?.user.id!, base)
+  }
+   const setAndSaveAccent = (accent : string) => {
+      setCustomAccent(accent)
+      changeAccent(session?.user.id!, accent)
+  }
  
 
     useEffect(() => {
         const getTheme = async () => {
         const user = await fetchUser(session?.user.id!);
         const userTheme = user!.theme
+        const base = user!.base
+        const accent = user!.accent
         setThemeMode(userTheme as ThemeMode)
+        setCustomBase(base)
+        setCustomAccent(accent)
         }
         getTheme()
     }, [session])
@@ -58,8 +74,10 @@ export const ThemeModeProvider = ({ children }: { children: React.ReactNode }) =
           console.log(customBase)
           if (calculateLightness(customBase) > 50) {
              setTheme("custom-light")
+             setMode("light")
           } else {
           setTheme("custom-dark")
+          setMode("dark")
           }
           document.documentElement.style.setProperty('--base-color', customBase);
            document.documentElement.style.setProperty('--accent', customAccent);
@@ -75,7 +93,7 @@ export const ThemeModeProvider = ({ children }: { children: React.ReactNode }) =
     }, [theme])
 
   return (
-      <ThemeContext.Provider value={{ themeMode, setAndSaveThemeMode, setCustomBase, setCustomAccent }}>
+      <ThemeContext.Provider value={{ themeMode, setAndSaveThemeMode, setAndSaveBase, setAndSaveAccent, customAccent, customBase }}>
         {children}
       </ThemeContext.Provider>
     );

@@ -177,7 +177,7 @@ html[data-theme='light'] {
 
 html[data-theme='custom-dark'] {
 
-  --base-color: oklch(58.9% 0.23813 28.893);
+  --base-color: oklch(19.689% 0.0016 16.521);
   
   --background:  oklch(from var(--base-color) calc(l - 0.05) c h);
 
@@ -187,13 +187,13 @@ html[data-theme='custom-dark'] {
 
   --card-muted : oklch(from var(--card) calc(l - 0.1) c h);
 
-  --accent: oklch(83.146% 0.27836 142.57);
+  --accent: oklch(91.698% 0.19182 104.784);
 
   --primary: var(--accent);
 
   --primary-muted: oklch(from var(--accent) calc(l * 0.9 - 0.1) calc(c * 0.9 - 0.05) h);
 
-  --secondary: oklch(from var(--accent) l c calc((h + 180)));
+  --secondary: oklch(from var(--accent) calc(1.25 - l / 2) c calc((h + 180)));
 
   --secondary-muted: oklch(from var(--secondary) calc(l - 0.1) c h);
 
@@ -223,7 +223,7 @@ html[data-theme='custom-light'] {
 
   --primary-muted: oklch(from var(--accent) calc(l * 0.9 - 0.1) calc(c * 0.9 - 0.05) h);
 
-  --secondary: oklch(from var(--accent) l c calc((h + 180)));
+  --secondary: oklch(from var(--accent) calc(1 - l / 2) c calc((h + 180)));
 
   --secondary-muted: oklch(from var(--secondary) calc(l - 0.1) c h);
 

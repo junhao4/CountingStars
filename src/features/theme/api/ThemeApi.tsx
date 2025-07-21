@@ -18,6 +18,35 @@ export const changeTheme = async (userId : string, theme : string) => {
     }
 }
 
+export const changeBase = async (userId : string, base : string) => {
+    const { data, error } = await supabase
+        .from('Users')
+        .update({base : base})
+        .eq('user_id', userId)
+        .single()
+
+    if (error) {
+        console.log("Error updating base")
+    } else {
+        console.log("Edited theme", data)
+        
+    }
+}
+export const changeAccent = async (userId : string, accent : string) => {
+    const { data, error } = await supabase
+        .from('Users')
+        .update({accent : accent})
+        .eq('user_id', userId)
+        .single()
+
+    if (error) {
+        console.log("Error updating theme")
+    } else {
+        console.log("Edited theme", data)
+        
+    }
+}
+
 export const calculateLightness = (hex : string) => {
     hex = hex.replace(/^#/, '')
     const r = parseInt(hex.substring(0, 2), 16)

@@ -214,7 +214,8 @@ export type Database = {
           metadata: Json
           organization_id: number
           performer_id: string
-          type: number
+          type: number | null
+          typeString: string | null
         }
         Insert: {
           created_at?: string
@@ -223,7 +224,8 @@ export type Database = {
           metadata: Json
           organization_id: number
           performer_id: string
-          type: number
+          type?: number | null
+          typeString?: string | null
         }
         Update: {
           created_at?: string
@@ -232,7 +234,8 @@ export type Database = {
           metadata?: Json
           organization_id?: number
           performer_id?: string
-          type?: number
+          type?: number | null
+          typeString?: string | null
         }
         Relationships: [
           {
@@ -333,6 +336,8 @@ export type Database = {
       }
       Users: {
         Row: {
+          accent: string
+          base: string
           created_at: string
           email: string
           image_file: string | null
@@ -341,6 +346,8 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          accent?: string
+          base?: string
           created_at?: string
           email: string
           image_file?: string | null
@@ -349,6 +356,8 @@ export type Database = {
           user_id?: string
         }
         Update: {
+          accent?: string
+          base?: string
           created_at?: string
           email?: string
           image_file?: string | null
