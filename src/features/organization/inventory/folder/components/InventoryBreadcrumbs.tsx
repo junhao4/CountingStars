@@ -20,7 +20,7 @@ export default function InventoryBreadcrumbs({ setData, folderId }:
     }, [folderId])
 
     return (
-        <Breadcrumbs className="inventory-breadcrumb" separator={'>'} sx={{ width: 'fit-content', boxShadow: '0 1px var(--secondary-alternative)' }}>
+        <Breadcrumbs className="inventory-breadcrumb" separator={'>'} sx={{ width: 'fit-content', boxShadow: '0 1px var(--border)' }}>
             {parentFolderIds.map((folder, index) => {
                 // If last breadcrumb, prevent dragging item into current folder
                 if (index === parentFolderIds.length - 1) {

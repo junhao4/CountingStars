@@ -123,7 +123,7 @@ export default function UserGrid({refresh}: UserGridProps) {
                 };
 
                 const handleDeleteUser = async () => {
-                    await deleteUser(user.id, row.id, org.id)
+                    await deleteUser(id as string, row.id, org.id)
                     setRows(rows.filter((row) => row.id !== id));
                     if (row.id == user.id) {
                         navigate("/dashboard");

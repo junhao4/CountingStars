@@ -10,7 +10,7 @@ interface AddUserBarProps {
     setRefresh: React.Dispatch<SetStateAction<boolean>>
 }
 
-export default function AddUserBar({setRefresh}: AddUserBarProps) {
+export default function AddUserBar({ setRefresh }: AddUserBarProps) {
     const { user } = useSessionContext() as ValidSession
     const { org } = useOrgContext() as ValidOrg
     const userWithOrg = { userId: user.id, organizationId: org.id, role: org.role }
@@ -21,8 +21,8 @@ export default function AddUserBar({setRefresh}: AddUserBarProps) {
 
     const onAddOrganizationUser = async () => {
         const success = await addOrganizationUser(user.id, org.id, email, role, createAlert)
-        if (success) { 
-            setRefresh(prev => !prev) 
+        if (success) {
+            setRefresh(prev => !prev)
             createAlert('success', "Successfully added user to organization!")
         }
     }
@@ -47,16 +47,19 @@ export default function AddUserBar({setRefresh}: AddUserBarProps) {
                         label="Role"
                         onChange={(e) => setRole(e.target.value)}
                     >
-                        <MenuItem disabled={!hasPermission(userWithOrg, "users", "addUser", 
-                            {...userWithOrg, role: 'owner', countOfOwners: 0})} value={'owner'}>Owner</MenuItem>
-                        <MenuItem disabled={!hasPermission(userWithOrg, "users", "addUser", 
-                            {...userWithOrg, role: 'admin', countOfOwners: 0})} value={'admin'}>Admin</MenuItem>
-                        <MenuItem disabled={!hasPermission(userWithOrg, "users", "addUser", 
-                            {...userWithOrg, role: 'member', countOfOwners: 0})} value={'member'}>Member</MenuItem>
+                        <MenuItem disabled={!hasPermission(userWithOrg, "users", "addUser",
+                            { ...userWithOrg, role: 'owner', countOfOwners: 0 })} value={'owner'}>Owner</MenuItem>
+                        <MenuItem disabled={!hasPermission(userWithOrg, "users", "addUser",
+                            { ...userWithOrg, role: 'admin', countOfOwners: 0 })} value={'admin'}>Admin</MenuItem>
+                        <MenuItem disabled={!hasPermission(userWithOrg, "users", "addUser",
+                            { ...userWithOrg, role: 'member', countOfOwners: 0 })} value={'member'}>Member</MenuItem>
                     </Select>
                 </FormControl>
             </div>
-            <Button variant="contained" color='secondary' onClick={onAddOrganizationUser}>
+            <Button variant="contained" color='secondary'
+                disabled={!hasPermission(userWithOrg, "users", "addUser",
+                    { ...userWithOrg, role: 'member', countOfOwners: 0 })} value={'member'}
+                onClick={onAddOrganizationUser}>
                 Add user
             </Button>
         </Box>

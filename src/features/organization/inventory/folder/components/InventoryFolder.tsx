@@ -33,7 +33,7 @@ export default function InventoryFolder({ data, setData, folderId }:
                         setAddFolderRow={setAddFolderRow} addFolderRow={addFolderRow} />
                 </table>
 
-                <Divider sx={{ backgroundColor: 'black', margin: '1rem 0' }} variant="fullWidth" />
+                <Divider sx={{ borderColor: 'var(--border)', margin: '1rem 0' }} variant="fullWidth" />
 
                 <Button color="secondary" onClick={() => { setAddFolderRow(prev => !prev) }} children={"Add Folder"} />
                 <Button color="secondary" onClick={() => { navigate('../add') }} children={"Add Item"} />
