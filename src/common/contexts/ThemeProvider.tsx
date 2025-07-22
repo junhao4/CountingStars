@@ -17,7 +17,7 @@ const customTheme = createTheme({
                 secondary: { // Yellow
                     light:'rgba(188, 183, 50, 1)',
                     main:'rgba(160, 158, 48, 1)',
-                    dark:'rgba(146, 128, 38, 1)',
+                    dark:'rgba(78, 69, 20, 1)',
                     contrastText: 'rgb(255, 255, 255)',
                 },
 
@@ -60,9 +60,9 @@ const customTheme = createTheme({
                 },
 
                 secondary: { // Purple
-                    light: 'rgb(248, 168, 255)',
-                    main: 'rgb(227, 85, 255)',
-                    dark: 'rgb(185, 78, 234)',
+                    light: 'rgba(252, 222, 255, 1)',
+                    main: 'rgba(221, 146, 236, 1)',
+                    dark: 'rgba(170, 95, 205, 1)',
                     contrastText: "#000000",
                 },
 
@@ -108,7 +108,7 @@ const customTheme = createTheme({
             styleOverrides: {
                 root: {
                     minWidth: '0',
-                    transition: 'background-color 1250ms linear'
+                    transition: 'background-color 250ms linear'
                 },
             },
             defaultProps: {
@@ -127,7 +127,7 @@ const customTheme = createTheme({
                     padding: '1rem',
                     color: 'var(--card-foreground)',
                     backgroundColor: 'var(--card)',
-                    transition: 'background-color 1250ms linear'
+                    transition: 'background-color 250ms linear'
                 },
             },
             defaultProps: {
