@@ -1,4 +1,4 @@
-import { Box, Button, Divider, TextField } from "@mui/material"
+import { Button, Divider, TextField } from "@mui/material"
 import { useState, type SetStateAction } from "react"
 import useSortingModel from "../hooks/useSortingModel"
 import { useNavigate } from "react-router-dom"
@@ -41,7 +41,7 @@ export default function InventoryFolder({ data, setData, folderId }:
 
             <Divider className="inventory-divider" />
 
-            <div className="inventory-buttons">
+            <div className="inventory-buttons" >
                 <Button color="secondary" onClick={() => { setAddFolderRow(prev => !prev) }} children={"Add Folder"} />
                 <Button color="secondary" onClick={() => { navigate('../add') }} children={"Add Item"} />
                 <Button color="secondary" onClick={() => { navigate('../categories') }} children={"Modify Categories"} />

@@ -1,6 +1,6 @@
 import { Grid, Typography } from "@mui/material";
 import LogTypeChip from "./LogTypeChip";
-import { generateLogMessageNew, type LogFetch, type LogFetchS, type LOGSTYPE, type metadataType } from "../api/LogApi";
+import { generateLogMessageNew, type LogFetchS, type LOGSTYPE, type metadataType } from "../api/LogApi";
 
 
 function LogRow({log, index} : {log : LogFetchS, index : number}) {

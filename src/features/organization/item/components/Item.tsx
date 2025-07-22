@@ -52,7 +52,7 @@ export default function Item({ itemId }: { itemId: number }) {
     const handleAddCategory = (categoryId: number, categoryName: string) => () => {
         setEditItem({
             ...editItem, categories: editItem.categories
-                .concat([{ id: categoryId, name: categoryName, createdAt: Date.now().toLocaleString() }])
+                .concat([{ id: categoryId, name: categoryName }])
         })
     }
 

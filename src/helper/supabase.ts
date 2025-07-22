@@ -215,7 +215,7 @@ export type Database = {
           organization_id: number
           performer_id: string
           type: number | null
-          typeString: string | null
+          typeString: string
         }
         Insert: {
           created_at?: string
@@ -225,7 +225,7 @@ export type Database = {
           organization_id: number
           performer_id: string
           type?: number | null
-          typeString?: string | null
+          typeString: string
         }
         Update: {
           created_at?: string
@@ -235,7 +235,7 @@ export type Database = {
           organization_id?: number
           performer_id?: string
           type?: number | null
-          typeString?: string | null
+          typeString?: string
         }
         Relationships: [
           {

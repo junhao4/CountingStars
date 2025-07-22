@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { usePageTitleContext } from "../../../common/contexts/PageTitleContext"
 import Item from "../../../features/organization/item/components/Item"
-import ItemLogs from "../../../features/organization/item/components/ItemLogs"
+import _ItemLogs from "../../../features/organization/item/components/ItemLogs"
 
 
 export default function ItemPage() {
@@ -26,7 +26,7 @@ export default function ItemPage() {
     return (
         <div>
             <Item itemId={itemIdNumber} />
-            <ItemLogs itemId={itemIdNumber} />
+            {/* <_ItemLogs itemId={itemIdNumber} /> */}
         </div>
     )
 }

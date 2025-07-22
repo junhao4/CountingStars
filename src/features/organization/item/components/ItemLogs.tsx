@@ -12,8 +12,8 @@ export default function ItemLogs({ itemId }: { itemId: number }) {
                     <tr>
                         <td>Id</td>
                         <td>Performer</td>
-                        <td>Type</td>
-                        <td>JSON</td>
+                        <td>Message</td>
+                        <td>Date</td>
                     </tr>
                 </thead>
                 <tbody> 
@@ -23,7 +23,7 @@ export default function ItemLogs({ itemId }: { itemId: number }) {
                                 <td>{log.id}</td>
                                 <td>{log.user_name}</td>
                                 <td>{log.type}</td>
-                                <td>{log.metadata?.toString()}</td>
+                                <td>{new Date(log.created_at).toDateString()}</td>
                             </tr>)
                     })}
                 </tbody>

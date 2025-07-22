@@ -15,7 +15,7 @@ export interface LogFetchS {
     id: number;
     user_name: string;
     item_name: string;
-    typeString: string | null;
+    typeString: string;
     created_at: string;
     metadata: Json;
 }
@@ -172,7 +172,7 @@ export const filterToType = {
     "Deleted": ["removeItem"],
 };
 
-type filterType = "Created" | "Updated" | "Deleted";
+export type FilterType = "Created" | "Updated" | "Deleted";
 
 //Add log to supabase
 export async function addLog<Type extends LOGSTYPE>(
@@ -197,37 +197,19 @@ export async function addLog<Type extends LOGSTYPE>(
 
 
 //Gets the logs from supabase
-export const fetchLogs = async (
-    org: Organization,
-    setLogs: React.Dispatch<React.SetStateAction<LogFetchS[]>>,
-    filter: filterType[]
-) => {
-    let query = supabase
+export const fetchLogs = async (organizationId: number) => {
+    const { data, error } = await supabase
         .from("Logs")
         .select(
             "id, Users!performer_id(name), Items!item_id(name), typeString, created_at, metadata"
         )
-        .eq("organization_id", org.id)
+        .eq("organization_id", organizationId)
         .order("id", { ascending: false })
 
-    const typeStrings = filter.flatMap(label => filterToType[label] || []);
-
-    if (filter.length > 0) {
-        query = query.in("typeString", typeStrings)
+    if (error) {
+        console.log(error.message)
+        return "logError"
     }
-
-    const res = await query
-    if (res.error) console.log(res.error.message);
-    else
-        setLogs(
-            res.data.map((log) => {
-                return {
-                    ...log,
-                    user_name: log.Users.name || "DELETED USER",
-                    item_name: log.Items?.name,
-                };
-            })
-        );
-
-};
+    return data
+}
 
