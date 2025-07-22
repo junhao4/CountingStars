@@ -1,13 +1,10 @@
 import "@testing-library/jest-dom"
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event';
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { MemoryRouter, Route, Routes } from "react-router-dom"
 import App from "../App";
 import ContextProvider from "../common/contexts/ContextProvider";
-import type { Session, User } from "@supabase/supabase-js";
-import supabase from "../helper/supabaseClient";
-import { useSessionContext, SessionProvider } from "../common/contexts/SessionContext";
 
 const renderLoginWithoutSession = () => {
   return render(
@@ -19,22 +16,6 @@ const renderLoginWithoutSession = () => {
       </ContextProvider>
     </MemoryRouter>
   )
-}
-
-const dummyUser: User = {
-  id: "1",
-  app_metadata: {},
-  user_metadata: {},
-  aud: "",
-  created_at: ""
-}
-
-const dummySession: Session = {
-  access_token: "",
-  refresh_token: "",
-  expires_in: 0,
-  token_type: "",
-  user: dummyUser
 }
 
 // vi.spyOn(supabase.auth, "signInWithPassword")

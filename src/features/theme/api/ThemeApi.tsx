@@ -1,5 +1,3 @@
-import type { Session } from "@supabase/supabase-js"
-import { useSessionContext } from "../../../common/contexts/SessionContext"
 import supabase from "../../../helper/supabaseClient"
 
 

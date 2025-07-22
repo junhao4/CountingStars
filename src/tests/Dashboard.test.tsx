@@ -5,14 +5,13 @@ import App from "../App";
 import ContextProvider from "../common/contexts/ContextProvider";
 import { fetchOrganization, fetchOrgImage } from "../features/organization/home/api/HomeApi";
 import { dummyUUID, simulateMockSession, simulateNoSession } from "./testApi";
-import * as SessionContext from "../common/contexts/SessionContext"
+// import * as SessionContext from "../common/contexts/SessionContext"
 import * as OrgController from "../features/organization/home/api/HomeApi"
 import * as DashboardController from "../features/dashboard/api/DashboardApi"
-import * as AuthController from "../features/authentication/api/AuthApi"
+// import * as AuthController from "../features/authentication/api/AuthApi"
 import * as AccountMenuController from "../common/api/UserApi"
 import userEvent from "@testing-library/user-event";
-import { fetchDashboard, transformOrgDataToDashboardCard } from "../features/dashboard/api/DashboardApi";
-import type { Organization } from "../helper/types";
+import { fetchDashboard } from "../features/dashboard/api/DashboardApi";
 
 URL.createObjectURL = vi.fn()
 vi.mocked(URL.createObjectURL).mockReturnValue("Url")

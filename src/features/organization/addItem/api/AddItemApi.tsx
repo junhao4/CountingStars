@@ -40,7 +40,7 @@ export const addItem = async (userId: string, item: UploadItem, organizationId: 
     })
   ).then(async (b: boolean[]) => {
     if (b.reduce((prev, next) => prev && next, true)) {
-      await addLog(organizationId, "addItem", userId, data.id, {})
+      await addLog(organizationId, "addItem", userId, data.id, { quantity: item.quantity })
       return true
     }
     return false

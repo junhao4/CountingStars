@@ -2,10 +2,8 @@ import { act, fireEvent, render, screen } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 import { describe, expect, it } from "vitest"
 import '@testing-library/jest-dom';
-import userEvent from "@testing-library/user-event";
 import Sidebar from "../common/components/sidebar/Sidebar";
-import ContextProvider from "../common/contexts/ContextProvider";
-import { SessionContext, SessionProvider } from "../common/contexts/SessionContext";
+import { SessionContext } from "../common/contexts/SessionContext";
 import { OrgContext } from "../common/contexts/OrgContext";
 
 

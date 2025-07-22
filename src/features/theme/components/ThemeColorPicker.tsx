@@ -1,8 +1,6 @@
 import { Box, Button, Typography } from "@mui/material"
 import { useRef, useState, type ChangeEvent } from "react"
 import { useThemeContext } from "../../../common/contexts/ThemeContext";
-import "./ThemeColorPicker.css"
-
 
 export default function ThemeColorPicker() {
     const { customAccent, customBase, setAndSaveAccent, setAndSaveBase } = useThemeContext()

@@ -1,6 +1,5 @@
 import type { Json } from "../../../../helper/supabase";
 import supabase from "../../../../helper/supabaseClient";
-import type { Organization } from "../../../../helper/types";
 
 export interface LogFetch {
     id: number;
@@ -33,7 +32,7 @@ export type LOGSTYPE =
 export type metadataType = {
     "addItem" :{
             metadata : {
-                quantity : string
+                quantity : number
             }
     },
     "removeItem": {

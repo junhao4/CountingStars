@@ -1,7 +1,6 @@
 import { Button, Badge } from "@mui/material";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications"
 import { useNavigate } from "react-router-dom";
-import useGetNotifications from "../../../../features/notifications/hooks/useGetNotifications";
 import { useNotificationContext } from "../../../contexts/NotificationContext";
 
 

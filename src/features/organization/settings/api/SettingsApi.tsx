@@ -1,5 +1,4 @@
 import type { CreateAlertType } from "../../../../common/contexts/AlertContext";
-import { hasPermission } from "../../../../helper/RolePermissions";
 import supabase from "../../../../helper/supabaseClient";
 
 export const fetchOrganizationImage = async (organizationId: number) => {
@@ -7,6 +6,11 @@ export const fetchOrganizationImage = async (organizationId: number) => {
         .select("image_file")
         .eq('id', organizationId)
         .single()
+
+    if (error) {
+        console.log(error.message)
+        return "Stock Background.jpg"
+    }
 
     if (data?.image_file == null) {
         return "Stock Background.jpg"
@@ -25,7 +29,7 @@ export const deleteOrganization = async (organizationId: number) => {
         return false;
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
         .from("Organizations")
         .delete()
         .eq("id", organizationId)
