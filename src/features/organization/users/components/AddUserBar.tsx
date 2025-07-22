@@ -1,4 +1,4 @@
-import { Box, Typography, Input, FormControl, InputLabel, Select, MenuItem, Button } from "@mui/material";
+import { Box, Typography, FormControl, InputLabel, Select, MenuItem, Button, TextField } from "@mui/material";
 import { useOrgContext, type ValidOrg } from "../../../../common/contexts/OrgContext";
 import { useState, type SetStateAction } from "react";
 import { addOrganizationUser } from "../api/UserGridApi";
@@ -39,7 +39,7 @@ export default function AddUserBar({ setRefresh }: AddUserBarProps) {
 
             <div style={{ display: 'flex', flexWrap: 'nowrap', gap: '2rem', alignItems: 'center' }}>
                 <Typography>Email: </Typography>
-                <Input value={email} onChange={(e) => setEmail(e.target.value)}
+                <TextField value={email} onChange={(e) => setEmail(e.target.value)}
                     placeholder='Email' />
             </div>
 

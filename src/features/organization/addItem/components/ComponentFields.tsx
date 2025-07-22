@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, Select, Box, Chip, MenuItem, Button, Input, Stack, Typography, styled } from "@mui/material";
+import { FormControl, InputLabel, Select, Box, Chip, MenuItem, Button, Stack, Typography, styled, TextField } from "@mui/material";
 import type { Action, UploadItem } from "./AddItem";
 import useGetCategoryList from "../../item/hooks/useGetCategoryList";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload"
@@ -59,13 +59,13 @@ export function ImageNameQuantityDescriptionField({ state, dispatch }: FieldProp
             <Stack sx={{ padding: '0 1rem 0 0', gap: '2rem', flexGrow: 1 }}>
                 <Box display="flex" gap="2rem">
                     <Typography p="0.25rem 0 0 0">Name:&emsp;&emsp;</Typography>
-                    <Input value={state.name} onChange={(e) => dispatch({ type: "SET_NAME", value: e.target.value })}
+                    <TextField value={state.name} onChange={(e) => dispatch({ type: "SET_NAME", value: e.target.value })}
                         placeholder="Name" sx={{ flexGrow: 1 }} />
                 </Box>
 
                 <Box display="flex" gap="2rem">
                     <Typography p="0.25rem 0 0 0">Quantity:&emsp;</Typography>
-                    <Input value={state.quantity} onChange={(e) => dispatch({
+                    <TextField value={state.quantity} onChange={(e) => dispatch({
                         type: "SET_QUANTITY",
                         value: convertValidStringToInt(e.target.value, state.quantity)
                     })}
@@ -74,7 +74,7 @@ export function ImageNameQuantityDescriptionField({ state, dispatch }: FieldProp
 
                 <Box display="flex" gap="2rem">
                     <Typography p="0.25rem 0 0 0">Description: </Typography>
-                    <Input value={state.description} onChange={(e) => dispatch({ type: "SET_DESCRIPTION", value: e.target.value })}
+                    <TextField value={state.description} onChange={(e) => dispatch({ type: "SET_DESCRIPTION", value: e.target.value })}
                         placeholder="Description" multiline rows={4} sx={{ flexGrow: 1 }} />
                 </Box>
             </Stack>

@@ -1,4 +1,4 @@
-import { Box, Typography, Input, Button, styled } from "@mui/material"
+import { Box, Typography, Button, styled, TextField } from "@mui/material"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAlertContext } from "../../../common/contexts/AlertContext"
@@ -41,8 +41,8 @@ export default function DashboardCreateOrg() {
 
             <div style={{ display: 'flex', padding: '1rem', boxShadow: '0 -1px 0 #000' }}>
                 <Typography variant='body1'>Organization Name</Typography>
-                <Input sx={{ marginLeft: '3rem', width: '50%', outline: '2px solid black', borderRadius: '0.25rem', padding: '0 1rem' }} disableUnderline
-                    value={name} onChange={(e) => setName(e.target.value)}></Input>
+                <TextField sx={{ marginLeft: '3rem', width: '50%', outline: '2px solid black', borderRadius: '0.25rem', padding: '0 1rem' }}
+                    value={name} onChange={(e) => setName(e.target.value)} />
             </div>
 
             <div style={{ display: 'flex', padding: '1rem', boxShadow: '0 -1px 0 #000' }}>

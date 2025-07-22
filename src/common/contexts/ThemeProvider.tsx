@@ -1,6 +1,7 @@
 import { ThemeProvider, createTheme } from "@mui/material";
 import type React from "react";
 import type { } from '@mui/x-data-grid/themeAugmentation';
+import type {} from '@mui/x-date-pickers/themeAugmentation';
 
 
 const customTheme = createTheme({
@@ -8,16 +9,16 @@ const customTheme = createTheme({
         dark: {
             palette: {
                 primary: { // Black
-                    light: 'rgb(63, 63, 62)',
-                    main: 'rgb(28, 28, 27)',
-                    dark: 'rgb(18, 18, 17)',
-                    contrastText: 'rgb(255, 255, 255)',
+                    light: 'rgba(255, 255, 255, 1)',
+                    main: 'rgba(214, 214, 214, 1)',
+                    dark: 'rgba(192, 192, 192, 1)186, 1)',
+                    contrastText: 'rgba(0, 0, 0, 1)',
                 },
 
                 secondary: { // Yellow
-                    light:'rgba(188, 183, 50, 1)',
-                    main:'rgba(160, 158, 48, 1)',
-                    dark:'rgba(78, 69, 20, 1)',
+                    light: 'rgba(188, 183, 50, 1)',
+                    main: 'rgba(160, 158, 48, 1)',
+                    dark: 'rgba(78, 69, 20, 1)',
                     contrastText: 'rgb(255, 255, 255)',
                 },
 
@@ -26,12 +27,12 @@ const customTheme = createTheme({
                     main: "#2990ff",
                     dark: "#0021c7",
                     contrastText: 'rgb(255, 255, 255)',
-                },  
+                },
 
                 error: { // Red
-                    light:'rgb(215, 21, 21)',
-                    main:'rgb(185, 8, 8)',
-                    dark:'rgb(88, 0, 0)',
+                    light: 'rgb(215, 21, 21)',
+                    main: 'rgb(185, 8, 8)',
+                    dark: 'rgb(88, 0, 0)',
                     contrastText: 'rgb(255, 255, 255)',
                 },
 
@@ -121,6 +122,19 @@ const customTheme = createTheme({
 
         },
 
+        MuiTextField: {
+            styleOverrides: {
+                root: {
+                    color: 'var(--text)',
+                    backgroundColor: 'transparent'
+                }
+            },
+            defaultProps: {
+                color: 'secondary',
+                variant: 'standard'
+            }
+        },
+
         MuiPaper: {
             styleOverrides: {
                 root: {
@@ -135,11 +149,17 @@ const customTheme = createTheme({
             }
         },
 
+        MuiSelect: {
+            defaultProps: {
+                color: 'secondary'
+            }
+        },
+
         MuiDataGrid: {
             styleOverrides: {
                 root: {
                     backgroundColor: 'var(--card)',
-                    outline:'1px solid var(--border)',
+                    outline: '1px solid var(--border)',
                     border: 0,
                     textAlign: 'center',
                     textWrap: 'wrap',
@@ -148,8 +168,13 @@ const customTheme = createTheme({
             },
             defaultProps: {
             }
-        }
+        },
 
+        MuiDateField: {
+            defaultProps: {
+                color: 'secondary'
+            }
+        }
     }
 
 })

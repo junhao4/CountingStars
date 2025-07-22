@@ -1,6 +1,6 @@
 import { type GridColDef, type GridEventListener, type GridRenderEditCellParams, type GridRowModel, type GridRowModesModel, type GridRowParams, DataGrid, GridActionsCellItem, GridRowEditStopReasons, GridRowModes } from "@mui/x-data-grid"
 import { useState } from "react"
-import { Typography, Input, Button, TextField } from "@mui/material"
+import { Typography, Button, TextField } from "@mui/material"
 import useGetCategories, { validateCategoryName } from "../hooks/useGetCategories"
 import Loading from "../../../../common/components/Loading"
 import DeleteIcon from "@mui/icons-material/Delete"
@@ -144,7 +144,7 @@ export default function Category() {
         <div>
             <div style={{ display: 'flex', justifyContent: 'right', alignItems: 'center', margin: '2rem 0', gap: '1rem' }}>
                 <Typography variant="body1">Name: </Typography>
-                <Input value={addCategoryName} placeholder='Name' onChange={(e) => setAddCategoryName(e.target.value)} />
+                <TextField value={addCategoryName} placeholder='Name' onChange={(e) => setAddCategoryName(e.target.value)} />
                 <Button color='success' variant='contained' onClick={handleAddCategory(addCategoryName)}>Add Category</Button>
             </div>
 

@@ -1,5 +1,4 @@
 import IconButton from "@mui/material/IconButton";
-import Input from "@mui/material/Input";
 import { useState, type SetStateAction } from "react";
 import { addNewFolder } from "../api/FolderApi";
 import { useOrgContext, type ValidOrg } from "../../../../../common/contexts/OrgContext";
@@ -7,6 +6,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useAlertContext } from "../../../../../common/contexts/AlertContext";
 import { validateAddFolderName } from "../functions/Folder";
 import type { InventoryRow } from "../hooks/useGetFolderContent";
+import TextField from "@mui/material/TextField";
 
 interface AddFolderRowProps {
     folderId: number | 'root', 
@@ -37,8 +37,8 @@ export default function AddFolderRow({ folderId, setData, setAddFolderRow }: Add
     return (
         <tr key={0}>
             <td>
-                <Input value={folderName} onChange={(e) => setFolderName(e.target.value)}
-                    endAdornment={<IconButton onClick={handleAddFolder}><AddCircleIcon /></IconButton>} />
+                <TextField value={folderName} onChange={(e) => setFolderName(e.target.value)}
+                    slotProps={{input: {endAdornment: <IconButton onClick={handleAddFolder}><AddCircleIcon /></IconButton>}}} />
             </td>
         </tr>)
 }

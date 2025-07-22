@@ -1,5 +1,4 @@
 import supabase from "../../../helper/supabaseClient";
-import type { AlertType } from "../../../common/contexts/AlertContext";
 import type { Notification } from "../../../helper/types";
 
 //Use this function to easier add notifications

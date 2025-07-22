@@ -6,7 +6,7 @@ import { useSessionContext, type ValidSession } from '../../../common/contexts/S
 import { useNavigate } from 'react-router-dom';
 import { useOrgContext, type ValidOrg } from '../../../common/contexts/OrgContext';
 import Loading from '../../../common/components/Loading';
-import { Box, Input } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import { useAlertContext } from '../../../common/contexts/AlertContext';
 import { type DashboardOrganizationFetch, fetchDashboard, joinOrg } from '../api/DashboardApi';
 import DashboardCard from './DashboardCard';
@@ -80,8 +80,8 @@ export default function Dashboard() {
                 Create Organization
             </Button>
 
-            <div style={{ display: 'flex', gap: '1rem', outline: '1px solid var(--text-muted)', backgroundColor: 'var(--foreground)'}}>
-                <Input placeholder='Organization ID' disableUnderline sx={{ width: '8rem', marginLeft: '1rem'}}
+            <div style={{ display: 'flex', gap: '1rem'}}>
+                <TextField placeholder='&ensp;Organization ID' sx={{ width: '8rem', marginLeft: '1rem'}}
                     value={joinId} onChange={(e) => setJoinId(e.target.value)} />
                 <Button color='info' onClick={onJoinOrgClick}
                     variant='outlined' sx={{ flexShrink: 0 }}>

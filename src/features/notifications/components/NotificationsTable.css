@@ -1,7 +1,6 @@
 .notifications-table {
     margin: 2rem 0;
-    justify-self: center;
-    min-height: auto;
+    width: 100%;
 
     border-collapse: collapse;
     border-radius: 1rem;
@@ -17,9 +16,8 @@
 }
 
 .notifications-table-row > td {
-    height: 32px;
-    width: fit-content;
-    padding: 0 32px;
+    height: 2rem;
+    padding: 0 2rem;
 }
 
 .notifications-table-body > .notifications-table-row > td {
