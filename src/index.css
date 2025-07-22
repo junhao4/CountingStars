@@ -121,7 +121,7 @@ html[data-theme='dark'] {
 
   --card: oklch(28.018% 0.0068 286.037);
 
-  --card-light : oklch(48.018% 0.0068 286.037);
+  --card-muted : oklch(48.018% 0.0068 286.037);
 
   --primary: oklch(90.118% 0.20031 105.701);
 
