@@ -108,7 +108,7 @@ const customTheme = createTheme({
             styleOverrides: {
                 root: {
                     minWidth: '0',
-                    transition: 'background-color 1250ms linear'
+                    transition: 'background-color 250ms linear'
                 },
             },
             defaultProps: {
@@ -127,7 +127,7 @@ const customTheme = createTheme({
                     padding: '1rem',
                     color: 'var(--card-foreground)',
                     backgroundColor: 'var(--card)',
-                    transition: 'background-color 1250ms linear'
+                    transition: 'background-color 250ms linear'
                 },
             },
             defaultProps: {

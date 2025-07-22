@@ -6,7 +6,7 @@
     max-width: 9rem;
     height: calc(100vh - 3rem);
     transition: 250ms;
-    background-color: var(--foreground);
+    background-color: var(--card);
     box-shadow: 2px 0 var(--border);
     z-index: 2;
 }
@@ -15,30 +15,6 @@
     width: 9rem;
     transition: 250ms;
     background-color: var(--card);
-}
-
-.nav-menu-item-container,
-.nav-menu-item-container.active {
-    display: flex;
-    align-items: center;
-    justify-self: center;
-    height: 3rem;
-    width: 3rem;
-    transition: 150ms;
-}
-
-.nav-menu-item-container.active {
-    width: 8.75rem;
-    transition: 300ms;
-}
-
-.nav-menu-item-container.selected {
-    background-color: var(--foreground);
-}
-
-.nav-menu-item-container:hover {
-    background-color: var(--foreground);
-    cursor: pointer;
 }
 
 .nav-menu-item,
@@ -68,10 +44,10 @@
 }
 
 .nav-menu-item.selected {
-    background-color: var(--primary);
+    background-color: var(--secondary);
 }
 
 .nav-menu-item:hover {
     cursor: pointer;
-    background-color: var(--secondary);
+    background-color: var(--secondary-muted);
 }
