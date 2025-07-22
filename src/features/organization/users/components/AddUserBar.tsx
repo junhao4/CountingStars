@@ -47,11 +47,11 @@ export default function AddUserBar({setRefresh}: AddUserBarProps) {
                         label="Role"
                         onChange={(e) => setRole(e.target.value)}
                     >
-                        <MenuItem disabled={hasPermission(userWithOrg, "users", "addUser", 
+                        <MenuItem disabled={!hasPermission(userWithOrg, "users", "addUser", 
                             {...userWithOrg, role: 'owner', countOfOwners: 0})} value={'owner'}>Owner</MenuItem>
-                        <MenuItem disabled={hasPermission(userWithOrg, "users", "addUser", 
+                        <MenuItem disabled={!hasPermission(userWithOrg, "users", "addUser", 
                             {...userWithOrg, role: 'admin', countOfOwners: 0})} value={'admin'}>Admin</MenuItem>
-                        <MenuItem disabled={hasPermission(userWithOrg, "users", "addUser", 
+                        <MenuItem disabled={!hasPermission(userWithOrg, "users", "addUser", 
                             {...userWithOrg, role: 'member', countOfOwners: 0})} value={'member'}>Member</MenuItem>
                     </Select>
                 </FormControl>

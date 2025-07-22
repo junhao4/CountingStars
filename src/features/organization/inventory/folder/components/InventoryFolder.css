@@ -1,7 +1,7 @@
 .inventory-table > thead > tr, 
 .inventory-table > tbody > tr,
 .inventory-table {
-    outline: 1px solid black;
+    outline: 1px solid var(--border);
     height: 3rem;
     width: 100%;
     border-collapse: collapse;
