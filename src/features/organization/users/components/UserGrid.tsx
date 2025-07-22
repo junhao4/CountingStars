@@ -206,7 +206,7 @@ export default function UserGrid({refresh}: UserGridProps) {
                         color="info"
                         onClick={handleDeleteUser}
                         disabled={!hasPermission<"users">(userWithOrganization,
-                            "users", "remove", { userId: row.id, organizationId: org.id, role: row.role, countOfOwners: 0 })}
+                            "users", "remove", { userId: row.id, organizationId: org.id, role: row.role, countOfOwners: countOfOwners })}
                     />,
                 ];
             },

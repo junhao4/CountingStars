@@ -1,6 +1,6 @@
 import { generateFileName } from "../../../../common/functions/File";
 import supabase from "../../../../helper/supabaseClient";
-import { addLog, LogTypes } from "../../log/api/LogApi";
+import { addLog } from "../../log/api/LogApi";
 import type { UploadItem } from "../components/AddItem";
 
 export const addItem = async (userId: string, item: UploadItem, organizationId: number) => {
@@ -49,7 +49,7 @@ export const addItem = async (userId: string, item: UploadItem, organizationId: 
     })
   ).then(async (b: boolean[]) => {
     if (b.reduce((prev, next) => prev && next, true)) {
-      await addLog(organizationId, LogTypes.INSERT_NEW, userId, data.id, {})
+      // await addLog(organizationId, LogTypes.INSERT_NEW, userId, data.id, {})
       return true
     }
     return false

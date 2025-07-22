@@ -1,6 +1,6 @@
 import supabase from "../../../../helper/supabaseClient";
 import type { Item, ItemWithCategories } from "../../../../helper/types";
-import { addLog, LogTypes } from "../../log/api/LogApi";
+import { addLog } from "../../log/api/LogApi";
 
 
 // ITEM INFO
@@ -172,7 +172,8 @@ export const deleteItemCategory = async (userId: string, organizationId: number,
         return null
     }
 
-    return await addLog(organizationId, LogTypes.UPDATE_CATEGORY, userId, itemId, {})
+    return true 
+    // await addLog(organizationId, LogTypes.UPDATE_CATEGORY, userId, itemId, {})
 }
 
 // ITEM CATEGORY
@@ -186,5 +187,6 @@ export const addItemCategory = async (userId: string, organizationId: number, it
         return null
     }
 
-    return await addLog(organizationId, LogTypes.UPDATE_CATEGORY, userId, itemId, {})
+    return true
+    // await addLog(organizationId, LogTypes.UPDATE_CATEGORY, userId, itemId, {})
 }
