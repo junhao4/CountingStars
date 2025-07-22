@@ -52,7 +52,12 @@ export default function useGetCategories() {
     }
 
     const handleAddCategory = (newName: string) => async () => {
-        handleGenerateAlert(validateCategoryName(newName, categories), createAlert)
+        const valid = validateCategoryName(newName, categories)
+        if (typeof valid === 'string') {
+            handleGenerateAlert(valid, createAlert)
+            return
+        }
+        
 
         const res = await addCategory(org.id, newName)
         if (typeof res === 'string') {

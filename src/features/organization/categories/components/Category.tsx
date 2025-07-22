@@ -1,17 +1,18 @@
 import { type GridColDef, type GridEventListener, type GridRenderEditCellParams, type GridRowModel, type GridRowModesModel, type GridRowParams, DataGrid, GridActionsCellItem, GridRowEditStopReasons, GridRowModes } from "@mui/x-data-grid"
 import { useState } from "react"
 import { Typography, Input, Button, TextField } from "@mui/material"
-import useGetCategories from "../hooks/useGetCategories"
+import useGetCategories, { validateCategoryName } from "../hooks/useGetCategories"
 import Loading from "../../../../common/components/Loading"
 import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 import SaveAltIcon from '@mui/icons-material/SaveAlt'
-import { updateCategoryName } from "../api/CategoriesApi"
+import { isCategoryNameTaken, updateCategoryName } from "../api/CategoriesApi"
 import { useAlertContext } from "../../../../common/contexts/AlertContext"
 import { hasPermission } from "../../../../helper/RolePermissions"
 import { useSessionContext, type ValidSession } from "../../../../common/contexts/SessionContext"
 import { useOrgContext, type ValidOrg } from "../../../../common/contexts/OrgContext"
+import { handleGenerateAlert } from "../../../../common/functions/ErrorAlerts"
 
 interface CategoryFetch {
     id: number,
@@ -22,7 +23,7 @@ interface CategoryFetch {
 export default function Category() {
     const { user } = useSessionContext() as ValidSession
     const { org } = useOrgContext() as ValidOrg
-    const userWithOrg = {userId: user.id, organizationId: org.id, role: org.role}
+    const userWithOrg = { userId: user.id, organizationId: org.id, role: org.role }
     const { createAlert } = useAlertContext()
     const { loading, categories, setCategories, handleAddCategory, handleDeleteCategory } = useGetCategories()
 
@@ -37,6 +38,13 @@ export default function Category() {
     }
     const onProcessRowUpdate = async (newRow: GridRowModel<CategoryFetch>, oldRow: GridRowModel<CategoryFetch>) => {
         if (newRow.name === oldRow.name) return oldRow
+        
+        const valid = validateCategoryName(newRow.name, categories)
+        if (typeof valid === 'string') {
+            handleGenerateAlert(valid, createAlert)
+            return oldRow
+        }
+
         const res = await updateCategoryName(newRow.id, newRow.name)
         if (!res) {
             createAlert("error", "Failed to update name")
@@ -54,7 +62,7 @@ export default function Category() {
             field: 'name', headerName: 'Name', type: 'string', width: 280, align: 'left', headerAlign: 'left', editable: true,
             renderEditCell: (param: GridRenderEditCellParams<CategoryFetch, string>) => {
                 return <TextField value={param.row.name} size="small"
-                    onChange={e => param.api.setEditCellValue({id: param.id, value: e.target.value, field: 'name'})}/>
+                    onChange={e => param.api.setEditCellValue({ id: param.id, value: e.target.value, field: 'name' })} />
             }
         },
         { field: 'quantity', headerName: 'Number of items in category', type: 'number', width: 280, align: 'left', headerAlign: 'left' },
@@ -139,7 +147,7 @@ export default function Category() {
                 <Input value={addCategoryName} placeholder='Name' onChange={(e) => setAddCategoryName(e.target.value)} />
                 <Button color='success' variant='contained' onClick={handleAddCategory(addCategoryName)}>Add Category</Button>
             </div>
-            
+
             <DataGrid
                 columns={columns}
                 rows={categories}
