@@ -31,7 +31,7 @@ export type LOGSTYPE =
 export type metadataType = {
     "addItem" :{
             metadata : {
-                
+                quantity : string
             }
     },
     "removeItem" :{
