@@ -9,16 +9,16 @@ const NotificationContext = createContext({
 
 export const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
     const [unread, setUnread] = useState(0)
-    const { session } = useSessionContext()
+    const { user } = useSessionContext()
 
     useEffect(() => {
         const get = async () => {
-            if (session?.user) {
-                setUnread((await getUnreadNumber(session.user.id))!)
+            if (user) {
+                setUnread((await getUnreadNumber(user.id))!)
             }
         }
         get()
-    })
+    }, [user])
 
 
     return (

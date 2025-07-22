@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from "@mui/material"
-import { useRef, useState, type ChangeEvent } from "react"
+import { useEffect, useRef, useState, type ChangeEvent } from "react"
 import { useThemeContext } from "../../../common/contexts/ThemeContext";
 
 export default function ThemeColorPicker() {
@@ -31,6 +31,11 @@ export default function ThemeColorPicker() {
             setSelectedBase(newColor)
         }, 250)
     }
+
+    useEffect(() => {
+        setSelectedAccent(customAccent)
+        setSelectedBase(customBase)
+    }, [customAccent, customBase])
 
     return (
         <div>

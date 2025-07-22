@@ -1,7 +1,7 @@
 import { useColorScheme, useMediaQuery } from "@mui/material";
 import { createContext, useContext, useEffect, useState } from "react";
 import { fetchUser } from "../api/UserApi";
-import { useSessionContext } from "./SessionContext";
+import { useSessionContext, type ValidSession } from "./SessionContext";
 import { calculateLightness, changeAccent, changeBase, changeTheme } from "../../features/theme/api/ThemeApi";
 
 export type ThemeMode = "light" | "dark" | "system" | "custom";
@@ -29,42 +29,42 @@ const ThemeContext = createContext<ThemeProps>({
 
 
 export const ThemeModeProvider = ({ children }: { children: React.ReactNode }) => {
+    const { user } = useSessionContext() as ValidSession
+
     const [themeMode, setThemeMode] = useState<ThemeMode>("system")
     const [theme, setTheme] = useState<Theme>("dark")
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-    const [customBase, setCustomBase] = useState("")
-    const [customAccent, setCustomAccent] = useState("")
-    const { session } = useSessionContext()
+    const [customBase, setCustomBase] = useState("#ffffff")
+    const [customAccent, setCustomAccent] = useState("#ffffff")
+    
     //MUI theme
     const { setMode } = useColorScheme()
     const setAndSaveThemeMode = (themeMode: string) => {
         setThemeMode(themeMode as ThemeMode)
-        changeTheme(session?.user.id!, themeMode)
+        changeTheme(user.id!, themeMode)
     }
     const setAndSaveBase = (base: string) => {
         setCustomBase(base)
-        changeBase(session?.user.id!, base)
+        changeBase(user.id!, base)
     }
     const setAndSaveAccent = (accent: string) => {
         setCustomAccent(accent)
-        changeAccent(session?.user.id!, accent)
+        changeAccent(user.id!, accent)
     }
 
 
     useEffect(() => {
         const getTheme = async () => {
-            const user = await fetchUser(session?.user.id!);
-            const userTheme = user!.theme
-            const base = user!.base
-            const accent = user!.accent
-            setThemeMode(userTheme as ThemeMode)
-            setCustomBase(base)
-            setCustomAccent(accent)
+            const res = await fetchUser(user.id!);
+            if (!res) {
+                return
+            }
+            setThemeMode(res.theme as ThemeMode)
+            setCustomBase(res!.base)
+            setCustomAccent(res!.accent)
         }
-        if (session) {
-            getTheme()
-        }
-    }, [session])
+        user && getTheme()
+    }, [user])
 
 
     useEffect(() => {
