@@ -9,21 +9,22 @@ function getSavedValue<T>(key: string, initialValue: T): T {
 export default function useLocalStorageSingle<T>(key: string, initialValue: T, fetchValue?: (() => Promise<T>)) {
     const isSet = localStorage.getItem(key)
 
+
+
     const [value, setValue] = useState<T>(() => {
         // Getting data from local storage
         return getSavedValue(key, initialValue)
     })
-
+    
     if (!isSet && fetchValue) {
-        new Promise(async () => {
-            const data = await fetchValue()
-            if (data) setValue(data)
-        })
+        fetchValue()
+            .then(data => (setValue(data), console.log(key)))
     }
 
     useEffect(() => {
         // Setting data in local storage
         if (value) localStorage.setItem(key, JSON.stringify(value))
+        else localStorage.removeItem(key)
     }, [value, key])
 
 

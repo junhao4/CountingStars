@@ -2,11 +2,30 @@ import { useEffect, useState } from "react"
 import { useAlertContext } from "../../../../common/contexts/AlertContext"
 import { deleteCategory, addCategory, fetchCategories } from "../api/CategoriesApi"
 import { useOrgContext, type ValidOrg } from "../../../../common/contexts/OrgContext"
+import { useSessionContext, type ValidSession } from "../../../../common/contexts/SessionContext"
+import { handleGenerateAlert } from "../../../../common/functions/ErrorAlerts"
 
 interface CategoryFetch {
     id: number,
     name: string,
     quantity: number,
+}
+
+const validateCategoryName = (name: string, categoryList: CategoryFetch[]) => {
+    if (name === "") {
+        return "emptyName"
+    } else if (categoryList.find(cat => cat.name === name)) {
+        return "duplicateName"
+    }
+    return true
+}
+
+const validateCategoryId = (id: number, categoryList: CategoryFetch[]) => {
+    if (categoryList.find(cat => cat.id === id)) {
+        return true
+    } else {
+        return "emptyName"
+    }
 }
 
 export default function useGetCategories() {
@@ -17,33 +36,33 @@ export default function useGetCategories() {
     const [loading, setLoading] = useState(true)
 
     const handleDeleteCategory = (categoryId: number) => async () => {
-        const res = await deleteCategory(categoryId)
-        if (res) {
-            setCategories(categories.filter(cat => cat.id !== categoryId))
-            createAlert("success", "Successfully deleted category!")
-        } else {
-            createAlert("error", "Failed to delete category")
+        if (validateCategoryId(categoryId, categories) === "emptyName") {
+            handleGenerateAlert("emptyName", createAlert)
+            return
         }
+
+        const res = await deleteCategory(categoryId)
+        if (typeof res === 'string') {
+            handleGenerateAlert(res, createAlert)
+            return
+        }
+
+        setCategories(categories.filter(cat => cat.id !== categoryId))
+        createAlert("success", "Successfully deleted category!")
     }
 
     const handleAddCategory = (newName: string) => async () => {
-        if (newName === '') {
-            createAlert('error', "Name cannot be empty!")
-            return
-        }
-        
-        if (categories.find(cat => cat.name === newName)) {
-            createAlert('warning', "Duplicate category name!")
+        handleGenerateAlert(validateCategoryName(newName, categories), createAlert)
+
+        const res = await addCategory(org.id, newName)
+        if (typeof res === 'string') {
+            handleGenerateAlert(res, createAlert)
             return
         }
 
-        const res = await addCategory(org.id, newName)
-        if (res) {
-            setCategories([...categories, ...res])
-            createAlert("success", "Successfully added category!")
-        } else {
-            createAlert("error", "Failed to add category")
-        }
+        setCategories([...categories, ...res])
+        createAlert("success", "Successfully added category!")
+
     }
 
     useEffect(() => {
@@ -52,5 +71,5 @@ export default function useGetCategories() {
             .then(() => setLoading(false))
     }, [])
 
-    return { loading, categories, handleAddCategory, handleDeleteCategory}
+    return { loading, categories, setCategories, handleAddCategory, handleDeleteCategory }
 }

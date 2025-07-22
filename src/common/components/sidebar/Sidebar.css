@@ -3,17 +3,18 @@
     display: flex;
     flex-direction: column;
     width: 3rem;
+    max-width: 9rem;
     height: calc(100vh - 3rem);
     transition: 250ms;
-    background-color: var(--sidebar);
+    background-color: var(--foreground);
     box-shadow: 2px 0 var(--border);
     z-index: 2;
 }
 
-.nav-menu:hover {
+.nav-menu.active {
     width: 9rem;
     transition: 250ms;
-    background-color: var(--sidebar);
+    background-color: var(--card);
 }
 
 .nav-menu-item-container,
@@ -32,11 +33,11 @@
 }
 
 .nav-menu-item-container.selected {
-    background-color: var(--sidebar-ring);
+    background-color: var(--foreground);
 }
 
 .nav-menu-item-container:hover {
-    background-color: var(--sidebar-foreground-hover);
+    background-color: var(--foreground);
     cursor: pointer;
 }
 
@@ -45,11 +46,13 @@
     align-self: center;
 
     display: flex;
-    background-color: var(--sidebar-foreground);
-    border-radius: 0.25rem;
-    width: 3rem;
-    margin: 0.25rem;
-    padding: 0 0.125rem;
+    background-color: var(--card);
+
+    height: 4rem;
+    /* Substract width by padding-left */
+    width: 2.6rem;
+    padding-left: 0.4rem;
+
     gap: 0.5rem;
     overflow-x: hidden;
 
@@ -59,6 +62,16 @@
 }
 
 .nav-menu-item.active {
-    width: 9rem;
+    /* Substract width by padding-left */
+    width: 8.6rem;
     transition: 250ms;
+}
+
+.nav-menu-item.selected {
+    background-color: var(--primary);
+}
+
+.nav-menu-item:hover {
+    cursor: pointer;
+    background-color: var(--secondary);
 }

@@ -46,7 +46,7 @@ export type Item = {
 
 export type ItemFolder = {
     id: number,
-    parentId: number,
+    parentId: number | null,
     name: string,
     description: string,
     lastModified: string,
@@ -64,7 +64,6 @@ export type ItemImage = {
 export type Category = {
     id: number,
     name: string,
-    createdAt: string,
 }
 
 export type Log = {

@@ -13,7 +13,7 @@ export const fetchProfileImage = async (userId: string) => {
         console.log(error.message)
         return null
     }
-    return data
+    return data.image_file
 };
 
 // Download profile image of user
@@ -43,40 +43,37 @@ export const updateProfileName = async (userId: string, newName: string) => {
 };
 
 // Updates profile image of user
-export const updateProfileImage = async (e: ChangeEvent<HTMLInputElement>,
-    userId: string, profileUrl: string, createAlert: (arg0: AlertType, arg1: string) => void) => {
-    if (!e.target.files || e.target.files.length === 0) {
-        createAlert('error', "You must select an image to upload.")
-        return profileUrl
-    }
+export const updateProfileImage = async (file: File, userId: string, oldProfileName: string) => {
 
-    const file = e.target.files[0];
     const fileExt = file.name.split(".").pop();
     const fileName = `${crypto.randomUUID()}.${fileExt}`;
-    // console.log("File", file.name, file.size, file.type);
+
     const { error } = await supabase.storage
         .from("profile-images")
         .upload(fileName, file);
-    if (error) {
-        createAlert('error', error.message);
-        return profileUrl
-    } else {
-        //remove old image from storage
-        if (profileUrl && profileUrl !== "Default_pfp.jpg") {
-            const { error } = await supabase.storage
-                .from("profile-images")
-                .remove([profileUrl]);
 
-            if (error) {
-                createAlert('error', "Failed to delete old image: " + error.message);
-                return profileUrl
-            }
-        }
-        await supabase
-            .from("Users")
-            .update({ image_file: fileName })
-            .eq("user_id", userId)
-            .then((res) => { if (res.error) createAlert('error', res.error.message) });
-        return fileName
+    if (error) {
+        console.log(error.message);
+        return oldProfileName
     }
+
+    //remove old image from storage
+    if (oldProfileName && oldProfileName !== "Default_pfp.jpg") {
+        const { error } = await supabase.storage
+            .from("profile-images")
+            .remove([oldProfileName]);
+
+        if (error) {
+            console.log(error.message);
+            return oldProfileName
+        }
+    }
+
+    await supabase
+        .from("Users")
+        .update({ image_file: fileName })
+        .eq("user_id", userId)
+        .then((res) => { if (res.error) console.log(res.error.message) });
+
+    return fileName
 };

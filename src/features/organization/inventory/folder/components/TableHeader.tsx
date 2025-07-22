@@ -1,23 +1,21 @@
 import { Tooltip, Popover, MenuList, MenuItem } from "@mui/material";
-import { useRef, useState, type SetStateAction } from "react";
-import type { InventoryRow } from "./InventoryFolder";
+import { useRef, useState } from "react";
 import type { InventorySort } from "../hooks/useSortingModel";
 import SwapVertIcon from "@mui/icons-material/SwapVert"
 import CheckIcon from '@mui/icons-material/Check';
 import useGetCategoryList from "../../../item/hooks/useGetCategoryList";
 
-interface InventoryHeadProps {
+interface TableHeaderProps {
     foldersOnTop: boolean,
     selectedCategories: number[],
     handleFilterCategory: (category: number) => void,
-    setData: React.Dispatch<SetStateAction<InventoryRow[]>>
-    handleSort: (arg0: React.Dispatch<SetStateAction<InventoryRow[]>>, arg1: InventorySort) => void
+    handleSort: (arg0: InventorySort) => void
     getSortTitle: (column: "name" | "quantity" | "category" | "lastModified") => string
     getSortIcon: (column: 'name' | 'quantity' | 'category' | 'lastModified') => React.ReactElement
 }
 
-export default function InventoryHead({ foldersOnTop, selectedCategories, handleFilterCategory,
-    getSortTitle, getSortIcon, handleSort, setData, }: InventoryHeadProps) {
+export default function TableHeader({ foldersOnTop, selectedCategories, handleFilterCategory,
+    getSortTitle, getSortIcon, handleSort }: TableHeaderProps) {
 
     const { categoryList } = useGetCategoryList()
 
@@ -30,14 +28,14 @@ export default function InventoryHead({ foldersOnTop, selectedCategories, handle
     return (
         <thead>
             <tr>
-                <Tooltip title={getSortTitle('name')} onClick={() => handleSort(setData, 'name')}>
+                <Tooltip title={getSortTitle('name')} onClick={() => handleSort('name')}>
                     <td width={'30%'}>
                         <p>Name&ensp;{getSortIcon('name')}
                         </p>
                     </td>
                 </Tooltip>
 
-                <Tooltip title={getSortTitle('quantity')} onClick={() => handleSort(setData, 'quantity')}>
+                <Tooltip title={getSortTitle('quantity')} onClick={() => handleSort('quantity')}>
                     <td width={'15%'}>
                         <p>Quantity&ensp;{getSortIcon('quantity')}</p>
                     </td>
@@ -57,7 +55,7 @@ export default function InventoryHead({ foldersOnTop, selectedCategories, handle
                     </MenuList>
                 </Popover>
 
-                <Tooltip title={getSortTitle('lastModified')} onClick={() => handleSort(setData, 'lastModified')}>
+                <Tooltip title={getSortTitle('lastModified')} onClick={() => handleSort('lastModified')}>
                     <td width={'20%'}>
                         <p>Last Modified&ensp;{getSortIcon('lastModified')}</p>
                     </td>
@@ -68,13 +66,14 @@ export default function InventoryHead({ foldersOnTop, selectedCategories, handle
                         <SwapVertIcon /></p>
                     </td>
                 </Tooltip>
+                
                 <Popover open={sortMenuOpen} anchorEl={sortRef.current} onClose={() => setSortMenuOpen(false)}
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
                     <MenuList disablePadding>
-                        <MenuItem onClick={() => handleSort(setData, 'foldersOnTop')}>Sort folders on top&ensp;
+                        <MenuItem onClick={() => handleSort('foldersOnTop')}>Sort folders on top&ensp;
                             {foldersOnTop && <CheckIcon />}
                         </MenuItem>
-                        <MenuItem onClick={() => handleSort(setData, 'foldersMix')}>Mix folders with items&ensp;
+                        <MenuItem onClick={() => handleSort('foldersMix')}>Mix folders with items&ensp;
                             {!foldersOnTop && <CheckIcon />}
                         </MenuItem>
                     </MenuList>

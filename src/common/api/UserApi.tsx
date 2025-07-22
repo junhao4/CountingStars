@@ -1,5 +1,4 @@
 import supabase from "../../helper/supabaseClient"
-import type { AlertType } from "../contexts/AlertContext"
     
 
 export const fetchUser = async (userId: string) => {
@@ -16,7 +15,7 @@ export const fetchUser = async (userId: string) => {
     return data
 }
 
-export const fetchProfileImage = async (userId: string, createAlert: (arg0: AlertType, arg1: string) => void) => {
+export const fetchProfileImage = async (userId: string) => {
     console.log("Fetching user profile URL")
     const { data, error } = await supabase
         .from("Users")
@@ -24,7 +23,7 @@ export const fetchProfileImage = async (userId: string, createAlert: (arg0: Aler
         .eq("user_id", userId)
         .single()
     if (error) {
-        createAlert('error', error.message)
+        console.log(error.message)
         return null
     } else {
         return data.image_file

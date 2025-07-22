@@ -15,7 +15,7 @@ export default function ItemRow({item}: {item: ItemWithCategories}) {
         <tr draggable className={`${over && "over"}`}
             onDragEnter={(e) => setOver(true)} onDragLeave={(e) => setOver(false)}
             onDragStart={(e) => e.dataTransfer.setData("id", 'item,' + item.id)}
-            // onDragOver={e => e.preventDefault()}
+            onDragOver={() => setOver(true)}
             onDoubleClick={() => navigate('../item/' + item.id, { relative: 'path' })}>
             <td><EditIcon />&ensp;{item.name}</td>
             <td>{item.quantity}</td>

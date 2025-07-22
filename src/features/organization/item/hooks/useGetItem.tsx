@@ -31,11 +31,11 @@ export default function useGetItem(itemId: number) {
         const oldCats = item!.categories.filter(cat => !newItem.categories.map(cat => cat.id).includes(cat.id))
 
         const addSuccess = await Promise.all(newCats.map(async cat => {
-            return await addItemCategory(user.id, org.id, item!.id, cat.id)
+            return await addItemCategory(user.id, org.id, item!.id, item!.name, cat.id, cat.name)
         })).then(res => res.reduce((prev, next) => prev && next, true))
 
         const deleteSuccess = await Promise.all(oldCats.map(async cat => {
-            return await deleteItemCategory(user.id, org.id, item!.id, cat.id)
+            return await deleteItemCategory(user.id, org.id, item!.id, item!.name, cat.id, cat.name)
         })).then(res => res.reduce((prev, next) => prev && next, true))
 
         const itemSuccess = await updateItem(newItem)

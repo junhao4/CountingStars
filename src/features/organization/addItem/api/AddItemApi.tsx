@@ -1,6 +1,6 @@
 import { generateFileName } from "../../../../common/functions/File";
 import supabase from "../../../../helper/supabaseClient";
-import { addLog, LogTypes } from "../../log/api/LogApi";
+import { addLog } from "../../log/api/LogApi";
 import type { UploadItem } from "../components/AddItem";
 
 export const addItem = async (userId: string, item: UploadItem, organizationId: number) => {
@@ -36,9 +36,22 @@ export const addItem = async (userId: string, item: UploadItem, organizationId: 
   // Add to Item Categories table
   const res = await Promise.all(
     item.categories.map(async (value) => {
-      return supabase
+        return await addItemCategory(data.id, value)
+    })
+  ).then(async (b: boolean[]) => {
+    if (b.reduce((prev, next) => prev && next, true)) {
+      await addLog(organizationId, "addItem", userId, data.id, {})
+      return true
+    }
+    return false
+  })
+  return res
+};
+
+const addItemCategory = async (itemId: number, categoryId: number) => {
+  return await supabase
           .from("items_categories")
-          .insert({ item_id: data.id, category_id: value })
+          .insert({ item_id: itemId, category_id: categoryId })
           .then((res) => {
             if (res.error) {
               console.log(res.error.message);
@@ -46,13 +59,4 @@ export const addItem = async (userId: string, item: UploadItem, organizationId: 
             }
             return true
           })
-    })
-  ).then(async (b: boolean[]) => {
-    if (b.reduce((prev, next) => prev && next, true)) {
-      await addLog(organizationId, LogTypes.INSERT_NEW, userId, data.id, {})
-      return true
-    }
-    return false
-  })
-  return res
-};
+}

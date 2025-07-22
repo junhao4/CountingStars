@@ -56,6 +56,18 @@ export const getNotification: (userId: string) => Promise<Notification[]> = asyn
 
 };
 
+export const getUnreadNumber = async (userId: string) => {
+      const {count, error} = await supabase
+        .from("notifications")
+        .select("*", {count : "exact" ,head : true})
+        .eq("receiver", userId)
+        .eq("status", true)
+        if (error) {
+            console.log(error)
+        }
+        return count
+}
+
 //Deletes the notification 
 export const deleteNotification = async (
     id: number,

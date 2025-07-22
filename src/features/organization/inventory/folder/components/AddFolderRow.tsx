@@ -4,16 +4,22 @@ import { useState, type SetStateAction } from "react";
 import { addNewFolder } from "../api/FolderApi";
 import { useOrgContext, type ValidOrg } from "../../../../../common/contexts/OrgContext";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import type { InventoryRow } from "./InventoryFolder";
 import { useAlertContext } from "../../../../../common/contexts/AlertContext";
 import { validateAddFolderName } from "../functions/Folder";
+import type { InventoryRow } from "../hooks/useGetFolderContent";
 
-export default function AddFolderRow({folderId, setData, setAddFolderRow}: 
-    {folderId: number | 'root', setData: React.Dispatch<SetStateAction<InventoryRow[]>>, setAddFolderRow: React.Dispatch<SetStateAction<boolean>>}) {
+interface AddFolderRowProps {
+    folderId: number | 'root', 
+    setData: React.Dispatch<SetStateAction<InventoryRow[]>>, 
+    setAddFolderRow: React.Dispatch<SetStateAction<boolean>>
+}
+
+export default function AddFolderRow({ folderId, setData, setAddFolderRow }: AddFolderRowProps) {
     const { org } = useOrgContext() as ValidOrg
     const { createAlert } = useAlertContext()
 
     const [folderName, setFolderName] = useState("")
+    
     const handleAddFolder = async () => {
         const res = validateAddFolderName(folderName)
         if (res.error) {
