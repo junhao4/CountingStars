@@ -1,12 +1,10 @@
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { ThemeSettingsBox } from "../features/theme/components/ThemeSettingsBox";
-import { useEffect, useState } from "react";
-import { useThemeContext } from "../common/contexts/ThemeContext";
 
 export default function ThemePage() {
-    const testing =
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Test.svg/2560px-Test.svg.png";
+    // const testing =
+    //     "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Test.svg/2560px-Test.svg.png";
 
     const chartData = [
         { x: new Date("2024-07-01"), y: 10 },

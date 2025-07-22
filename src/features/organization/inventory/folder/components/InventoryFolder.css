@@ -26,22 +26,37 @@
     align-items: center;
 }
 
+.inventory-divider {
+    grid-area: inventory-divider;
+    border-color: var(--border); 
+    padding-top: 0.5rem;
+}
+
+.inventory-buttons {
+    grid-area: inventory-buttons;
+    display: flex;
+    padding-top: 0.5rem;
+    gap: 1rem;
+}
 
 .inventory-container {
-    outline: 1px solid black;
+    outline: 1px solid var(--border);
+    border-radius: 0.5rem;
     margin: 2rem;
     padding: 1rem;
     width: 60vw;
     height: auto;
     gap: 0.5rem;
-    background-color: var(--foreground);
+    background-color: var(--card);
 
     display: grid;
-    grid-template-rows: auto auto;
+    /* grid-template-rows: 1fr 9fr 0.25fr 0.5fr; */
     grid-template-columns: 7fr 3fr;
     grid-template-areas:
         "inventory-breadcrumb inventory-search"
-        "inventory-body inventory-body";
+        "inventory-body inventory-body"
+        "inventory-divider inventory-divider"
+        "inventory-buttons inventory-buttons"
 }
 
 .inventory-container> nav.inventory-breadcrumb {

@@ -7,6 +7,7 @@ import useFilterModel from "../hooks/useFilterModel"
 import type { InventoryRow } from "../hooks/useGetFolderContent"
 import TableBody from "./TableBody"
 import './InventoryFolder.css'
+import InfoTip from "../../../../../common/components/InfoTip"
 
 export default function InventoryFolder({ data, setData, folderId }:
     { data: InventoryRow[], setData: React.Dispatch<SetStateAction<InventoryRow[]>>, folderId: number | 'root' }) {
@@ -20,8 +21,12 @@ export default function InventoryFolder({ data, setData, folderId }:
 
     return (
         <>
-            <TextField size="small" className="inventory-search" 
-                onChange={e => handleFilterName(e.target.value)} placeholder="Search by name" />
+            <div className="inventory-search" style={{ display: 'flex', gap: '1rem' }} >
+                <TextField size="small"
+                    onChange={e => handleFilterName(e.target.value)} placeholder="Search by name" />
+
+                <InfoTip resource="inventory" />
+            </div>
 
             <div className="inventory-body">
                 <table className="inventory-table">
@@ -32,13 +37,16 @@ export default function InventoryFolder({ data, setData, folderId }:
                     <TableBody sortedData={sortedData} setData={setData} folderId={folderId}
                         setAddFolderRow={setAddFolderRow} addFolderRow={addFolderRow} />
                 </table>
+            </div>
 
-                <Divider sx={{ borderColor: 'var(--border)', margin: '1rem 0' }} variant="fullWidth" />
+            <Divider className="inventory-divider" />
 
+            <div className="inventory-buttons">
                 <Button color="secondary" onClick={() => { setAddFolderRow(prev => !prev) }} children={"Add Folder"} />
                 <Button color="secondary" onClick={() => { navigate('../add') }} children={"Add Item"} />
                 <Button color="secondary" onClick={() => { navigate('../categories') }} children={"Modify Categories"} />
             </div>
+
         </>
     )
 }

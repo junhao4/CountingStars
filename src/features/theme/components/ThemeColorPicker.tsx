@@ -5,10 +5,10 @@ import "./ThemeColorPicker.css"
 
 
 export default function ThemeColorPicker() {
-    const { setAndSaveAccent, setAndSaveBase } = useThemeContext()
+    const { customAccent, customBase, setAndSaveAccent, setAndSaveBase } = useThemeContext()
 
-    const [selectedAccent, setSelectedAccent] = useState("#ffffff")
-    const [selectedBase, setSelectedBase] = useState("#ffffff");
+    const [selectedAccent, setSelectedAccent] = useState(customAccent)
+    const [selectedBase, setSelectedBase] = useState(customBase);
 
     const accentRef = useRef<number>(0)
 

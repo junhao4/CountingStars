@@ -4,7 +4,10 @@ import { useState, type SetStateAction } from "react";
 import { addOrganizationUser } from "../api/UserGridApi";
 import { useSessionContext, type ValidSession } from "../../../../common/contexts/SessionContext";
 import { useAlertContext } from "../../../../common/contexts/AlertContext";
+
+import InfoTip from "../../../../common/components/InfoTip";
 import { hasPermission } from "../../../../helper/RolePermissions";
+
 
 interface AddUserBarProps {
     setRefresh: React.Dispatch<SetStateAction<boolean>>
@@ -13,7 +16,9 @@ interface AddUserBarProps {
 export default function AddUserBar({ setRefresh }: AddUserBarProps) {
     const { user } = useSessionContext() as ValidSession
     const { org } = useOrgContext() as ValidOrg
+
     const userWithOrg = { userId: user.id, organizationId: org.id, role: org.role }
+
     const { createAlert } = useAlertContext()
 
     const [email, setEmail] = useState<string>('')
@@ -29,13 +34,15 @@ export default function AddUserBar({ setRefresh }: AddUserBarProps) {
 
     return (
         <Box hidden={!(org.role === "owner" || org.role === "admin")}
-            sx={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'right', gap: '4rem', alignItems: 'center', p: '1rem' }}
+            sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'left', gap:'1rem', p: '1rem' }}
             bgcolor='transparent'>
+
             <div style={{ display: 'flex', flexWrap: 'nowrap', gap: '2rem', alignItems: 'center' }}>
                 <Typography>Email: </Typography>
                 <Input value={email} onChange={(e) => setEmail(e.target.value)}
                     placeholder='Email' />
             </div>
+
             <div style={{ display: 'flex', flexWrap: 'nowrap', gap: '2rem', alignItems: 'center' }}>
                 <Typography>Role: </Typography>
                 <FormControl size="small">
@@ -56,12 +63,16 @@ export default function AddUserBar({ setRefresh }: AddUserBarProps) {
                     </Select>
                 </FormControl>
             </div>
-            <Button variant="contained" color='secondary'
+
+            <Button variant="contained" color='secondary' sx={{marginRight: 'auto'}}
                 disabled={!hasPermission(userWithOrg, "users", "addUser",
                     { ...userWithOrg, role: 'member', countOfOwners: 0 })} value={'member'}
                 onClick={onAddOrganizationUser}>
                 Add user
             </Button>
+
+            <InfoTip resource="user" />
+
         </Box>
     )
 }
