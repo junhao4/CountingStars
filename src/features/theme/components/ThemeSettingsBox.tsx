@@ -5,6 +5,7 @@ import { useThemeContext } from "../../../common/contexts/ThemeContext";
 import LightImg from "../../../assets/CountingStarsLight.png";
 import DarkImg from "../../../assets/CountingStarsDark.png";
 import SystemImg from "../../../assets/CountingStarsSystem.png";
+import CustomImg from "../../../assets/CountingStarsCustom.png";
 
 export function ThemeSettingsBox() {
     const { themeMode, setAndSaveThemeMode } = useThemeContext();
@@ -84,7 +85,7 @@ export function ThemeSettingsBox() {
                     <Grid>
                         <ThemeRadio
                             text="Custom"
-                            img={SystemImg}
+                            img={CustomImg}
                             id={"custom"}
                             selected={selected}
                             setSelected={setSelected}
