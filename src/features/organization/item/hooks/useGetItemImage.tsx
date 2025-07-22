@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchItemImage, setDefaultItemImage, updateItemImage } from "../api/ItemApi";
 import type { ItemImage } from "../../../../helper/types";
 import { useAlertContext } from "../../../../common/contexts/AlertContext";

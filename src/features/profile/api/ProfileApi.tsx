@@ -1,5 +1,3 @@
-import type { ChangeEvent } from "react";
-import type { AlertType } from "../../../common/contexts/AlertContext";
 import supabase from "../../../helper/supabaseClient";
 
 // Fetches the profile image name of user
@@ -31,11 +29,10 @@ export const downloadProfileImage = async (profileUrl: string) => {
 
 // Updates profile name of user
 export const updateProfileName = async (userId: string, newName: string) => {
-    const { data, error } = await supabase
+    const { error } = await supabase
         .from("Users")
         .update({ name: newName })
         .eq("user_id", userId)
-        .select();
 
     if (error) {
         console.log("error", error.message);

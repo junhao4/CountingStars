@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { usePageTitleContext } from "../../common/contexts/PageTitleContext";
-import { Button, Input, TextField, Typography } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 import { useAlertContext } from "../../common/contexts/AlertContext";
 import { resetPasswordForEmail } from "../../features/authentication/api/AuthApi";
 

@@ -13,7 +13,7 @@ export default function ItemRow({item}: {item: ItemWithCategories}) {
     
     return (
         <tr draggable className={`${over && "over"}`}
-            onDragEnter={(e) => setOver(true)} onDragLeave={(e) => setOver(false)}
+            onDragEnter={() => setOver(true)} onDragLeave={() => setOver(false)}
             onDragStart={(e) => e.dataTransfer.setData("id", 'item,' + item.id)}
             onDragOver={() => setOver(true)}
             onDoubleClick={() => navigate('../item/' + item.id, { relative: 'path' })}>

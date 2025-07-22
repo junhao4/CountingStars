@@ -2,9 +2,14 @@ import { createContext, useContext, useEffect, useState } from "react"
 import { useSessionContext } from "./SessionContext"
 import { getUnreadNumber } from "../../features/notifications/api/NotificationsApi"
 
+interface NotificationProps {
+    unread: number,
+    setUnread: React.Dispatch<React.SetStateAction<number>>
+} 
 
-const NotificationContext = createContext({
-    unread: 0
+const NotificationContext = createContext<NotificationProps>({
+    unread: 0,
+    setUnread: () => {}
 });
 
 export const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
@@ -22,7 +27,7 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
 
 
     return (
-        <NotificationContext.Provider value={{ unread }}>
+        <NotificationContext.Provider value={{ unread, setUnread }}>
             {children}
         </NotificationContext.Provider>
     );
