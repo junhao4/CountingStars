@@ -15,9 +15,9 @@ const customTheme = createTheme({
                 },
 
                 secondary: { // Yellow
-                    light:'rgb(230, 225, 63)',
-                    main:'rgb(236, 224, 6)',
-                    dark:'rgb(255, 149, 0)',
+                    light:'rgba(188, 183, 50, 1)',
+                    main:'rgba(160, 158, 48, 1)',
+                    dark:'rgba(146, 128, 38, 1)',
                     contrastText: 'rgb(255, 255, 255)',
                 },
 
@@ -26,7 +26,7 @@ const customTheme = createTheme({
                     main: "#2990ff",
                     dark: "#0021c7",
                     contrastText: 'rgb(255, 255, 255)',
-                },
+                },  
 
                 error: { // Red
                     light:'rgb(215, 21, 21)',
