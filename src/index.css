@@ -227,11 +227,11 @@ html[data-theme='custom-light'] {
 
   --secondary-muted: oklch(from var(--secondary) calc(l - 0.1) c h);
 
-   --text: oklch(25% 0 0);
+   --text: oklch(15% 0 0);
 
-  --text-muted: oklch(65.444% 0 0);
+  --text-muted: oklch(35.444% 0 0);
 
-  --border: oklch(66.241% 0.00006 271.152);
+  --border: oklch(46.241% 0.00006 271.152);
 
 
 }

@@ -16,7 +16,7 @@ function ProfileInformationBox({ img, user, onUpdateImage }: ProfileInfoProps) {
     return (
         <>
             <Box sx={{
-                border: "1px solid var(--ring)", mx: "auto", p: 2, mt: 2, mb: 2,
+                border: "1px solid var(--border)", mx: "auto", p: 2, mt: 2, mb: 2,
                 display: "flex",
                 alignItems: "flex-start",
                 borderRadius: 2,
@@ -54,7 +54,7 @@ function ProfileInformationBox({ img, user, onUpdateImage }: ProfileInfoProps) {
                         <Button
                             component="label"
                             variant="outlined"
-                            sx={{ color: "var(--input)" }}
+                            sx={{ color: "var(--text)" }}
                             startIcon={<CloudUploadIcon />}
                             fullWidth
                         >

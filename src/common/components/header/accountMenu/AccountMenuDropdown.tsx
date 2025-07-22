@@ -107,7 +107,7 @@ export default function AccountMenuDropdown({
                                     size="small"
                                     sx={{
                                         "&.Mui-checked": {
-                                            color: "var(--text-muted)",
+                                            color: "var(--text)",
                                         },
                                     }}
                                 />
@@ -121,7 +121,7 @@ export default function AccountMenuDropdown({
                                     size="small"
                                     sx={{
                                         "&.Mui-checked": {
-                                            color: "var(--text-muted)",
+                                            color: "var(--text)",
                                         },
                                     }}
                                 />
@@ -135,7 +135,7 @@ export default function AccountMenuDropdown({
                                     size="small"
                                     sx={{
                                         "&.Mui-checked": {
-                                            color: "var(--text-muted)",
+                                            color: "var(--text)",
                                         },
                                     }}
                                 />
@@ -149,7 +149,7 @@ export default function AccountMenuDropdown({
                                     size="small"
                                     sx={{
                                         "&.Mui-checked": {
-                                            color: "var(--text-muted)",
+                                            color: "var(--text)",
                                         },
                                     }}
                                 />

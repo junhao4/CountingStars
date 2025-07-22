@@ -20,7 +20,7 @@ function ProfileUsernameBox() {
   return (
     <Box
       sx={{
-        border: "1px solid var(--ring)",
+        border: "1px solid var(--border)",
         borderRadius: 2,
         p: 3,
         mx: "auto",
@@ -43,12 +43,12 @@ function ProfileUsernameBox() {
 
           sx={{
             color: 'var(--input)', ".MuiInputBase-root": {
-              borderColor: "var(--input)", color: "var(--input)"
+              borderColor: "var(--text)", color: "var(--text)"
             }, ".Mui-focused fieldset": {
-              borderColor: "var(--input)", color: "var(--input)"
+              borderColor: "var(--text)", color: "var(--text)"
             }, '& .MuiOutlinedInput-root': {
               '& fieldset': {
-                borderColor: 'var(--input)',
+                borderColor: 'var(--text)',
               }
             }
 

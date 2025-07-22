@@ -1,4 +1,4 @@
-import { Button, Container } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 
 import { ThemeSettingsBox } from "../features/theme/components/ThemeSettingsBox";
 import { useEffect, useState } from "react";
@@ -8,16 +8,7 @@ export default function ThemePage() {
     const testing =
         "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Test.svg/2560px-Test.svg.png";
 
-    const [selectedBase, setSelectedBase] = useState("#ffffff");
-    const [selectedAccent, setSelectedAccent] = useState("#ffffff");
-    const { setAndSaveAccent, setAndSaveBase, customAccent, customBase } = useThemeContext();
-    const [refresh, setRefresh] = useState(true)
-
-    useEffect(() => {
-        setSelectedBase(customBase)
-        setSelectedAccent(customAccent)
-    }, [customAccent, customBase])
-
+   
 
 
     return (
@@ -25,34 +16,7 @@ export default function ThemePage() {
             <Container sx={{ mt: 4 }}>
                 <ThemeSettingsBox></ThemeSettingsBox>
 
-                <input
-                    type="color"
-                    value={selectedBase}
-                    onChange={(e) => setSelectedBase(e.target.value)}
-                />
-                <Button
-                    variant="contained"
-                    sx={{ ml: 2 }}
-                    onClick={() => {
-                        setAndSaveBase(selectedBase);
-                    }}
-                >
-                    Confirm Color
-                </Button>
-                 <input
-                    type="color"
-                    value={selectedAccent}
-                    onChange={(e) => setSelectedAccent(e.target.value)}
-                />
-                <Button
-                    variant="contained"
-                    sx={{ ml: 2 }}
-                    onClick={() => {
-                        setAndSaveAccent(selectedAccent);
-                    }}
-                >
-                    Confirm Accent
-                </Button>
+               
             </Container>
         </>
     );
