@@ -21,7 +21,7 @@ export type NoSession = {
 
 type SessionContextProps = (ValidSession | NoSession)
 
-const SessionContext = createContext<SessionContextProps>({
+export const SessionContext = createContext<SessionContextProps>({
     session: null,
     loading: true,
     user: null,

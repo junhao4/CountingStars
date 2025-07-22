@@ -16,7 +16,7 @@
 .inventory-table > tbody > tr:hover,
 .inventory-table > thead > tr > td:hover,
 .inventory-table > tbody > tr.over {
-    background-color: var(--primary);
+    background-color: var(--card);
     cursor: pointer;
 }
 

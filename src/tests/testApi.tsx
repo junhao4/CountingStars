@@ -3,12 +3,15 @@ import supabase from "../helper/supabaseClient"
 import type { PostgrestResponseFailure, PostgrestResponseSuccess } from "@supabase/postgrest-js"
 import type { Session } from "@supabase/supabase-js"
 import * as SessionContext from "../common/contexts/SessionContext"
-
-import * as AuthController from "../features/authentication/api/AuthApi"
+import * as AuthApi from "../features/authentication/api/AuthApi"
+import * as UserApi from "../common/api/UserApi"
+import * as NotificationsApi from "../features/notifications/api/NotificationsApi"
 import type { User } from "../helper/types"
 
 export const dummyUUID = "7a4af5c3-6640-45c3-94a7-d34bd6fbde02"
-export const dummyUser = { id: dummyUUID, name: "Test", imageFile: "", email: "", createdAt: "" }
+export const dummyUser = { id: dummyUUID, name: "Test", theme: "", imageFile: "", email: "", createdAt: "",
+    accent: "", base: "", created_at:"", profile_image: "", image_file:"", user_id: ""
+ }
 export const dummySession: Session = {
     access_token: "",
     refresh_token: "",
@@ -63,5 +66,7 @@ export const simulateMockSession = () => {
         return <>{children}</>
     })
 
-    vi.spyOn(AuthController, "isFirstTimeUser").mockResolvedValue(false)
+    vi.spyOn(UserApi, "fetchUser").mockResolvedValue(dummyUser)
+
+    vi.spyOn(NotificationsApi, "getNotification").mockResolvedValue([])
 }
