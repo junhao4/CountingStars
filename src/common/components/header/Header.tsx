@@ -12,7 +12,7 @@ function Header() {
     const location = useLocation()
     const navigate = useNavigate()
 
-    const breadcrumbPathnames: string[] = location.pathname.split('/')
+    const breadcrumbPathnames: string[] = location.pathname.split('/').filter(path => path !== 'root' && isNaN(parseInt(path)))
     const breadcrumbRoutenames: string[] = [(breadcrumbPathnames.length > 0 ? breadcrumbPathnames[0] : "")]
 
     for (var i = 1; i < breadcrumbPathnames.length; i++) {
@@ -27,16 +27,17 @@ function Header() {
                     <Typography variant='h5'>Counting Stars</Typography>
 
                 </div>
-                <Breadcrumbs sx={{ fontSize: '0.5rem' }}>
+                <Breadcrumbs className="header-breadcrumbs" sx={{ fontSize: '0.5rem' }}>
                     {breadcrumbPathnames.map((path, index) => {
                         return (
-                            <Link to={breadcrumbRoutenames[index]}
-                                className="header-breadcrumbs">{path}</Link>
+                            <Link to={breadcrumbRoutenames[index]}>{path}</Link>
                         )
                     })}
                 </Breadcrumbs>
             </div>
+
             <h2 id='header-title' className="header-title">{usePageTitleContext().title}</h2>
+
             <div className="header-user-details">
                 {session ? (
                     <div style={{
@@ -51,12 +52,12 @@ function Header() {
                 ) : (
                     <div style={{ display: "flex", justifyContent: 'space-evenly', height: '3.5rem', alignItems:'center' }} >
                         <Link to="/login" data-testid="header-login-link"
-                            style={{ color: "var(--foreground-text)", fontSize: "1rem" }}>
+                            style={{ color: "var(---text)", fontSize: "1rem" }}>
                             Login
                         </Link>
 
                         <Link to="/register" data-testid="header-register-link"
-                            style={{ color: "var(--foreground-text)", fontSize: "1rem" }}>
+                            style={{ color: "var(---text)", fontSize: "1rem" }}>
                             Register
                         </Link>
                     </div>

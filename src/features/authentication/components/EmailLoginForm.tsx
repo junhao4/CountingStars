@@ -1,19 +1,18 @@
-import { Box, Input, Button, Stack } from "@mui/material";
+import { Box, Button, Stack, TextField } from "@mui/material";
 import { loginWithEmail } from "../api/AuthApi";
 import { useAlertContext } from "../../../common/contexts/AlertContext";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
 export default function EmailLoginForm() {
     const { createAlert } = useAlertContext()
-    const navigate = useNavigate()
     
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    const onHandleLogin = async () => {
-        const data = await loginWithEmail({ email, password, createAlert })
+    const handleLogin = async () => {
+        await loginWithEmail({ email, password, createAlert })
     }
 
     return (
@@ -22,17 +21,35 @@ export default function EmailLoginForm() {
         }}>
             <Box display='flex' gap='2rem' alignItems='center' margin='2rem 2rem 0 2rem'>
                 <label htmlFor='login-email-input'>Email: </label>
-                <Input id="login-email-input" value={email} onChange={(e) => setEmail(e.target.value)}
-                    placeholder='Email' autoComplete='email' />
+
+                     <TextField
+          id="login-email-input"
+          label="Email"
+          type="text"
+          autoComplete="on"
+          variant="standard"
+          color="secondary"
+          onChange={(e) => setEmail(e.target.value)}
+
+        />
             </Box>
 
             <Box display='flex' gap='2rem' alignItems='center' margin='2rem'>
                 <label htmlFor='login-password-input'>Password:</label>
-                <Input id="login-password-input" value={password} onChange={(e) => setPassword(e.target.value)} type='password'
-                    placeholder='Password' autoComplete="new-password" sx={{ marginRight: '1.75rem' }} />
+               
+                    <TextField
+          id="login-password-input"
+          label="Password"
+          type="password"
+          autoComplete="new-password"
+          variant="standard"
+          color="secondary"
+          onChange={(e) => setPassword(e.target.value)}
+          sx={{ marginRight: '1.75rem' }}
+        />
             </Box>
 
-            <Button onClick={onHandleLogin} sx={{ justifySelf: 'center' }}>Login</Button>
+            <Button onClick={handleLogin} sx={{ justifySelf: 'center',color: 'var(--secondary)', borderColor: 'var(--secondary)'}}>Login</Button>
 
             <Link to='/forgot' style={{
                 color: 'grey', justifySelf: 'right', textAlign: 'right',

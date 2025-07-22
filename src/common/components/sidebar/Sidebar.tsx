@@ -1,6 +1,5 @@
 import "./Sidebar.css";
-import React, { useState } from "react";
-import { Divider, Typography } from "@mui/material";
+import { useState } from "react";
 import HomeIcon from "@mui/icons-material/Home";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import GroupIcon from "@mui/icons-material/Group";
@@ -8,29 +7,8 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import HistoryIcon from '@mui/icons-material/History';
 import { useLocation, useNavigate } from "react-router-dom";
+import SidebarItem from "./SidebarItem";
 
-interface NavBarItemProps {
-  open: boolean;
-  selected: boolean;
-  children: React.ReactNode;
-  onClick: React.MouseEventHandler<HTMLDivElement>;
-}
-
-const NavBarItem = ({ open, selected, children, onClick }: NavBarItemProps) => {
-  return (
-    <div
-      className={
-        (open ? "nav-menu-item-container active" : "nav-menu-item-container") +
-        (selected ? " selected" : "")
-      }
-      onClick={onClick}
-    >
-      <div className={open ? "nav-menu-item active" : "nav-menu-item"}>
-        {children}
-      </div>
-    </div>
-  );
-};
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -39,92 +17,40 @@ export default function Sidebar() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <div style={{ width: "4rem" }} />
       <nav
-        className="nav-menu"
+        className={"nav-menu" + (open ? " active" : "") }
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
       >
-        {location.pathname.startsWith("/dashboard/organization") ? (
-          <>
-          <NavBarItem
-              open={open}
-              selected={location.pathname === "/dashboard"}
-              onClick={() => navigate("/dashboard")}
-            >
-              <ViewListIcon fontSize="large" />
-              <Typography>Dashboard</Typography>
-            </NavBarItem>
-            <div style={{
-                height: "2px",
-                width: "100%",
-                backgroundColor: "var(--border)",
-                alignSelf: "center",
-                margin: "6px"
-              }} />
-            <NavBarItem
-              open={open}
-              selected={location.pathname === "/dashboard/organization"}
-              onClick={() => navigate("/dashboard/organization")}
-            >
-              <HomeIcon fontSize="large" />
-              <Typography>Home</Typography>
-            </NavBarItem>
+        {location.pathname.startsWith("/dashboard/organization")
+          ? (<>
+            <SidebarItem open={open} selected={location.pathname === "/dashboard"} name="Dashboard"
+              navigate={() => navigate("/dashboard")} Icon={ViewListIcon} />
 
-            <NavBarItem
-              open={open}
-              selected={location.pathname === "/dashboard/organization/users"}
-              onClick={() => navigate("/dashboard/organization/users")}
-            >
-              <GroupIcon fontSize="large" />
-              <Typography>Users</Typography>
-            </NavBarItem>
+            <SidebarItem open={open} selected={location.pathname === "/dashboard/organization"} name="Organization"
+              navigate={() => navigate("/dashboard/organization")} Icon={HomeIcon} />
 
-            <NavBarItem
-              open={open}
-              selected={
-                location.pathname === "/dashboard/organization/inventory"
-              }
-              onClick={() => navigate("/dashboard/organization/inventory")}
-            >
-              <InventoryIcon fontSize="large" />
-              <Typography>Inventory</Typography>
-            </NavBarItem>
+            <SidebarItem open={open} selected={location.pathname === "/dashboard/organization/users"} name="Users"
+              navigate={() => navigate("/dashboard/organization/users")} Icon={GroupIcon} />
 
-            <NavBarItem
-              open={open}
-              selected={
-                location.pathname === "/dashboard/organization/log"
-              }
-              onClick={() => navigate("/dashboard/organization/log")}
-            >
-              <HistoryIcon fontSize="large" />
-              <Typography>Logs</Typography>
-            </NavBarItem>
+            <SidebarItem open={open} selected={location.pathname.startsWith("/dashboard/organization/inventory")} name="Inventory"
+              navigate={() => navigate("/dashboard/organization/inventory")} Icon={InventoryIcon} />
 
-            <NavBarItem
-              open={open}
-              selected={
-                location.pathname === "/dashboard/organization/settings"
-              }
-              onClick={() => navigate("/dashboard/organization/settings")}
-            >
-              <SettingsIcon fontSize="large" />
-              <Typography>Settings</Typography>
-            </NavBarItem>
+            <SidebarItem open={open} selected={location.pathname === "/dashboard/organization/log"} name="Logs"
+              navigate={() => navigate("/dashboard/organization/log")} Icon={HistoryIcon} />
+
+            <SidebarItem open={open} selected={location.pathname === "/dashboard/organization/settings"} name="Settings"
+              navigate={() => navigate("/dashboard/organization/settings")} Icon={SettingsIcon} />
           </>
-        ) : (
-          <>
-            <NavBarItem open={open} onClick={() => navigate("/")} selected={location.pathname === "/"}>
-              <HomeIcon fontSize="large" />
-              <Typography>Home</Typography>
-            </NavBarItem>
-            <NavBarItem open={open} onClick={() => navigate("/dashboard")} selected={location.pathname === "/dashboard"}>
-              <ViewListIcon fontSize="large" />
-              <Typography>Dashboard</Typography>
-            </NavBarItem>
-          </>
-        )}
+          ) : (
+            <>
+              <SidebarItem open={open} selected={location.pathname === "/"} name="Home"
+                navigate={() => navigate("/")} Icon={HomeIcon} />
+
+              <SidebarItem open={open} selected={location.pathname === "/dashboard"} name="Dashboard"
+                navigate={() => navigate("/dashboard")} Icon={ViewListIcon} />
+            </>
+          )}
       </nav>
     </>
   );

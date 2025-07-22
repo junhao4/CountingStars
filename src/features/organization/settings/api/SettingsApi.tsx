@@ -79,15 +79,17 @@ export const updateOrganizationImage = async (organizationId: number, files: Fil
 
     const file = files[0];
     // Check that image size is < 2MB, type is correct, and that organization name is not empty
+    if (!(file.type === "image/jpeg" || file.type === "image/png")) {
+        alert("File type not accepted!");
+        return;
+    }
+    
     if (file.size > 2097152) {
         alert("Image size must be < 2MB!");
         return;
     }
 
-    if (!(file.type === "image/jpeg" || file.type === "image/png")) {
-        alert("File type not accepted!");
-        return;
-    }
+    
 
     const fileExt = file.name.split(".").pop();
     const fileName = `${crypto.randomUUID()}.${fileExt}`;

@@ -1,6 +1,6 @@
 import type { Json } from "../../../../helper/supabase";
 import supabase from "../../../../helper/supabaseClient";
-import type { Organization, UserOrganization } from "../../../../helper/types";
+import type { Organization } from "../../../../helper/types";
 
 export interface LogFetch {
     id: number;

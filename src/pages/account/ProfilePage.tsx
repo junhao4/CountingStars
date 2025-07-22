@@ -3,6 +3,7 @@ import { usePageTitleContext } from "../../common/contexts/PageTitleContext";
 import { useSessionContext } from "../../common/contexts/SessionContext";
 import Profile from "../../features/profile/components/Profile";
 
+
 export default function ProfilePage() {
     const { session, user } = useSessionContext()
     if (session === null || user === null) {
@@ -17,6 +18,10 @@ export default function ProfilePage() {
     }, []);
 
     return (
+        <>        
         <Profile />
+      
+        </>
+
     );
 }

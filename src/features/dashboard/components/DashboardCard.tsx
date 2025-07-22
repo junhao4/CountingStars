@@ -19,7 +19,8 @@ export default function DashboardCard({org, index, onEnterOrgClick}: OrgCardProp
                 <Typography variant='h6' sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{org.name}</Typography>
             </CardContent>
             <CardActions style={{ justifyContent: 'space-evenly' }}>
-                <Button variant='outlined' onClick={() => onEnterOrgClick(index)}>Enter</Button>
+                <Button sx={{color: 'var(--text)', borderColor: 'var(--text-muted)'}}
+                variant='outlined' onClick={() => onEnterOrgClick(index)}>Enter</Button>
             </CardActions>
         </Card>
     )

@@ -10,9 +10,9 @@ function LogRow({log, index} : {log : LogFetchS, index : number}) {
             sx={{
                 px: 2,
                 py: 1.5,
-                borderBottom: "1px solid var(--foreground-text)",
-                borderLeft:  "1px solid var(--foreground-text)",
-                borderRight:  "1px solid var(--foreground-text)",
+                borderBottom: "1px solid var(--text)",
+                borderLeft:  "1px solid var(--text)",
+                borderRight:  "1px solid var(--text)",
                 display: "grid",
                 gridTemplateColumns: "5% 15% 60% 20%",
                 alignItems: "center",

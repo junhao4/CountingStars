@@ -336,6 +336,8 @@ export type Database = {
       }
       Users: {
         Row: {
+          accent: string
+          base: string
           created_at: string
           email: string
           image_file: string | null
@@ -344,6 +346,8 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          accent?: string
+          base?: string
           created_at?: string
           email: string
           image_file?: string | null
@@ -352,6 +356,8 @@ export type Database = {
           user_id?: string
         }
         Update: {
+          accent?: string
+          base?: string
           created_at?: string
           email?: string
           image_file?: string | null

@@ -5,22 +5,31 @@ import { OrgProvider } from "./OrgContext";
 import { PageTitleProvider } from "./PageTitleContext";
 import { MessageProvider } from "./AlertContext";
 import ThemeUsage from "./ThemeProvider";
+import { ThemeModeProvider } from "./ThemeContext";
+import { ProfileProvider } from "./ProfileContext";
 
-
-export default function ContextProvider({ children }: { children: React.ReactNode }) {
+export default function ContextProvider({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
     return (
         <ThemeUsage>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <MessageProvider>
                     <SessionProvider>
-                        <OrgProvider>
-                            <PageTitleProvider>
-                                    {children}
-                            </PageTitleProvider>
-                        </OrgProvider>
+                        <ProfileProvider>
+                            <ThemeModeProvider>
+                                <OrgProvider>
+                                    <PageTitleProvider>
+                                        {children}
+                                    </PageTitleProvider>
+                                </OrgProvider>
+                            </ThemeModeProvider>
+                        </ProfileProvider>
                     </SessionProvider>
                 </MessageProvider>
             </LocalizationProvider>
         </ThemeUsage>
-    )
+    );
 }

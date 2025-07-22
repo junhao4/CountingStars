@@ -1,4 +1,3 @@
-import "./App.css";
 import AlertPopup from "./common/components/AlertPopup.tsx";
 import Header from "./common/components/header/Header.tsx";
 import Sidebar from "./common/components/sidebar/Sidebar.tsx";

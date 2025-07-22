@@ -15,9 +15,9 @@ const customTheme = createTheme({
                 },
 
                 secondary: { // Yellow
-                    light:'rgb(221, 215, 46)',
-                    main:'rgb(182, 145, 32)',
-                    dark:'rgb(188, 109, 19)',
+                    light:'rgba(255, 250, 114, 1)',
+                    main:'rgb(255, 242, 0)',
+                    dark:'rgb(255, 149, 0)',
                     contrastText: 'rgb(255, 255, 255)',
                 },
 
@@ -102,7 +102,6 @@ const customTheme = createTheme({
         ].join(','),
     },
 
-    defaultColorScheme: 'light',
 
     components: {
         MuiButton: {
@@ -140,11 +139,10 @@ const customTheme = createTheme({
                     outline:'1px solid black',
                     border: 0,
                     textAlign: 'center',
-                    textWrap: 'wrap'
-                }
+                    textWrap: 'wrap',
+                },
             },
             defaultProps: {
-                
             }
         }
     }

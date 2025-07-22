@@ -1,0 +1,26 @@
+.inventory-table > thead > tr, 
+.inventory-table > tbody > tr,
+.inventory-table {
+    outline: 1px solid black;
+    height: 3rem;
+    border-collapse: collapse;
+    overflow: scroll;
+    overflow-wrap: anywhere;
+}
+
+.inventory-table > thead > tr > td,
+.inventory-table > tbody > tr > td {
+    padding: 0 1rem;
+}
+
+.inventory-table > tbody > tr:hover,
+.inventory-table > thead > tr > td:hover,
+.inventory-table > tbody > tr.over {
+    background-color: var(--card);
+    cursor: pointer;
+}
+
+.inventory-table > thead > tr > td > p {
+    display: flex;
+    align-items: center;
+}

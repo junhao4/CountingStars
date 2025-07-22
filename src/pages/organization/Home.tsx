@@ -59,19 +59,19 @@ export default function OrgHome() {
                     >
                         <Grid container spacing={4} sx={{ pt : 1}}>
                         <Stack>
-                             <Typography variant="body1" align="center" sx={{color : 'var(--muted-foreground)'}}>Users</Typography>
+                             <Typography variant="body1" align="center" sx={{color : 'var(--text-muted)'}}>Users</Typography>
                             <Typography variant="h5" align="center">
                                 {users}
                             </Typography>
                         </Stack>
                         <Stack>
-                             <Typography variant="body1" align="center" sx={{color : 'var(--muted-foreground)'}}>Items</Typography>
+                             <Typography variant="body1" align="center" sx={{color : 'var(--text-muted)'}}>Items</Typography>
                             <Typography variant="h5" align="center">
                                 {items}
                             </Typography>
                         </Stack>
                         <Stack>
-                            <Typography variant="body1" align="center" sx={{color : 'var(--muted-foreground)'}}>ID</Typography>
+                            <Typography variant="body1" align="center" sx={{color : 'var(--text-muted)'}}>ID</Typography>
                             <Typography variant="h5" align="center">
                                 {org?.id}
                             </Typography>
@@ -82,7 +82,7 @@ export default function OrgHome() {
                 <div style={{
                 height: "2px",
                 width: "100%",
-                backgroundColor: "var(--muted-foreground)",
+                backgroundColor: "var(--text-muted)",
                 alignSelf: "center",
                 marginTop: "60px",
                 

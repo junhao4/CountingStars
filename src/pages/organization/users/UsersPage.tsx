@@ -3,7 +3,6 @@ import UserGrid from "../../../features/organization/users/components/UserGrid";
 import { useOrgContext, type ValidOrg } from "../../../common/contexts/OrgContext";
 import { usePageTitleContext } from "../../../common/contexts/PageTitleContext";
 import AddUserBar from "../../../features/organization/users/components/AddUserBar";
-import { useNavigate } from "react-router-dom";
 
 export default function UsersPage() {
   const { org } = useOrgContext() as ValidOrg

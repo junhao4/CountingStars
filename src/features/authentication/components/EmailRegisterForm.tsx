@@ -5,6 +5,7 @@ import { registerWithEmail } from "../api/AuthApi";
 
 export default function EmailRegisterForm() {
     const { createAlert } = useAlertContext()
+    
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
