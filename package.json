@@ -16,6 +16,7 @@
     "@fontsource/roboto": "^5.2.6",
     "@mui/icons-material": "^7.1.1",
     "@mui/material": "^7.1.0",
+    "@mui/x-charts": "^8.9.0",
     "@mui/x-data-grid": "^8.5.2",
     "@mui/x-date-pickers": "^8.5.1",
     "@supabase/supabase-js": "^2.49.8",

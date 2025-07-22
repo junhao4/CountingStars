@@ -31,10 +31,10 @@ export type LOGSTYPE =
     | "removeItemCategory"
 
 export type metadataType = {
-    "addItem": {
-        metadata: {
-
-        }
+    "addItem" :{
+            metadata : {
+                quantity : string
+            }
     },
     "removeItem": {
         metadata: {
