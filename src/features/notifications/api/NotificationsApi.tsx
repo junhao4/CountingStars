@@ -69,24 +69,17 @@ export const getUnreadNumber = async (userId: string) => {
 }
 
 //Deletes the notification 
-export const deleteNotification = async (
-    id: number,
-    createAlert: (arg0: AlertType, arg1: string) => void,
-    setNotifications: React.Dispatch<
-        React.SetStateAction<Notification[]>
-    >,
-    notifications: Notification[]
-) => {
+export const deleteNotification = async (id: number) => {
     const { error } = await supabase
         .from("notifications")
         .delete()
         .eq("id", id);
 
     if (error) {
-        createAlert("error", error.message);
-    } else {
-        setNotifications(notifications.filter((notif) => notif.id !== id));
+        console.log(error.message)
+        return "notificationError"
     }
+    return true
 };
 
 //Creates message based on data stored in supabase

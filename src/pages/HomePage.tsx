@@ -51,7 +51,8 @@ export default function HomePage() {
 
     return (
         <Box component="section" sx={{
-            display: 'flex', flexDirection: 'column', p: 2, border: '1px solid black', margin: '1rem 8rem'
+            display: 'flex', flexDirection: 'column', p: 2, border: '1px solid var(--border)',
+            margin: '1rem 8rem', padding:'2rem', borderRadius:'1rem'
         }}>
             <img style={{ alignSelf: 'center' }} width='200' height='200' src={logo} />
             <Typography sx={{ alignSelf: 'center' }} variant="h6">

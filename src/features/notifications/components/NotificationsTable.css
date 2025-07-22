@@ -1,17 +1,27 @@
 .notifications-table {
+    margin: 2rem 0;
     justify-self: center;
     min-height: auto;
+
+    border-collapse: collapse;
+    border-radius: 1rem;
+    outline: 1px solid var(--border);
+    background-color: var(--card);
 }   
 
 
 
 .notifications-table-header {
-    background-color: #ccc;
+    height: 3rem;
+    border-bottom: 1px solid var(--border);
 }
 
 .notifications-table-row > td {
-    outline: 2px solid black;
     height: 32px;
     width: fit-content;
     padding: 0 32px;
+}
+
+.notifications-table-body > .notifications-table-row > td {
+    border-top: 1px solid var(--border);
 }

@@ -66,7 +66,8 @@ export default function Dashboard() {
 
     // Renders loading screen. If no data, display "No organizations found", else display the organizations in Cards.
     return (<Box sx={{
-        overflow: 'auto', outline: '1px solid black', margin: '1rem 4rem',
+        overflow: 'auto', outline: '1px solid var(--border)', borderRadius:'1rem',
+        margin: '1rem 4rem',
         justifySelf: 'center', width: '70%'
     }}>
 
@@ -91,7 +92,7 @@ export default function Dashboard() {
 
         {orgs.length > 0 &&
             <Grid container padding='2rem 0' spacing={2} justifyContent='center' overflow='auto' wrap='wrap'
-                boxShadow='0 -1px 0 #000'>{
+                boxShadow='0 -1px 0 var(--border)'>{
                     orgs.map((key, index) => {
                         return (
                             <DashboardCard key={index} org={key} index={index} onEnterOrgClick={onEnterOrgClick} />

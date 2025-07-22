@@ -7,6 +7,7 @@ type ErrorAlerts =
     | "categoryError"
     | "itemCategoryError"
     | "logError"
+    | "notificationError"
 
     | "emptyName"
     | "duplicateName"
@@ -14,13 +15,12 @@ type ErrorAlerts =
 export const handleGenerateAlert = (error: ErrorAlerts, createAlert: CreateAlertType) => {
     switch (error) {
         case "userError":
-            createAlert("error", "Supabase user error")
-            return
+        case "itemError":
+        case "itemCategoryError":
         case "categoryError":
-            createAlert("error", "Supabase category erorr")
-            return
         case "logError":
-            createAlert("error", "Supabase log error")
+        case "notificationError":
+            createAlert("error", "Supabase " + error)
             return
 
         case "emptyName":
