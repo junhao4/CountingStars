@@ -15,8 +15,8 @@ const customTheme = createTheme({
                 },
 
                 secondary: { // Yellow
-                    light:'rgba(255, 250, 114, 1)',
-                    main:'rgb(255, 242, 0)',
+                    light:'rgb(230, 225, 63)',
+                    main:'rgb(236, 224, 6)',
                     dark:'rgb(255, 149, 0)',
                     contrastText: 'rgb(255, 255, 255)',
                 },
@@ -108,6 +108,7 @@ const customTheme = createTheme({
             styleOverrides: {
                 root: {
                     minWidth: '0',
+                    transition: 'background-color 1250ms linear'
                 },
             },
             defaultProps: {
@@ -126,6 +127,7 @@ const customTheme = createTheme({
                     padding: '1rem',
                     color: 'var(--card-foreground)',
                     backgroundColor: 'var(--card)',
+                    transition: 'background-color 1250ms linear'
                 },
             },
             defaultProps: {
@@ -145,6 +147,7 @@ const customTheme = createTheme({
             defaultProps: {
             }
         }
+
     }
 
 })

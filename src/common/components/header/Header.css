@@ -14,6 +14,8 @@
     flex-shrink: 0;
     overflow: hidden;
     z-index: 2;
+    transition: background-color 250ms linear
+
 }
 
 .header-logo {

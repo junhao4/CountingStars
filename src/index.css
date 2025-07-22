@@ -31,6 +31,7 @@ p {
 
 .MuiBox-root {
   background-color: var(--foreground);
+  transition: background-color 250ms linear
 }
 
 /* @theme inline {
@@ -108,7 +109,7 @@ p {
 
 :root {
   /* Default dark mode **/
-
+  transition: background-color 250ms linear;
  
 }
 
@@ -123,9 +124,9 @@ html[data-theme='dark'] {
 
   --card-muted : oklch(48.018% 0.0068 286.037);
 
-  --primary: oklch(90.118% 0.20031 105.701);
+  --primary: oklch(84.118% 0.20031 105.701);
 
-  --primary-muted: oklch(80.118% 0.2031 105.701);
+  --primary-muted: oklch(76.118% 0.2031 105.701);
 
   --secondary: oklch(54.001% 0.25542 262.302);
 

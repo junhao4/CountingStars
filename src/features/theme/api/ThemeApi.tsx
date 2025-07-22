@@ -53,6 +53,7 @@ export const calculateLightness = (hex : string) => {
     const g = parseInt(hex.substring(2, 4), 16)
     const b = parseInt(hex.substring(4, 6), 16)
 
+    //WCAG luminance formula
     const brightness = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255
     return +(brightness * 100).toFixed(2)
 }
