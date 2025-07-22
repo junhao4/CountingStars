@@ -26,7 +26,7 @@ function HomeNavigateCard({ children, route } : HomeNavigateCardProps) {
           <Typography
             variant="h6"
             align="center"
-            sx={{ color: "var(--foreground-text)" }}
+            sx={{ color: "var(--text)" }}
           >
             {children}
           </Typography>

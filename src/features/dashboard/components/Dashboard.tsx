@@ -74,13 +74,13 @@ export default function Dashboard() {
             gap='2rem' margin='1rem' flexWrap='wrap'>
             <Typography variant='h5'>Your Organizations</Typography>
 
-            <Button color='secondary' onClick={() => navigate('new')}
-                variant='outlined' sx={{ flexShrink: 0 }}>
+            <Button onClick={() => navigate('new')}
+                variant='outlined' sx={{ flexShrink: 0, color: 'var(--primary)', borderColor : 'var(--primary)' }}>
                 Create Organization
             </Button>
 
-            <div style={{ display: 'flex', gap: '1rem', outline: '1px solid black' }}>
-                <Input placeholder='Organization ID' disableUnderline sx={{ width: '8rem', marginLeft: '1rem' }}
+            <div style={{ display: 'flex', gap: '1rem', outline: '1px solid var(--text-muted)', backgroundColor: 'var(--foreground)'}}>
+                <Input placeholder='Organization ID' disableUnderline sx={{ width: '8rem', marginLeft: '1rem'}}
                     value={joinId} onChange={(e) => setJoinId(e.target.value)} />
                 <Button color='info' onClick={onJoinOrgClick}
                     variant='outlined' sx={{ flexShrink: 0 }}>

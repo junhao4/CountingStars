@@ -19,7 +19,7 @@ import { useState } from "react";
 
 interface AccountMenuDropdownProps {
     anchorEl: HTMLElement | null;
-    handleClose: (arg0 : boolean) => void;
+    handleClose: (arg0: boolean) => void;
     handleProfile: () => void;
     handleLogout: () => void;
     user: User | FirstTimeUser;
@@ -38,8 +38,7 @@ export default function AccountMenuDropdown({
     themeMode,
     setAndSaveThemeMode,
 }: AccountMenuDropdownProps) {
-
-    const [ closebutton, setCloseButton ] = useState(true)
+    const [closebutton, setCloseButton] = useState(true);
     return (
         <>
             <Menu
@@ -61,19 +60,16 @@ export default function AccountMenuDropdown({
                 }}
                 transformOrigin={{ horizontal: "right", vertical: "top" }}
                 anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-               
             >
                 <MenuItem
                     sx={{
                         py: 0,
-                        color: "var(--foreground-primary)",
                         pointerEvents: "none",
                     }}
                 >
                     <Typography
                         sx={{
                             fontWeight: 900,
-                            color: "var(--foreground-primary)",
                             "&.Mui-disabled": {
                                 opacity: 1,
                             },
@@ -85,44 +81,91 @@ export default function AccountMenuDropdown({
                 <MenuItem disabled sx={{ py: 0 }}>
                     <Typography>{user.email}</Typography>
                 </MenuItem>
-                <Divider sx={{mb : 0}}/>
-                <Box sx={{ px: 2, py: 1 , bgcolor: "var(--card)"}}
-                onClick={(e) => e.stopPropagation()}>
-                    <Typography variant="body2" sx={{ fontWeight: 600, mt : 0, pt : 0}}>
+                <Divider sx={{ mb: 0 }} />
+                <Box
+                    sx={{ px: 2, py: 1, bgcolor: "var(--card)" }}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <Typography
+                        variant="body2"
+                        sx={{ fontWeight: 600, mt: 0, pt: 0 }}
+                    >
                         Theme
                     </Typography>
                     <RadioGroup
                         value={themeMode}
                         onChange={(e) => {
-                            setCloseButton(false)
-                            setAndSaveThemeMode(e.target.value as ThemeMode)
-                        }
-                        }
+                            setCloseButton(false);
+                            setAndSaveThemeMode(e.target.value as ThemeMode);
+                        }}
                         name="theme"
                     >
-                       
                         <FormControlLabel
                             value="light"
-                            control={<Radio size="small" />}
+                            control={
+                                <Radio
+                                    size="small"
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "var(--text)",
+                                        },
+                                    }}
+                                />
+                            }
                             label="Light"
                         />
-                         <FormControlLabel
+                        <FormControlLabel
                             value="dark"
-                            control={<Radio size="small" />}
+                            control={
+                                <Radio
+                                    size="small"
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "var(--text)",
+                                        },
+                                    }}
+                                />
+                            }
                             label="Dark"
                         />
                         <FormControlLabel
                             value="system"
-                            control={<Radio size="small" />}
+                            control={
+                                <Radio
+                                    size="small"
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "var(--text)",
+                                        },
+                                    }}
+                                />
+                            }
                             label="System"
+                        />
+                        <FormControlLabel
+                            value="custom"
+                            control={
+                                <Radio
+                                    size="small"
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "var(--text)",
+                                        },
+                                    }}
+                                />
+                            }
+                            label="Custom"
                         />
                     </RadioGroup>
                 </Box>
 
                 <Divider />
-                <MenuItem onClick={() => {
-                    setCloseButton(false)
-                    handleProfile()}}>
+                <MenuItem
+                    onClick={() => {
+                        setCloseButton(false);
+                        handleProfile();
+                    }}
+                >
                     <ListItemIcon>
                         <Settings fontSize="small" />
                     </ListItemIcon>

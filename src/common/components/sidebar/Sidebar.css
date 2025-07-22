@@ -6,7 +6,7 @@
     max-width: 9rem;
     height: calc(100vh - 3rem);
     transition: 250ms;
-    background-color: var(--sidebar);
+    background-color: var(--foreground);
     box-shadow: 2px 0 var(--border);
     z-index: 2;
 }
@@ -14,7 +14,31 @@
 .nav-menu.active {
     width: 9rem;
     transition: 250ms;
-    background-color: var(--sidebar);
+    background-color: var(--card);
+}
+
+.nav-menu-item-container,
+.nav-menu-item-container.active {
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    height: 3rem;
+    width: 3rem;
+    transition: 150ms;
+}
+
+.nav-menu-item-container.active {
+    width: 8.75rem;
+    transition: 300ms;
+}
+
+.nav-menu-item-container.selected {
+    background-color: var(--primary-muted);
+}
+
+.nav-menu-item-container:hover {
+    background-color: var(--secondary);
+    cursor: pointer;
 }
 
 .nav-menu-item,
@@ -22,13 +46,13 @@
     align-self: center;
 
     display: flex;
-    background-color: var(--sidebar-foreground);
-
+    background-color: var(--card-muted);
+    border-radius: 0.25rem;
+    height: 4rem;
     /* Substract width by padding-left */
     width: 2.6rem;
-    padding-left: 0.40rem;
+    padding-left: 0.4rem;
 
-    height: 4rem;
     gap: 0.5rem;
     overflow-x: hidden;
 
