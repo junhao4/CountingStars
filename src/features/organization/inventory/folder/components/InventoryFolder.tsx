@@ -21,7 +21,7 @@ export default function InventoryFolder({ data, setData, folderId }:
 
     return (
         <>
-            <div className="inventory-search" style={{display:'flex', gap: '1rem'}} >
+            <div className="inventory-search" style={{ display: 'flex', gap: '1rem' }} >
                 <TextField size="small"
                     onChange={e => handleFilterName(e.target.value)} placeholder="Search by name" />
 
@@ -37,13 +37,16 @@ export default function InventoryFolder({ data, setData, folderId }:
                     <TableBody sortedData={sortedData} setData={setData} folderId={folderId}
                         setAddFolderRow={setAddFolderRow} addFolderRow={addFolderRow} />
                 </table>
+            </div>
 
-                <Divider sx={{ borderColor: 'var(--border)', margin: '1rem 0' }} variant="fullWidth" />
+            <Divider className="inventory-divider" />
 
+            <div className="inventory-buttons">
                 <Button color="secondary" onClick={() => { setAddFolderRow(prev => !prev) }} children={"Add Folder"} />
                 <Button color="secondary" onClick={() => { navigate('../add') }} children={"Add Item"} />
                 <Button color="secondary" onClick={() => { navigate('../categories') }} children={"Modify Categories"} />
             </div>
+
         </>
     )
 }

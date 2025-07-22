@@ -1,4 +1,4 @@
-import { Divider, IconButton, Popover, Stack } from "@mui/material"
+import { Divider, IconButton, Popover, Stack, Tooltip } from "@mui/material"
 import { useRef, useState } from "react"
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import CloseIcon from '@mui/icons-material/Close';
@@ -17,8 +17,10 @@ export default function InfoTip({ resource }: InfoTipProps) {
 
     return (
         <>
-            <IconButton ref={ref}
+            <Tooltip title="Help">
+                <IconButton ref={ref}
                 onClick={() => setOpen(prev => !prev)}><HelpOutlineIcon /></IconButton>
+            </Tooltip>
 
             <Popover open={open} anchorEl={ref.current}
                 anchorOrigin={{
@@ -65,7 +67,7 @@ const InfoTipText = {
         header: ["Adding users", "Owner Role", "Admin Role", "Member Role", "Pending users"],
         body: ["Enter the user's email to add them into the organization. They must have registered.",
             `Owners are able to do everything, including deleting the organization, and except modifying logs. 
-                        There must be at least one owner per organization.`,
+                There must be at least one owner.`,
             `Admins are able to edit other admins and members, and modify the inventory.`,
             `Members only have view-only access to organization features.`,
             `Pending users are those that applied to join the organization. Admins and above can choose to accept or reject their entry.`

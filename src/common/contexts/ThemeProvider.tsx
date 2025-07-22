@@ -125,7 +125,7 @@ const customTheme = createTheme({
             styleOverrides: {
                 root: {
                     padding: '1rem',
-                    color: 'var(--card-foreground)',
+                    color: 'var(--text)',
                     backgroundColor: 'var(--card)',
                     transition: 'background-color 250ms linear'
                 },
@@ -138,10 +138,12 @@ const customTheme = createTheme({
         MuiDataGrid: {
             styleOverrides: {
                 root: {
-                    outline:'1px solid black',
+                    backgroundColor: 'var(--card)',
+                    outline:'1px solid var(--border)',
                     border: 0,
                     textAlign: 'center',
                     textWrap: 'wrap',
+                    padding: '0.5rem'
                 },
             },
             defaultProps: {
