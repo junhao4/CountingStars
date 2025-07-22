@@ -1,4 +1,4 @@
-import { Box, Button, Collapse, Grid, Typography } from "@mui/material";
+import { Box, Button, Collapse, debounce, Grid, Typography } from "@mui/material";
 import ThemeRadio from "./ThemeRadio";
 import { useEffect, useState } from "react";
 import { useThemeContext } from "../../../common/contexts/ThemeContext";
@@ -6,19 +6,14 @@ import LightImg from "../../../assets/CountingStarsLight.png";
 import DarkImg from "../../../assets/CountingStarsDark.png";
 import SystemImg from "../../../assets/CountingStarsSystem.png";
 import CustomImg from "../../../assets/CountingStarsCustom.png";
+import ThemeColorPicker from "./ThemeColorPicker";
 
 export function ThemeSettingsBox() {
     const { themeMode, setAndSaveThemeMode } = useThemeContext();
     const [selected, setSelected] = useState(themeMode);
-    const [selectedBase, setSelectedBase] = useState("#ffffff");
-    const [selectedAccent, setSelectedAccent] = useState("#ffffff");
-    const { setAndSaveAccent, setAndSaveBase, customAccent, customBase } =
-        useThemeContext();
 
-    useEffect(() => {
-        setSelectedBase(customBase);
-        setSelectedAccent(customAccent);
-    }, [customAccent, customBase]);
+    const theme = useThemeContext();
+
 
     useEffect(() => {
         setSelected(themeMode);
@@ -93,105 +88,28 @@ export function ThemeSettingsBox() {
                         ></ThemeRadio>
                     </Grid>
                     <Grid>
-                      <Collapse in={selected === "custom"}>
-                    <Box
-                        marginRight={0}
-                        padding={2}
-                        sx={{
-                            border: "1px solid var(--border)",
-                            bgcolor: "transparent",
-                            borderRadius: 2,
-                        }}
-                    >
-                        <Typography variant="h6" mb={2}>
-                            Custom Theme Colours
-                        </Typography>
-
-                        <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 2,
-                                mb: 2,
-                                bgcolor: "transparent",
-                            }}
-                        >
-                            <Typography
-                                component="label"
-                                htmlFor="base"
-                                variant="body2"
-                                sx={{ fontWeight: 500, minWidth: 120 }}
-                            >
-                                Base Colour:
-                            </Typography>
-                            <input
-                                id="base"
-                                type="color"
-                                value={selectedBase}
-                                onChange={(e) =>
-                                    setSelectedBase(e.target.value)
-                                }
-                                style={{
-                                    width: 40,
-                                    height: 32,
+                        <Collapse in={selected === "custom"}>
+                            <Box
+                                marginRight={0}
+                                padding={2}
+                                sx={{
                                     border: "1px solid var(--border)",
-                                    borderRadius: "4px",
-                                    cursor: "pointer",
-                                }}
-                            />
-                        </Box>
-
-                        <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 2,
-                                mb: 2,
-                                bgcolor: "transparent",
-                            }}
-                        >
-                            <Typography
-                                component="label"
-                                htmlFor="accent"
-                                variant="body2"
-                                sx={{ fontWeight: 500, minWidth: 120 }}
-                            >
-                                Accent Colour:
-                            </Typography>
-                            <input
-                                id="accent"
-                                type="color"
-                                value={selectedAccent}
-                                onChange={(e) =>
-                                    setSelectedAccent(e.target.value)
-                                }
-                                style={{
-                                    width: 40,
-                                    height: 32,
-                                    border: "1px solid var(--border)",
-                                    borderRadius: "4px",
-                                    cursor: "pointer",
-                                }}
-                            />
-                        </Box>
-
-                        <Box mt={3} sx={{ bgcolor: "transparent" }}>
-                            <Button
-                                variant="contained"
-                                onClick={() => {
-                                    setAndSaveBase(selectedBase);
-                                    setAndSaveAccent(selectedAccent);
+                                    bgcolor: "transparent",
+                                    borderRadius: 2,
                                 }}
                             >
-                                Save Colours
-                            </Button>
-                        </Box>
-                    </Box>
-                </Collapse>
+                                <Typography variant="h6" mb={2}>
+                                    Custom Theme Colours
+                                </Typography>
+
+                                <ThemeColorPicker />
+
+                            </Box>
+                        </Collapse>
                     </Grid>
-                    
+
                 </Grid>
-                
+
             </Box>
         </>
     );

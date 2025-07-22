@@ -6,8 +6,6 @@ import {
     Typography,
     Divider,
     ListItemIcon,
-    FormControl,
-    FormLabel,
     RadioGroup,
     FormControlLabel,
     Radio,

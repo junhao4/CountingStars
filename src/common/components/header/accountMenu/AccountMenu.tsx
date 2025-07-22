@@ -39,6 +39,8 @@ export default function AccountMenu() {
   const handleLogout = () => {
     setAnchorEl(null)
     supabase.auth.signOut()
+    // Clear organization local storage
+    localStorage.removeItem("orgContext")
     navigate("/")
   }
 

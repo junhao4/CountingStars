@@ -21,43 +21,55 @@ export interface LogFetchS {
 }
 
 
-export type LOGSTYPE = 
+export type LOGSTYPE =
     | "addItem"
     | "removeItem"
     | "moveItem"
     | "updateQuantity"
     | "updateExpiry"
+    | "addItemCategory"
+    | "removeItemCategory"
 
 export type metadataType = {
-    "addItem" :{
-            metadata : {
-                
-            }
+    "addItem": {
+        metadata: {
+
+        }
     },
-    "removeItem" :{
-            metadata : {
-                
-            }
+    "removeItem": {
+        metadata: {
+
+        }
     },
-    "moveItem" :{
-            metadata : {
-                newLocation : string, oldLocation : string
-            }
+    "moveItem": {
+        metadata: {
+            newLocation: string, oldLocation: string
+        }
     },
-    "updateQuantity" :{
-            metadata : {
-                newQuantity : number, oldQuantity : number
-            }
+    "updateQuantity": {
+        metadata: {
+            newQuantity: number, oldQuantity: number
+        }
     }
-    "updateExpiry" :{
-            metadata : {
-                newExpiry : string, oldExpiry : string
-            }
+    "updateExpiry": {
+        metadata: {
+            newExpiry: string, oldExpiry: string
+        }
     },
-} 
+    "addItemCategory": {
+        metadata: {
+            itemName: string, categoryName: string
+        }
+    },
+    "removeItemCategory": {
+        metadata: {
+            itemName: string, categoryName: string
+        }
+    }
+}
 
 type MessageCheck<Key extends LOGSTYPE> =
-     (performerName : string, item : string, metadata : metadataType[Key]["metadata"]) => string 
+    (performerName: string, item: string, metadata: metadataType[Key]["metadata"]) => string
 
 type LogsWithMetadata = {
     [L in LOGSTYPE]: {
@@ -65,21 +77,21 @@ type LogsWithMetadata = {
     }
 }
 
-export const LOGS : LogsWithMetadata = {
-        addItem: {
-            generateMessage : (performerName, item, _metadata) => {
-                return performerName + " has added a new item " + item;
-            }
-        },
-        removeItem: {
-            generateMessage : (performerName, item, _metadata) => {
-             return performerName + " has deleted the item " + item;
-            }
-            
-        },
-        moveItem: {
-            generateMessage : (performerName, item, metadata) => {
-                return (
+export const LOGS: LogsWithMetadata = {
+    addItem: {
+        generateMessage: (performerName, item, _metadata) => {
+            return performerName + " has added a new item " + item;
+        }
+    },
+    removeItem: {
+        generateMessage: (performerName, item, _metadata) => {
+            return performerName + " has deleted the item " + item;
+        }
+
+    },
+    moveItem: {
+        generateMessage: (performerName, item, metadata) => {
+            return (
                 performerName +
                 " has moved item " +
                 item +
@@ -87,12 +99,12 @@ export const LOGS : LogsWithMetadata = {
                 metadata.oldLocation +
                 " to " +
                 metadata.newLocation
-                )
-            }
-        },
-        updateQuantity: {
-            generateMessage :  (performerName, item, metadata) => {
-                return (
+            )
+        }
+    },
+    updateQuantity: {
+        generateMessage: (performerName, item, metadata) => {
+            return (
                 performerName +
                 " has updated the quantity of " +
                 item +
@@ -100,48 +112,70 @@ export const LOGS : LogsWithMetadata = {
                 metadata.oldQuantity +
                 " to " +
                 metadata.newQuantity
-                )
-            }
-        },
-        updateExpiry: {
-            generateMessage :  (performerName, item, metadata) => {
-                return (
-                    performerName +
-                    " has updated the expiration date of " +
-                    item +
-                    " from " +
-                    metadata.oldExpiry +
-                    " to " +
-                    metadata.newExpiry
-                )
-            }
+            )
         }
-    
+    },
+    updateExpiry: {
+        generateMessage: (performerName, item, metadata) => {
+            return (
+                performerName +
+                " has updated the expiration date of " +
+                item +
+                " from " +
+                metadata.oldExpiry +
+                " to " +
+                metadata.newExpiry
+            )
+        }
+    },
+    addItemCategory: {
+        generateMessage: (performerName, _item, metadata) => {
+            return (
+                performerName +
+                " has added the item " +
+                metadata.itemName +
+                " to category " +
+                metadata.categoryName
+            )
+        }
+    },
+    removeItemCategory: {
+        generateMessage: (performerName, _item, metadata) => {
+            return (
+                performerName +
+                " has removed the item " +
+                metadata.itemName +
+                " from category " +
+                metadata.categoryName
+            )
+        }
+    }
+
 } as const satisfies LogsWithMetadata
 
 export function generateLogMessageNew<Type extends LOGSTYPE>(
-  type: Type,
-  performerName: string,
-  item: string,
-  metadata: metadataType[Type]["metadata"]
+    type: Type,
+    performerName: string,
+    item: string,
+    metadata: metadataType[Type]["metadata"]
 ) {
-  if (!(type in LOGS)) {
-    console.warn("Unknown log type:", type, item);
-  }
-  const generator = LOGS[type].generateMessage;
-  return generator(performerName, item, metadata);
+    if (!(type in LOGS)) {
+        console.warn("Unknown log type:", type, item);
+    }
+    const generator = LOGS[type].generateMessage;
+    return generator(performerName, item, metadata);
 }
 //Convert user choice to database stored types
 export const filterToType = {
-  "Created" : ["addItem"],
-  "Updated" : ["updateQuantity", "updateExpiry", "moveItem"],
-  "Deleted" : ["removeItem"],
+    "Created": ["addItem"],
+    "Updated": ["updateQuantity", "updateExpiry", "moveItem"],
+    "Deleted": ["removeItem"],
 };
 
 type filterType = "Created" | "Updated" | "Deleted";
 
 //Add log to supabase
-export async function addLog<Type extends LOGSTYPE> (
+export async function addLog<Type extends LOGSTYPE>(
     organization_id: number,
     typeString: Type,
     performer_id: string,
@@ -152,9 +186,9 @@ export async function addLog<Type extends LOGSTYPE> (
         .from("Logs")
         .insert({ typeString, performer_id, item_id, metadata, organization_id })
         .then((res) => {
-            if (res.error) { 
+            if (res.error) {
                 console.log(res.error.message)
-                return null
+                return false
             }
             else return true;
         });
@@ -175,25 +209,25 @@ export const fetchLogs = async (
         )
         .eq("organization_id", org.id)
         .order("id", { ascending: false })
-        
-        const typeStrings = filter.flatMap(label => filterToType[label] || []);
 
-        if (filter.length > 0) {
-            query = query.in("typeString", typeStrings)
-        }
-        
-        const res = await query
-            if (res.error) console.log(res.error.message);
-            else
-                setLogs(
-                    res.data.map((log) => {
-                        return {
-                            ...log,
-                            user_name: log.Users.name || "DELETED USER",
-                            item_name: log.Items?.name,
-                        };
-                    })
-                );
-         
+    const typeStrings = filter.flatMap(label => filterToType[label] || []);
+
+    if (filter.length > 0) {
+        query = query.in("typeString", typeStrings)
+    }
+
+    const res = await query
+    if (res.error) console.log(res.error.message);
+    else
+        setLogs(
+            res.data.map((log) => {
+                return {
+                    ...log,
+                    user_name: log.Users.name || "DELETED USER",
+                    item_name: log.Items?.name,
+                };
+            })
+        );
+
 };
 
