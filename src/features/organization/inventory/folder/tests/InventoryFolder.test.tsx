@@ -6,14 +6,14 @@ describe("validateMoveIntoFolder fn", () => {
         const moveItem = "folder,1"
         const folderId = 1
 
-        expect(validateMoveIntoFolder(moveItem, folderId)).toBe(false)
+        expect(validateMoveIntoFolder(moveItem, folderId).data).toBe(false)
     })
 
     it("should return true if moving item into root folder", () => {
         const moveItem = "item,1"
         const folderId = null
 
-        expect(validateMoveIntoFolder(moveItem, folderId)).toBe(true)
+        expect(validateMoveIntoFolder(moveItem, folderId).data).toBe(true)
     })
 })
 

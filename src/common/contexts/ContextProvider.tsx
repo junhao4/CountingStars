@@ -7,6 +7,7 @@ import { MessageProvider } from "./AlertContext";
 import ThemeUsage from "./ThemeProvider";
 import { ThemeModeProvider } from "./ThemeContext";
 import { ProfileProvider } from "./ProfileContext";
+import { NotificationProvider } from "./NotificationContext";
 
 export default function ContextProvider({
     children,
@@ -22,7 +23,9 @@ export default function ContextProvider({
                             <ThemeModeProvider>
                                 <OrgProvider>
                                     <PageTitleProvider>
-                                        {children}
+                                        <NotificationProvider>
+                                            {children}
+                                        </NotificationProvider>
                                     </PageTitleProvider>
                                 </OrgProvider>
                             </ThemeModeProvider>

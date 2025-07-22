@@ -1,9 +1,9 @@
-import "./LogPage.css";
+
 import { useOrgContext, type ValidOrg } from "../../../common/contexts/OrgContext.tsx";
 import { useEffect, useState } from "react";
 import {
     fetchLogs,
-    type LogFetch,
+    type LogFetchS,
 } from "../../../features/organization/log/api/LogApi.tsx";
 import LogRow from "../../../features/organization/log/components/LogRow.tsx";
 import { Container, Grid, Paper, Stack, Typography } from "@mui/material";
@@ -13,7 +13,7 @@ import LogFilterSelect from "../../../features/organization/log/components/LogFi
 export default function LogPage() {
     const { org } = useOrgContext() as ValidOrg
 
-    const [logs, setLogs] = useState<LogFetch[]>([]);
+    const [logs, setLogs] = useState<LogFetchS[]>([]);
     const [filter, setFilter] = useState<string[]>([])
 
     useEffect(() => {
@@ -50,7 +50,7 @@ export default function LogPage() {
                             <LogRow key={index} log={log} index={index + 1} />
                         ))
                     )}
-                </Paper>
+                </Paper> 
             </Container>
         </>
     );

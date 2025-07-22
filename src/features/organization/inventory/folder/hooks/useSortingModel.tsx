@@ -60,7 +60,7 @@ export default function useSortingModel(filteredData: InventoryRow[]) {
 
     const [sortedData, setSortedData] = useState<InventoryRow[]>(filteredData)
 
-    const [ascending, setAscending] = useState(false)
+    const [ascending, setAscending] = useState(true)
     const [foldersOnTop, setFoldersOnTop] = useState(true)
     const [sortType, setSortType] = useState<InventorySort>('name')
 

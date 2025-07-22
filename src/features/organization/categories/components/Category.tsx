@@ -139,6 +139,7 @@ export default function Category() {
                 <Input value={addCategoryName} placeholder='Name' onChange={(e) => setAddCategoryName(e.target.value)} />
                 <Button color='success' variant='contained' onClick={handleAddCategory(addCategoryName)}>Add Category</Button>
             </div>
+            
             <DataGrid
                 columns={columns}
                 rows={categories}

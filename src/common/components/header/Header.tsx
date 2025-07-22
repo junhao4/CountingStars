@@ -27,11 +27,10 @@ function Header() {
                     <Typography variant='h5'>Counting Stars</Typography>
 
                 </div>
-                <Breadcrumbs sx={{ fontSize: '0.5rem'}}>
+                <Breadcrumbs className="header-breadcrumbs" sx={{ fontSize: '0.5rem' }}>
                     {breadcrumbPathnames.map((path, index) => {
                         return (
-                            <Link to={breadcrumbRoutenames[index]}
-                                className="header-breadcrumbs">{path}</Link>
+                            <Link to={breadcrumbRoutenames[index]}>{path}</Link>
                         )
                     })}
                 </Breadcrumbs>

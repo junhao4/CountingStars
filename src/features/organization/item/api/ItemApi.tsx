@@ -1,6 +1,6 @@
 import supabase from "../../../../helper/supabaseClient";
 import type { Item, ItemWithCategories } from "../../../../helper/types";
-import { addLog, LogTypes } from "../../log/api/LogApi";
+import { addLog } from "../../log/api/LogApi";
 
 
 // ITEM INFO
@@ -161,7 +161,8 @@ export const setDefaultItemImage = async (itemId: number, oldImageName: string) 
     return data
 }
 
-export const deleteItemCategory = async (userId: string, organizationId: number, itemId: number, categoryId: number) => {
+export const deleteItemCategory = async (userId: string, organizationId: number, itemId: number, 
+    itemName: string,  categoryId: number, categoryName: string,) => {
     const { error } = await supabase.from('items_categories')
         .delete()
         .eq('item_id', itemId)
@@ -172,12 +173,13 @@ export const deleteItemCategory = async (userId: string, organizationId: number,
         return null
     }
 
-    return await addLog(organizationId, LogTypes.UPDATE_CATEGORY, userId, itemId, {})
+    return await addLog(organizationId, "removeItemCategory", userId, itemId, { itemName, categoryName })
 }
 
 // ITEM CATEGORY
 
-export const addItemCategory = async (userId: string, organizationId: number, itemId: number, categoryId: number) => {
+export const addItemCategory = async (userId: string, organizationId: number, itemId: number,
+    itemName: string, categoryId: number, categoryName: string) => {
     const { error } = await supabase.from('items_categories')
         .insert({ item_id: itemId, category_id: categoryId })
 
@@ -186,5 +188,5 @@ export const addItemCategory = async (userId: string, organizationId: number, it
         return null
     }
 
-    return await addLog(organizationId, LogTypes.UPDATE_CATEGORY, userId, itemId, {})
+    return await addLog(organizationId, "addItemCategory", userId, itemId, { itemName, categoryName })
 }

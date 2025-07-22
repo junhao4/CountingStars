@@ -14,6 +14,8 @@
     flex-shrink: 0;
     overflow: hidden;
     z-index: 2;
+    transition: background-color 250ms linear
+
 }
 
 .header-logo {
@@ -29,13 +31,13 @@
     color: var(--primary-muted);
 }
 
-.header-breadcrumbs {
+.header-breadcrumbs > ol > li > a {
     color: var(--primary);
     text-decoration: none;
     font-size: 0.75rem
 }
 
-.header-breadcrumbs:hover {
+.header-breadcrumbs > ol > li > a:hover {
     color: var(--secondary);
 }
 
@@ -55,4 +57,14 @@
 .header-user-details {
     width: 40%;
 
+}
+
+@media screen and (max-width: 768px) {
+    .header-logo > h5 {
+        display: none;
+    }
+
+    .header-breadcrumbs {
+        display: none;
+    }
 }

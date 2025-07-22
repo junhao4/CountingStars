@@ -2,20 +2,21 @@ import { Chip } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import ClearIcon from '@mui/icons-material/Clear';
+import type { LOGSTYPE } from '../api/LogApi';
 
 
-function LogTypeChip( {type} : {type  : number}) {
+function LogTypeChip( {type} : {type  : string}) {
   switch (type) {
-    case 1: return (
+    case 'addItem': return (
       <Chip icon= {<AddIcon />} label="CREATED" color="success" sx={{color : "white"}} />
   )
-    case 2: return (
+    case 'moveItem' :
+    case 'updateExpiry' :
+    case 'updateQuantity': return (
       <Chip icon={<DriveFileRenameOutlineIcon />} label="UPDATED" color="info" sx={{color : "white"}} />
   ) 
-    case 3: return (
-      <Chip icon={<DriveFileRenameOutlineIcon />} label="UPDATED" color="info" sx={{color : "white"}} />
-  )
-  case 4: return (
+  
+  case 'removeItem': return (
       <Chip icon={<ClearIcon />} label="DELETED" color="error" sx={{color : "white"}} />
   )
   }   

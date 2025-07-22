@@ -38,6 +38,7 @@ vi.mock("@supabase/supabase-js", () => {
                     eq: vi.fn().mockReturnThis(),
                     maybeSingle: vi.fn().mockReturnThis(),
                     single: vi.fn().mockReturnThis(),
+                    order: vi.fn().mockReturnThis(),
                     data: mocks.data(),
                     error: mocks.error()
                 })
@@ -182,6 +183,6 @@ describe("Dashboard page rendering", () => {
         })
 
         expect(screen.getByRole('heading', { name: /Dashboard/i })).toBeDefined()
-        expect(screen.getByText(/Error/i)).toBeDefined()
+        expect(screen.getByText(/Warning/i)).toBeDefined()
     })
 })
