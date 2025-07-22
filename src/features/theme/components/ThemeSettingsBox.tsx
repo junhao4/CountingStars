@@ -1,4 +1,4 @@
-import { Box, Button, Collapse, debounce, Grid, Typography } from "@mui/material";
+import { Box, Collapse, Grid, Typography } from "@mui/material";
 import ThemeRadio from "./ThemeRadio";
 import { useEffect, useState } from "react";
 import { useThemeContext } from "../../../common/contexts/ThemeContext";
@@ -12,12 +12,10 @@ export function ThemeSettingsBox() {
     const { themeMode, setAndSaveThemeMode } = useThemeContext();
     const [selected, setSelected] = useState(themeMode);
 
-    const theme = useThemeContext();
-
-
     useEffect(() => {
         setSelected(themeMode);
     }, [themeMode]);
+    
     return (
         <>
             <Box
