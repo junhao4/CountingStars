@@ -5,13 +5,14 @@ import { useNavigate } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import { useRef, useState, type SetStateAction } from "react";
 import { MenuItem, MenuList, Popover, Tooltip } from "@mui/material";
-import { deleteFolder } from "../api/FolderApi";
+import { deleteFolder, moveItemIntoFolder } from "../api/FolderApi";
 import { useAlertContext } from "../../../../../common/contexts/AlertContext";
 import type { InventoryRow } from "../hooks/useGetFolderContent";
+import { validateMoveIntoFolder } from "../functions/Folder";
 
 
-export default function FolderRow({ setData, folder, moveIntoFolder }:
-    { folder: ItemFolder, setData: React.Dispatch<SetStateAction<InventoryRow[]>>, moveIntoFolder: (moveItem: string, folderId: number) => void }) {
+export default function FolderRow({ setData, folder }:
+    { folder: ItemFolder, setData: React.Dispatch<SetStateAction<InventoryRow[]>>}) {
     const navigate = useNavigate()
     const { createAlert } = useAlertContext()
 
@@ -30,11 +31,27 @@ export default function FolderRow({ setData, folder, moveIntoFolder }:
         setMenuOpen(false)
     }
 
+    const moveIntoFolder = async (moveItem: string, folderId: number) => {
+        if (!validateMoveIntoFolder(moveItem, folderId).data) {
+            return
+        }
+
+        const item = moveItem.split(',')
+
+        const res = await moveItemIntoFolder(item[0] as 'folder' | 'item', parseInt(item[1]), folderId)
+        if (res) {
+            setData(data => data.filter(row => !(row.type === item[0] && row.id === parseInt(item[1]))))
+            createAlert('success', "Successfully moved folder!")
+        } else {
+            createAlert('error', "Failed to move folder")
+        }
+    }
+
     return (
         <tr draggable className={`${over && "over"}`}
             onDragEnter={() => setOver(true)} onDragLeave={() => setOver(false)}
             onDragStart={e => e.dataTransfer.setData('id', 'folder,' + folder.id)}
-            onDragOver={e => (e.preventDefault(),setOver(true))}
+            onDragOver={e => (e.preventDefault(), setOver(true))}
             onDrop={e => moveIntoFolder(e.dataTransfer.getData('id'), folder.id)}
             onDoubleClick={() => navigate('../' + folder.id, { relative: 'path' })}>
             <td><FolderIcon />&ensp;{folder.name}</td>

@@ -5,7 +5,7 @@ import SwapVertIcon from "@mui/icons-material/SwapVert"
 import CheckIcon from '@mui/icons-material/Check';
 import useGetCategoryList from "../../../item/hooks/useGetCategoryList";
 
-interface InventoryHeadProps {
+interface TableHeaderProps {
     foldersOnTop: boolean,
     selectedCategories: number[],
     handleFilterCategory: (category: number) => void,
@@ -14,8 +14,8 @@ interface InventoryHeadProps {
     getSortIcon: (column: 'name' | 'quantity' | 'category' | 'lastModified') => React.ReactElement
 }
 
-export default function InventoryHead({ foldersOnTop, selectedCategories, handleFilterCategory,
-    getSortTitle, getSortIcon, handleSort }: InventoryHeadProps) {
+export default function TableHeader({ foldersOnTop, selectedCategories, handleFilterCategory,
+    getSortTitle, getSortIcon, handleSort }: TableHeaderProps) {
 
     const { categoryList } = useGetCategoryList()
 
