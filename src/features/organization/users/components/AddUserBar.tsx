@@ -34,7 +34,7 @@ export default function AddUserBar({ setRefresh }: AddUserBarProps) {
 
     return (
         <Box hidden={!(org.role === "owner" || org.role === "admin")}
-            sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', p: '1rem' }}
+            sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'left', gap:'1rem', p: '1rem' }}
             bgcolor='transparent'>
 
             <div style={{ display: 'flex', flexWrap: 'nowrap', gap: '2rem', alignItems: 'center' }}>
@@ -42,6 +42,7 @@ export default function AddUserBar({ setRefresh }: AddUserBarProps) {
                 <Input value={email} onChange={(e) => setEmail(e.target.value)}
                     placeholder='Email' />
             </div>
+
             <div style={{ display: 'flex', flexWrap: 'nowrap', gap: '2rem', alignItems: 'center' }}>
                 <Typography>Role: </Typography>
                 <FormControl size="small">
@@ -62,21 +63,15 @@ export default function AddUserBar({ setRefresh }: AddUserBarProps) {
                     </Select>
                 </FormControl>
             </div>
-            <Button variant="contained" color='secondary'
+
+            <Button variant="contained" color='secondary' sx={{marginRight: 'auto'}}
                 disabled={!hasPermission(userWithOrg, "users", "addUser",
                     { ...userWithOrg, role: 'member', countOfOwners: 0 })} value={'member'}
                 onClick={onAddOrganizationUser}>
                 Add user
             </Button>
-        <InfoTip
-                header={["Adding users", "Owner Role", "Admin Role", "Member Role", "Pending users"]}
-                body={["Enter the user's email to add them into the organization. They must have registered.",
-                    `Owners are able to do everything, including deleting the organization, and except modifying logs. 
-                        There must be at least one owner per organization.`,
-                    `Admins are able to edit other admins and members, and modify the inventory.`,
-                    `Members only have view-only access to organization features.`,
-                    `Pending users are those that applied to join the organization. Admins and above can choose to accept or reject their entry.`
-                ]} />
+
+            <InfoTip resource="user" />
 
         </Box>
     )
