@@ -37,16 +37,15 @@ export const addCategory = async (organizationId: number, categoryName: string) 
 
     if (error) {
         console.log(error.message)
-        return null
+        return "categoryError"
     }
-    else {
-        return data.map(d => { return { ...d, quantity: 0 } })
-    }
+
+     return data.map(d => { return { ...d, quantity: 0 } })
 }
 
 export const updateCategoryName = async (categoryId: number, categoryName: string) => {
     const { error } = await supabase.from('Categories')
-        .update({name: categoryName})
+        .update({ name: categoryName })
         .eq('id', categoryId)
         .single()
 
@@ -61,18 +60,20 @@ export const deleteCategory = async (categoryId: number) => {
     const { error } = await supabase.from('Categories')
         .delete()
         .eq('id', categoryId)
-        
-    if (error) { console.log(error.message)
-        return false
-     }
 
-     const { error:error2 } = await supabase.from('items_categories')
+    if (error) {
+        console.log(error.message)
+        return "categoryError"
+    }
+
+    const { error: error2 } = await supabase.from('items_categories')
         .delete()
         .eq('category_id', categoryId)
 
     if (error2) {
         console.log(error2.message)
-        return false
+        return "itemCategoryError"
     }
+    
     return true
 }

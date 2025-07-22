@@ -27,8 +27,6 @@ export type LOGSTYPE =
     | "moveItem"
     | "updateQuantity"
     | "updateExpiry"
-    | "createCategory"
-    | "deleteCategory"
     | "addItemCategory"
     | "removeItemCategory"
 
@@ -56,16 +54,6 @@ export type metadataType = {
     "updateExpiry": {
         metadata: {
             newExpiry: string, oldExpiry: string
-        }
-    },
-    "createCategory": {
-        metadata: {
-            name: string
-        }
-    },
-    "deleteCategory": {
-        metadata: {
-            name: string
         }
     },
     "addItemCategory": {
@@ -137,24 +125,6 @@ export const LOGS: LogsWithMetadata = {
                 metadata.oldExpiry +
                 " to " +
                 metadata.newExpiry
-            )
-        }
-    },
-    createCategory: {
-        generateMessage: (performerName, _item, metadata) => {
-            return (
-                performerName +
-                " has created a new category " +
-                metadata.name
-            )
-        }
-    },
-    deleteCategory: {
-        generateMessage: (performerName, _item, metadata) => {
-            return (
-                performerName +
-                " has deleted the category " +
-                metadata.name
             )
         }
     },

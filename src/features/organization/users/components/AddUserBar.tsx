@@ -4,6 +4,7 @@ import { useState, type SetStateAction } from "react";
 import { addOrganizationUser } from "../api/UserGridApi";
 import { useSessionContext, type ValidSession } from "../../../../common/contexts/SessionContext";
 import { useAlertContext } from "../../../../common/contexts/AlertContext";
+import { hasPermission } from "../../../../helper/RolePermissions";
 
 interface AddUserBarProps {
     setRefresh: React.Dispatch<SetStateAction<boolean>>
@@ -12,7 +13,8 @@ interface AddUserBarProps {
 export default function AddUserBar({setRefresh}: AddUserBarProps) {
     const { user } = useSessionContext() as ValidSession
     const { org } = useOrgContext() as ValidOrg
-    const { createAlert} = useAlertContext()
+    const userWithOrg = { userId: user.id, organizationId: org.id, role: org.role }
+    const { createAlert } = useAlertContext()
 
     const [email, setEmail] = useState<string>('')
     const [role, setRole] = useState<string>('member')
@@ -45,9 +47,12 @@ export default function AddUserBar({setRefresh}: AddUserBarProps) {
                         label="Role"
                         onChange={(e) => setRole(e.target.value)}
                     >
-                        <MenuItem value={'owner'}>Owner</MenuItem>
-                        <MenuItem value={'admin'}>Admin</MenuItem>
-                        <MenuItem value={'member'}>Member</MenuItem>
+                        <MenuItem disabled={hasPermission(userWithOrg, "users", "addUser", 
+                            {...userWithOrg, role: 'owner', countOfOwners: 0})} value={'owner'}>Owner</MenuItem>
+                        <MenuItem disabled={hasPermission(userWithOrg, "users", "addUser", 
+                            {...userWithOrg, role: 'admin', countOfOwners: 0})} value={'admin'}>Admin</MenuItem>
+                        <MenuItem disabled={hasPermission(userWithOrg, "users", "addUser", 
+                            {...userWithOrg, role: 'member', countOfOwners: 0})} value={'member'}>Member</MenuItem>
                     </Select>
                 </FormControl>
             </div>

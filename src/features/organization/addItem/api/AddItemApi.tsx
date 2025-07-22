@@ -36,16 +36,7 @@ export const addItem = async (userId: string, item: UploadItem, organizationId: 
   // Add to Item Categories table
   const res = await Promise.all(
     item.categories.map(async (value) => {
-      return supabase
-          .from("items_categories")
-          .insert({ item_id: data.id, category_id: value })
-          .then((res) => {
-            if (res.error) {
-              console.log(res.error.message);
-              return false
-            }
-            return true
-          })
+        return await addItemCategory(data.id, value)
     })
   ).then(async (b: boolean[]) => {
     if (b.reduce((prev, next) => prev && next, true)) {
@@ -56,3 +47,16 @@ export const addItem = async (userId: string, item: UploadItem, organizationId: 
   })
   return res
 };
+
+const addItemCategory = async (itemId: number, categoryId: number) => {
+  return await supabase
+          .from("items_categories")
+          .insert({ item_id: itemId, category_id: categoryId })
+          .then((res) => {
+            if (res.error) {
+              console.log(res.error.message);
+              return false
+            }
+            return true
+          })
+}

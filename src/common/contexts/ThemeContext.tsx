@@ -8,7 +8,7 @@ export type ThemeMode = "light" | "dark" | "system" | "custom";
 
 type Theme = "light" | "dark" | "custom-dark" | "custom-light";
 
-interface ThemeProps {
+export interface ThemeProps {
     themeMode: ThemeMode,
     setAndSaveThemeMode: (themeMode: string) => void,
     setAndSaveBase: (base: string) => void,
