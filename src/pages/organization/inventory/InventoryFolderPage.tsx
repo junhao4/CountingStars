@@ -3,9 +3,9 @@ import InventoryFolder from "../../../features/organization/inventory/folder/com
 import { useEffect } from "react"
 import { usePageTitleContext } from "../../../common/contexts/PageTitleContext"
 import InventoryBreadcrumbs from "../../../features/organization/inventory/folder/components/InventoryBreadcrumbs"
-import { Box } from "@mui/material"
 import useGetFolderContent from "../../../features/organization/inventory/folder/hooks/useGetFolderContent"
 import Loading from "../../../common/components/Loading"
+import "../../../features/organization/inventory/folder/components/InventoryFolder.css"
 
 const FOLDER_ROOT_PATH = 'root' // id === 0
 
@@ -47,12 +47,9 @@ export default function InventoryPage() {
     }
 
     return (
-        <Box sx={{
-            outline: '1px solid black', margin: '2rem', padding: '1rem',
-            display: 'flex', width: '60vw', flexDirection: 'column', gap: '0.5rem'
-        }}>
+        <div className="inventory-container">
             <InventoryBreadcrumbs data={data} setData={setData} folderId={folderId} />
             <InventoryFolder data={data} setData={setData} folderId={folderId} />
-        </Box>
+        </div>
     )
 }

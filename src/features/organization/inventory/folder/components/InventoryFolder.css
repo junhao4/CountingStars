@@ -3,6 +3,7 @@
 .inventory-table {
     outline: 1px solid black;
     height: 3rem;
+    width: 100%;
     border-collapse: collapse;
     overflow: scroll;
     overflow-wrap: anywhere;
@@ -23,4 +24,35 @@
 .inventory-table > thead > tr > td > p {
     display: flex;
     align-items: center;
+}
+
+
+.inventory-container {
+    outline: 1px solid black;
+    margin: 2rem;
+    padding: 1rem;
+    width: 60vw;
+    height: auto;
+    gap: 0.5rem;
+    background-color: var(--foreground);
+
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: 7fr 3fr;
+    grid-template-areas:
+        "inventory-breadcrumb inventory-search"
+        "inventory-body inventory-body";
+}
+
+.inventory-container> nav.inventory-breadcrumb {
+    grid-area: inventory-breadcrumb;
+}
+
+.inventory-container > div.inventory-search {
+    grid-area: inventory-search;
+}
+
+.inventory-container > div.inventory-body {
+    grid-area: inventory-body;
+    height: fit-content;
 }

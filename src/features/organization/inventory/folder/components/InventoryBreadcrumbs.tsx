@@ -4,6 +4,7 @@ import { useEffect, useState, type SetStateAction } from "react";
 import { IconButton } from "@mui/material";
 import FolderBreadcrumb from "./FolderBreadcrumb";
 import type { InventoryRow } from "../hooks/useGetFolderContent";
+import "./InventoryFolder.css"
 
 
 export default function InventoryBreadcrumbs({ setData, folderId }:
@@ -19,7 +20,7 @@ export default function InventoryBreadcrumbs({ setData, folderId }:
     }, [folderId])
 
     return (
-        <Breadcrumbs separator={'>'} sx={{ width: 'fit-content', boxShadow: '0 1px var(--secondary-alternative)' }}>
+        <Breadcrumbs className="inventory-breadcrumb" separator={'>'} sx={{ width: 'fit-content', boxShadow: '0 1px var(--secondary-alternative)' }}>
             {parentFolderIds.map((folder, index) => {
                 // If last breadcrumb, prevent dragging item into current folder
                 if (index === parentFolderIds.length - 1) {
