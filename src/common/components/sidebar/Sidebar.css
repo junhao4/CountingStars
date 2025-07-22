@@ -33,11 +33,11 @@
 }
 
 .nav-menu-item-container.selected {
-    background-color: var(--primary-muted);
+    background-color: var(--foreground);
 }
 
 .nav-menu-item-container:hover {
-    background-color: var(--secondary);
+    background-color: var(--foreground);
     cursor: pointer;
 }
 
@@ -46,8 +46,8 @@
     align-self: center;
 
     display: flex;
-    background-color: var(--card-muted);
-    border-radius: 0.25rem;
+    background-color: var(--card);
+
     height: 4rem;
     /* Substract width by padding-left */
     width: 2.6rem;
@@ -68,10 +68,10 @@
 }
 
 .nav-menu-item.selected {
-    background-color: var(--sidebar-ring);
+    background-color: var(--primary);
 }
 
 .nav-menu-item:hover {
     cursor: pointer;
-    background-color: var(--sidebar-foreground-hover);
+    background-color: var(--secondary);
 }
