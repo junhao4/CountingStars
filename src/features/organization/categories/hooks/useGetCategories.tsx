@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { useAlertContext } from "../../../../common/contexts/AlertContext"
 import { deleteCategory, addCategory, fetchCategories } from "../api/CategoriesApi"
 import { useOrgContext, type ValidOrg } from "../../../../common/contexts/OrgContext"
-import { useSessionContext, type ValidSession } from "../../../../common/contexts/SessionContext"
 import { handleGenerateAlert } from "../../../../common/functions/ErrorAlerts"
 
 interface CategoryFetch {
@@ -11,7 +10,7 @@ interface CategoryFetch {
     quantity: number,
 }
 
-const validateCategoryName = (name: string, categoryList: CategoryFetch[]) => {
+export const validateCategoryName = (name: string, categoryList: CategoryFetch[]) => {
     if (name === "") {
         return "emptyName"
     } else if (categoryList.find(cat => cat.name === name)) {
@@ -57,7 +56,6 @@ export default function useGetCategories() {
             handleGenerateAlert(valid, createAlert)
             return
         }
-        
 
         const res = await addCategory(org.id, newName)
         if (typeof res === 'string') {

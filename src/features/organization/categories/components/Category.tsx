@@ -7,7 +7,7 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 import SaveAltIcon from '@mui/icons-material/SaveAlt'
-import { isCategoryNameTaken, updateCategoryName } from "../api/CategoriesApi"
+import { updateCategoryName } from "../api/CategoriesApi"
 import { useAlertContext } from "../../../../common/contexts/AlertContext"
 import { hasPermission } from "../../../../helper/RolePermissions"
 import { useSessionContext, type ValidSession } from "../../../../common/contexts/SessionContext"
