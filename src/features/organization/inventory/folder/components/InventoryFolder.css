@@ -11,7 +11,7 @@
 
 .inventory-table > thead > tr > td,
 .inventory-table > tbody > tr > td {
-    padding: 0 1rem;
+    padding: 0.25rem 1rem;
 }
 
 .inventory-table > tbody > tr:hover,
@@ -44,7 +44,7 @@
     border-radius: 0.5rem;
     margin: 2rem;
     padding: 1rem;
-    width: 60vw;
+    width: 65vw;
     height: auto;
     gap: 0.5rem;
     background-color: var(--card);

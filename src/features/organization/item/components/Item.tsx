@@ -12,6 +12,12 @@ import { DatePicker } from "@mui/x-date-pickers"
 import dayjs from "dayjs"
 import useGetItemImage from "../hooks/useGetItemImage"
 import type { ItemWithCategories } from "../../../../helper/types"
+import { useNavigate } from "react-router-dom"
+import { deleteItem } from "../api/ItemApi"
+import { useSessionContext, type ValidSession } from "../../../../common/contexts/SessionContext"
+import { useOrgContext, type ValidOrg } from "../../../../common/contexts/OrgContext"
+import { handleGenerateAlert } from "../../../../common/functions/ErrorAlerts"
+import { useAlertContext } from "../../../../common/contexts/AlertContext"
 
 const convertValidStringToInt = (text: string, initialInt: number) => {
     var isNumber = true
@@ -41,6 +47,11 @@ const VisuallyHiddenInput = styled('input')({
 })
 
 export default function Item({ itemId }: { itemId: number }) {
+    const navigate = useNavigate()
+    const { user } = useSessionContext() as ValidSession
+    const { org } = useOrgContext() as ValidOrg
+    const { createAlert } = useAlertContext()
+
     const { loading: loadingItem, item, handleSetItem } = useGetItem(itemId)
     const { loading: loadingImage, image, setImage, removeImage } = useGetItemImage(itemId)
 
@@ -60,7 +71,21 @@ export default function Item({ itemId }: { itemId: number }) {
         setEditItem({ ...editItem, categories: editItem.categories.filter(cat => cat.id !== categoryId) || [] })
     }
 
-    
+    const handleDelete = async () => {
+        if (!confirm("Are your sure you want to delete this item?")) {
+            return
+        }
+            
+        const res = await deleteItem(itemId, user.id, org.id)
+        if (typeof res === 'string') {
+            handleGenerateAlert(res, createAlert)
+            return
+        }
+        createAlert("success", "Successfully deleted item!")
+        navigate(-1)
+    }
+
+
     useEffect(() => {
         if (item) setEditItem(item)
     }, [item])
@@ -84,8 +109,6 @@ export default function Item({ itemId }: { itemId: number }) {
                     }} sx={{ margin: '1rem 0 2rem 0' }}
                         variant="standard" value={editItem.name} onChange={(e) => setEditItem({ ...editItem, name: e.target.value })} />
                 </div>
-
-
 
                 <div style={{ display: 'flex', width: '100%', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center', margin: '0 0 2rem 0' }}>
                     {/** Section for displaying image, and buttons */}
@@ -120,7 +143,7 @@ export default function Item({ itemId }: { itemId: number }) {
 
                         <div style={{ width: '100%', display: 'flex', justifyContent: 'left', flexWrap: 'wrap' }}>
                             <p>Categories:&emsp;&emsp;&emsp;</p>
-                            <CategoryChips categories={editItem.categories} editMode={editMode} 
+                            <CategoryChips categories={editItem.categories} editMode={editMode}
                                 selected={editItem.categories.map(cat => cat.id)}
                                 handleRemove={handleRemoveCategory} handleAdd={handleAddCategory} />
                         </div>
@@ -152,7 +175,12 @@ export default function Item({ itemId }: { itemId: number }) {
                             <Button onClick={() => { handleSetItem(editItem); setEditMode(false) }} color="success" variant="contained" startIcon={<SaveIcon />} children={"Save"} />
                             <Button onClick={() => { setEditMode(false); setEditItem(item) }} color="error" variant="contained" startIcon={<CancelIcon />} children={"Cancel"} />
                         </>
-                        : <IconButton onClick={() => setEditMode(true)}><Tooltip title="Edit item"><EditIcon /></Tooltip></IconButton>
+                        : <>
+                            <IconButton color="success" onClick={() => setEditMode(true)}>
+                                <Tooltip title="Edit item"><EditIcon /></Tooltip></IconButton>
+                            <IconButton color="error" onClick={() => handleDelete()}>
+                                <Tooltip title="Delete item"><DeleteIcon /></Tooltip></IconButton>
+                        </>
                     }
                 </div>
             </Stack>

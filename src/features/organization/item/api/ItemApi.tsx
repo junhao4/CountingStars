@@ -31,19 +31,6 @@ export const fetchItem = async (itemId: number) => {
     return fixDate as ItemWithCategories
 }
 
-// Fetches the list of all categories for the given organization
-export const fetchCategoryOptions = async (organizationId: number) => {
-    const { data, error } = await supabase
-        .from("Categories")
-        .select(`id, name`)
-        .eq("org_id", organizationId)
-    if (error) {
-        console.log("error", error.message);
-        return []
-    }
-    return data
-};
-
 export const updateItem = async (newItem: Item) => {
     const { error } = await supabase
         .from("Items")
@@ -59,6 +46,38 @@ export const updateItem = async (newItem: Item) => {
 
     return newItem
 }
+
+export const deleteItem = async (itemId: number, userId: string, organizationId: number) => {
+    const { error } = await supabase.from("Items")
+        .update({deleted: true, last_modified: new Date(Date.now()).toDateString()})
+        .eq('id', itemId)
+        .single()
+
+    if (error) {
+        console.log(error)
+        return "itemError"
+    }
+
+    const res = await addLog(organizationId, "removeItem", userId, itemId, {})
+
+    return res ? true : "logError"
+}
+
+// Fetches the list of all categories for the given organization
+export const fetchCategoryOptions = async (organizationId: number) => {
+    const { data, error } = await supabase
+        .from("Categories")
+        .select(`id, name`)
+        .eq("org_id", organizationId)
+    if (error) {
+        console.log("error", error.message);
+        return []
+    }
+    return data
+};
+
+
+
 
 
 
