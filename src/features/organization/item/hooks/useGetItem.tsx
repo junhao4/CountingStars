@@ -4,6 +4,7 @@ import { addItemCategory, deleteItemCategory, fetchItem, updateItem } from "../a
 import { useAlertContext } from "../../../../common/contexts/AlertContext"
 import { useSessionContext, type ValidSession } from "../../../../common/contexts/SessionContext"
 import { useOrgContext, type ValidOrg } from "../../../../common/contexts/OrgContext"
+import { addLog } from "../../log/api/LogApi"
 
 export default function useGetItem(itemId: number) {
     const { createAlert } = useAlertContext()
@@ -25,6 +26,9 @@ export default function useGetItem(itemId: number) {
         // Shallow comparison of item equality
         if (item === newItem) {
             return
+        }
+        if (item?.quantity != newItem.quantity) {
+            addLog(org.id, "updateQuantity", user.id, newItem.id , {newQuantity: newItem.quantity, oldQuantity: item?.quantity!})
         }
 
         const newCats = newItem.categories.filter(cat => !item?.categories.map(cat => cat.id).includes(cat.id))
