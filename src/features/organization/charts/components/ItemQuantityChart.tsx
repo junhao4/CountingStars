@@ -13,7 +13,7 @@ function ItemQuantityChart() {
             
                 dataset={chartData}
                 xAxis={[{ scaleType: "time", dataKey: "date" }]}
-                series={[{ curve: "linear", dataKey: "stock", label: "Quantity of" }]}
+                series={[{ curve: "linear", dataKey: "stock", label: "Quantity of " + chartData[0].name }]}
                 height={400}
             />
         )

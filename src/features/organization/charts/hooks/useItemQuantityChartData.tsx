@@ -6,6 +6,7 @@ import { useAlertContext } from "../../../../common/contexts/AlertContext";
 type ChartPoint = {
     date: Date;
     stock: number;
+    name : string
 };
 
 function useItemQuantityChartData(itemId: number) {
@@ -35,8 +36,8 @@ function useItemQuantityChartData(itemId: number) {
                     } else if (typeString === "updateQuantity") {
                         stock = meta.newQuantity!
                     }
-
-                    result.push({ date, stock });
+                    const name = log.Items.name
+                    result.push({ date, stock, name });
                 }
                 setData(result);
                 console.log(result)
