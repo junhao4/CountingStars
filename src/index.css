@@ -151,9 +151,9 @@ html[data-theme='light'] {
 
   --card-muted : oklch(87.078% 0.11491 109.131);
 
-  --secondary: oklch(60% 0.25 95);
+  --secondary: oklch(70.674% 0.24867 75.566);
 
-  --secondary-muted: oklch(40% 0.25 95);
+  --secondary-muted: oklch(65% 0.15 90);
 
   --primary: oklch(40% 0.18 250);
 
@@ -226,7 +226,7 @@ html[data-theme='custom-light'] {
 
   --secondary: oklch(from var(--accent) calc(1 - l / 2) c calc((h + 180)));
 
-  --secondary-muted: oklch(from var(--secondary) calc(l - 0.1) c h);
+  --secondary-muted: oklch(from var(--secondary) calc(l - 0.1) calc(c - 0.05) h);
 
    --text: oklch(15% 0 0);
 
