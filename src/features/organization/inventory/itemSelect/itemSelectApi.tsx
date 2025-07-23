@@ -22,7 +22,7 @@ const transformSupabaseItem = (item: SupabaseItem) => {
 export const fetchItemList = async (organizationId: number) => {
     const { data, error } = await supabase.from('Items')
         .select("*")
-        .match({org_id: organizationId})
+        .match({org_id: organizationId, deleted: false})
 
     if (error) {
         console.log(error.message)
