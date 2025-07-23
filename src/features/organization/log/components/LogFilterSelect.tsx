@@ -47,8 +47,8 @@ export default function LogFilterSelect({ filter, setFilter} : LogFilterProps) {
           input={<OutlinedInput id="select-multiple-chip" label="Filter by type" />}
           renderValue={(selected) => (
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, bgcolor : 'transparent'}}>
-              {selected.map((value) => (
-                <LogTypeChip type={value} />
+              {selected.map((value, index) => (
+                <LogTypeChip key={index} type={value} />
               ))}
             </Box>
           )}

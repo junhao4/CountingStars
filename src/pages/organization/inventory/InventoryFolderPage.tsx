@@ -40,6 +40,7 @@ export default function InventoryPage() {
         }
     }, [navigate])
 
+
     if (loading) {
         return (<Loading />)
     } else if (folderId === null) {

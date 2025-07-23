@@ -36,6 +36,7 @@ export default function AddFolderRow({ folderId, setData, setAddFolderRow }: Add
 
     return (
         <tr key={0}>
+            <td></td>
             <td>
                 <TextField value={folderName} onChange={(e) => setFolderName(e.target.value)}
                     slotProps={{input: {endAdornment: <IconButton onClick={handleAddFolder}><AddCircleIcon /></IconButton>}}} />
