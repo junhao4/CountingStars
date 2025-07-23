@@ -12,6 +12,10 @@ function LogTypeChip( {type} : {type  : string}) {
     case 'moveItem' :
     case 'updateExpiry' : 
     case 'updateQuantity': 
+    case 'moveItem' :
+    case 'changeItemName' :
+    case 'addItemCategory' :
+    case 'removeItemCategory' :
     case 'Updated': return (
       <Chip icon={<DriveFileRenameOutlineIcon />} label="UPDATED" color="info" sx={{color : "white"}} />
   ) 

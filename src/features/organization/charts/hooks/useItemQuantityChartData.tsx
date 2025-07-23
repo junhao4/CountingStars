@@ -3,7 +3,7 @@ import { useOrgContext } from "../../../../common/contexts/OrgContext";
 import { fetchItemChartData } from "../api/ChartsApi";
 import { useAlertContext } from "../../../../common/contexts/AlertContext";
 
-type ChartPoint = {
+export type ChartPoint = {
     date: Date;
     stock: number;
     name : string

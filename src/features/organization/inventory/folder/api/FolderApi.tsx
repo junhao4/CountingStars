@@ -1,5 +1,6 @@
 import supabase from "../../../../../helper/supabaseClient"
 import type { Item, ItemFolder, ItemWithCategories } from "../../../../../helper/types"
+import { addLog } from "../../../log/api/LogApi"
 
 export const fetchFolders = async (organizationId: number, folderId: number | null) => {
     const { data, error } = await supabase.from('Folders')
@@ -58,8 +59,20 @@ export const addNewFolder = async (organizationId: number, parentFolder: number 
     return transformFolder(data)
 }
 
+export const fetchCurrentFolder = async (itemId : number) => {
+  const { data, error } = await supabase
+            .from("Items")
+            .select("Folders(name)")
+            .eq("id", itemId)
+            .single();
+        if(error) console.log(error)
+        else return data
+}
+
 export const moveItemIntoFolder = async (itemType: 'item' | 'folder', itemId: number, folderId: number | null) => {
     if (itemType === 'item') {
+      
+
         const { error } = await supabase.from("Items")
             .update({folder_id: folderId})
             .eq('id', itemId)

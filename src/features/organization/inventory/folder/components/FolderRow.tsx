@@ -5,17 +5,21 @@ import { useNavigate } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import { useRef, useState, type SetStateAction } from "react";
 import { MenuItem, MenuList, Popover, Tooltip } from "@mui/material";
-import { deleteFolder, moveItemIntoFolder } from "../api/FolderApi";
+import { deleteFolder, fetchCurrentFolder, moveItemIntoFolder } from "../api/FolderApi";
 import { useAlertContext } from "../../../../../common/contexts/AlertContext";
 import type { InventoryRow } from "../hooks/useGetFolderContent";
 import { validateMoveIntoFolder } from "../functions/Folder";
+import { addLog } from "../../../log/api/LogApi";
+import { useOrgContext } from "../../../../../common/contexts/OrgContext";
+import { useSessionContext } from "../../../../../common/contexts/SessionContext";
 
 
 export default function FolderRow({ setData, folder }:
     { folder: ItemFolder, setData: React.Dispatch<SetStateAction<InventoryRow[]>> }) {
     const navigate = useNavigate()
     const { createAlert } = useAlertContext()
-
+    const { user } = useSessionContext()
+    const { org } = useOrgContext()
     const [over, setOver] = useState(false)
     const [menuOpen, setMenuOpen] = useState(false)
     const ref = useRef(null)
@@ -37,13 +41,16 @@ export default function FolderRow({ setData, folder }:
         }
 
         const item = moveItem.split(',')
-
+        const curr = await fetchCurrentFolder(parseInt(item[1]))
+        const currFolderName = curr?.Folders?.name! ?? "root"
         const res = await moveItemIntoFolder(item[0] as 'folder' | 'item', parseInt(item[1]), folderId)
         if (res) {
             setData(data => data.filter(row => !(row.type === item[0] && row.id === parseInt(item[1]))))
-            createAlert('success', "Successfully moved folder!")
+            createAlert('success', "Successfully moved!")
+            const updated = await fetchCurrentFolder(parseInt(item[1]))
+            addLog(org?.id!, "moveItem", user?.id!, parseInt(item[1]), {newLocation : updated?.Folders?.name!, oldLocation : currFolderName})
         } else {
-            createAlert('error', "Failed to move folder")
+            createAlert('error', "Failed to move")
         }
     }
 

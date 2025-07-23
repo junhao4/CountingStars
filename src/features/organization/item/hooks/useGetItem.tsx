@@ -30,6 +30,11 @@ export default function useGetItem(itemId: number) {
         if (item?.quantity != newItem.quantity) {
             addLog(org.id, "updateQuantity", user.id, newItem.id , {newQuantity: newItem.quantity, oldQuantity: item?.quantity!})
         }
+        if (item?.name != newItem.name) {
+            addLog(org.id, "changeItemName", user.id, newItem.id , {newName: newItem.name, oldName: item?.name!})
+        }
+        console.log("OLDITEM", item)
+          console.log("NEWITEM", newItem)
 
         const newCats = newItem.categories.filter(cat => !item?.categories.map(cat => cat.id).includes(cat.id))
         const oldCats = item!.categories.filter(cat => !newItem.categories.map(cat => cat.id).includes(cat.id))

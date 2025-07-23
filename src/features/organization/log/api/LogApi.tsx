@@ -28,6 +28,20 @@ export type LOGSTYPE =
     | "updateExpiry"
     | "addItemCategory"
     | "removeItemCategory"
+    | "changeItemName"
+
+    export type FilterType = "Created" | "Updated" | "Deleted";
+
+    //Convert user choice to database stored types
+export const filterToType = {
+    "Created": ["addItem"],
+    "Updated": ["updateQuantity", "updateExpiry", "moveItem", "changeItemName",
+                "addItemCategory", "removeItemCategory"
+    ],
+    "Deleted": ["removeItem"],
+};
+
+
 
 export type metadataType = {
     "addItem" :{
@@ -64,6 +78,11 @@ export type metadataType = {
         metadata: {
             itemName: string, categoryName: string
         }
+    },
+    "changeItemName": {
+        metadata: {
+            newName: string, oldName: string
+        }
     }
 }
 
@@ -96,8 +115,9 @@ export const LOGS: LogsWithMetadata = {
                 item +
                 " from " +
                 metadata.oldLocation +
-                " to " +
-                metadata.newLocation
+                " folder to " +
+                metadata.newLocation +
+                " folder"
             )
         }
     },
@@ -148,6 +168,17 @@ export const LOGS: LogsWithMetadata = {
                 metadata.categoryName
             )
         }
+    },
+    changeItemName: {
+        generateMessage: (performerName, _item, metadata) => {
+            return (
+                performerName +
+                " has changed the name of the item from " +
+                metadata.oldName +
+                " to " +
+                metadata.newName
+            )
+        }
     }
 
 } as const satisfies LogsWithMetadata
@@ -164,14 +195,7 @@ export function generateLogMessageNew<Type extends LOGSTYPE>(
     const generator = LOGS[type].generateMessage;
     return generator(performerName, item, metadata);
 }
-//Convert user choice to database stored types
-export const filterToType = {
-    "Created": ["addItem"],
-    "Updated": ["updateQuantity", "updateExpiry", "moveItem"],
-    "Deleted": ["removeItem"],
-};
 
-export type FilterType = "Created" | "Updated" | "Deleted";
 
 //Add log to supabase
 export async function addLog<Type extends LOGSTYPE>(
