@@ -12,7 +12,7 @@ import { validateMoveIntoFolder } from "../functions/Folder";
 
 
 export default function FolderRow({ setData, folder }:
-    { folder: ItemFolder, setData: React.Dispatch<SetStateAction<InventoryRow[]>>}) {
+    { folder: ItemFolder, setData: React.Dispatch<SetStateAction<InventoryRow[]>> }) {
     const navigate = useNavigate()
     const { createAlert } = useAlertContext()
 
@@ -54,6 +54,7 @@ export default function FolderRow({ setData, folder }:
             onDragOver={e => (e.preventDefault(), setOver(true))}
             onDrop={e => moveIntoFolder(e.dataTransfer.getData('id'), folder.id)}
             onDoubleClick={() => navigate('../' + folder.id, { relative: 'path' })}>
+            <td></td>
             <td><FolderIcon />&ensp;{folder.name}</td>
             <td></td>
             <td></td>

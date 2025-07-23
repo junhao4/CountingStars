@@ -126,7 +126,8 @@ const customTheme = createTheme({
             styleOverrides: {
                 root: {
                     color: 'var(--text)',
-                    backgroundColor: 'transparent'
+                    backgroundColor: 'transparent',
+                    justifyContent:'center'
                 }
             },
             defaultProps: {

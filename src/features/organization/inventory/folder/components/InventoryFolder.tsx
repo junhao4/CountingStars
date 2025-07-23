@@ -16,13 +16,12 @@ export default function InventoryFolder({ data, setData, folderId }:
     const { selectedCategories, handleFilterCategory, handleFilterName, filteredData } = useFilterModel(data)
     const { sortedData, foldersOnTop, getSortTitle, getSortIcon, handleSort } = useSortingModel(filteredData)
 
-
     const [addFolderRow, setAddFolderRow] = useState(false)
 
     return (
         <>
             <div className="inventory-search" style={{ display: 'flex', gap: '1rem' }} >
-                <TextField size="small"
+                <TextField
                     onChange={e => handleFilterName(e.target.value)} placeholder="Search by name" />
 
                 <InfoTip resource="inventory" />
@@ -46,7 +45,6 @@ export default function InventoryFolder({ data, setData, folderId }:
                 <Button color="secondary" onClick={() => { navigate('../add') }} children={"Add Item"} />
                 <Button color="secondary" onClick={() => { navigate('../categories') }} children={"Modify Categories"} />
             </div>
-
         </>
     )
 }
