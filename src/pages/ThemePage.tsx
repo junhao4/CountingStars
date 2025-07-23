@@ -1,6 +1,7 @@
 import { Box, Container } from "@mui/material";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { ThemeSettingsBox } from "../features/theme/components/ThemeSettingsBox";
+import ItemQuantityChart from "../features/organization/charts/components/ItemQuantityChart";
 
 export default function ThemePage() {
     // const testing =
@@ -56,6 +57,7 @@ export default function ThemePage() {
                         width={600}
                         height={300}
                     />
+                    <ItemQuantityChart></ItemQuantityChart>
                 </Box>
             </Container>
         </>

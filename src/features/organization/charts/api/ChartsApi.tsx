@@ -1,8 +1,19 @@
-// import supabase from "../../../../helper/supabaseClient"
+import supabase from "../../../../helper/supabaseClient";
 
+export const fetchItemChartData = async (itemId : number, orgId : number) => {
+    const { data, error } = await supabase
+        .from("Logs")
+        .select("typeString, metadata, created_at")
+        .eq("item_id", itemId)
+        .order("created_at", { ascending: true });
+  
 
+    if (error) {
+        console.log(error)
+    } else {
+        console.log("DATA",data)
+        return data
+    }
 
-// const getItemChartData = async (itemId : number) => {
-//     const { data, error } = await supabase
-//         .from()
-// }
+}
+
