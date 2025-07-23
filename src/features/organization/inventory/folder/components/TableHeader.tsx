@@ -28,6 +28,9 @@ export default function TableHeader({ foldersOnTop, selectedCategories, handleFi
     return (
         <thead>
             <tr>
+                <td width={"5%"}>
+                    <p>ID</p>
+                </td>
                 <Tooltip title={getSortTitle('name')} onClick={() => handleSort('name')}>
                     <td width={'30%'}>
                         <p>Name&ensp;{getSortIcon('name')}
@@ -36,7 +39,7 @@ export default function TableHeader({ foldersOnTop, selectedCategories, handleFi
                 </Tooltip>
 
                 <Tooltip title={getSortTitle('quantity')} onClick={() => handleSort('quantity')}>
-                    <td width={'15%'}>
+                    <td width={'10%'}>
                         <p>Quantity&ensp;{getSortIcon('quantity')}</p>
                     </td>
                 </Tooltip>
