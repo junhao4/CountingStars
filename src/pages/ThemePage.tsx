@@ -12,6 +12,32 @@ export default function ThemePage() {
         { x: new Date("2024-07-02"), y: 20 },
         { x: new Date("2024-07-09"), y: 15 },
     ];
+const dataset = [
+  {
+    date: new Date("2024-01-01"),
+    printerPaper: 10,
+  },
+  {
+    date: new Date("2024-02-01"),
+
+    inkCartridge: 12,
+  },
+  {
+    date: new Date("2024-03-01"),
+    printerPaper: 8,
+   
+  },
+  {
+    date: new Date("2024-04-01"),
+    printerPaper: 20,
+    inkCartridge: 14,
+  },
+   {
+    date: new Date("2024-05-09"),
+    printerPaper: 20,
+    inkCartridge: 14,
+  },
+];
 
     return (
         <>
@@ -57,7 +83,17 @@ export default function ThemePage() {
                         width={600}
                         height={300}
                     />
-                    <ItemQuantityChart></ItemQuantityChart>
+                    <ItemQuantityChart itemIds={[108,104,103]}></ItemQuantityChart>
+                    <LineChart
+  xAxis={[{ dataKey: "date", scaleType: "time" }]}
+  yAxis={[{ min: 0 }]}
+  dataset={dataset}
+  series={[
+    { dataKey: "printerPaper", label: "Printer Paper", curve: "linear", connectNulls:true},
+    { dataKey: "inkCartridge", label: "Ink Cartridge", curve: "linear", connectNulls:true },
+  ]}
+  height={400}
+/>
                 </Box>
             </Container>
         </>

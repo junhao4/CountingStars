@@ -42,7 +42,7 @@ export default function FolderRow({ setData, folder }:
 
         const item = moveItem.split(',')
         const curr = await fetchCurrentFolder(parseInt(item[1]))
-        const currFolderName = curr?.Folders?.name! ?? "root"
+        const currFolderName = curr?.Folders?.name! ?? "Root"
         const res = await moveItemIntoFolder(item[0] as 'folder' | 'item', parseInt(item[1]), folderId)
         if (res) {
             setData(data => data.filter(row => !(row.type === item[0] && row.id === parseInt(item[1]))))

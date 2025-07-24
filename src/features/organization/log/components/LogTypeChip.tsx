@@ -12,7 +12,6 @@ function LogTypeChip( {type} : {type  : string}) {
     case 'moveItem' :
     case 'updateExpiry' : 
     case 'updateQuantity': 
-    case 'moveItem' :
     case 'changeItemName' :
     case 'addItemCategory' :
     case 'removeItemCategory' :
