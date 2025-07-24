@@ -45,13 +45,13 @@ export const filterToType = {
 
 export type metadataType = {
     "addItem" :{
-            metadata : {
-                quantity : number
-            }
+        metadata : {
+            quantity : number
+        }
     },
     "removeItem": {
         metadata: {
-
+            quantity : number
         }
     },
     "moveItem": {

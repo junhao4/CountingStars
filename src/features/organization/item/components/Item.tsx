@@ -18,7 +18,7 @@ import { useSessionContext, type ValidSession } from "../../../../common/context
 import { useOrgContext, type ValidOrg } from "../../../../common/contexts/OrgContext"
 import { handleGenerateAlert } from "../../../../common/functions/ErrorAlerts"
 import { useAlertContext } from "../../../../common/contexts/AlertContext"
-import { addLog } from "../../log/api/LogApi"
+
 
 const convertValidStringToInt = (text: string, initialInt: number) => {
     var isNumber = true

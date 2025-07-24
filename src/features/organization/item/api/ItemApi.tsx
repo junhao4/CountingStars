@@ -48,9 +48,10 @@ export const updateItem = async (newItem: Item) => {
 }
 
 export const deleteItem = async (itemId: number, userId: string, organizationId: number) => {
-    const { error } = await supabase.from("Items")
+    const { data, error } = await supabase.from("Items")
         .update({deleted: true, last_modified: new Date(Date.now()).toDateString()})
         .eq('id', itemId)
+        .select()
         .single()
 
     if (error) {
@@ -58,7 +59,7 @@ export const deleteItem = async (itemId: number, userId: string, organizationId:
         return "itemError"
     }
 
-    const res = await addLog(organizationId, "removeItem", userId, itemId, {})
+    const res = await addLog(organizationId, "removeItem", userId, itemId, {quantity : data.quantity})
 
     return res ? true : "logError"
 }

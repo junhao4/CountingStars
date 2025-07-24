@@ -2,42 +2,13 @@ import { Box, Container } from "@mui/material";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { ThemeSettingsBox } from "../features/theme/components/ThemeSettingsBox";
 import ItemQuantityChart from "../features/organization/charts/components/ItemQuantityChart";
+import TotalQuantityChart from "../features/organization/charts/components/TotalQuantityChart";
 
 export default function ThemePage() {
     // const testing =
     //     "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Test.svg/2560px-Test.svg.png";
 
-    const chartData = [
-        { x: new Date("2024-07-01"), y: 10 },
-        { x: new Date("2024-07-02"), y: 20 },
-        { x: new Date("2024-07-09"), y: 15 },
-    ];
-const dataset = [
-  {
-    date: new Date("2024-01-01"),
-    printerPaper: 10,
-  },
-  {
-    date: new Date("2024-02-01"),
-
-    inkCartridge: 12,
-  },
-  {
-    date: new Date("2024-03-01"),
-    printerPaper: 8,
-   
-  },
-  {
-    date: new Date("2024-04-01"),
-    printerPaper: 20,
-    inkCartridge: 14,
-  },
-   {
-    date: new Date("2024-05-09"),
-    printerPaper: 20,
-    inkCartridge: 14,
-  },
-];
+  
 
     return (
         <>
@@ -49,51 +20,14 @@ const dataset = [
                         border: "1px solid var(--border)",
                         p: 2,
                         borderRadius: 2,
-                        width: "50%",
+                        width: "80%",
                     }}
                 >
-                    <LineChart
-                        xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-                        series={[
-                            {
-                                data: [2, 5.5, 2, 8.5, 1.5, 5],
-                            },
-                        ]}
-                        height={300}
-                    />
-                    <LineChart
-                        xAxis={[
-                            {
-                                scaleType: "time",
-                                dataKey: "x",
-                                valueFormatter: (date) =>
-                                    date.toLocaleDateString(),
-                            },
-                        ]}
-                        yAxis={[{
-                            max : 25
-                        }]}
-                        series={[
-                            {
-                                dataKey: "y",
-                                label: "Value",
-                            },
-                        ]}
-                        dataset={chartData}
-                        width={600}
-                        height={300}
-                    />
+                    
+                    
                     <ItemQuantityChart itemIds={[108,104,103]}></ItemQuantityChart>
-                    <LineChart
-  xAxis={[{ dataKey: "date", scaleType: "time" }]}
-  yAxis={[{ min: 0 }]}
-  dataset={dataset}
-  series={[
-    { dataKey: "printerPaper", label: "Printer Paper", curve: "linear", connectNulls:true},
-    { dataKey: "inkCartridge", label: "Ink Cartridge", curve: "linear", connectNulls:true },
-  ]}
-  height={400}
-/>
+                    
+                    <TotalQuantityChart orgId={95}></TotalQuantityChart>
                 </Box>
             </Container>
         </>

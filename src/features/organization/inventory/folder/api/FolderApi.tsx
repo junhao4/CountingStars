@@ -1,6 +1,6 @@
 import supabase from "../../../../../helper/supabaseClient"
 import type { Item, ItemFolder, ItemWithCategories } from "../../../../../helper/types"
-import { addLog } from "../../../log/api/LogApi"
+
 
 export const fetchFolders = async (organizationId: number, folderId: number | null) => {
     const { data, error } = await supabase.from('Folders')

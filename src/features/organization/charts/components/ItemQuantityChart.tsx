@@ -33,6 +33,7 @@ const yMax = maxY * 1.0;
                 xAxis={[{ scaleType: "time", dataKey: "date" }]}
                 series={series}
                 height={400}
+                grid={{ vertical: true, horizontal: true }}
             />
         </Box>
     );
