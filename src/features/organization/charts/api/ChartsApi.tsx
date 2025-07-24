@@ -22,14 +22,14 @@ export const fetchTotalQuantityLogs = async (orgId: number) => {
         .select("typeString, metadata, created_at")
         .eq("organization_id", orgId)
         .in("typeString", ["addItem", "removeItem", "updateQuantity"])
-        .order("created_at", { ascending: true })
+        .order("created_at", { ascending: true });
 
     if (error) {
-        console.error("Error", error)
-        return
+        console.error("Error", error);
+        return;
     }
 
-    return data
+    return data;
 };
 
 export const fetchItemsInOrg = async (orgId: number) => {
@@ -37,11 +37,16 @@ export const fetchItemsInOrg = async (orgId: number) => {
         .from("Items")
         .select("id, name, quantity")
         .eq("org_id", orgId)
-        .eq("deleted", false)
+        .eq("deleted", false);
 
     if (error) {
-        console.error("Error", error)
-        return
+        console.error("Error", error);
+        return;
     }
-    return data
+    return data;
+};
+
+export const fetchItemByCategory = async (orgId: number) => {
+  
+
 };

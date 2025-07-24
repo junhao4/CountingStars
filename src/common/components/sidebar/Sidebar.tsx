@@ -8,6 +8,7 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import HistoryIcon from '@mui/icons-material/History';
 import { useLocation, useNavigate } from "react-router-dom";
 import SidebarItem from "./SidebarItem";
+import TimelineIcon from '@mui/icons-material/Timeline';
 
 
 export default function Sidebar() {
@@ -35,6 +36,9 @@ export default function Sidebar() {
 
             <SidebarItem open={open} selected={location.pathname.startsWith("/dashboard/organization/inventory")} name="Inventory"
               navigate={() => navigate("/dashboard/organization/inventory")} Icon={InventoryIcon} />
+
+            <SidebarItem open={open} selected={location.pathname === ("/dashboard/organization/charts")} name="Charts"
+              navigate={() => navigate("/dashboard/organization/charts")} Icon={TimelineIcon} />
 
             <SidebarItem open={open} selected={location.pathname === "/dashboard/organization/log"} name="Logs"
               navigate={() => navigate("/dashboard/organization/log")} Icon={HistoryIcon} />

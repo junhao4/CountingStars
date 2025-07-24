@@ -17,6 +17,7 @@ function ItemInOrgChart({ orgId }: { orgId: number }) {
                 series={[{ dataKey: "quantity", label: "Quantity" }]}
                 borderRadius={20}
                 height={500}
+                grid={{ vertical: true, horizontal: true }}
             />
         </Box>
     );

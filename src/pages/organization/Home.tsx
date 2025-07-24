@@ -10,6 +10,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import SettingsIcon from "@mui/icons-material/Settings";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import HistoryIcon from '@mui/icons-material/History';
+import TimelineIcon from '@mui/icons-material/Timeline';
 
 
 export default function OrgHome() {
@@ -91,23 +92,31 @@ export default function OrgHome() {
               <Grid container spacing={0}  sx={{ mt: 4, px: 2, justifyContent: "space-around"}}>
                 <HomeNavigateCard  route="/dashboard/organization/users">
                 <Stack sx={{alignItems : "center"}}>
-                    <GroupIcon sx={{ fontSize: "108px" }} />
+                    <GroupIcon sx={{ fontSize: "98px" }} />
                     Users
                     </Stack>
                 </HomeNavigateCard>
                 <HomeNavigateCard  route="/dashboard/organization/inventory">
                 <Stack sx={{alignItems : "center"}}>
-                    <InventoryIcon sx={{ fontSize: "108px" }} />
+                    <InventoryIcon sx={{ fontSize: "98px" }} />
                     Inventory
                     </Stack>
-                </HomeNavigateCard><HomeNavigateCard  route="/dashboard/organization/log">
+                </HomeNavigateCard>
+                <HomeNavigateCard  route="/dashboard/organization/charts">
                 <Stack sx={{alignItems : "center"}}>
-                    <HistoryIcon sx={{ fontSize: "108px" }} />
+                    <TimelineIcon sx={{ fontSize: "98px" }} />
+                    Charts
+                    </Stack>
+                </HomeNavigateCard>
+                <HomeNavigateCard  route="/dashboard/organization/log">
+                <Stack sx={{alignItems : "center"}}>
+                    <HistoryIcon sx={{ fontSize: "98px" }} />
                     Logs
                     </Stack>
-                </HomeNavigateCard><HomeNavigateCard  route="/dashboard/organization/settings">
+                </HomeNavigateCard>
+                <HomeNavigateCard  route="/dashboard/organization/settings">
                 <Stack sx={{alignItems : "center"}}>
-                    <SettingsIcon sx={{ fontSize: "108px" }} />
+                    <SettingsIcon sx={{ fontSize: "98px" }} />
                     Settings
                     </Stack>
                 </HomeNavigateCard>
