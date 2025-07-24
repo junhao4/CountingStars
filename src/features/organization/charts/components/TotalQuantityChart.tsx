@@ -23,7 +23,7 @@ function TotalQuantityChart({ orgId }: { orgId: number }) {
   series={[{curve : 'monotoneX', area: true ,dataKey: "total", label: "Total Stock" ,showMark: true }]}
   xAxis={[{ dataKey: "date", scaleType: "time" }]}
   yAxis={[{ min: 0 }]}
-  height={300}
+  height={500}
     grid={{ vertical: true, horizontal: true }}
 />
         </Box>

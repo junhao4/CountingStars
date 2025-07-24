@@ -3,6 +3,7 @@ import { LineChart } from "@mui/x-charts/LineChart";
 import { ThemeSettingsBox } from "../features/theme/components/ThemeSettingsBox";
 import ItemQuantityChart from "../features/organization/charts/components/ItemQuantityChart";
 import TotalQuantityChart from "../features/organization/charts/components/TotalQuantityChart";
+import ItemSelect from "../features/organization/inventory/itemSelect/ItemSelect";
 
 export default function ThemePage() {
     // const testing =
@@ -23,7 +24,7 @@ export default function ThemePage() {
                         width: "80%",
                     }}
                 >
-                    
+                   
                     
                     <ItemQuantityChart itemIds={[108,104,103]}></ItemQuantityChart>
                     

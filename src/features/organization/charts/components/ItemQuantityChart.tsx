@@ -23,16 +23,13 @@ const yMax = maxY * 1.0;
 
     return (
         <Box textAlign={"center"}>
-            <Typography
-             variant="h6" fontWeight={600} mb={2}>
-                Item Stock Over Time
-            </Typography>
+           
             <LineChart
                 yAxis={[{ min: 0, max: yMax }]}
                 dataset={dataset}
                 xAxis={[{ scaleType: "time", dataKey: "date" }]}
                 series={series}
-                height={400}
+                height={500}
                 grid={{ vertical: true, horizontal: true }}
             />
         </Box>
