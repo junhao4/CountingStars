@@ -17,6 +17,20 @@ export const fetchFolders = async (organizationId: number, folderId: number | nu
         .map(item => { return { ...item, lastModified: new Date(item.lastModified).toDateString() } }) as ItemFolder[]
 }
 
+export const fetchAllFolders = async (organizationId: number) => {
+    const { data, error } = await supabase.from('Folders')
+        .select(`id, parentId:parent_id, name, description, 
+            lastModified:last_modified, createdAt:created_at, deleted`)
+        .eq("organization_id", organizationId)
+
+    if (error) {
+        console.log(error.message)
+        return []
+    }
+    return data
+        .map(item => { return { ...item, lastModified: new Date(item.lastModified).toDateString() } }) as ItemFolder[]
+}
+
 export const fetchItems = async (organizationId: number, folderId: number | null) => {
     const { data, error } = await supabase.from('Items')
         .select('id, folderId:folder_id, name, quantity, description, lastModified:last_modified, expiryDate:expiry_date')

@@ -8,7 +8,7 @@ import "./InventoryFolder.css"
 
 
 
-export default function InventoryBreadcrumbs({ setData, folderId }:
+export default function dInventoryBreadcrumbs({ setData, folderId }:
     { data: InventoryRow[], setData: React.Dispatch<SetStateAction<InventoryRow[]>>, folderId: number | 'root' }) {
 
     const [parentFolderIds, setParentFolderIds] = useState<{ id: number | 'root', name: string }[]>([])

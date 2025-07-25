@@ -152,7 +152,8 @@ const customTheme = createTheme({
 
         MuiSelect: {
             defaultProps: {
-                color: 'secondary'
+                color: 'secondary',
+                size: 'small'
             }
         },
 

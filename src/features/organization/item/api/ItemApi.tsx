@@ -1,3 +1,4 @@
+import { generateFileName } from "../../../../common/functions/File";
 import supabase from "../../../../helper/supabaseClient";
 import type { Item, ItemWithCategories } from "../../../../helper/types";
 import { addLog } from "../../log/api/LogApi";
@@ -117,6 +118,8 @@ export const fetchItemImage = async (itemId: number) => {
 }
 
 export const updateItemImage = async (itemId: number, oldImageName: string, imageFile: File) => {
+    const newName = generateFileName(imageFile)
+
     if (oldImageName !== 'default_item.jpg') {
         const { error } = await supabase.storage
             .from('item-images')
@@ -130,7 +133,7 @@ export const updateItemImage = async (itemId: number, oldImageName: string, imag
 
     const { error: storageError } = await supabase.storage
         .from('item-images')
-        .upload(imageFile.name, imageFile)
+        .upload(newName, imageFile)
 
     if (storageError) {
         console.log(storageError.message)
