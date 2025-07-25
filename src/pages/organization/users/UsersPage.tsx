@@ -11,7 +11,7 @@ export default function UsersPage() {
   const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
-    setTitle(org.name + " Users");
+    setTitle("Users");
   }, []);
 
   return (

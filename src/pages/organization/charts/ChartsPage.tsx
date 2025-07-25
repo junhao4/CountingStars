@@ -13,7 +13,7 @@ function ChartsPage() {
     const [ selectedIds, setSelectedIds ] = useState<number[]>([])
 
     useEffect(() => {
-        setTitle(org?.name + " Charts");
+        setTitle("Charts");
     }, []);
 
     return (
