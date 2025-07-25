@@ -7,8 +7,8 @@ import { SessionContext } from "../common/contexts/SessionContext";
 import { OrgContext } from "../common/contexts/OrgContext";
 
 
-const renderSidebar = (path: string) =>
-  render(
+const renderSidebar = async (path: string) =>
+  await render(
     <MemoryRouter initialEntries={[path]}>
       {/* <ContextProvider> */}
       <SessionContext.Provider value={{ session: null, user: null, setUser: () => { }, loading: false }}>
@@ -23,8 +23,6 @@ const renderSidebar = (path: string) =>
 describe('Sidebar text', () => {
   it('renders organization sidebar items when on organization page', () => {
     renderSidebar('/dashboard/organization')
-
-    screen.logTestingPlaygroundURL()
 
     expect(screen.getByText(/Organization/i)).toBeInTheDocument();
     expect(screen.getByText(/Users/i)).toBeInTheDocument();
@@ -47,8 +45,6 @@ describe('Sidebar actions', () => {
     act(() => {
       renderSidebar('/')
     })
-
-    screen.logTestingPlaygroundURL()
 
     const nav = screen.getByRole('navigation');
     fireEvent.mouseEnter(nav);

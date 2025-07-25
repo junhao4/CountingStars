@@ -77,7 +77,7 @@ export default function UserGrid({refresh}: UserGridProps) {
             },
         },
         {
-            field: "role", headerName: "Role", width: 280, align: "left", headerAlign: "left", type: "singleSelect", display: 'flex',
+            field: "role", headerName: "Role", width: 140, align: "left", headerAlign: "left", type: "singleSelect", display: 'flex',
             valueOptions: ["owner", "admin", "member"], sortComparator: compareRolesTo, editable: true,
 
             // Capitalizes the first letter of role

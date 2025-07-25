@@ -12,6 +12,7 @@ import { type DashboardOrganizationFetch, fetchDashboard, joinOrg } from '../api
 import DashboardCard from './DashboardCard';
 import { hasPermission } from '../../../helper/RolePermissions';
 import type { UserOrganization } from '../../../helper/types';
+import InfoTip from '../../../common/components/InfoTip';
 
 export default function Dashboard() {
     const { user } = useSessionContext() as ValidSession
@@ -34,7 +35,6 @@ export default function Dashboard() {
                 setOrgs([])
             }
             setLoading(false)
-            console.log("Dashboard Loading set to false")
         })
     }, [user])
 
@@ -66,29 +66,32 @@ export default function Dashboard() {
 
     // Renders loading screen. If no data, display "No organizations found", else display the organizations in Cards.
     return (<Box sx={{
-        overflow: 'auto', outline: '1px solid var(--border)', borderRadius:'1rem',
+        overflow: 'auto', outline: '1px solid var(--border)', borderRadius: '1rem',
         margin: '1rem 4rem',
         justifySelf: 'center', width: '70%'
     }}>
 
-        <Box display='flex' textAlign='center' alignItems='center' justifyContent='center'
-            gap='2rem' margin='1rem' flexWrap='wrap'>
-            <Typography variant='h5'>Your Organizations</Typography>
+        <div style={{display: 'flex', justifyContent:'right', padding: '0 1rem'}}>
+            <Box display='flex' textAlign='center' alignItems='center' justifyContent='center' width='100%'
+                gap='2rem' margin='1rem' flexWrap='wrap'>
+                <Typography variant='h5'>Your Organizations</Typography>
 
-            <Button onClick={() => navigate('new')}
-                variant='outlined' sx={{ flexShrink: 0, color: 'var(--primary)', borderColor : 'var(--primary)' }}>
-                Create Organization
-            </Button>
-
-            <div style={{ display: 'flex', gap: '1rem'}}>
-                <TextField placeholder='&ensp;Organization ID' sx={{ width: '8rem', marginLeft: '1rem'}}
-                    value={joinId} onChange={(e) => setJoinId(e.target.value)} />
-                <Button color='info' onClick={onJoinOrgClick}
-                    variant='outlined' sx={{ flexShrink: 0 }}>
-                    Join Organization
+                <Button onClick={() => navigate('new')}
+                    variant='outlined' sx={{ flexShrink: 0, color: 'var(--primary)', borderColor: 'var(--primary)' }}>
+                    Create Organization
                 </Button>
-            </div>
-        </Box>
+
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                    <TextField placeholder='&ensp;Organization ID' sx={{ width: '8rem', marginLeft: '1rem' }}
+                        value={joinId} onChange={(e) => setJoinId(e.target.value)} />
+                    <Button color='info' onClick={onJoinOrgClick}
+                        variant='outlined' sx={{ flexShrink: 0 }}>
+                        Join Organization
+                    </Button>
+                </div>
+            </Box>
+            <InfoTip resource='dashboard' />
+        </div>
 
         {orgs.length > 0 &&
             <Grid container padding='2rem 0' spacing={2} justifyContent='center' overflow='auto' wrap='wrap'

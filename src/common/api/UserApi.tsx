@@ -16,7 +16,6 @@ export const fetchUser = async (userId: string) => {
 }
 
 export const fetchProfileImage = async (userId: string) => {
-    console.log("Fetching user profile URL")
     const { data, error } = await supabase
         .from("Users")
         .select("image_file")

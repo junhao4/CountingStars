@@ -72,8 +72,6 @@ export const ThemeModeProvider = ({ children }: { children: React.ReactNode }) =
             setTheme(prefersDarkMode ? "dark" : "light")
             setMode(prefersDarkMode ? "dark" : "light")
         } else if (themeMode == 'custom') {
-
-            console.log(customBase)
             if (calculateLightness(customBase) > 50) {
                 setTheme("custom-light")
                 setMode("light")
