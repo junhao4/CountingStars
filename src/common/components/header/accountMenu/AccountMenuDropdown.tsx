@@ -81,7 +81,7 @@ export default function AccountMenuDropdown({
                 </MenuItem>
                 <Divider sx={{ mb: 0 }} />
                 <Box
-                    sx={{ px: 2, py: 1, bgcolor: "var(--card)" }}
+                    sx={{ px: 2, py: 1, bgcolor: "var(--card)", transition:"background-color 0ms linear" }}
                     onClick={(e) => e.stopPropagation()}
                 >
                     <Typography
