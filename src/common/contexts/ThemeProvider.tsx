@@ -16,9 +16,9 @@ const customTheme = createTheme({
                 },
 
                 secondary: { // Yellow
-                    light: 'rgba(188, 183, 50, 1)',
-                    main: 'rgba(160, 158, 48, 1)',
-                    dark: 'rgba(78, 69, 20, 1)',
+                    light: 'rgba(235, 231, 140, 1)',
+                    main: 'rgba(199, 197, 70, 1)',
+                    dark: 'rgba(145, 130, 43, 1)',
                     contrastText: 'rgb(255, 255, 255)',
                 },
 
@@ -55,14 +55,14 @@ const customTheme = createTheme({
             palette: {
                 primary: { // Black
                     light: 'rgb(79, 79, 79)',
-                    main: 'rgb(28, 28, 28)',
+                    main: 'rgba(41, 41, 41, 1)',
                     dark: 'rgb(0, 0, 0)',
                     contrastText: "#ffffff",
                 },
 
                 secondary: { // Purple
-                    light: 'rgba(252, 222, 255, 1)',
-                    main: 'rgba(221, 146, 236, 1)',
+                    light: 'rgba(241, 179, 247, 1)',
+                    main: 'rgba(219, 135, 236, 1)',
                     dark: 'rgba(170, 95, 205, 1)',
                     contrastText: "#000000",
                 },
@@ -127,12 +127,20 @@ const customTheme = createTheme({
                 root: {
                     color: 'var(--text)',
                     backgroundColor: 'transparent',
-                    justifyContent:'center'
+                    justifyContent:'center',
+                    
                 }
             },
             defaultProps: {
                 color: 'secondary',
-                variant: 'standard'
+                variant: 'standard',
+                slotProps: {
+                    input: {
+                        sx: {
+                            '::after': {borderBottomColor:'var(--primary)'}
+                        }
+                    }
+                }
             }
         },
 

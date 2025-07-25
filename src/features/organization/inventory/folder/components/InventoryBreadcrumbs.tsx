@@ -26,7 +26,7 @@ export default function dInventoryBreadcrumbs({ setData, folderId }:
                 // If last breadcrumb, prevent dragging item into current folder
                 if (index === parentFolderIds.length - 1) {
                     return (
-                    <IconButton color="secondary">
+                    <IconButton sx={{color: 'var(--primary)'}}>
                         {folder.name}
                     </IconButton>)
                 }

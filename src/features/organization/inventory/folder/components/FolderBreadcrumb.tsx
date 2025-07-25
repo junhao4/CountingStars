@@ -44,8 +44,8 @@ export default function FolderBreadcrumb({ folder, setData }: FolderBreadcrumbPr
     }
 
     return (
-        <IconButton sx={{ ...(over && {backgroundColor: 'var(--secondary-alternative)'}) }}
-            color="secondary" onClick={() => navigate('/dashboard/organization/inventory/' + folder.id)}
+        <IconButton sx={{ ...(over && {backgroundColor: 'var(--primary-alternative)'}), color: 'var(--primary)' }}
+            onClick={() => navigate('/dashboard/organization/inventory/' + folder.id)}
             onDragEnter={() => setOver(true)} onDragLeave={() => setOver(false)}
             onDragOver={e => e.preventDefault()}    
             onDrop={e => moveIntoFolder(e.dataTransfer.getData('id'),
