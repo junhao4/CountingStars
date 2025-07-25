@@ -36,10 +36,8 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
     useEffect(() => {
         supabase.auth.getSession().then(async ({ data: { session } }) => {
             if (session) {
-                console.log("Signing in!")
                 setSession(session)
             } else {
-                console.log("Signing out!")
                 setSession(null)
                 setLoading(false)
             }
@@ -47,8 +45,6 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
 
         // Checks and dynamically updates session state throughout all components that have access to context
         supabase.auth.onAuthStateChange((event, session) => {
-            console.log('supabase onAuthStateChange function called')
-
             if (event === 'SIGNED_IN') {
                 console.log("Signing in!")
                 setSession(session!)

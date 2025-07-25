@@ -13,24 +13,14 @@ export default function useItemSelect() {
     const [loading, setLoading] = useState(true)
     const [itemList, setItemList] = useState<Item[]>([])
 
-    const [filteredList, setFilteredList] = useState<Item[]>([])
-
     useEffect(() => {
         fetchItemList(org.id)
             .then(data => data === 'itemError' 
                 ? handleGenerateAlert(data, createAlert) 
-                : (setItemList(data),setFilteredList(data)))
+                : (setItemList(data)))
             .then(() => setLoading(false))
     }, [])
 
-    const handleFilter = (text: string) => {
-        if (text === "") {
-            setFilteredList(itemList)
-        } else {
-            setFilteredList(itemList.filter(item => (item.name + ' ' + item.id.toString()).includes(text)))
-        }
-    }
 
-
-    return { filteredList, handleFilter, loading }
+    return { itemList, loading }
 }

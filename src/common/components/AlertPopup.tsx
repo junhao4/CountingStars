@@ -17,8 +17,6 @@ export default function AlertPopup() {
       }}
     >
       {alert.map(({ variant, text, trigger, key }) => {
-
-        console.log(alert)
         return (
           <Grow
             in={trigger} key={key}
