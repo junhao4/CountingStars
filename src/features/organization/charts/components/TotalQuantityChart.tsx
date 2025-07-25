@@ -1,16 +1,9 @@
 import { LineChart } from "@mui/x-charts";
-
-import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { useTotalQuantityChartData } from "../hooks/useTotalQuantityChartData";
 
 function TotalQuantityChart({ orgId }: { orgId: number }) {
     const {dataset}  = useTotalQuantityChartData(orgId)
-
-
-    useEffect(() => {
-        console.log("CHARTDATA", dataset);
-    }, [dataset]);
 
     return (
         <Box textAlign={"center"}>

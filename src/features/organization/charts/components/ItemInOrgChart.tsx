@@ -1,7 +1,7 @@
 import { BarChart } from "@mui/x-charts";
 import { Box, Typography } from "@mui/material";
 import useItemInOrgChartData from "../hooks/useItemInOrgChartData";
-import { yellow } from "@mui/material/colors";
+
 
 function ItemInOrgChart({ orgId }: { orgId: number }) {
     const { dataset } = useItemInOrgChartData(orgId);

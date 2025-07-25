@@ -5,11 +5,9 @@ import { useSessionContext, type ValidSession } from "../../common/contexts/Sess
 import Loading from "../../common/components/Loading";
 import TableHeader from "../../features/notifications/components/TableHeader";
 import useGetNotifications from "../../features/notifications/hooks/useGetNotifications";
-import TableBody from "../../features/notifications/components/TableBody";
 import "../../features/notifications/components/NotificationsTable.css";
 import SearchBar from "../../features/notifications/components/SearchBar";
-import { Container, Grid, Paper, Stack, TextField, Typography } from "@mui/material";
-import LogFilterSelect from "../../features/organization/log/components/LogFilterSelect";
+import { Container, Grid, Paper, Stack, Typography } from "@mui/material";
 import TableRow from "../../features/notifications/components/TableRow";
 
 
