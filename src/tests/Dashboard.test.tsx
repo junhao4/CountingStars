@@ -1,5 +1,6 @@
 import { vi, it, expect, describe, afterEach } from "vitest";
 import { act, render, screen } from "@testing-library/react";
+import '@testing-library/jest-dom';
 import { MemoryRouter } from "react-router-dom";
 import App from "../App";
 import ContextProvider from "../common/contexts/ContextProvider";
@@ -162,14 +163,14 @@ describe("Dashboard page rendering", () => {
 
     it("should show alert when entering organization button is clicked with pending role", async () => {
         simulateMockSession()
-
+        
         vi.spyOn(AccountMenuController, "fetchProfileImage").mockResolvedValue(null)
 
         vi.spyOn(DashboardController, "fetchDashboard").mockResolvedValue(
             [{ id: 1, name: "Test Org", role: "pending", imageFile: "TEST", imageUrlBlob: null }])
 
         await act(async () => {
-            render(
+            await render(
                 <MemoryRouter initialEntries={['/dashboard']}>
                     <ContextProvider>
                         <App />
@@ -177,9 +178,7 @@ describe("Dashboard page rendering", () => {
                 </MemoryRouter>)
         })
 
-        await act(async () => {
-            await userEvent.click(screen.getByRole('button', { name: /enter/i }))
-        })
+        await userEvent.click(screen.getByRole('button', { name: /enter/i }))
 
         expect(screen.getByRole('heading', { name: /Dashboard/i })).toBeDefined()
         expect(screen.getByText(/Warning/i)).toBeDefined()

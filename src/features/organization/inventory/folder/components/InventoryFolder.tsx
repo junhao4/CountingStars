@@ -26,10 +26,8 @@ export default function InventoryFolder({ data, setData, folderId }:
 
     return (
         <>
-            <div className="inventory-search" style={{ display: 'flex', gap: '1rem' }} >
-                <TextField
-                    onChange={e => handleFilterName(e.target.value)} placeholder="Search by name" />
-
+            <div className="inventory-search" style={{ display: 'flex', justifyContent:'right', gap: '1rem' }} >
+                <TextField onChange={e => handleFilterName(e.target.value)} placeholder="Search by name" sx={{flexGrow:1}} />
                 <InfoTip resource="inventory" />
             </div>
 

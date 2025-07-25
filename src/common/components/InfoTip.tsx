@@ -52,6 +52,7 @@ export default function InfoTip({ resource }: InfoTipProps) {
 type InfoTipTypes =
     | "inventory"
     | "user"
+    | "dashboard"
 
 const InfoTipText = {
     inventory: {
@@ -71,6 +72,14 @@ const InfoTipText = {
             `Admins are able to edit other admins and members, and modify the inventory.`,
             `Members only have view-only access to organization features.`,
             `Pending users are those that applied to join the organization. Admins and above can choose to accept or reject their entry.`
+        ]
+    },
+
+    dashboard: {
+        header: ["New organization", "Joining"],
+        body: [
+            "Create an organization via the 'Create organization' button, and fill out a new name and image for your organization.",
+            "Request to join another organization using their organization ID. You can only enter the organization once they have approved your entry."
         ]
     }
 }

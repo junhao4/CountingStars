@@ -16,10 +16,7 @@ export default function SessionWrapper({ children }: SessionWrapperProps) {
   // Protected route: Waits for session to load, then checks for session, if it does not exist, navigate away.
   // First-time users are routed to profile and forced to input username.
   useEffect(() => {
-    console.log("SessionWrapper useEffect triggered!")
-
     if (!user) {
-      console.log("SessionWrapper navigating to /")
       createAlert("info","Your session has expired. Please log in to continue.")
       navigate('/')
     } else if (user) {

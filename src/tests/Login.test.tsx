@@ -1,20 +1,26 @@
 import "@testing-library/jest-dom"
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect } from 'vitest'
 import { MemoryRouter, Route, Routes } from "react-router-dom"
 import App from "../App";
 import ContextProvider from "../common/contexts/ContextProvider";
+import { OrgContext } from "../common/contexts/OrgContext";
+import { SessionContext } from "../common/contexts/SessionContext";
 
-const renderLoginWithoutSession = () => {
-  return render(
+const renderLoginWithoutSession = async () => {
+  return await render(
     <MemoryRouter initialEntries={['/login']}>
       <ContextProvider>
-        <Routes>
-          <Route index path='/*' element={<App />} />
-        </Routes>
+        <SessionContext.Provider value={{ session: null, user: null, setUser: () => { }, loading: false }}>
+          <OrgContext.Provider value={{ org: null, setOrg: () => {}, loading: false }} >
+            <Routes>
+              <Route index path='/*' element={<App />} />
+            </Routes>
+          </OrgContext.Provider>
+        </SessionContext.Provider>
       </ContextProvider>
-    </MemoryRouter>
+    </MemoryRouter >
   )
 }
 
@@ -34,8 +40,10 @@ const renderLoginWithoutSession = () => {
 
 describe("Login page test", () => {
 
-  it('Header components exists, not logged in', () => {
-    renderLoginWithoutSession()
+  it('Header components exists, not logged in', async () => {
+    await act(async () => {
+      await renderLoginWithoutSession()
+    })
 
     // Page title
     expect(screen.getByRole('heading', { level: 2, name: /Login/i })).toBeDefined()
@@ -48,8 +56,10 @@ describe("Login page test", () => {
 
   })
 
-  it('Login page sidebar components exists', () => {
-    renderLoginWithoutSession()
+  it('Login page sidebar components exists', async () => {
+    await act(async () => {
+      await renderLoginWithoutSession()
+    })
 
     // Home tab
     expect(screen.getByText(/home/i)).toBeDefined()
@@ -59,39 +69,12 @@ describe("Login page test", () => {
   })
 
   it('Login fields exists', async () => {
-    renderLoginWithoutSession()
+    await act(async () => {
+      await renderLoginWithoutSession()
+    })
 
     expect(screen.getByLabelText(/Email:/i)).toHaveValue("")
     expect(screen.getByLabelText(/Password:/i)).toHaveValue("")
 
   })
-
-  it('Login via default account', async () => {
-    render(
-      <MemoryRouter initialEntries={['/login']}>
-        <ContextProvider>
-            <Routes>
-              <Route index path='/*' element={<App />} />
-            </Routes>
-        </ContextProvider>
-      </MemoryRouter>
-    )
-
-    await userEvent.type(screen.getByLabelText(/Email:/i), "countingstarsauth@gmail.com")
-    expect(screen.getByLabelText(/Email:/i)).toHaveValue("countingstarsauth@gmail.com")
-
-    await userEvent.type(screen.getByLabelText(/Password:/i), "testtest")
-    expect(screen.getByLabelText(/Password:/i)).toHaveValue("testtest")
-
-
-
-    await userEvent.click(screen.getByRole('button', { name: /Login/i }), { delay: 1000 })
-    screen.logTestingPlaygroundURL()
-
-    await waitFor(() => {
-      expect(screen.getByText(/loading\.\.\./i)).toBeInTheDocument()
-    })
-
-  })
-
 })

@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import UserGrid from "../../../features/organization/users/components/UserGrid";
-import { useOrgContext, type ValidOrg } from "../../../common/contexts/OrgContext";
 import { usePageTitleContext } from "../../../common/contexts/PageTitleContext";
 import AddUserBar from "../../../features/organization/users/components/AddUserBar";
 
 export default function UsersPage() {
-  const { org } = useOrgContext() as ValidOrg
   const { setTitle } = usePageTitleContext()
 
   const [refresh, setRefresh] = useState(false)
