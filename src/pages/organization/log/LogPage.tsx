@@ -14,12 +14,14 @@ import LogFilterSelect from "../../../features/organization/log/components/LogFi
 import { handleGenerateAlert } from "../../../common/functions/ErrorAlerts.tsx";
 import { useAlertContext } from "../../../common/contexts/AlertContext.tsx";
 import { usePageTitleContext } from "../../../common/contexts/PageTitleContext.tsx";
+import Loading from "../../../common/components/Loading.tsx";
 
 export default function LogPage() {
     const { org } = useOrgContext() as ValidOrg
     const { createAlert } = useAlertContext()
     const { setTitle } = usePageTitleContext()
 
+    const [loading, setLoading] = useState(true)
     const [logs, setLogs] = useState<LogFetchS[]>([]);
 
     const [search, setSearch] = useState<string>("")
@@ -27,13 +29,28 @@ export default function LogPage() {
 
     const [filteredLogs, setFilteredLogs] = useState<LogFetchS[]>([])
 
+    const handleFilter = (logs: LogFetchS[]) => {
+        const acceptedTypes = filters.flatMap(filter => filterToType[filter])
+        return logs.filter(log => {
+            return (log.item_name.toLowerCase().includes(search.toLowerCase()) &&
+                (filters.length === 0 || acceptedTypes.includes(log.typeString)))
+        })
+    }
+
     useEffect(() => {
         setTitle("Logs")
         // Sets log data
         fetchLogs(org.id)
-            .then(data => data === 'logError' 
-                ? handleGenerateAlert('logError', createAlert) 
-                : setLogs(data.map(d => ({...d, user_name: d.Users.name || "DELETED USER", item_name: d.Items.name}))))
+            .then(data => {
+                if (data === 'logError') {
+                    handleGenerateAlert('logError', createAlert)
+                    return []
+                }
+                const transformedData = data.map(d => ({ ...d, user_name: d.Users.name || "DELETED USER", item_name: d.Items.name }))
+                setLogs(transformedData)
+                setFilteredLogs(handleFilter(transformedData))
+            })
+            .then(() => setLoading(false))
     }, [])
 
     useEffect(() => {
@@ -43,7 +60,8 @@ export default function LogPage() {
             return (log.item_name.toLowerCase().includes(search.toLowerCase()) &&
                 (filters.length === 0 || acceptedTypes.includes(log.typeString)))
         }))
-    }, [logs, search, filters])
+
+    }, [search, filters])
 
     return (
         <>
@@ -67,18 +85,21 @@ export default function LogPage() {
                     </div>
                 </Grid>
 
-                <Paper>
-                    <LogHeader />
-                    {filteredLogs.length === 0 ? (
-                        <Typography variant="h3" sx={{ px: 2, py: 2, textAlign: "center" }}>
-                            No logs available
-                        </Typography>
-                    ) : (
-                        filteredLogs.map((log, index) => (
-                            <LogRow key={index} log={log} index={index + 1} />
-                        ))
-                    )}
-                </Paper>
+                {loading
+                    ? (<Loading />)
+                    : (<Paper sx={{ bgcolor: 'var(--foreground)' }}>
+                        <LogHeader />
+                        {filteredLogs.length === 0 ? (
+                            <Typography variant="h3" sx={{ px: 2, py: 2, textAlign: "center" }}>
+                                No logs available
+                            </Typography>
+                        ) : (
+                            filteredLogs.map((log, index) => (
+                                <LogRow key={index} log={log} index={index + 1} />
+                            ))
+                        )}
+                    </Paper>)
+                }
             </Container>
         </>
     );
