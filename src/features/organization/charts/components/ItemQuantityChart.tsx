@@ -1,8 +1,6 @@
 import { LineChart } from "@mui/x-charts";
 import useItemQuantityChartData from "../hooks/useItemQuantityChartData";
-import { useOrgContext } from "../../../../common/contexts/OrgContext";
-import { useEffect, useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 
 function ItemQuantityChart({ itemIds }: { itemIds: number[] }) {
     const { dataset, series } = useItemQuantityChartData(itemIds);
@@ -16,11 +14,6 @@ function ItemQuantityChart({ itemIds }: { itemIds: number[] }) {
 );
 
 const yMax = maxY * 1.0;
-
-    useEffect(() => {
-        console.log("ITEMIDS", itemIds)
-        console.log("CHARTDATA", dataset);
-    }, [dataset, series]);
 
     return (
         <Box textAlign={"center"}>

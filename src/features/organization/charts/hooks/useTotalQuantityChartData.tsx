@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import { useOrgContext } from "../../../../common/contexts/OrgContext";
 import { fetchTotalQuantityLogs } from "../api/ChartsApi";
 
 export function useTotalQuantityChartData( orgid : number ) {
-    const { org } = useOrgContext();
     const [dataset, setData] = useState<{ date: Date; total: number; }[]>([]);
 
     useEffect(() => {
@@ -14,7 +12,7 @@ export function useTotalQuantityChartData( orgid : number ) {
 
             for (const log of data!) {
                 const date = new Date(log.created_at);
-                const { typeString, metadata } = log;
+                const { typeString } = log;
                 const meta = log.metadata as {
                     quantity?: number;
                     newQuantity?: number;

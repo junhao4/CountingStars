@@ -127,7 +127,10 @@ const ROLES = {
             view: true, update: false, delete: false
         },
         users: {
-            view: true, addUser: false, changeToOwner: false, changeToAdmin: false, changeToMember: false, remove: false
+            view: true, addUser: false, changeToOwner: false, changeToAdmin: false, changeToMember: false, 
+            remove: (user, resource) => {
+                return (user.userId == resource.userId)
+            }
         },
         inventory: {
             view: true, update: false, delete: false

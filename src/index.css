@@ -161,7 +161,7 @@ html[data-theme='light'] {
 
   --text: oklch(25% 0 0);
 
-  --text-muted: oklch(65.444% 0 0);
+  --text-muted: oklch(55.444% 0 0);
 
   --border: oklch(66.241% 0.00006 271.152);
 

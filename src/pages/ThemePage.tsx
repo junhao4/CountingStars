@@ -1,16 +1,10 @@
 import { Box, Container } from "@mui/material";
-import { LineChart } from "@mui/x-charts/LineChart";
 import { ThemeSettingsBox } from "../features/theme/components/ThemeSettingsBox";
-import ItemQuantityChart from "../features/organization/charts/components/ItemQuantityChart";
-import TotalQuantityChart from "../features/organization/charts/components/TotalQuantityChart";
-import ItemSelect from "../features/organization/inventory/itemSelect/ItemSelect";
+
 
 export default function ThemePage() {
-    // const testing =
-    //     "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Test.svg/2560px-Test.svg.png";
-
+   
   
-
     return (
         <>
             <Container sx={{ mt: 4 }}>
@@ -25,10 +19,6 @@ export default function ThemePage() {
                     }}
                 >
                    
-                    
-                    <ItemQuantityChart itemIds={[108,104,103]}></ItemQuantityChart>
-                    
-                    <TotalQuantityChart orgId={95}></TotalQuantityChart>
                 </Box>
             </Container>
         </>

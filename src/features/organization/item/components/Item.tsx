@@ -18,6 +18,7 @@ import { useSessionContext, type ValidSession } from "../../../../common/context
 import { useOrgContext, type ValidOrg } from "../../../../common/contexts/OrgContext"
 import { handleGenerateAlert } from "../../../../common/functions/ErrorAlerts"
 import { useAlertContext } from "../../../../common/contexts/AlertContext"
+import { hasPermission } from "../../../../helper/RolePermissions"
 
 
 const convertValidStringToInt = (text: string, initialInt: number) => {
@@ -52,6 +53,7 @@ export default function Item({ itemId }: { itemId: number }) {
     const { user } = useSessionContext() as ValidSession
     const { org } = useOrgContext() as ValidOrg
     const { createAlert } = useAlertContext()
+    const userWithOrg = { userId: user.id, organizationId: org.id, role: org.role }
 
     const { loading: loadingItem, item, handleSetItem } = useGetItem(itemId)
     const { loading: loadingImage, image, setImage, removeImage } = useGetItemImage(itemId)
@@ -177,9 +179,9 @@ export default function Item({ itemId }: { itemId: number }) {
                             <Button onClick={() => { setEditMode(false); setEditItem(item) }} color="error" variant="contained" startIcon={<CancelIcon />} children={"Cancel"} />
                         </>
                         : <>
-                            <IconButton color="success" onClick={() => setEditMode(true)}>
+                            <IconButton disabled={!hasPermission(userWithOrg, "inventory", "update")} color="success" onClick={() => setEditMode(true)}>
                                 <Tooltip title="Edit item"><EditIcon /></Tooltip></IconButton>
-                            <IconButton color="error" onClick={() => handleDelete()}>
+                            <IconButton disabled={!hasPermission(userWithOrg, "inventory", "update")} color="error" onClick={() => handleDelete()}>
                                 <Tooltip title="Delete item"><DeleteIcon /></Tooltip></IconButton>
                         </>
                     }

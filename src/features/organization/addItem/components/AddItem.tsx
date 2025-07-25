@@ -7,6 +7,7 @@ import { useOrgContext, type ValidOrg } from "../../../../common/contexts/OrgCon
 import { useSessionContext, type ValidSession } from "../../../../common/contexts/SessionContext";
 import { addItem } from "../api/AddItemApi";
 import { CategoryField, ExpiryDateField, ImageNameQuantityDescriptionField } from "./ComponentFields";
+import { hasPermission } from "../../../../helper/RolePermissions";
 
 export type UploadItem = {
     name: string;
@@ -63,6 +64,7 @@ export default function AddItem() {
     const { org } = useOrgContext() as ValidOrg
     const { createAlert } = useAlertContext();
     const { user } = useSessionContext() as ValidSession
+    const userWithOrg = { userId: user.id, organizationId: org.id, role: org.role }
 
     const [state, dispatch] = useReducer(itemReducer, initialState)
 
@@ -92,7 +94,7 @@ export default function AddItem() {
 
                 <Box>
                     <Button variant="contained" color="info" onClick={() => navigate(-1)} children="Back" />
-                    <Button sx={{ m: "1rem 2rem" }} variant="contained" color='secondary' onClick={handleAddItem} children="Add" />
+                    <Button disabled={!hasPermission(userWithOrg, "inventory", "update")} sx={{ m: "1rem 2rem" }} variant="contained" color='secondary' onClick={handleAddItem} children="Add" />
                 </Box>
             </Stack>
         </Box>

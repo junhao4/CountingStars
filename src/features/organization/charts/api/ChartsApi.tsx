@@ -1,6 +1,6 @@
 import supabase from "../../../../helper/supabaseClient";
 
-export const fetchItemChartData = async (itemId: number, orgId: number) => {
+export const fetchItemChartData = async (itemId: number, _orgId: number) => {
     const { data, error } = await supabase
         .from("Logs")
         .select("typeString, metadata, created_at, Items(name)")
@@ -46,7 +46,4 @@ export const fetchItemsInOrg = async (orgId: number) => {
     return data;
 };
 
-export const fetchItemByCategory = async (orgId: number) => {
-  
 
-};
