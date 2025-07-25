@@ -8,7 +8,7 @@ export default function InventoryAddItemPage() {
   const { setTitle } = usePageTitleContext()
 
   useEffect(() => {
-    setTitle(org.name)
+    setTitle("Add Item")
   }, [])
 
   return (

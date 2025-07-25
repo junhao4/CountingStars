@@ -18,6 +18,7 @@ function ItemQuantityChart({ itemIds }: { itemIds: number[] }) {
 const yMax = maxY * 1.0;
 
     useEffect(() => {
+        console.log("ITEMIDS", itemIds)
         console.log("CHARTDATA", dataset);
     }, [dataset, series]);
 
