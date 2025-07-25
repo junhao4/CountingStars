@@ -13,10 +13,12 @@ import LogHeader from "../../../features/organization/log/components/LogHeader.t
 import LogFilterSelect from "../../../features/organization/log/components/LogFilterSelect.tsx";
 import { handleGenerateAlert } from "../../../common/functions/ErrorAlerts.tsx";
 import { useAlertContext } from "../../../common/contexts/AlertContext.tsx";
+import { usePageTitleContext } from "../../../common/contexts/PageTitleContext.tsx";
 
 export default function LogPage() {
     const { org } = useOrgContext() as ValidOrg
     const { createAlert } = useAlertContext()
+    const { setTitle } = usePageTitleContext()
 
     const [logs, setLogs] = useState<LogFetchS[]>([]);
 
@@ -26,6 +28,7 @@ export default function LogPage() {
     const [filteredLogs, setFilteredLogs] = useState<LogFetchS[]>([])
 
     useEffect(() => {
+        setTitle("Logs")
         // Sets log data
         fetchLogs(org.id)
             .then(data => data === 'logError' 
