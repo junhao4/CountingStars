@@ -8,8 +8,10 @@ export default function SearchBar({ handleSearch }: SearchBarProps) {
     return (
         <>
             <TextField 
-                placeholder={"Search Messages"} 
-                sx={{ margin: '2rem 2rem 0 2rem' }}
+                variant="outlined"
+                placeholder={"Search Messages"}
+                label={"Search Messages"} 
+                sx={{ margin: '2rem 2rem 3rem 2rem' }}
                 onChange={e => handleSearch(e.target.value)} />
         </>
     )
