@@ -175,7 +175,41 @@ const customTheme = createTheme({
             defaultProps: {
                 color: 'secondary'
             }
+        },
+
+        MuiMenu: {
+            styleOverrides: {
+                root: {
+                    transition: "background-color 250ms linear"
+                }
+            }
+        },
+
+        MuiMenuItem: {
+            styleOverrides: {
+                root: {
+                    transition: "background-color 250ms linear"
+                }
+            }
+        },
+
+        MuiList: {
+            styleOverrides: {
+                root: {
+                    transition: "background-color 250ms linear"
+                }
+            }
+        },
+
+        MuiMenuList: {
+            styleOverrides: {
+                root: {
+                    transition: "background-color 250ms linear"
+                }
+            }
         }
+        
+    
     }
 
 })
