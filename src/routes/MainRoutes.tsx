@@ -1,4 +1,4 @@
-import Home from "../pages/HomePage"
+import Home from "../pages/home/HomePage"
 import { Route, Routes } from "react-router-dom";
 import NotFound from "../pages/NotFoundPage";
 import ProtectedRoutes from "./ProtectedRoutes";
