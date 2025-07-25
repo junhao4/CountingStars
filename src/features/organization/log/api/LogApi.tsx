@@ -71,12 +71,12 @@ export type metadataType = {
     },
     "addItemCategory": {
         metadata: {
-            itemName: string, categoryName: string
+          categoryName: string
         }
     },
     "removeItemCategory": {
         metadata: {
-            itemName: string, categoryName: string
+           categoryName: string
         }
     },
     "changeItemName": {
@@ -148,22 +148,22 @@ export const LOGS: LogsWithMetadata = {
         }
     },
     addItemCategory: {
-        generateMessage: (performerName, _item, metadata) => {
+        generateMessage: (performerName, item, metadata) => {
             return (
                 performerName +
                 " has added the item " +
-                metadata.itemName +
+                item +
                 " to category " +
                 metadata.categoryName
             )
         }
     },
     removeItemCategory: {
-        generateMessage: (performerName, _item, metadata) => {
+        generateMessage: (performerName, item, metadata) => {
             return (
                 performerName +
                 " has removed the item " +
-                metadata.itemName +
+                item +
                 " from category " +
                 metadata.categoryName
             )

@@ -182,7 +182,7 @@ export const setDefaultItemImage = async (itemId: number, oldImageName: string) 
 }
 
 export const deleteItemCategory = async (userId: string, organizationId: number, itemId: number, 
-    itemName: string,  categoryId: number, categoryName: string,) => {
+    _itemName: string,  categoryId: number, categoryName: string,) => {
     const { error } = await supabase.from('items_categories')
         .delete()
         .eq('item_id', itemId)
@@ -193,13 +193,13 @@ export const deleteItemCategory = async (userId: string, organizationId: number,
         return null
     }
 
-    return await addLog(organizationId, "removeItemCategory", userId, itemId, { itemName, categoryName })
+    return await addLog(organizationId, "removeItemCategory", userId, itemId, { categoryName })
 }
 
 // ITEM CATEGORY
 
 export const addItemCategory = async (userId: string, organizationId: number, itemId: number,
-    itemName: string, categoryId: number, categoryName: string) => {
+    _itemName: string, categoryId: number, categoryName: string) => {
     const { error } = await supabase.from('items_categories')
         .insert({ item_id: itemId, category_id: categoryId })
 
@@ -208,5 +208,5 @@ export const addItemCategory = async (userId: string, organizationId: number, it
         return null
     }
 
-    return await addLog(organizationId, "addItemCategory", userId, itemId, { itemName, categoryName })
+    return await addLog(organizationId, "addItemCategory", userId, itemId, { categoryName })
 }

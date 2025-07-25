@@ -32,15 +32,16 @@ export const addItem = async (userId: string, item: UploadItem, organizationId: 
     if (res.error) console.log(res.error.message)
   }
   
+await addLog(organizationId, "addItem", userId, data.id, { quantity: item.quantity })
 
   // Add to Item Categories table
   const res = await Promise.all(
     item.categories.map(async (value) => {
-        return await addItemCategory(data.id, value)
+        return await addItemCategory(data.id, value, organizationId, userId)
     })
   ).then(async (b: boolean[]) => {
     if (b.reduce((prev, next) => prev && next, true)) {
-      await addLog(organizationId, "addItem", userId, data.id, { quantity: item.quantity })
+      
       return true
     }
     return false
@@ -48,15 +49,18 @@ export const addItem = async (userId: string, item: UploadItem, organizationId: 
   return res
 };
 
-const addItemCategory = async (itemId: number, categoryId: number) => {
-  return await supabase
-          .from("items_categories")
-          .insert({ item_id: itemId, category_id: categoryId })
-          .then((res) => {
-            if (res.error) {
-              console.log(res.error.message);
-              return false
-            }
-            return true
-          })
+const addItemCategory = async (itemId: number, categoryId: number, organizationId : number, userId : string) => {
+  const {data, error} = await supabase
+      .from("items_categories")
+      .insert({ item_id: itemId, category_id: categoryId })
+      .select("Categories(name)")
+            
+      if (error) {
+          console.log(error.message);
+          return false
+      }
+      const catName = data[0].Categories.name
+      addLog(organizationId, "addItemCategory", userId, itemId, {categoryName: catName})
+      return true
 }
+

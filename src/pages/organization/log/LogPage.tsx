@@ -59,7 +59,7 @@ export default function LogPage() {
                     </Stack>
 
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <TextField placeholder="Search Text" onChange={e => setSearch(e.target.value)} />
+                        <TextField label="Search Items" variant="outlined" placeholder="Search Items" onChange={e => setSearch(e.target.value)} />
                         <LogFilterSelect filter={filters} setFilter={setFilters} />
                     </div>
                 </Grid>
