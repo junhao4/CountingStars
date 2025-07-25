@@ -32,15 +32,15 @@ export default function TableHeader({ foldersOnTop, selectedCategories, handleFi
                     <p>ID</p>
                 </td>
                 <Tooltip title={getSortTitle('name')} onClick={() => handleSort('name')}>
-                    <td width={'27%'}>
+                    <td width={'25%'}>
                         <p>Name&ensp;{getSortIcon('name')}
                         </p>
                     </td>
                 </Tooltip>
 
                 <Tooltip title={getSortTitle('quantity')} onClick={() => handleSort('quantity')}>
-                    <td width={'10%'}>
-                        <p>Quantity{getSortIcon('quantity')}</p>
+                    <td width={'12%'}>  
+                        <p>Quantity&ensp;{getSortIcon('quantity')}</p>
                     </td>
                 </Tooltip>
 
