@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchItemImage, setDefaultItemImage, updateItemImage } from "../api/ItemApi";
 import type { ItemImage } from "../../../../helper/types";
 import { useAlertContext } from "../../../../common/contexts/AlertContext";
+import { validateImageFile } from "../../../../common/functions/File";
 
 
 export default function useGetItemImage(itemId: number) {
@@ -20,9 +21,13 @@ export default function useGetItemImage(itemId: number) {
     }, [])
 
     const handleSetImage = async (file: FileList) => {
+    
         if (!file[0]) {
             createAlert('info', "No file selected")
             return 
+        }
+        if (!validateImageFile(file[0])) {
+            return
         }
         const res = await updateItemImage(itemId, image!.imageFile, file[0])
         if (res) {
