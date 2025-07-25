@@ -65,10 +65,10 @@ export const updateOrganizationName = async (newName: string, organizationId: nu
 
     if (data) {
         createAlert("success", newName + " set as organization's name");
-        return false
+        return true
     } else {
         createAlert("error", "could not update name")
-        return true
+        return false
     }
 };
 
