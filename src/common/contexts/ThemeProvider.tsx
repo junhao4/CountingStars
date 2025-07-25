@@ -134,13 +134,6 @@ const customTheme = createTheme({
             defaultProps: {
                 color: 'secondary',
                 variant: 'standard',
-                slotProps: {
-                    input: {
-                        sx: {
-                            '::after': {borderBottomColor:'var(--primary)'}
-                        }
-                    }
-                }
             }
         },
 

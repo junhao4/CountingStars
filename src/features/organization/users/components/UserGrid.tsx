@@ -97,7 +97,8 @@ export default function UserGrid({refresh}: UserGridProps) {
                         { userId: param.row.id, organizationId: org.id, role: param.row.role, countOfOwners }
                     )}
                     renderInput={(params) => (
-                        <TextField {...params} variant="standard" />
+                        <TextField {...params} value={"&ensp;" + params.inputProps.value} size="small" 
+                            sx={{width: '7rem', padding:'0 1rem'}} variant="standard" />
                     )}
                 />
             }
