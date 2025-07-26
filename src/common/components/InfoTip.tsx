@@ -53,11 +53,14 @@ type InfoTipTypes =
     | "inventory"
     | "user"
     | "dashboard"
+    | "itemTimeChart"
+    | "totalChart"
+    | "itemBarChart"
 
 const InfoTipText = {
     inventory: {
         header: ["Navigation", "Moving items", "Sorting", "Filtering", "Folder view"],
-        body: ["Double-click to view an item or enter a folder.",
+        body: ["Double-click to view an item or enter a folder.  Only owners and admins can edit inventory.",
             "Drag any row into another folder or the yellow directory name above to move them.",
             "Click on 'Name', 'Quantity', 'Last Modified' to sort. Click again to sort in reverse order.",
             "Click on 'Categories' to select and apply your filters",
@@ -80,6 +83,27 @@ const InfoTipText = {
         body: [
             "Create an organization via the 'Create organization' button, and fill out a new name and image for your organization.",
             "Request to join another organization using their organization ID. You can only enter the organization once they have approved your entry."
+        ]
+    },
+
+    itemTimeChart: {
+        header: ["Item Stock"],
+        body: [
+            "Compare the stock of different items over time, you can search for and select which items to include in the comparison."
+        ]
+    },
+
+    totalChart: {
+        header: ["Total Stock"],
+        body: [
+            "See the trend of the total number of items in your inventory over time."
+        ]
+    },
+
+    itemBarChart: {
+        header: ["Item Bars"],
+        body: [
+            "Compare the stock of different items currently in your inventory."
         ]
     }
 }
