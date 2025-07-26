@@ -97,7 +97,10 @@ const ROLES = {
             view: true, update: true, delete: false
         },
         users: {
-            view: true, edit: true, addUser: (user, resource) => {
+            view: true, edit: (user, resource) => {
+                return compareRolesTo(user.role, resource.role) >= 0
+            }, 
+            addUser: (user, resource) => {
                 return compareRolesTo(user.role, resource.role) >= 0
             }, 
             changeToOwner: false, 
