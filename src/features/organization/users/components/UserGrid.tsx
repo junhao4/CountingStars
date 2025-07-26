@@ -180,14 +180,14 @@ export default function UserGrid({refresh}: UserGridProps) {
                             icon={<SaveAltIcon />}
                             label="save"
                             // @ts-expect-error
-                            color="info"
+                            color="success"
                             onClick={handleSaveClick}
                         />,
                         <GridActionsCellItem
                             icon={<CancelIcon />}
                             label="save"
                             // @ts-expect-error
-                            color="info"
+                            color="warning"
                             onClick={handleCancelClick}
                         />,
                     ];
@@ -205,7 +205,7 @@ export default function UserGrid({refresh}: UserGridProps) {
                         icon={<DeleteIcon />}
                         label="save"
                         // @ts-expect-error
-                        color="info"
+                        color="error"
                         onClick={handleDeleteUser}
                         disabled={!hasPermission<"users">(userWithOrganization,
                             "users", "remove", { userId: row.id, organizationId: org.id, role: row.role, countOfOwners: countOfOwners })}
