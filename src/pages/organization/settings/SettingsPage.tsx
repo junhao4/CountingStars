@@ -132,12 +132,13 @@ export default function SettingsPage() {
                                 variant="outlined"
                                 startIcon={<CloudUploadIcon />}
                                 fullWidth
+                                disabled={!hasPermission(userWithOrganization, "organization", "update")}
                             >
                                 Upload Image (.jpg or .png, &lt; 2MB)
                                 <VisuallyHiddenInput
                                     type="file"
                                     onChange={onUpdateOrganizationImage}
-                                    disabled={!hasPermission(userWithOrganization, "organization", "update")}
+                                    
                                 />
                             </Button>
                         </Stack>

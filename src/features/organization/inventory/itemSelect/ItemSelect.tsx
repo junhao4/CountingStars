@@ -41,12 +41,13 @@ export default function ItemSelect({ selectedIds, setSelectedIds }: itemSelectPr
                 }}
                 MenuProps={{ slotProps: { paper: { sx: { height: '20rem', width: '15rem' } } } }}>
                 {
-                    [<TextField placeholder="Search item to compare" defaultValue={text} autoFocus
+                    [<TextField placeholder="Search items" defaultValue={text} autoFocus
                         onChange={e => setText(e.target.value)} onKeyDown={e => e.stopPropagation()} />,
                     ...itemList
                         .map(item => (
                         <MenuItem key={item.id} value={item.id} 
-                            sx={{display: !(item.name + ' ' + item.id.toString()).includes(text) ? "none" : "block"}}>
+                            sx={{display: !(item.name + ' ' + item.id.toString()).toLowerCase().includes(text.toLowerCase()) 
+                                ? "none" : "block"}}>
                             {item.id}.&ensp;{item.name}
                         </MenuItem>))
                     ]

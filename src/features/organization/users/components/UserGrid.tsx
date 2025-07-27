@@ -21,7 +21,7 @@ interface UserGridProps {
     refresh: boolean
 }
 
-export default function UserGrid({refresh}: UserGridProps) {
+export default function UserGrid({ refresh }: UserGridProps) {
     const { user } = useSessionContext() as ValidSession
     const { org, setOrg } = useOrgContext() as ValidOrg
     const { createAlert } = useAlertContext()
@@ -44,7 +44,7 @@ export default function UserGrid({refresh}: UserGridProps) {
     // When row is updated, update the target user's role. Does not fire if no changes are made.
     const onProcessRowUpdate = async (newRow: GridRowModel<UserGridData>) => {
         const success = await updateUserRole(user.id, newRow.id, org.id, newRow.role)
-        if (success) { createAlert('success', "Successfully updated user role!")}
+        if (success) { createAlert('success', "Successfully updated user role!") }
         if (newRow.id === user.id) {
             setOrg({ ...org, role: newRow.role });
         }
@@ -97,8 +97,8 @@ export default function UserGrid({refresh}: UserGridProps) {
                         { userId: param.row.id, organizationId: org.id, role: param.row.role, countOfOwners }
                     )}
                     renderInput={(params) => (
-                        <TextField {...params} value={"&ensp;" + params.inputProps.value} size="small" 
-                            sx={{width: '7rem', padding:'0 1rem'}} variant="standard" />
+                        <TextField {...params} value={"&ensp;" + params.inputProps.value} size="small"
+                            sx={{ width: '7rem', padding: '0 1rem' }} variant="standard" />
                     )}
                 />
             }
@@ -180,14 +180,14 @@ export default function UserGrid({refresh}: UserGridProps) {
                             icon={<SaveAltIcon />}
                             label="save"
                             // @ts-expect-error
-                            color="info"
+                            color="success"
                             onClick={handleSaveClick}
                         />,
                         <GridActionsCellItem
                             icon={<CancelIcon />}
                             label="save"
                             // @ts-expect-error
-                            color="info"
+                            color="warning"
                             onClick={handleCancelClick}
                         />,
                     ];
@@ -200,12 +200,14 @@ export default function UserGrid({refresh}: UserGridProps) {
                         // @ts-expect-error
                         color="info"
                         onClick={handleEditClick}
+                        disabled={!hasPermission<"users">(userWithOrganization,
+                            "users", "edit", { userId: row.id, organizationId: org.id, role: row.role, countOfOwners: countOfOwners })}
                     />,
                     <GridActionsCellItem
                         icon={<DeleteIcon />}
                         label="save"
                         // @ts-expect-error
-                        color="info"
+                        color="error"
                         onClick={handleDeleteUser}
                         disabled={!hasPermission<"users">(userWithOrganization,
                             "users", "remove", { userId: row.id, organizationId: org.id, role: row.role, countOfOwners: countOfOwners })}
