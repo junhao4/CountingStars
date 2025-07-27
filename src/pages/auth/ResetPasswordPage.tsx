@@ -5,19 +5,18 @@ import { useAlertContext } from '../../common/contexts/AlertContext';
 import { usePageTitleContext } from '../../common/contexts/PageTitleContext';
 
 export default function ResetPasswordPage() {
-  const {setTitle} = usePageTitleContext()
-  const [password, setPassword] = useState("");
+  const { setTitle } = usePageTitleContext()
   const { createAlert } = useAlertContext()
 
+  const [password, setPassword] = useState("");
+
   const handleReset = async () => {
-    const { data, error } = await supabase.auth.updateUser({ password })
-    console.log(data)
+    const { error } = await supabase.auth.updateUser({ password })
     if (error) {
-      createAlert("error", error.message);
+      console.log("error", error.message);
+      createAlert("success", "Password reset failed")
       return;
     } else {
-
-      console.log("Sign-up successful!");
       createAlert("success", "Password reset was successful")
     }
 
@@ -37,20 +36,20 @@ export default function ResetPasswordPage() {
         </Typography>
         <Box display='flex' gap='2rem' alignItems='center' padding='1rem 2rem 2rem 2rem'
           width='calc(100% - 4rem)' boxShadow='0 -2px 0 black'>
-          <Typography sx={{pt : 2}}>Password: </Typography>
-    
-          
-                               <TextField
-                    id="login-email-input"
-                    label="Password"
-                    type="text"
-                    autoComplete="password"
-                    variant="standard"
-                    color="secondary"
-                    onChange={(e) => setPassword(e.target.value)}
-                    sx={{ flexGrow: 1 }}
-          
-                  />
+          <Typography sx={{ pt: 2 }}>Password: </Typography>
+
+
+          <TextField
+            id="login-email-input"
+            label="Password"
+            type="text"
+            autoComplete="password"
+            variant="standard"
+            color="secondary"
+            onChange={(e) => setPassword(e.target.value)}
+            sx={{ flexGrow: 1 }}
+
+          />
         </Box>
         <Button sx={{ alignSelf: 'center', margin: '0 0 2rem 0', color: 'var(--secondary)', borderColor: 'var(--secondary)' }} onClick={handleReset}>Submit</Button>
       </Box>

@@ -49,7 +49,8 @@ export const resetPasswordForEmail = async ({ email, createAlert }: Omit<EmailPr
     });
     if (error) {
         createAlert('error', error.message)
-        return
+        return false
     }
     createAlert('success', "A link was sent to your email")
+    return true
 }
