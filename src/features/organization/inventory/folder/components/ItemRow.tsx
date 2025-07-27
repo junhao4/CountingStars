@@ -19,7 +19,8 @@ export default function ItemRow({item}: {item: ItemWithCategories}) {
     
 
     return (
-        <tr draggable={hasPermission(userWithOrg, "inventory", "update")}  className={`${over && "over"}`}
+        <tr style={{userSelect: 'none'}}
+            draggable={hasPermission(userWithOrg, "inventory", "update")}  className={`${over && "over"}`}
             onDragEnter={() => setOver(true)} onDragLeave={() => setOver(false)}
             onDragStart={(e) => e.dataTransfer.setData("id", 'item,' + item.id)}
             onDragOver={() => setOver(true)}

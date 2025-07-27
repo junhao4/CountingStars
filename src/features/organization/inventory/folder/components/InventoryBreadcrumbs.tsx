@@ -8,7 +8,7 @@ import "./InventoryFolder.css"
 
 
 
-export default function InventoryBreadcrumbs({ setData, folderId }:
+export default function dInventoryBreadcrumbs({ setData, folderId }:
     { data: InventoryRow[], setData: React.Dispatch<SetStateAction<InventoryRow[]>>, folderId: number | 'root' }) {
 
     const [parentFolderIds, setParentFolderIds] = useState<{ id: number | 'root', name: string }[]>([])
@@ -21,12 +21,12 @@ export default function InventoryBreadcrumbs({ setData, folderId }:
     }, [folderId])
 
     return (
-        <Breadcrumbs className="inventory-breadcrumb" separator={'>'} sx={{ width: 'fit-content', boxShadow: '0 1px var(--border)' }}>
+        <Breadcrumbs className="inventory-breadcrumb" separator={'>'} sx={{ width: 'fit-content', boxShadow: '0 1px var(--primary)' }}>
             {parentFolderIds.map((folder, index) => {
                 // If last breadcrumb, prevent dragging item into current folder
                 if (index === parentFolderIds.length - 1) {
                     return (
-                    <IconButton color="secondary">
+                    <IconButton sx={{color: 'var(--primary)'}}>
                         {folder.name}
                     </IconButton>)
                 }

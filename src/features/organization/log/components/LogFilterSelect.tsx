@@ -43,6 +43,7 @@ export default function LogFilterSelect({ filter, setFilter} : LogFilterProps) {
           id="demo-multiple-chip"
           multiple
           value={filter}
+          size='medium'
           onChange={e => setFilter(typeof e.target.value === 'string' ? e.target.value.split(',') as FilterType[] : e.target.value)}
           input={<OutlinedInput id="select-multiple-chip" label="Filter by type" />}
           renderValue={(selected) => (

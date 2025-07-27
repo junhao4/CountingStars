@@ -13,7 +13,7 @@ export default function UsersPage() {
   }, []);
 
   return (
-    <div style={{ width: '70%', maxWidth: '70%', margin: '1rem 0' }}>
+    <div style={{ width: '60%', margin: '2rem 0' }}>
       <AddUserBar setRefresh={setRefresh} />
       <UserGrid refresh={refresh} />
     </div>

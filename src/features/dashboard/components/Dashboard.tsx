@@ -90,6 +90,7 @@ export default function Dashboard() {
                     </Button>
                 </div>
             </Box>
+            
             <InfoTip resource='dashboard' />
         </div>
 
