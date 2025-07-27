@@ -145,9 +145,9 @@ html[data-theme='light'] {
 
   --background:  oklch(98% 0.0005 264.073);
 
-  --foreground: oklch(96.148% 0.0589 108.704);
+  --foreground: oklch(96.148% 0.0589 98.704);
 
-  --card: oklch(92.708% 0.1023 104.488);
+  --card: oklch(90.708% 0.1223 98.488);
 
   --card-muted : oklch(87.078% 0.11491 109.131);
 
@@ -155,7 +155,7 @@ html[data-theme='light'] {
 
   --secondary-muted: oklch(65% 0.15 90);
 
-  --primary: oklch(40% 0.18 250);
+  --primary: oklch(40% 0.25 255);
 
   --primary-muted: oklch(30% 0.15 250);
 
