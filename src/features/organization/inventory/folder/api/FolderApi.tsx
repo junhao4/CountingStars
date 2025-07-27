@@ -17,6 +17,20 @@ export const fetchFolders = async (organizationId: number, folderId: number | nu
         .map(item => { return { ...item, lastModified: new Date(item.lastModified).toDateString() } }) as ItemFolder[]
 }
 
+export const fetchAllFolders = async (organizationId: number) => {
+    const { data, error } = await supabase.from('Folders')
+        .select(`id, parentId:parent_id, name, description, 
+            lastModified:last_modified, createdAt:created_at, deleted`)
+        .eq("organization_id", organizationId)
+
+    if (error) {
+        console.log(error.message)
+        return []
+    }
+    return data
+        .map(item => { return { ...item, lastModified: new Date(item.lastModified).toDateString() } }) as ItemFolder[]
+}
+
 export const fetchItems = async (organizationId: number, folderId: number | null) => {
     const { data, error } = await supabase.from('Items')
         .select('id, folderId:folder_id, name, quantity, description, lastModified:last_modified, expiryDate:expiry_date')
@@ -48,7 +62,7 @@ const fetchCategories = async (item: Item) => {
 
 export const addNewFolder = async (organizationId: number, parentFolder: number | 'root', folderName: string) => {
     const { data, error } = await supabase.from("Folders")
-        .insert({...{ organization_id: organizationId, name: folderName }, ...(parentFolder === 'root' ? {} : {parent_id: parentFolder})})
+        .insert({ ...{ organization_id: organizationId, name: folderName }, ...(parentFolder === 'root' ? {} : { parent_id: parentFolder }) })
         .select("*")
         .single()
 
@@ -59,22 +73,26 @@ export const addNewFolder = async (organizationId: number, parentFolder: number 
     return transformFolder(data)
 }
 
-export const fetchCurrentFolder = async (itemId : number) => {
-  const { data, error } = await supabase
-            .from("Items")
-            .select("Folders(name)")
-            .eq("id", itemId)
-            .single();
-        if(error) console.log(error)
-        else return data
+export const fetchCurrentFolder = async (itemId: number) => {
+    const { data, error } = await supabase
+        .from("Items")
+        .select("Folders(name)")
+        .eq("id", itemId)
+        .maybeSingle();
+
+    if (error) {
+        console.log(error)
+        return 'itemError'
+    }
+    else return data
 }
 
 export const moveItemIntoFolder = async (itemType: 'item' | 'folder', itemId: number, folderId: number | null) => {
     if (itemType === 'item') {
-      
+
 
         const { error } = await supabase.from("Items")
-            .update({folder_id: folderId})
+            .update({ folder_id: folderId })
             .eq('id', itemId)
             .single()
 
@@ -84,7 +102,7 @@ export const moveItemIntoFolder = async (itemType: 'item' | 'folder', itemId: nu
         }
     } else {
         const { error } = await supabase.from("Folders")
-            .update({parent_id: folderId})
+            .update({ parent_id: folderId })
             .eq('id', itemId)
             .single()
 
@@ -155,6 +173,8 @@ const transformFolder = (folder: {
     organization_id: number,
     parent_id: number | null,
 }) => {
-    return {...folder, lastModified: folder.last_modified, createdAt: folder.created_at,
-        organizationId: folder.organization_id, parentId: folder.parent_id} as ItemFolder
+    return {
+        ...folder, lastModified: folder.last_modified, createdAt: folder.created_at,
+        organizationId: folder.organization_id, parentId: folder.parent_id
+    } as ItemFolder
 }

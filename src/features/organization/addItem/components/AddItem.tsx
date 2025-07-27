@@ -8,8 +8,10 @@ import { useSessionContext, type ValidSession } from "../../../../common/context
 import { addItem } from "../api/AddItemApi";
 import { CategoryField, ExpiryDateField, ImageNameQuantityDescriptionField } from "./ComponentFields";
 import { hasPermission } from "../../../../helper/RolePermissions";
+import { FolderSelect } from "./FolderSelect";
 
 export type UploadItem = {
+    folderId: number | null;
     name: string;
     quantity: number;
     description: string;
@@ -26,6 +28,7 @@ export type Action =
     | { type: 'SET_EXPIRY_DATE', value: Dayjs | null }
     | { type: 'SET_CATEGORIES', value: number[] }
     | { type: 'SET_IMAGE', value: File | undefined }
+    | { type: 'SET_FOLDERID', value: number | null}
 
 const itemReducer = (state: UploadItem, action: Action) => {
     switch (action.type) {
@@ -43,12 +46,15 @@ const itemReducer = (state: UploadItem, action: Action) => {
             return action.value 
                 ? { ...state, image: action.value, imageBlobUrl: URL.createObjectURL(action.value)}
                 : { ...state, image: undefined, imageBlobUrl: undefined }
+        case 'SET_FOLDERID':
+            return {...state, folderId: action.value}
         default:
             return state
     }
 }
 
 const initialState = {
+    folderId: null,
     name: "",
     quantity: 0,
     description: "",
@@ -85,6 +91,8 @@ export default function AddItem() {
                 <Typography variant="h6" sx={{ p: '1rem 0', width: "100%", textAlign: "center", boxShadow: "0 1px 0 black" }}>
                     Add Item
                 </Typography>
+
+                <FolderSelect state={state} dispatch={dispatch} />
 
                 <ImageNameQuantityDescriptionField state={state} dispatch={dispatch} />
 

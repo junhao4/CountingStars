@@ -46,7 +46,7 @@ type Permissions = {
     },
     users: {
         dataType: UserOrganization & { countOfOwners: number }
-        action: "view" | "addUser" | "changeToOwner" | "changeToAdmin" | "changeToMember" | "remove"
+        action: "view" | "edit" | "addUser" | "changeToOwner" | "changeToAdmin" | "changeToMember" | "remove"
     }
     inventory: {
         dataType: Item
@@ -68,7 +68,7 @@ const ROLES = {
             view: true, update: true, delete: true
         },
         users: {
-            view: true, addUser: true, changeToOwner: true, 
+            view: true, edit: true, addUser: true, changeToOwner: true, 
             changeToAdmin: (user, resource) => {
                 // If user is owner, and trying to demote oneself to admin but only one owner present, return no permissions.
                 return !(user.role === "owner" && user.userId === resource.userId && resource.countOfOwners === 1)
@@ -97,7 +97,10 @@ const ROLES = {
             view: true, update: true, delete: false
         },
         users: {
-            view: true, addUser: (user, resource) => {
+            view: true, edit: (user, resource) => {
+                return compareRolesTo(user.role, resource.role) >= 0
+            }, 
+            addUser: (user, resource) => {
                 return compareRolesTo(user.role, resource.role) >= 0
             }, 
             changeToOwner: false, 
@@ -127,7 +130,7 @@ const ROLES = {
             view: true, update: false, delete: false
         },
         users: {
-            view: true, addUser: false, changeToOwner: false, changeToAdmin: false, changeToMember: false, 
+            view: true, edit: false, addUser: false, changeToOwner: false, changeToAdmin: false, changeToMember: false, 
             remove: (user, resource) => {
                 return (user.userId == resource.userId)
             }

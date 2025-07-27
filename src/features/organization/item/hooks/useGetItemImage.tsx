@@ -21,7 +21,6 @@ export default function useGetItemImage(itemId: number) {
     }, [])
 
     const handleSetImage = async (file: FileList) => {
-    
         if (!file[0]) {
             createAlert('info', "No file selected")
             return 
@@ -39,7 +38,7 @@ export default function useGetItemImage(itemId: number) {
     }
 
     const handleRemoveImage = async () => {
-        if (image!.imageFile === "default_item.jpg") {
+        if (image && image.imageFile === "default_item.jpg") {
             return
         }
 

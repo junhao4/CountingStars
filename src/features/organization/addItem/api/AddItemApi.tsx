@@ -10,6 +10,7 @@ export const addItem = async (userId: string, item: UploadItem, organizationId: 
   const { data, error } = await supabase
     .from("Items")
     .insert({
+      folder_id: item.folderId,
       name: item.name,
       org_id: organizationId,
       quantity: item.quantity,
