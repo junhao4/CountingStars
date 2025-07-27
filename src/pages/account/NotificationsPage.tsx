@@ -50,7 +50,7 @@ export default function NotificationsPage() {
 
                 </Grid>
 
-                <Paper>
+                <Paper sx={{ bgcolor: 'var(--foreground)'}}>
                     <TableHeader />
                     {messages.length === 0 ? (
                         <Typography variant="h3" sx={{ px: 2, py: 2, textAlign: "center" }}>

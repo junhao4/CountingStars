@@ -153,7 +153,7 @@ html[data-theme='light'] {
 
   --secondary: oklch(70.674% 0.24867 75.566);
 
-  --secondary-muted: oklch(65% 0.15 90);
+  --secondary-muted: oklch(80% 0.15 70);
 
   --primary: oklch(40% 0.25 255);
 
