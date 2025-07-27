@@ -3,6 +3,7 @@ import { loginWithEmail } from "../api/AuthApi";
 import { useAlertContext } from "../../../common/contexts/AlertContext";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import Loading from "../../../common/components/Loading";
 
 
 export default function EmailLoginForm() {
@@ -10,15 +11,27 @@ export default function EmailLoginForm() {
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [loading, setLoading] = useState(false)
 
     const handleLogin = async () => {
-        await loginWithEmail({ email, password, createAlert })
+        setLoading(true)
+        const res = await loginWithEmail({ email, password })
+        if (res.error) {
+            createAlert('warning', "Unable to login: " + res.error)
+            setLoading(false)
+            return
+        }
+        createAlert('success', "Successfully logged in!")
+    }
+
+    if (loading) {
+        return <Loading />
     }
 
     return (
         <Stack sx={{
             backgroundColor: 'var(--foreground)', margin: '2rem 0', outline: '2px solid var(--border)',
-            alignItems: 'center', borderRadius:'1rem'
+            alignItems: 'center', borderRadius: '1rem'
         }}>
             <Box display='flex' gap='2rem' alignItems='center' margin='2rem 2rem 0 2rem'>
                 <label htmlFor='login-email-input'>Email: </label>
@@ -47,7 +60,7 @@ export default function EmailLoginForm() {
                 />
             </Box>
 
-            <Button onClick={handleLogin} sx={{ justifySelf: 'center'}}>Login</Button>
+            <Button onClick={handleLogin} sx={{ justifySelf: 'center' }}>Login</Button>
 
             <Link to='/forgot' style={{
                 color: 'grey', justifySelf: 'right', textAlign: 'right',

@@ -15,9 +15,11 @@ export default function ForgetPassword() {
 
   const handleSubmit = async () => {
     setLoading(true)
-    const res = await resetPasswordForEmail({ email, createAlert })
-    if (!res) {
-      createAlert('error', "Failed to send link")
+    const res = await resetPasswordForEmail({ email })
+    if (res.error) {
+      createAlert('warning', res.error)
+      setLoading(false)
+      return
     }
     createAlert('success', "A link was sent to your email")
     setLoading(false)

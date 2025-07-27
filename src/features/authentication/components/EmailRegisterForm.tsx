@@ -2,14 +2,30 @@ import { Box, Button, Stack, TextField } from "@mui/material";
 import { useState } from "react";
 import { useAlertContext } from "../../../common/contexts/AlertContext";
 import { registerWithEmail } from "../api/AuthApi";
+import Loading from "../../../common/components/Loading";
 
 export default function EmailRegisterForm() {
     const { createAlert } = useAlertContext()
     
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false)
 
-    const handleRegister = () => registerWithEmail({ email, password, createAlert })
+    const handleRegister = async () => {
+        setLoading(true)
+        const res = await registerWithEmail({ email, password })
+        if (res.error) {
+            createAlert('warning', res.error)
+            setLoading(false)
+            return
+        }
+        createAlert("success", "A link will be sent to your email, please check spam folder")
+        setLoading(false)
+    }
+
+    if (loading) {
+        return <Loading />
+    }
 
     return (
         <form>
