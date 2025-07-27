@@ -3,7 +3,7 @@ import { usePageTitleContext } from "../../../common/contexts/PageTitleContext";
 import ItemQuantityChart from "../../../features/organization/charts/components/ItemQuantityChart";
 import TotalQuantityChart from "../../../features/organization/charts/components/TotalQuantityChart";
 import ItemSelect from "../../../features/organization/inventory/itemSelect/ItemSelect";
-import { Box, Container, Stack, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { useOrgContext } from "../../../common/contexts/OrgContext";
 import ItemInOrgChart from "../../../features/organization/charts/components/ItemInOrgChart";
 import InfoTip from "../../../common/components/InfoTip";
