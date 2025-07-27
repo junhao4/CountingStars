@@ -20,7 +20,6 @@ export const fetchOrgImage = async (fileName: string | null) => {
     if (fileName === null) {
         fileName = 'Stock Background.jpg'
     }
-    console.log(1)
     const { data, error } = await supabase.storage.from('organization-images')
         .download(fileName)
     if (error) {

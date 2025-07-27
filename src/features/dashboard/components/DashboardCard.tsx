@@ -11,10 +11,7 @@ interface OrgCardProps {
 export default function DashboardCard({org, index, onEnterOrgClick}: OrgCardProps) {
     return (
         <Card sx={{ width: 'max(10%,200px)' }} key={index}>
-            {org.imageUrlBlob
-                ? <CardMedia sx={{ height: '150px' }} image={org.imageUrlBlob} />
-                : <CardMedia />
-            }
+            <CardMedia sx={{ height: '150px' }} image={org.imageUrlBlob} />
             <CardContent sx={{ textAlign: 'center' }}>
                 <Typography variant='h6' sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{org.name}</Typography>
             </CardContent>

@@ -54,34 +54,26 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
     }, []);
 
     useEffect(() => {
-        if (session) {            
-            new Promise(async () => {
-                const data = await fetchUser(session?.user.id)
-
-                if (data) {
-                    setUser(prev => {
-                        if (prev?.id === data.user_id) {
-                            return prev
-                        }
-                        return {
-                            ...data, id: data.user_id, createdAt: data.created_at, name: data.name || "NO NAME",
-                            imageFile: data.image_file || "Default_pfp.jpg"
-                        }
-                    })
-                    setLoading(false)
-                } else {
-                    const data = await handleFirstTimeUser(session.user.id, session.user.email!)
-                    if (data) setUser(prev => {
-                        if (prev?.id === data.user_id) {
-                            return prev
-                        }
-                        return {
-                            ...data, id: data.user_id, createdAt: data.created_at, name: data.name || "NO NAME",
-                            imageFile: data.image_file || "Default_pfp.jpg"
-                        }
-                    })
-                }
-            })
+        if (session) {
+            fetchUser(session?.user.id)
+                .then(async data => {
+                    if (!data) {
+                        data = await handleFirstTimeUser(session.user.id, session.user.email!)
+                    }
+                    if (data) {
+                        setUser(prev => prev?.id === data.user_id
+                            ? prev
+                            : {
+                                ...data, id: data.user_id, createdAt: data.created_at, name: data.name || "NO NAME",
+                                imageFile: data.image_file || "Default_pfp.jpg"
+                            })
+                        setLoading(false)
+                        return
+                    }
+                    console.error("SessionContext should not reach here")
+                })
+        } else {
+            setUser(null)
         }
     }, [session])
 

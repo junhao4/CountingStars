@@ -3,7 +3,7 @@ import supabase from "../../../helper/supabaseClient"
 import { type OrganizationRolesType, type Organization, OrganizationRoles } from "../../../helper/types"
 import { fetchOrganization, fetchOrgImage } from "../../organization/home/api/HomeApi"
 
-export type DashboardOrganizationFetch = Organization & { imageUrlBlob: string | null }
+export type DashboardOrganizationFetch = Organization & { imageUrlBlob: string }
 
 // Fetches an array of Dashboard Organization cards
 export const fetchDashboard = async (userId: string) => {
@@ -29,17 +29,15 @@ export const fetchDashboard = async (userId: string) => {
     const filteredRoles = roles.filter(d => !!d)
 
     const images = await Promise.all(filteredRoles.map(async d => {
-        if (d.imageFile) {
-            const imageUrlBlob = await fetchOrgImage(d.imageFile)
-
-            return { ...d, imageUrlBlob }
-        } else {
-            const imageUrlBlob = await fetchOrgImage("Stock Background.jpg")
-            return { ...d, imageUrlBlob }
+        const imageUrlBlob = await fetchOrgImage(d.imageFile)
+        if (!imageUrlBlob) {
+            console.error("Error fetching image for " + d.name)
+            return null
         }
+        return {...d, imageUrlBlob}
     }))
 
-    return images
+    return images.filter(img => !!img)
 }
 
 const fetchUserRole = async (userId: string, org_id: number) => {
@@ -68,6 +66,7 @@ export const transformOrgDataToDashboardCard = async (userId: string, org: Organ
     }
 
     const image = await fetchOrgImage(org.imageFile)
+    if (!image) return null
 
     return { ...org, imageUrlBlob: image, role: role as OrganizationRolesType }
 }
@@ -102,6 +101,7 @@ export const joinOrg = async (joinId: string, userId: string) => {
                     .insert({ user_id: userId, organization_id, role: "pending" })
                 if (error) {
                     console.log(error.message)
+                    return null
                 } else {
                     const org = await fetchOrganization(organization_id)
                     if (org) {

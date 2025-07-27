@@ -27,18 +27,27 @@ export default function Dashboard() {
 
     useEffect(() => {
         setLoading(true)
-        new Promise(async () => {
-            const data = await fetchDashboard(user!.id)
-            if (data) {
-                setOrgs(data)
-            } else {
-                setOrgs([])
-            }
-            setLoading(false)
-        })
+        fetchDashboard(user.id)
+            .then(data => {
+                if (data) {
+                    setOrgs(data)
+                } else {
+                    setOrgs([])
+                }
+                setLoading(false)
+                return data
+            })
     }, [user])
 
-
+    useEffect(() => {
+        // Clean-up code that runs on unmounting
+        return () => {
+            orgs.forEach(org => {
+                console.log(org.imageUrlBlob)
+                URL.revokeObjectURL(org.imageUrlBlob)
+            })
+        }
+    }, [orgs])
 
     const onEnterOrgClick = (index: number) => {
         // If successfully entered organization, set its context.
@@ -71,7 +80,7 @@ export default function Dashboard() {
         justifySelf: 'center', width: '70%'
     }}>
 
-        <div style={{display: 'flex', justifyContent:'right', padding: '0 1rem'}}>
+        <div style={{ display: 'flex', justifyContent: 'right', padding: '0 1rem' }}>
             <Box display='flex' textAlign='center' alignItems='center' justifyContent='center' width='100%'
                 gap='2rem' margin='1rem' flexWrap='wrap'>
                 <Typography variant='h5'>Your Organizations</Typography>
@@ -90,18 +99,17 @@ export default function Dashboard() {
                     </Button>
                 </div>
             </Box>
-            
+
             <InfoTip resource='dashboard' />
         </div>
 
-        {orgs.length > 0 &&
-            <Grid container padding='2rem 0' spacing={2} justifyContent='center' overflow='auto' wrap='wrap'
-                boxShadow='0 -1px 0 var(--border)'>{
-                    orgs.map((key, index) => {
-                        return (
-                            <DashboardCard key={index} org={key} index={index} onEnterOrgClick={onEnterOrgClick} />
-                        )
-                    })
-                }</Grid>}
+        <Grid container padding='2rem 0' spacing={2} justifyContent='center' overflow='auto' wrap='wrap'
+            boxShadow='0 -1px 0 var(--border)'>{
+                orgs.map((key, index) => {
+                    return (
+                        <DashboardCard key={index} org={key} index={index} onEnterOrgClick={onEnterOrgClick} />
+                    )
+                })
+            }</Grid>
     </Box>)
 }
