@@ -24,7 +24,7 @@ export default function VerifyPage() {
   }, []);
 
   return (<>
-    <Box component="section" sx={{ p: 2, border: '2px solid black' }}>
+    <Box component="section" sx={{ m: '2rem 0', p: 2, border: '2px solid var(--border)', borderRadius: '2rem'}}>
       <Stack spacing={3} alignItems="center">
         <Typography sx={{ justifySelf: 'center' }} variant="h4" component="h1">
           Your email was successfully verified! Proceed to login.
