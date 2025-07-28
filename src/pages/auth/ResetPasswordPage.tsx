@@ -29,7 +29,7 @@ export default function ResetPasswordPage() {
   return (
     <>
       <Box display='flex' flexDirection='column' justifySelf='center' alignItems='start'
-        sx={{ outline: '2px solid var(--border)', borderRadius: '2px', margin: '2rem' }}>
+        sx={{ outline: '2px solid var(--border)', borderRadius: '1rem', margin: '2rem' }}>
         <Typography variant="h6" padding='1rem 2rem 0 2rem'>Reset your Password</Typography>
         <Typography variant="body1" padding='0 2rem 1rem 2rem'>
           Type in a new secure password and press submit to update your password
@@ -37,7 +37,6 @@ export default function ResetPasswordPage() {
         <Box display='flex' gap='2rem' alignItems='center' padding='1rem 2rem 2rem 2rem'
           width='calc(100% - 4rem)' boxShadow='0 -2px 0 var(--border)'>
           <Typography sx={{ pt: 2 }}>Password: </Typography>
-
 
           <TextField
             id="login-email-input"

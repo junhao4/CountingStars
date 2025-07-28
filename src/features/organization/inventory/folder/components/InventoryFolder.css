@@ -47,7 +47,7 @@
     width: 65vw;
     height: auto;
     gap: 0.5rem;
-    background-color: var(--card);
+    background-color: var(--foreground);
 
     display: grid;
     /* grid-template-rows: 1fr 9fr 0.25fr 0.5fr; */

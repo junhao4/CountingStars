@@ -35,7 +35,7 @@ export default function ForgetPassword() {
 
   return (
     <Box display='flex' flexDirection='column' justifySelf='center' alignItems='start' color='var(--text)'
-      sx={{ outline: '2px solid var(--border)', borderRadius: '2px', margin: '2rem' }}>
+      sx={{ outline: '2px solid var(--border)', borderRadius: '1rem', margin: '2rem' }}>
       <Typography variant="h6" padding='1rem 2rem 0 2rem'>Reset your Password</Typography>
       <Typography variant="body1" padding='0 2rem 1rem 2rem'>
         Type in your email and we'll send you a link to reset your password
