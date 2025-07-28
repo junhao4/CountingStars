@@ -1,9 +1,17 @@
 import { Box, Container } from "@mui/material";
 import { ThemeSettingsBox } from "../features/theme/components/ThemeSettingsBox";
+import { useEffect } from "react";
+import { useAlertContext } from "../common/contexts/AlertContext";
+
 
 
 export default function ThemePage() {
    
+    const { createAlert } = useAlertContext()
+
+    useEffect(() => {
+        createAlert('success', "This is a success message")
+    }, [])
   
     return (
         <>
