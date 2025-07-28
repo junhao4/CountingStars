@@ -161,7 +161,7 @@ const customTheme = createTheme({
         MuiDataGrid: {
             styleOverrides: {
                 root: {
-                    backgroundColor: 'var(--card)',
+                    backgroundColor: 'var(--foreground)',
                     outline: '1px solid var(--border)',
                     border: 0,
                     textAlign: 'center',
