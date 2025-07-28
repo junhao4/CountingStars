@@ -1,5 +1,4 @@
 import supabase from "../../helper/supabaseClient"
-    
 
 export const fetchUser = async (userId: string) => {
     const { data, error } = await supabase

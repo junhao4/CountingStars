@@ -15,7 +15,7 @@ import { compareRolesTo, hasPermission } from "../../../../helper/RolePermission
 import Loading from "../../../../common/components/Loading";
 import { useAlertContext } from "../../../../common/contexts/AlertContext";
 
-type UserGridData = Omit<User, "createdAt"> & { role: OrganizationRolesType }
+export type UserGridData = Omit<User, "createdAt"> & { role: OrganizationRolesType }
 
 interface UserGridProps {
     refresh: boolean
@@ -109,6 +109,8 @@ export default function UserGrid({ refresh }: UserGridProps) {
 
             // Returns the actionable buttons, depending on VIEW/EDIT state and role.
             getActions: ({ id, row }: GridRowParams<UserGridData>) => {
+                const permissionResource = { userId: row.id, organizationId: org.id, role: row.role, countOfOwners: countOfOwners }
+
                 const handleEditClick = () => {
                     setRowModesModel({
                         ...rowModesModel,
@@ -162,6 +164,7 @@ export default function UserGrid({ refresh }: UserGridProps) {
                             // @ts-expect-error
                             color="info"
                             onClick={handleAcceptPendingUser}
+                            disabled={!hasPermission(userWithOrganization, "users", "edit", permissionResource)}
                         />,
                         <GridActionsCellItem
                             icon={<CancelIcon />}
@@ -169,6 +172,7 @@ export default function UserGrid({ refresh }: UserGridProps) {
                             // @ts-expect-error
                             color="info"
                             onClick={handleRejectPendingUser}
+                            disabled={!hasPermission(userWithOrganization, "users", "edit", permissionResource)}
                         />,
                     ];
                 }
@@ -182,6 +186,7 @@ export default function UserGrid({ refresh }: UserGridProps) {
                             // @ts-expect-error
                             color="success"
                             onClick={handleSaveClick}
+                            disabled={!hasPermission(userWithOrganization, "users", "edit", permissionResource)}
                         />,
                         <GridActionsCellItem
                             icon={<CancelIcon />}
@@ -200,8 +205,7 @@ export default function UserGrid({ refresh }: UserGridProps) {
                         // @ts-expect-error
                         color="info"
                         onClick={handleEditClick}
-                        disabled={!hasPermission<"users">(userWithOrganization,
-                            "users", "edit", { userId: row.id, organizationId: org.id, role: row.role, countOfOwners: countOfOwners })}
+                        disabled={!hasPermission<"users">(userWithOrganization, "users", "edit", permissionResource)}
                     />,
                     <GridActionsCellItem
                         icon={<DeleteIcon />}
@@ -209,8 +213,7 @@ export default function UserGrid({ refresh }: UserGridProps) {
                         // @ts-expect-error
                         color="error"
                         onClick={handleDeleteUser}
-                        disabled={!hasPermission<"users">(userWithOrganization,
-                            "users", "remove", { userId: row.id, organizationId: org.id, role: row.role, countOfOwners: countOfOwners })}
+                        disabled={!hasPermission<"users">(userWithOrganization, "users", "remove", permissionResource)}
                     />,
                 ];
             },
@@ -218,10 +221,11 @@ export default function UserGrid({ refresh }: UserGridProps) {
     ];
 
     useEffect(() => {
-        fetchOrganizationUsers(org.id).then(data => {
-            if (data) setRows(data)
-            setLoading(false)
-        })
+        fetchOrganizationUsers(org.id)
+            .then(data => {
+                if (data) setRows(data)
+                setLoading(false)
+            })
     }, [refresh]);
 
     if (loading) return <Loading />

@@ -61,6 +61,7 @@ describe("User permissions", () => {
 
             expect(hasPermission(dummyUser, 'users', 'changeToAdmin', { ...targetUser, countOfOwners: 69 })).toBe(false)
             expect(hasPermission(dummyUser, 'users', 'changeToAdmin', { ...targetUser, countOfOwners: 1 })).toBe(false)
+            
             expect(hasPermission(dummyUser, 'users', 'changeToMember', { ...targetUser, countOfOwners: 69 })).toBe(false)
             expect(hasPermission(dummyUser, 'users', 'changeToMember', { ...targetUser, countOfOwners: 1 })).toBe(false)
         })
@@ -80,28 +81,38 @@ describe("User permissions", () => {
     })
 
     describe("Member permissions", () => {
-        it("should return false for all attributes", () => {
+        it("should return false for all attributes except remove oneself", () => {
             const dummyUser = { userId: dummyUUID, organizationId: 69, role: 'member' as const }
 
             const targetOwnerUser = { userId: "DWADSADAD", organizationId: 69, role: 'owner' as const }
             const targetAdminUser = { userId: "DWADSADAD", organizationId: 69, role: 'admin' as const }
             const targetMemberUser = { userId: "DWADSADAD", organizationId: 69, role: 'member' as const }
+            const targetPendingUser = { userId: "DWADSADAD", organizationId: 69, role: 'member' as const }
 
             expect(hasPermission(dummyUser, 'users', 'changeToOwner', { ...dummyUser, countOfOwners: 69 })).toBe(false)
             expect(hasPermission(dummyUser, 'users', 'changeToAdmin', { ...dummyUser, countOfOwners: 69 })).toBe(false)
-            expect(hasPermission(dummyUser, 'users', 'remove', { ...dummyUser, countOfOwners: 69 })).toBe(false)
+            expect(hasPermission(dummyUser, 'users', 'edit', { ...targetPendingUser, countOfOwners: 69 })).toBe(false)
+            expect(hasPermission(dummyUser, 'users', 'remove', { ...dummyUser, countOfOwners: 69 })).toBe(true)
 
             expect(hasPermission(dummyUser, 'users', 'changeToOwner', { ...targetOwnerUser, countOfOwners: 69 })).toBe(false)
             expect(hasPermission(dummyUser, 'users', 'changeToAdmin', { ...targetOwnerUser, countOfOwners: 69 })).toBe(false)
+            expect(hasPermission(dummyUser, 'users', 'edit', { ...targetPendingUser, countOfOwners: 69 })).toBe(false)
             expect(hasPermission(dummyUser, 'users', 'remove', { ...targetOwnerUser, countOfOwners: 69 })).toBe(false)
 
             expect(hasPermission(dummyUser, 'users', 'changeToOwner', { ...targetAdminUser, countOfOwners: 69 })).toBe(false)
             expect(hasPermission(dummyUser, 'users', 'changeToAdmin', { ...targetAdminUser, countOfOwners: 69 })).toBe(false)
+            expect(hasPermission(dummyUser, 'users', 'edit', { ...targetPendingUser, countOfOwners: 69 })).toBe(false)
             expect(hasPermission(dummyUser, 'users', 'remove', { ...targetAdminUser, countOfOwners: 69 })).toBe(false)
 
             expect(hasPermission(dummyUser, 'users', 'changeToOwner', { ...targetMemberUser, countOfOwners: 69 })).toBe(false)
             expect(hasPermission(dummyUser, 'users', 'changeToAdmin', { ...targetMemberUser, countOfOwners: 69 })).toBe(false)
+            expect(hasPermission(dummyUser, 'users', 'edit', { ...targetPendingUser, countOfOwners: 69 })).toBe(false)
             expect(hasPermission(dummyUser, 'users', 'remove', { ...targetMemberUser, countOfOwners: 69 })).toBe(false)
+
+            expect(hasPermission(dummyUser, 'users', 'changeToOwner', { ...targetPendingUser, countOfOwners: 69 })).toBe(false)
+            expect(hasPermission(dummyUser, 'users', 'changeToAdmin', { ...targetPendingUser, countOfOwners: 69 })).toBe(false)
+            expect(hasPermission(dummyUser, 'users', 'edit', { ...targetPendingUser, countOfOwners: 69 })).toBe(false)
+            expect(hasPermission(dummyUser, 'users', 'remove', { ...targetPendingUser, countOfOwners: 69 })).toBe(false)
 
         })
     })

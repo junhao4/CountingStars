@@ -34,13 +34,13 @@ export default function EmailRegisterForm() {
                 alignItems: 'center', borderRadius:'1rem'
             }}>
                 <Box display='flex' gap='2rem' alignItems='center' margin='2rem 2rem 0 2rem'>
-                    <label>Email: </label>
-                    <TextField value={email} label="Email" onChange={(e) => setEmail(e.target.value)}
+                    <label htmlFor="register-email-input">Email: </label>
+                    <TextField id="register-email-input" value={email} label="Email" onChange={(e) => setEmail(e.target.value)}
                         placeholder='Email' autoComplete="email" />
                 </Box>
                 <Box display='flex' gap='2rem' alignItems='center' margin='2rem'>
-                    <label>Password: </label>
-                    <TextField value={password} label="Password" onChange={(e) => setPassword(e.target.value)} type='password'
+                    <label htmlFor="register-password-input">Password: </label>
+                    <TextField id="register-password-input" value={password} label="Password" onChange={(e) => setPassword(e.target.value)} type='password'
                         placeholder='Password' autoComplete="new-password" sx={{ marginRight: '1.75rem' }} />
                 </Box>
                 <Button onClick={handleRegister} sx={{ justifySelf: 'center', marginBottom: '3.5rem' }}>Register</Button>

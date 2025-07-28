@@ -56,9 +56,9 @@ vi.mock("@supabase/supabase-js", () => {
 });
 
 
-const renderLoginPage = ({ hasSession }: MockContextProviderProps) => {
+const renderRegisterPage = ({hasSession}: MockContextProviderProps) => {
   return render(
-    <MemoryRouter initialEntries={['/login']}>
+    <MemoryRouter initialEntries={['/register']}>
       <MockContextProvider hasSession={hasSession}>
         <App />
       </MockContextProvider>
@@ -66,12 +66,12 @@ const renderLoginPage = ({ hasSession }: MockContextProviderProps) => {
   )
 }
 
-describe("Login page renders", () => {
+describe("Register page renders", () => {
   it('should render header and sidebar', async () => {
-    renderLoginPage({hasSession: false})
+    renderRegisterPage({hasSession: false})
 
     // Page title
-    expect(screen.getByRole('heading', { level: 2, name: /Login/i })).toBeDefined()
+    expect(screen.getByRole('heading', { level: 2, name: /Registration/i })).toBeDefined()
 
     // Sidebar Home tab
     expect(screen.getByText(/home/i)).toBeDefined()
@@ -86,14 +86,13 @@ describe("Login page renders", () => {
     expect(screen.getByTestId(/header-register-link/i)).toBeDefined()
   })
 
-  it('should render login form when not logged in', async () => {
-    renderLoginPage({hasSession: false})
+  it('should render registration form when not logged in', async () => {
+    renderRegisterPage({hasSession: false})
 
     // Login fields are empty
     expect(screen.getByLabelText(/Email:/i)).toHaveValue("")
     expect(screen.getByLabelText(/Password:/i)).toHaveValue("")
-    expect(screen.getByRole('button', {name:/Login/i})).toBeInTheDocument()
-    expect(screen.getByRole('link',{name: /Forgot Password?/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', {name:/Register/i})).toBeInTheDocument()
 
     await userEvent.type(screen.getByLabelText(/Email:/i), "fakeemail@fakemail.com")
     expect(screen.getByLabelText(/Email:/i)).toHaveValue("fakeemail@fakemail.com")
@@ -107,7 +106,7 @@ describe("Login page renders", () => {
       session: dummySession, user: dummyUser, setUser: () => { }, loading: false
     }))
 
-    renderLoginPage({hasSession: true})
+    renderRegisterPage({hasSession: true})
 
     expect(await screen.findByRole('heading', { name: /Dashboard/i, level: 2 })).toBeInTheDocument()
   })

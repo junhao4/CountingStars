@@ -1,22 +1,23 @@
-import { act, fireEvent, render, screen } from "@testing-library/react"
+import { fireEvent, render, screen } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 import { describe, expect, it } from "vitest"
 import '@testing-library/jest-dom';
 import Sidebar from "../common/components/sidebar/Sidebar";
 import { SessionContext } from "../common/contexts/SessionContext";
 import { OrgContext } from "../common/contexts/OrgContext";
+import ContextProvider from "../common/contexts/ContextProvider";
 
 
-const renderSidebar = async (path: string) =>
-  await render(
+const renderSidebar = (path: string) =>
+  render(
     <MemoryRouter initialEntries={[path]}>
-      {/* <ContextProvider> */}
+      <ContextProvider>
       <SessionContext.Provider value={{ session: null, user: null, setUser: () => { }, loading: false }}>
         <OrgContext.Provider value={{ org: null, setOrg: () => { }, loading: false }} >
           <Sidebar />
         </OrgContext.Provider>
       </SessionContext.Provider>
-      {/* </ContextProvider> */}
+      </ContextProvider>
     </MemoryRouter>
   );
 
@@ -40,13 +41,10 @@ describe('Sidebar text', () => {
 })
 
 describe('Sidebar actions', () => {
-  it('expands on hover', () => {
+  it('expands on hover', async () => {
+    renderSidebar('/')
 
-    act(() => {
-      renderSidebar('/')
-    })
-
-    const nav = screen.getByRole('navigation');
+    const nav = await screen.findByRole('navigation');
     fireEvent.mouseEnter(nav);
 
     const text = screen.getByText(/Home/i).closest('.nav-menu-item');

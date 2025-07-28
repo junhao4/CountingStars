@@ -1,4 +1,4 @@
-import { Box, Typography, FormControl, InputLabel, Select, MenuItem, Button, TextField } from "@mui/material";
+import { Box, FormControl, InputLabel, Select, MenuItem, Button, TextField } from "@mui/material";
 import { useOrgContext, type ValidOrg } from "../../../../common/contexts/OrgContext";
 import { useState, type SetStateAction } from "react";
 import { addOrganizationUser } from "../api/UserGridApi";
@@ -38,13 +38,13 @@ export default function AddUserBar({ setRefresh }: AddUserBarProps) {
             bgcolor='transparent'>
 
             <div style={{ display: 'flex', flexWrap: 'nowrap', gap: '2rem', alignItems: 'center' }}>
-                <Typography>Email: </Typography>
-                <TextField value={email} onChange={(e) => setEmail(e.target.value)}
+                <label htmlFor="add-user-email">Email: </label>
+                <TextField id="add-user-email" value={email} onChange={(e) => setEmail(e.target.value)}
                     placeholder='Email' />
             </div>
 
-            <div style={{ display: 'flex', flexWrap: 'nowrap', gap: '2rem', alignItems: 'center' }}>
-                <Typography>Role: </Typography>
+            <div style={{ display: 'flex', flexWrap: 'nowrap', gap: '1rem', alignItems: 'center' }}>
+                <label htmlFor="add-user-role">Role: </label>
                 <FormControl size="small">
                     <InputLabel id="role-select-label">Role</InputLabel>
                     <Select

@@ -118,7 +118,7 @@ describe("FetchDashboard unit test", () => {
 
 })
 
-describe("Dashboard page rendering", () => {
+describe("Dashboard page renders", () => {
     afterEach(() => {
         vi.clearAllMocks()
     })
@@ -129,7 +129,7 @@ describe("Dashboard page rendering", () => {
         vi.spyOn(AccountMenuController, "fetchProfileImage").mockResolvedValue(null)
 
         vi.spyOn(DashboardController, "fetchDashboard").mockResolvedValue(
-            [{ id: 1, name: "Test Org", role: "pending", imageFile: "TEST", imageUrlBlob: null }])
+            [{ id: 1, name: "Test Org", role: "pending", imageFile: "TEST", imageUrlBlob: "" }])
 
         await act(async () => {
             render(
@@ -163,20 +163,18 @@ describe("Dashboard page rendering", () => {
 
     it("should show alert when entering organization button is clicked with pending role", async () => {
         simulateMockSession()
-        
+
         vi.spyOn(AccountMenuController, "fetchProfileImage").mockResolvedValue(null)
 
         vi.spyOn(DashboardController, "fetchDashboard").mockResolvedValue(
-            [{ id: 1, name: "Test Org", role: "pending", imageFile: "TEST", imageUrlBlob: null }])
+            [{ id: 1, name: "Test Org", role: "pending", imageFile: "TEST", imageUrlBlob: "" }])
 
-        await act(async () => {
-            await render(
-                <MemoryRouter initialEntries={['/dashboard']}>
-                    <ContextProvider>
-                        <App />
-                    </ContextProvider>
-                </MemoryRouter>)
-        })
+        render(
+            <MemoryRouter initialEntries={['/dashboard']}>
+                <ContextProvider>
+                    <App />
+                </ContextProvider>
+            </MemoryRouter>)
 
         await userEvent.click(screen.getByRole('button', { name: /enter/i }))
 

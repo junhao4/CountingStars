@@ -3,9 +3,8 @@ import { render, screen } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import { MemoryRouter } from "react-router-dom"
 import App from "../App";
-import userEvent from "@testing-library/user-event";
-import { dummySession, dummyUser } from "./testApi";
-import MockContextProvider, { type MockContextProviderProps } from "./__mocks__/MockContextProvider";
+import { dummySession } from "./testApi";
+import MockContextProvider from "./__mocks__/MockContextProvider";
 
 URL.createObjectURL = vi.fn()
 vi.mocked(URL.createObjectURL).mockReturnValue("Url")
@@ -56,27 +55,29 @@ vi.mock("@supabase/supabase-js", () => {
 });
 
 
-const renderLoginPage = ({ hasSession }: MockContextProviderProps) => {
+const renderHomePage = () => {
   return render(
-    <MemoryRouter initialEntries={['/login']}>
-      <MockContextProvider hasSession={hasSession}>
+    <MemoryRouter initialEntries={['/']}>
+      <MockContextProvider>
         <App />
       </MockContextProvider>
     </MemoryRouter>
   )
 }
 
-describe("Login page renders", () => {
+describe("Home page renders", () => {
   it('should render header and sidebar', async () => {
-    renderLoginPage({hasSession: false})
+    renderHomePage()
 
     // Page title
-    expect(screen.getByRole('heading', { level: 2, name: /Login/i })).toBeDefined()
+    expect(screen.getByRole('heading', { level: 2, name: /Home/i })).toBeDefined()
 
     // Sidebar Home tab
-    expect(screen.getByText(/home/i)).toBeDefined()
+    expect(screen.getByTestId('HomeIcon')).toBeDefined()
+    expect(screen.getAllByText(/home/i)).toHaveLength(2)
 
     // Sidebar Dashboard tab
+    expect(screen.getByTestId('ViewListIcon')).toBeDefined()
     expect(screen.getByText(/dashboard/i)).toBeDefined()
 
     // Header Login redirect link
@@ -86,29 +87,9 @@ describe("Login page renders", () => {
     expect(screen.getByTestId(/header-register-link/i)).toBeDefined()
   })
 
-  it('should render login form when not logged in', async () => {
-    renderLoginPage({hasSession: false})
+  it('should render home page', async () => {
+    renderHomePage()
 
-    // Login fields are empty
-    expect(screen.getByLabelText(/Email:/i)).toHaveValue("")
-    expect(screen.getByLabelText(/Password:/i)).toHaveValue("")
-    expect(screen.getByRole('button', {name:/Login/i})).toBeInTheDocument()
-    expect(screen.getByRole('link',{name: /Forgot Password?/i })).toBeInTheDocument()
-
-    await userEvent.type(screen.getByLabelText(/Email:/i), "fakeemail@fakemail.com")
-    expect(screen.getByLabelText(/Email:/i)).toHaveValue("fakeemail@fakemail.com")
-
-    await userEvent.type(screen.getByLabelText(/Password:/i), "password")
-    expect(screen.getByLabelText(/Password:/i)).toHaveValue("password")
-  })
-
-    it("should navigate away to dashboard when already logged in", async () => {
-    mocks.session.mockImplementation(() => ({
-      session: dummySession, user: dummyUser, setUser: () => { }, loading: false
-    }))
-
-    renderLoginPage({hasSession: true})
-
-    expect(await screen.findByRole('heading', { name: /Dashboard/i, level: 2 })).toBeInTheDocument()
+    expect(screen.getAllByRole('img')).toBeDefined()
   })
 })

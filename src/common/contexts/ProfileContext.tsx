@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react"
 import { downloadProfileImage, fetchProfileImage } from "../api/UserApi"
 import { useSessionContext } from "./SessionContext"
 
-interface ProfileProps {
+export interface ProfileProps {
     fileName: string | undefined
     blobUrl: string | undefined
     setFileName: (arg0: string) => void

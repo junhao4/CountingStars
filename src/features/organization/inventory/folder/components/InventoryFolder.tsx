@@ -12,8 +12,13 @@ import { hasPermission } from "../../../../../helper/RolePermissions"
 import { useSessionContext, type ValidSession } from "../../../../../common/contexts/SessionContext"
 import { useOrgContext, type ValidOrg } from "../../../../../common/contexts/OrgContext"
 
-export default function InventoryFolder({ data, setData, folderId }:
-    { data: InventoryRow[], setData: React.Dispatch<SetStateAction<InventoryRow[]>>, folderId: number | 'root' }) {
+interface InventoryFolderProps {
+    data: InventoryRow[], 
+    setData: React.Dispatch<SetStateAction<InventoryRow[]>>, 
+    folderId: number | 'root'
+}
+
+export default function InventoryFolder({ data, setData, folderId }: InventoryFolderProps) {
     const navigate = useNavigate()
     const { user } = useSessionContext() as ValidSession
     const { org } = useOrgContext() as ValidOrg
