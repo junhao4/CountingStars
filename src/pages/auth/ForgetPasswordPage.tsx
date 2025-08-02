@@ -21,7 +21,7 @@ export default function ForgetPassword() {
       setLoading(false)
       return
     }
-    createAlert('success', "A link was sent to your email")
+    createAlert('success', "A link will be sent to your email, this may take up to 5 minutes")
     setLoading(false)
   }
 
